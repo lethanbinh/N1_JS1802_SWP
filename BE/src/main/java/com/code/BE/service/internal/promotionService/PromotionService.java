@@ -6,8 +6,8 @@ import com.code.BE.model.dto.response.PromotionResponse;
 import java.util.List;
 
 public interface PromotionService {
-    List<PromotionResponse> findAllPromotions ();
-    PromotionResponse findPromotionById (int id);
-    PromotionResponse savePromotion (PromotionRequest promotionRequest);
-    boolean deletePromotionById (int id);
+    List<PromotionResponse> findAll ();
+    PromotionResponse findById (int id);
+    PromotionResponse save (PromotionRequest promotionRequest);
+    boolean deleteById (int id);
 }

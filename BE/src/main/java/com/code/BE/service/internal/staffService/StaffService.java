@@ -8,9 +8,8 @@ import com.code.BE.model.dto.response.UserResponse;
 import java.util.List;
 
 public interface StaffService {
-    List<UserResponse> findAllStaffs ();
-    UserResponse findStaffById (int id);
-    UserResponse saveStaff (UserRequest userRequest);
-    boolean deleteStaffById (int id);
-    OrderResponse confirmPromotion (OrderRequest orderRequest);
+    List<UserResponse> findAll ();
+    UserResponse findById (int id);
+    UserResponse save (UserRequest userRequest);
+    boolean deleteById (int id);
 }
