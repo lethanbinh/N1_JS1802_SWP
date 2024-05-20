@@ -47,3 +47,6 @@ Deployed on Docker
 Commit message syntax
 
 Person - functions/task- description
+
+How to use API:
+Syntax: api/version/object?key=value

@@ -7,13 +7,12 @@ import com.code.BE.model.dto.response.OrderResponse;
 import java.util.List;
 
 public interface OrderService {
-    List<OrderResponse> findAllOrders ();
-    OrderResponse findOrderById (int id);
-    OrderResponse saveOrder (OrderRequest orderRequest);
-    boolean deleteOrderById (int id);
+    List<OrderResponse> findAll ();
+    OrderResponse findById (int id);
+    OrderResponse save (OrderRequest orderRequest);
+    boolean deleteById (int id);
 
-    OrderDetailResponse addProductByCode (String code);
-    OrderDetailResponse addProductByBarCode (String barCode);
-    OrderDetailResponse updateProductByBarCode (String barCode);
-    boolean deleteProduct (int code);
+    OrderDetailResponse addProductToOrder (String code);
+    OrderDetailResponse updateProductQuantity (String code, int quantity);
+    boolean deleteProductFromBill (String code);
 }
