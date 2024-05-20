@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**")
+                        .requestMatchers("/api/v1/auth/**", "/swagger-ui/**")
                         .permitAll() // Cho phép tất cả mọi người truy cập vào những URL này
                         .anyRequest() // Tất cả các request còn lại cần phải xác thực mới được truy cập
                         .authenticated())
