@@ -4,15 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Setter
 @Getter
 public class ApiResponse<T> {
     private StatusEnum status;
     private T payload;
-
-    private Object message;
-    private HashMap<String, Object> metadata;
+    private Map<String, String> error;
+    private Map<String, Object> metadata;
 
     public void ok() {
         this.status = StatusEnum.SUCCESS;
@@ -29,9 +29,9 @@ public class ApiResponse<T> {
         this.metadata = metadata;
     }
 
-    public void error(Object message) {
+    public void error(Map<String, String> error) {
         this.status = StatusEnum.ERROR;
-        this.message = message;
+        this.error = error;
     }
 
 }

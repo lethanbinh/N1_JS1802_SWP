@@ -1,6 +1,6 @@
 package com.code.BE.model.entity;
 
-import com.code.BE.constant.Validation;
+import com.code.BE.constant.Regex;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table
@@ -22,7 +23,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private int id;
 
     @NotNull
     @Column(name = "username", nullable = false, unique = true)
@@ -36,7 +37,7 @@ public class User {
     @Column(name = "register_date")
     private Date registerDate;
 
-    @Pattern(regexp = Validation.phoneValidationPattern)
+    @Pattern(regexp = Regex.PHONE_PATTERN)
     @Column(name = "phone")
     private String phone;
 
@@ -73,6 +74,9 @@ public class User {
 
     @OneToOne(mappedBy = "staff")
     private Stall stall;
+
+    @OneToOne(mappedBy = "user")
+    private ConfirmationToken confirmationToken;
 
     // Getters and setters
 }

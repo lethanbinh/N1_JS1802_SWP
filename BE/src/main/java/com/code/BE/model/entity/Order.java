@@ -19,7 +19,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private int id;
 
     @NotNull
     @Column(name = "name", nullable = false)
@@ -65,7 +65,7 @@ public class Order {
     @Column(name = "refund_money")
     private double refundMoney;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "promotion_id")
     private Promotion promotion;
 

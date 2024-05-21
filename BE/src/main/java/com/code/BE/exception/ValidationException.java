@@ -1,7 +1,10 @@
 package com.code.BE.exception;
 
+import lombok.Getter;
+
 import java.util.Map;
 
+@Getter
 public class ValidationException extends RuntimeException {
     public ValidationException(String message) {
         super(message);
@@ -12,10 +15,6 @@ public class ValidationException extends RuntimeException {
     public ValidationException(Map<String, String> errors) {
         super("Validation failed");
         this.errors = errors;
-    }
-
-    public Map<String, String> getErrors() {
-        return errors;
     }
 
 }

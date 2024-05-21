@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table
@@ -18,7 +19,7 @@ public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private int id;
 
     @PositiveOrZero
     @Column(name = "discount")
@@ -47,7 +48,7 @@ public class Promotion {
     @Column(name = "maximum_prize")
     private double maximumPrize;
 
-    @OneToOne(mappedBy = "promotion")
-    private Order order;
+    @OneToMany(mappedBy = "promotion")
+    private List<Order> orderList;
     // Getters and setters
 }
