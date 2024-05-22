@@ -1,6 +1,7 @@
-package com.code.BE.model.dto.response;
+package com.code.BE.model.dto.request;
 
-import com.code.BE.model.entity.Role;
+import com.code.BE.constant.Regex;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,16 +11,26 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
-    private int id;
+public class ProfileUpdateRoleAdmin {
+    @NotNull
     private String username;
-    private Date registerDate;
+    @Pattern(regexp = Regex.PHONE_PATTERN)
     private String phone;
+
+    @Email
     private String email;
     private String address;
     private String avatar;
+
+    @PositiveOrZero
     private double pointBonus;
     private Date birthday;
+
     private boolean status;
-    private String roleId;
+
+    @Positive
+    private int roleId;
+
+    @Positive
+    private int stallId;
 }

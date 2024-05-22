@@ -38,8 +38,7 @@ public class Stall {
     @Column(name = "revenue")
     private double revenue;
 
-    @OneToOne
-    @JoinColumn(name = "staff_id")
+    @OneToOne(mappedBy = "stall")
     private User staff;
 
     @OneToMany(mappedBy = "stall")

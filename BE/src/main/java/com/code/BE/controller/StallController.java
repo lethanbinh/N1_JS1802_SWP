@@ -5,14 +5,12 @@ import com.code.BE.constant.SuccessMessage;
 import com.code.BE.exception.ApplicationException;
 import com.code.BE.exception.NotFoundException;
 import com.code.BE.exception.ValidationException;
-import com.code.BE.model.dto.request.ProfileUpdateRoleAdmin;
-import com.code.BE.model.dto.request.ProfileUpdateRoleUser;
-import com.code.BE.model.dto.request.UserRequest;
+import com.code.BE.model.dto.request.StallRequest;
 import com.code.BE.model.dto.response.ApiResponse;
-import com.code.BE.model.dto.response.UserResponse;
-import com.code.BE.service.internal.userService.UserService;
+import com.code.BE.model.dto.response.StallResponse;
+import com.code.BE.service.internal.stallService.StallService;
 import com.code.BE.util.ValidatorUtil;
-import com.code.BE.validator.UserValidator;
+import com.code.BE.validator.StallValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,23 +23,23 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/users")
-@PreAuthorize(value = "hasAuthority('ROLE_ADMIN')")
-public class UserController {
+@RequestMapping("/api/v1/stalls")
+@PreAuthorize(value = "hasAuthority('ROLE_MANAGER')")
+public class StallController {
+    @Autowired
+    private StallService stallService;
+
     @Autowired
     private ValidatorUtil validatorUtil;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserValidator userValidator;
+    private StallValidator stallValidator;
 
     @GetMapping(value = "")
-    public ResponseEntity<ApiResponse<List<UserResponse>>> findAll() throws Exception {
-        ApiResponse<List<UserResponse>> apiResponse = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<List<StallResponse>>> findAll() throws Exception {
+        ApiResponse<List<StallResponse>> apiResponse = new ApiResponse<>();
         try {
-            apiResponse.ok(userService.findAll());
+            apiResponse.ok(stallService.findAll());
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (Exception ex) {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
@@ -49,13 +47,13 @@ public class UserController {
     }
 
     @GetMapping(value = "/id/{id}")
-    public ResponseEntity<ApiResponse<UserResponse>> findById(@PathVariable int id) throws Exception {
+    public ResponseEntity<ApiResponse<StallResponse>> findById(@PathVariable int id) throws Exception {
         try {
-            if (userService.findById(id) == null) {
-                throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
+            if (stallService.findById(id) == null) {
+                throw new NotFoundException(ErrorMessage.STALL_NOT_FOUND);
             }
-            ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-            apiResponse.ok(userService.findById(id));
+            ApiResponse<StallResponse> apiResponse = new ApiResponse<>();
+            apiResponse.ok(stallService.findById(id));
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (NotFoundException ex) {
             throw ex; // Rethrow NotFoundException
@@ -65,17 +63,17 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<UserResponse>> save(@Valid @RequestBody UserRequest userRequest, BindingResult bindingResult) throws Exception {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<StallResponse>> save(@Valid @RequestBody StallRequest stallRequest, BindingResult bindingResult) throws Exception {
+        ApiResponse<StallResponse> apiResponse = new ApiResponse<>();
         try {
-            userValidator.validate(userRequest, bindingResult);
+            stallValidator.validate(stallRequest, bindingResult);
             if (bindingResult.hasErrors()) {
                 Map<String, String> validationErrors = validatorUtil.toErrors(bindingResult.getFieldErrors());
                 throw new ValidationException(validationErrors);
             }
 
-            UserResponse userResponse = userService.save(userRequest);
-            apiResponse.ok(userResponse);
+            StallResponse stallResponse = stallService.save(stallRequest);
+            apiResponse.ok(stallResponse);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (ValidationException ex) {
             throw ex; // Rethrow ValidationException
@@ -85,14 +83,14 @@ public class UserController {
     }
 
     @PutMapping(value = "/id/{id}")
-    public ResponseEntity<ApiResponse<UserResponse>> updateById(@PathVariable int id
-            , @Valid @RequestBody ProfileUpdateRoleAdmin profileUpdateRoleAdmin) throws Exception {
+    public ResponseEntity<ApiResponse<StallResponse>> updateById(@PathVariable int id
+            , @Valid @RequestBody StallRequest stallRequest) throws Exception {
         try {
-            if (userService.findById(id) == null) {
-                throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
+            if (stallService.findById(id) == null) {
+                throw new NotFoundException(ErrorMessage.STALL_NOT_FOUND);
             }
-            ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-            apiResponse.ok(userService.updateByIdRoleAdmin(id, profileUpdateRoleAdmin));
+            ApiResponse<StallResponse> apiResponse = new ApiResponse<>();
+            apiResponse.ok(stallService.editById(id, stallRequest));
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (NotFoundException ex) {
             throw ex; // Rethrow NotFoundException
@@ -105,11 +103,11 @@ public class UserController {
     public ResponseEntity<ApiResponse<String>> deleteById(@PathVariable int id) throws Exception {
         ApiResponse<String> apiResponse = new ApiResponse<>();
         try {
-            UserResponse userResponse = userService.findById(id);
-            if (userResponse == null) {
-                throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
+            StallResponse stallResponse = stallService.findById(id);
+            if (stallResponse == null) {
+                throw new NotFoundException(ErrorMessage.STALL_NOT_FOUND);
             }
-            userService.deleteById(id);
+            stallService.deleteById(id);
             apiResponse.ok(SuccessMessage.DELETE_SUCCESS);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (NotFoundException ex) {

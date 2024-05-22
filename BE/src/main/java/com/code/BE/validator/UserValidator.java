@@ -12,7 +12,7 @@ import org.springframework.validation.Validator;
 public class UserValidator implements Validator {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Override
     public boolean supports(Class<?> clazz) {

@@ -66,14 +66,15 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @OneToOne
+    @JoinColumn(name = "stall_id")
+    private Stall stall;
+
     @OneToMany(mappedBy = "staff")
     private List<Order> staffOrders;
 
     @OneToMany(mappedBy = "customer")
     private List<Order> customerOrders;
-
-    @OneToOne(mappedBy = "staff")
-    private Stall stall;
 
     @OneToOne(mappedBy = "user")
     private ConfirmationToken confirmationToken;
