@@ -84,14 +84,28 @@ public class StallController {
 
     @PutMapping(value = "/id/{id}")
     public ResponseEntity<ApiResponse<StallResponse>> updateById(@PathVariable int id
-            , @Valid @RequestBody StallRequest stallRequest) throws Exception {
+            , @Valid @RequestBody StallRequest stallRequest
+            , BindingResult bindingResult) throws Exception {
         try {
-            if (stallService.findById(id) == null) {
+            StallResponse stallResponse = stallService.findById(id);
+            if (stallResponse == null) {
                 throw new NotFoundException(ErrorMessage.STALL_NOT_FOUND);
             }
+
+            if (!stallResponse.getCode().equals(stallRequest.getCode())) {
+                stallValidator.validate(stallRequest, bindingResult);
+            }
+
+            if (bindingResult.hasErrors()) {
+                Map<String, String> validationErrors = validatorUtil.toErrors(bindingResult.getFieldErrors());
+                throw new ValidationException(validationErrors);
+            }
+
             ApiResponse<StallResponse> apiResponse = new ApiResponse<>();
             apiResponse.ok(stallService.editById(id, stallRequest));
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (ValidationException ex) {
+            throw ex; // Rethrow ValidationException
         } catch (NotFoundException ex) {
             throw ex; // Rethrow NotFoundException
         } catch (Exception ex) {

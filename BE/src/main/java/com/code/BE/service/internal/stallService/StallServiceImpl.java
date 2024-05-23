@@ -32,13 +32,20 @@ public class StallServiceImpl implements StallService {
     @Override
     public StallResponse save(StallRequest stallRequest) {
         Stall stall = stallMapper.toEntity(stallRequest);
+        stall.setStatus(true);
         return stallMapper.toResponse(stallRepository.saveAndFlush(stall));
     }
 
     @Override
     public StallResponse editById(int id, StallRequest stallRequest) {
         Stall stall = stallRepository.findById(id);
+
         if (stall != null) {
+            stall.setCode(stallRequest.getCode());
+            stall.setName(stallRequest.getName());
+            stall.setType(stallRequest.getType());
+            stall.setDescription(stallRequest.getDescription());
+            stall.setStatus(stallRequest.isStatus());
             return stallMapper.toResponse(stallRepository.saveAndFlush(stall));
         }
         return null;
@@ -46,12 +53,13 @@ public class StallServiceImpl implements StallService {
 
     @Override
     public boolean deleteById(int id) {
-        try {
-            stallRepository.deleteById(id);
+        Stall stall = stallRepository.findById(id);
+        if (stall != null) {
+            stall.setStatus(false);
+            stallRepository.saveAndFlush(stall);
             return true;
-        } catch (Exception ex) {
-            return false;
         }
+        return false;
     }
 
     @Override

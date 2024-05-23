@@ -6,7 +6,6 @@ import com.code.BE.exception.ApplicationException;
 import com.code.BE.exception.NotFoundException;
 import com.code.BE.exception.ValidationException;
 import com.code.BE.model.dto.request.ProfileUpdateRoleAdmin;
-import com.code.BE.model.dto.request.ProfileUpdateRoleUser;
 import com.code.BE.model.dto.request.UserRequest;
 import com.code.BE.model.dto.response.ApiResponse;
 import com.code.BE.model.dto.response.UserResponse;
@@ -86,8 +85,14 @@ public class UserController {
 
     @PutMapping(value = "/id/{id}")
     public ResponseEntity<ApiResponse<UserResponse>> updateById(@PathVariable int id
-            , @Valid @RequestBody ProfileUpdateRoleAdmin profileUpdateRoleAdmin) throws Exception {
+            , @Valid @RequestBody ProfileUpdateRoleAdmin profileUpdateRoleAdmin
+            , BindingResult bindingResult) throws Exception {
         try {
+            if (bindingResult.hasErrors()) {
+                Map<String, String> validationErrors = validatorUtil.toErrors(bindingResult.getFieldErrors());
+                throw new ValidationException(validationErrors);
+            }
+
             if (userService.findById(id) == null) {
                 throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
             }
@@ -96,6 +101,8 @@ public class UserController {
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (NotFoundException ex) {
             throw ex; // Rethrow NotFoundException
+        } catch (ValidationException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
         }

@@ -12,7 +12,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface StallMapper {
     @Mapping(source = "stall.staff.id", target = "staffId")
-
     // Map Entity to Response
     StallResponse toResponse(Stall stall);
     List<StallResponse> toResponseList(List<Stall> stallList);

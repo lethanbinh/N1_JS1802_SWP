@@ -103,11 +103,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteById(int id) {
-        try {
-            userRepository.deleteById(id);
+        User user = userRepository.findById(id);
+        if (user != null) {
+            user.setStatus(false);
+            userRepository.saveAndFlush(user);
             return true;
-        } catch (Exception ex) {
-            return false;
         }
+        return false;
     }
 }

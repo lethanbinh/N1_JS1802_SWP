@@ -22,4 +22,5 @@ public class UserResponse {
     private Date birthday;
     private boolean status;
     private String roleId;
+    private String stallId;
 }

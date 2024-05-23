@@ -14,5 +14,6 @@ public class StallResponse {
     private String type;
     private String description;
     private double revenue;
+    private boolean status;
     private int staffId;
 }

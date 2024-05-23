@@ -38,6 +38,9 @@ public class Stall {
     @Column(name = "revenue")
     private double revenue;
 
+    @Column(name = "status")
+    private boolean status;
+
     @OneToOne(mappedBy = "stall")
     private User staff;
 
