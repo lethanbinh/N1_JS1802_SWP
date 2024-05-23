@@ -35,6 +35,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private static final String IMAGE_API = "http://localhost:8080/api/v1/images/";
+
     @Override
     public List<UserResponse> findAll() {
         return userMapper.toResponseList(userRepository.findAll());
@@ -59,8 +61,9 @@ public class UserServiceImpl implements UserService {
     public UserResponse save(UserRequest userRequest) {
         User user = userMapper.toEntity(userRequest);
         user.setRegisterDate(new Date());
-
         Role role = roleRepository.findById(userRequest.getRoleId());
+
+        user.setAvatar(IMAGE_API + userRequest.getAvatar());
         user.setRole(role);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         return userMapper.toResponse(userRepository.saveAndFlush(user));
@@ -74,7 +77,7 @@ public class UserServiceImpl implements UserService {
             user.setPhone(profileUpdateRoleUser.getPhone());
             user.setEmail(profileUpdateRoleUser.getEmail());
             user.setAddress(profileUpdateRoleUser.getAddress());
-            user.setAvatar(profileUpdateRoleUser.getAvatar());
+            user.setAvatar(IMAGE_API + profileUpdateRoleUser.getAvatar());
             user.setBirthday(profileUpdateRoleUser.getBirthday());
             return userMapper.toResponse(userRepository.saveAndFlush(user));
         }
@@ -89,7 +92,7 @@ public class UserServiceImpl implements UserService {
             user.setPhone(profileUpdateRoleAdmin.getPhone());
             user.setEmail(profileUpdateRoleAdmin.getEmail());
             user.setAddress(profileUpdateRoleAdmin.getAddress());
-            user.setAvatar(profileUpdateRoleAdmin.getAvatar());
+            user.setAvatar(IMAGE_API + profileUpdateRoleAdmin.getAvatar());
             user.setBirthday(profileUpdateRoleAdmin.getBirthday());
             user.setPointBonus(profileUpdateRoleAdmin.getPointBonus());
             user.setStatus(profileUpdateRoleAdmin.isStatus());

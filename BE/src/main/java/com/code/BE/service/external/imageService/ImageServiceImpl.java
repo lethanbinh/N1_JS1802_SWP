@@ -4,9 +4,13 @@ import com.code.BE.model.entity.ImageData;
 import com.code.BE.repository.ImageRepository;
 import com.code.BE.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 @Service
@@ -37,5 +41,23 @@ public class ImageServiceImpl implements ImageService{
     public byte[] downloadImage(String fileName) throws IOException {
         ImageData dbImageData = imageRepository.findByName(fileName);
         return imageUtil.decompressImage(dbImageData.getImageData());
+    }
+
+    @Override
+    public ImageData saveImage(BufferedImage bufferedImage, String fileName) throws IOException {
+        ImageData dbImageData = imageRepository.findByName(fileName);
+        if (dbImageData != null) {
+            imageRepository.deleteById(dbImageData.getId());
+        }
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
+        byte[] imageBytes = byteArrayOutputStream.toByteArray();
+
+        ImageData imageData = new ImageData();
+        imageData.setName(fileName);
+        imageData.setType(MediaType.IMAGE_PNG.getType());
+        imageData.setImageData(imageUtil.compressImage(imageBytes));
+        return imageRepository.saveAndFlush(imageData);
     }
 }

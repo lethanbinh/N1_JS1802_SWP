@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-05-23T08:13:48+0700",
+    date = "2024-05-23T15:21:26+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
@@ -63,9 +63,7 @@ public class StallMapperImpl implements StallMapper {
         stall.setName( stallRequest.getName() );
         stall.setType( stallRequest.getType() );
         stall.setDescription( stallRequest.getDescription() );
-        if ( stallRequest.getStatus() != null ) {
-            stall.setStatus( Boolean.parseBoolean( stallRequest.getStatus() ) );
-        }
+        stall.setStatus( stallRequest.isStatus() );
 
         return stall;
     }
