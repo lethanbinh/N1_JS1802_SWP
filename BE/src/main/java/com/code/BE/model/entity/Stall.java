@@ -1,7 +1,9 @@
 package com.code.BE.model.entity;
 
+import com.code.BE.constant.Regex;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +23,7 @@ public class Stall {
     private int id;
 
     @NotNull
+    @Pattern(regexp = Regex.STALL_CODE_PATTERN)
     @Column(name = "code", nullable = false)
     private String code;
 
