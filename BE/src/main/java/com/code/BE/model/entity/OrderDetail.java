@@ -27,7 +27,7 @@ public class OrderDetail {
     @Column(name = "product_price")
     private double productPrice;
 
-    @PositiveOrZero
+    @Positive
     @Column(name = "product_quantity")
     private int productQuantity;
 
