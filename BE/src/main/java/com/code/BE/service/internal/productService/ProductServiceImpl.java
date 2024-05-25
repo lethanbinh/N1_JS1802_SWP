@@ -1,5 +1,6 @@
 package com.code.BE.service.internal.productService;
 
+import com.code.BE.constant.Regex;
 import com.code.BE.model.dto.request.ProductRequest;
 import com.code.BE.model.dto.response.ProductResponse;
 import com.code.BE.model.entity.ImageData;
@@ -80,7 +81,22 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public ProductResponse findByCode(String code) {
-        return productMapper.toResponse(productRepository.findByCode(code));
+        if (code.length() == 5) {
+            return productMapper.toResponse(productRepository.findByCode(code));
+        }
+        return null;
+    }
+
+    @Override
+    public ProductResponse findByBarcode(String barcode) {
+        if (barcode.length() == 13) {
+            String productCode = barcode.substring(7, 12);
+            if (productCode.matches(Regex.PRODUCT_CODE_PATTERN)) {
+                return findByCode(productCode);
+            }
+        }
+
+        return null;
     }
 
     @Override

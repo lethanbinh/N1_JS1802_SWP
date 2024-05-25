@@ -64,6 +64,23 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
+    @GetMapping(value = "/barcode/{barcode}")
+    public ResponseEntity<ApiResponse<ProductResponse>> findByBarcode(@PathVariable String barcode) throws Exception {
+        try {
+            if (productService.findByBarcode(barcode) == null) {
+                throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
+            }
+            ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
+            apiResponse.ok(productService.findByBarcode(barcode));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (NotFoundException ex) {
+            throw ex; // Rethrow NotFoundException
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
     @PostMapping("")
     public ResponseEntity<ApiResponse<ProductResponse>> save(@Valid @RequestBody ProductRequest productRequest,
                                                              BindingResult bindingResult) throws Exception {
