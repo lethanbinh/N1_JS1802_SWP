@@ -25,7 +25,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@PreAuthorize(value = "hasAuthority('ROLE_ADMIN')")
+
 public class UserController {
     @Autowired
     private ValidatorUtil validatorUtil;
