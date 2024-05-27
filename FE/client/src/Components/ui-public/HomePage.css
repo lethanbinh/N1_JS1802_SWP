@@ -1,0 +1,21 @@
+/* Assuming there are styles for NavBar, SideBar, and content */
+.content {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .main-content h1 {
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .main-content p {
+    font-size: 16px;
+    color: #666;
+  }
+  
