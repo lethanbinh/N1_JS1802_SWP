@@ -1,7 +1,9 @@
 package com.code.BE.model.entity;
 
+import com.code.BE.constant.Regex;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,10 +38,6 @@ public class Product {
     private double sellPrice;
 
     @PositiveOrZero
-    @Column(name = "original_price")
-    private double originalPrice;
-
-    @PositiveOrZero
     @Column(name = "quantity")
     private int quantity;
 
@@ -53,9 +51,6 @@ public class Product {
     @Column(name = "size")
     private String size;
 
-    @Column(name = "image", columnDefinition = "LONGTEXT")
-    private String image;
-
     @Column(name = "stall_location")
     private String stallLocation;
 
@@ -63,6 +58,7 @@ public class Product {
     private String type;
 
     @Column(name = "code")
+    @Pattern(regexp = Regex.PRODUCT_CODE_PATTERN)
     private String code;
 
     @Column(name = "bar_code", columnDefinition = "LONGTEXT")

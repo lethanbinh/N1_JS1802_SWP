@@ -8,8 +8,10 @@ import java.util.List;
 public interface ProductService {
     List<ProductResponse> findAll ();
     ProductResponse findById (int id);
-    ProductResponse save (ProductRequest productRequest);
+    ProductResponse save (ProductRequest productRequest, String countryCode, String manufacturerCode, String productCode) throws Exception;
+    ProductResponse editById (int id, ProductRequest productRequest);
+    ProductResponse findByCode (String code);
+    ProductResponse findByBarcode (String barcode);
     boolean deleteById (int id);
-
     List<ProductResponse> findProductsByStallId (int stallId);
 }

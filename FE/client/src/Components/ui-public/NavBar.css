@@ -1,0 +1,71 @@
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  padding: 20px 10%;
+  color: #fff;
+  align-items: center;
+  z-index: 100px;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+li {
+  margin-right: 20px;
+}
+
+li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+li a:hover {
+  text-decoration: underline;
+}
+
+button {
+  background-color: #f44336;
+  color: rgb(12, 11, 11);
+  border: none;
+  padding: 5px 10px; /* Reduced padding for smaller size */
+  border-radius: 3px; /* Reduced border-radius */
+  cursor: pointer;
+  font-size: 16px; /* Reduced font-size */
+  margin-left: 20px; /* Added margin to create space between the Profile link and Logout button */
+}
+
+button:hover {
+  background-color: #d32f2f;
+}
+
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  ul {
+    flex-direction: column;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  button {
+    align-self: flex-end;
+    margin-left: 40px; /* Reset margin for smaller screens */
+    margin-top: 10px; /* Add top margin to separate from the list items */
+  }
+}

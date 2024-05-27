@@ -1,11 +1,13 @@
-import { LoginPage } from './Components/ui/LoginPage'
+//import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import AppRoutes from './AppRoutes';
 
-function App() {
+const App = () => {
   return (
-    <div>
-      <LoginPage/>
-    </div>
-  )
-}
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  );
+};
 
-export default App
+export default App;
