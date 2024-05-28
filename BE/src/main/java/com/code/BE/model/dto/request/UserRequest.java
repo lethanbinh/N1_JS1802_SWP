@@ -17,6 +17,7 @@ import java.util.Date;
 public class UserRequest {
     @NotNull
     private String username;
+    private String fullName;
 
     @NotNull
     @Pattern(regexp = Regex.PASSWORD_PATTERN)

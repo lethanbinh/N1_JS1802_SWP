@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 @Service
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
@@ -55,6 +55,7 @@ public class ProductServiceImpl implements ProductService{
         product.setCode(productCode);
         product.setBarCode(IMAGE_API + imageData.getName());
         product.setStall(stallRepository.findById(productRequest.getStallId()));
+        product.setImage(IMAGE_API + productRequest.getImage());
         return productMapper.toResponse(productRepository.saveAndFlush(product));
     }
 
@@ -63,6 +64,7 @@ public class ProductServiceImpl implements ProductService{
         Product product = productRepository.findById(id);
         if (product != null) {
             product.setName(productRequest.getName());
+            product.setImage(IMAGE_API + productRequest.getImage());
             product.setDescription(productRequest.getName());
             product.setPurchasePrice(productRequest.getPurchasePrice());
             product.setSellPrice(productRequest.getSellPrice());
@@ -111,7 +113,12 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<ProductResponse> findProductsByStallId(int stallId) {
-        return productMapper.toResponseList(productRepository.findByStallId(stallId));
+    public List<ProductResponse> findByNameContaining(String name) {
+        return productMapper.toResponseList(productRepository.findByNameContaining(name));
+    }
+
+    @Override
+    public List<ProductResponse> findByStallNameContaining(String name) {
+        return productMapper.toResponseList(productRepository.findByStallNameContaining(name));
     }
 }

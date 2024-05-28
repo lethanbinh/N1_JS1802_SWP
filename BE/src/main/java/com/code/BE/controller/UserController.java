@@ -63,6 +63,49 @@ public class UserController {
         }
     }
 
+    @GetMapping(value = "/username/{username}")
+    public ResponseEntity<ApiResponse<UserResponse>> findByUsername(@PathVariable String username) throws Exception {
+        try {
+            if (userService.findByUsername(username) == null) {
+                throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
+            }
+            ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+            apiResponse.ok(userService.findByUsername(username));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (NotFoundException ex) {
+            throw ex; // Rethrow NotFoundException
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
+    @GetMapping(value = "/email/{email}")
+    public ResponseEntity<ApiResponse<UserResponse>> findByEmail(@PathVariable String email) throws Exception {
+        try {
+            if (userService.findByEmail(email) == null) {
+                throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
+            }
+            ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+            apiResponse.ok(userService.findByEmail(email));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (NotFoundException ex) {
+            throw ex; // Rethrow NotFoundException
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
+    @GetMapping(value = "/roleName/{roleName}")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> findByRoleName(@PathVariable String roleName) throws Exception {
+        try {
+            ApiResponse<List<UserResponse>> apiResponse = new ApiResponse<>();
+            apiResponse.ok(userService.findByRoleName(roleName));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
     @PostMapping("")
     public ResponseEntity<ApiResponse<UserResponse>> save(@Valid @RequestBody UserRequest userRequest, BindingResult bindingResult) throws Exception {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();

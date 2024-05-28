@@ -27,6 +27,9 @@ public class User {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
+    @Column(name = "fullName")
+    private String fullName;
+
     @NotNull
     @Column(name = "password", nullable = false)
     private String password;

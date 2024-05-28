@@ -13,5 +13,6 @@ public interface ProductService {
     ProductResponse findByCode (String code);
     ProductResponse findByBarcode (String barcode);
     boolean deleteById (int id);
-    List<ProductResponse> findProductsByStallId (int stallId);
+    List<ProductResponse> findByStallNameContaining (String name);
+    List<ProductResponse> findByNameContaining (String name);
 }

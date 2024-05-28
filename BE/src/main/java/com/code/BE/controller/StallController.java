@@ -46,6 +46,17 @@ public class StallController {
         }
     }
 
+    @GetMapping(value = "/name/{name}")
+    public ResponseEntity<ApiResponse<List<StallResponse>>> findByNameContaining(@PathVariable String name) throws Exception {
+        ApiResponse<List<StallResponse>> apiResponse = new ApiResponse<>();
+        try {
+            apiResponse.ok(stallService.findByNameContaining(name));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
     @GetMapping(value = "/id/{id}")
     public ResponseEntity<ApiResponse<StallResponse>> findById(@PathVariable int id) throws Exception {
         try {

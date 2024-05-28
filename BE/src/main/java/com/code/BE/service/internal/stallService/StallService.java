@@ -15,4 +15,5 @@ public interface StallService {
     boolean deleteById (int id);
 
     StallResponse findByCode(String code);
+    List<StallResponse> findByNameContaining (String name);
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-05-25T13:39:29+0700",
+    date = "2024-05-28T18:00:51+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
@@ -30,7 +30,6 @@ public class OrderMapperImpl implements OrderMapper {
         orderResponse.setStaffId( orderStaffId( order ) );
         orderResponse.setCustomerId( orderCustomerId( order ) );
         orderResponse.setId( order.getId() );
-        orderResponse.setName( order.getName() );
         orderResponse.setDescription( order.getDescription() );
         orderResponse.setStatus( order.getStatus() );
         orderResponse.setType( order.getType() );
@@ -68,17 +67,12 @@ public class OrderMapperImpl implements OrderMapper {
 
         Order order = new Order();
 
-        order.setName( orderRequest.getName() );
         order.setDescription( orderRequest.getDescription() );
         order.setStatus( orderRequest.getStatus() );
         order.setType( orderRequest.getType() );
         order.setAddress( orderRequest.getAddress() );
-        order.setTotalPrice( orderRequest.getTotalPrice() );
         order.setTax( orderRequest.getTax() );
-        order.setFinalPrice( orderRequest.getFinalPrice() );
-        order.setTotalBonusPoint( orderRequest.getTotalBonusPoint() );
         order.setCustomerGiveMoney( orderRequest.getCustomerGiveMoney() );
-        order.setRefundMoney( orderRequest.getRefundMoney() );
 
         return order;
     }

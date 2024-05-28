@@ -114,4 +114,9 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public List<UserResponse> findByRoleName(String name) {
+        return userMapper.toResponseList(userRepository.findByRoleName(name.toUpperCase()));
+    }
 }

@@ -66,4 +66,9 @@ public class StallServiceImpl implements StallService {
     public StallResponse findByCode(String code) {
         return stallMapper.toResponse(stallRepository.findByCode(code));
     }
+
+    @Override
+    public List<StallResponse> findByNameContaining(String name) {
+        return stallMapper.toResponseList(stallRepository.findByNameContaining(name));
+    }
 }

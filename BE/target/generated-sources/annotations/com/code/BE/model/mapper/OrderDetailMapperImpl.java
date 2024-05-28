@@ -1,5 +1,6 @@
 package com.code.BE.model.mapper;
 
+import com.code.BE.model.dto.request.OrderDetailRequest;
 import com.code.BE.model.dto.response.OrderDetailResponse;
 import com.code.BE.model.entity.Order;
 import com.code.BE.model.entity.OrderDetail;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-05-25T15:43:17+0700",
+    date = "2024-05-28T18:00:51+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
@@ -25,8 +26,8 @@ public class OrderDetailMapperImpl implements OrderDetailMapper {
 
         OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
 
-        orderDetailResponse.setProductId( orderDetailProductId( orderDetail ) );
         orderDetailResponse.setOrderId( orderDetailOrderId( orderDetail ) );
+        orderDetailResponse.setProductId( orderDetailProductId( orderDetail ) );
         orderDetailResponse.setId( orderDetail.getId() );
         orderDetailResponse.setProductName( orderDetail.getProductName() );
         orderDetailResponse.setProductPrice( orderDetail.getProductPrice() );
@@ -50,16 +51,31 @@ public class OrderDetailMapperImpl implements OrderDetailMapper {
         return list;
     }
 
-    private int orderDetailProductId(OrderDetail orderDetail) {
-        if ( orderDetail == null ) {
-            return 0;
+    @Override
+    public OrderDetail toEntity(OrderDetailRequest orderDetailRequest) {
+        if ( orderDetailRequest == null ) {
+            return null;
         }
-        Product product = orderDetail.getProduct();
-        if ( product == null ) {
-            return 0;
+
+        OrderDetail orderDetail = new OrderDetail();
+
+        orderDetail.setProductQuantity( orderDetailRequest.getProductQuantity() );
+
+        return orderDetail;
+    }
+
+    @Override
+    public List<OrderDetail> toEntityList(List<OrderDetailRequest> orderDetailRequestList) {
+        if ( orderDetailRequestList == null ) {
+            return null;
         }
-        int id = product.getId();
-        return id;
+
+        List<OrderDetail> list = new ArrayList<OrderDetail>( orderDetailRequestList.size() );
+        for ( OrderDetailRequest orderDetailRequest : orderDetailRequestList ) {
+            list.add( toEntity( orderDetailRequest ) );
+        }
+
+        return list;
     }
 
     private int orderDetailOrderId(OrderDetail orderDetail) {
@@ -71,6 +87,18 @@ public class OrderDetailMapperImpl implements OrderDetailMapper {
             return 0;
         }
         int id = order.getId();
+        return id;
+    }
+
+    private int orderDetailProductId(OrderDetail orderDetail) {
+        if ( orderDetail == null ) {
+            return 0;
+        }
+        Product product = orderDetail.getProduct();
+        if ( product == null ) {
+            return 0;
+        }
+        int id = product.getId();
         return id;
     }
 }

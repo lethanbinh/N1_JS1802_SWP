@@ -9,8 +9,10 @@ import com.code.BE.model.dto.request.ProductRequest;
 import com.code.BE.model.dto.response.ApiResponse;
 import com.code.BE.model.dto.response.ProductResponse;
 import com.code.BE.service.internal.productService.ProductService;
+import com.code.BE.service.internal.stallService.StallService;
 import com.code.BE.util.CodeGeneratorUtil;
 import com.code.BE.util.ValidatorUtil;
+import com.code.BE.validator.ProductValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,13 @@ public class ProductController {
     private ProductService productService;
 
     @Autowired
+    private StallService stallService;
+
+    @Autowired
     private ValidatorUtil validatorUtil;
+
+    @Autowired
+    private ProductValidator productValidator;
 
     @Autowired
     private CodeGeneratorUtil codeGeneratorUtil;
@@ -65,6 +73,30 @@ public class ProductController {
     }
 
     @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
+    @GetMapping(value = "/stallName/{stallName}")
+    public ResponseEntity<ApiResponse<List<ProductResponse>>> findByStallNameContaining(@PathVariable String stallName) throws Exception {
+        try {
+            ApiResponse<List<ProductResponse>> apiResponse = new ApiResponse<>();
+            apiResponse.ok(productService.findByStallNameContaining(stallName));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
+    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
+    @GetMapping(value = "/name/{name}")
+    public ResponseEntity<ApiResponse<List<ProductResponse>>> findByNameContaining(@PathVariable String name) throws Exception {
+        try {
+            ApiResponse<List<ProductResponse>> apiResponse = new ApiResponse<>();
+            apiResponse.ok(productService.findByNameContaining(name));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
+    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "/barcode/{barcode}")
     public ResponseEntity<ApiResponse<ProductResponse>> findByBarcode(@PathVariable String barcode) throws Exception {
         try {
@@ -90,6 +122,7 @@ public class ProductController {
             String manufacturerCode = codeGeneratorUtil.generateRandomManufacturerCode();
             String productCode = codeGeneratorUtil.generateRandomProductCode();
 
+            productValidator.validate(productRequest, bindingResult);
             while (productService.findByCode(productCode) != null) {
                 productCode = codeGeneratorUtil.generateRandomProductCode();
             }
@@ -119,6 +152,7 @@ public class ProductController {
                 throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
             }
 
+            productValidator.validate(productRequest, bindingResult);
             if (bindingResult.hasErrors()) {
                 Map<String, String> validationErrors = validatorUtil.toErrors(bindingResult.getFieldErrors());
                 throw new ValidationException(validationErrors);

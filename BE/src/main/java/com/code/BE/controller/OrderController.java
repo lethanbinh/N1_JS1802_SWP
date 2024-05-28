@@ -4,11 +4,14 @@ import com.code.BE.constant.ErrorMessage;
 import com.code.BE.exception.ApplicationException;
 import com.code.BE.exception.NotFoundException;
 import com.code.BE.exception.ValidationException;
+import com.code.BE.model.dto.request.OrderDetailRequest;
 import com.code.BE.model.dto.request.OrderRequest;
 import com.code.BE.model.dto.response.ApiResponse;
 import com.code.BE.model.dto.response.OrderResponse;
 import com.code.BE.service.internal.orderService.OrderService;
 import com.code.BE.util.ValidatorUtil;
+import com.code.BE.validator.OrderDetailValidator;
+import com.code.BE.validator.OrderValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,12 @@ public class OrderController {
 
     @Autowired
     private ValidatorUtil validatorUtil;
+
+    @Autowired
+    private OrderValidator orderValidator;
+
+    @Autowired
+    private OrderDetailValidator orderDetailValidator;
 
     @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "")
@@ -59,11 +68,40 @@ public class OrderController {
         }
     }
 
+    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
+    @GetMapping(value = "/staffName/{staffName}")
+    public ResponseEntity<ApiResponse<List<OrderResponse>>> findByStaffFullNameContaining(@PathVariable String staffName) throws Exception {
+        try {
+            ApiResponse<List<OrderResponse>> apiResponse = new ApiResponse<>();
+            apiResponse.ok(orderService.findByStaffFullNameContaining(staffName));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
+    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
+    @GetMapping(value = "/customerName/{customerName}")
+    public ResponseEntity<ApiResponse<List<OrderResponse>>> findByCustomerFullNameContaining(@PathVariable String customerName) throws Exception {
+        try {
+            ApiResponse<List<OrderResponse>> apiResponse = new ApiResponse<>();
+            apiResponse.ok(orderService.findByCustomerFullNameContaining(customerName));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
     @PostMapping("")
     public ResponseEntity<ApiResponse<OrderResponse>> save(@Valid @RequestBody OrderRequest orderRequest,
                                                              BindingResult bindingResult) throws Exception {
         ApiResponse<OrderResponse> apiResponse = new ApiResponse<>();
         try {
+            orderValidator.validate(orderRequest, bindingResult);
+            for (OrderDetailRequest orderDetailRequest : orderRequest.getOrderDetailRequestList()) {
+                orderDetailValidator.validate(orderDetailRequest, bindingResult);
+            }
+
             if (bindingResult.hasErrors()) {
                 Map<String, String> validationErrors = validatorUtil.toErrors(bindingResult.getFieldErrors());
                 throw new ValidationException(validationErrors);
@@ -89,6 +127,11 @@ public class OrderController {
                 throw new NotFoundException(ErrorMessage.ORDER_NOT_FOUND);
             }
 
+            orderValidator.validate(orderRequest, bindingResult);
+            for (OrderDetailRequest orderDetailRequest : orderRequest.getOrderDetailRequestList()) {
+                orderDetailValidator.validate(orderDetailRequest, bindingResult);
+            }
+
             if (bindingResult.hasErrors()) {
                 Map<String, String> validationErrors = validatorUtil.toErrors(bindingResult.getFieldErrors());
                 throw new ValidationException(validationErrors);
@@ -105,5 +148,4 @@ public class OrderController {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
         }
     }
-
 }
