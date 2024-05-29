@@ -1,6 +1,7 @@
 package com.code.BE.validator;
 
 import com.code.BE.constant.ErrorMessage;
+import com.code.BE.constant.Regex;
 import com.code.BE.model.dto.request.UserRequest;
 import com.code.BE.model.dto.response.UserResponse;
 import com.code.BE.service.internal.userService.UserService;
@@ -23,6 +24,14 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         UserRequest userRequest = (UserRequest)target;
+
+        if (!userRequest.getPassword().matches(Regex.PASSWORD_PATTERN)) {
+            errors.rejectValue("password", "error.password", ErrorMessage.PASSWORD_VALIDATION_FAILED);
+        }
+
+        if (!userRequest.getPhone().matches(Regex.PHONE_PATTERN)) {
+            errors.rejectValue("phone", "error.phone", ErrorMessage.PHONE_VALIDATION_FAILED);
+        }
 
         UserResponse userNameUserValidation = userService.findByUsername(userRequest.getUsername());
         if (userNameUserValidation != null) {

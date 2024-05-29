@@ -64,8 +64,14 @@ public class Product {
     @Pattern(regexp = Regex.PRODUCT_CODE_PATTERN)
     private String code;
 
-    @Column(name = "bar_code", columnDefinition = "LONGTEXT")
+    @Column(name = "barcodeText", nullable = false, unique = true)
+    private String barCodeText;
+
+    @Column(name = "barcode", columnDefinition = "LONGTEXT")
     private String barCode;
+
+    @Column(name = "qrcode", columnDefinition = "LONGTEXT")
+    private String qrCode;
 
     @ManyToOne
     @JoinColumn(name = "stall_id")

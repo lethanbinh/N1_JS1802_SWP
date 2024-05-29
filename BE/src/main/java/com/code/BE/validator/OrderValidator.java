@@ -38,6 +38,10 @@ public class OrderValidator implements Validator {
             errors.rejectValue("staffId", "error.staffId", ErrorMessage.STAFF_NOT_FOUND);
         }
 
+        if (orderRequest.getTax() < 0 || orderRequest.getTax() > 1) {
+            errors.rejectValue("tax", "error.tax", ErrorMessage.TAX_VALIDATION_FAILED);
+        }
+
         try {
             Enums.OrderStatus.valueOf(orderRequest.getStatus().toUpperCase());
         } catch (IllegalArgumentException e) {

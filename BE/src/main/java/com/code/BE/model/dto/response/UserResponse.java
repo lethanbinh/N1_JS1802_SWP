@@ -13,6 +13,7 @@ import java.util.Date;
 public class UserResponse {
     private int id;
     private String username;
+    private String password;
     private String fullName;
     private Date registerDate;
     private String phone;

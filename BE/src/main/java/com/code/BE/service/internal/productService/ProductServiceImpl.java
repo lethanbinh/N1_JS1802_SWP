@@ -8,6 +8,7 @@ import com.code.BE.model.entity.Product;
 import com.code.BE.model.mapper.ProductMapper;
 import com.code.BE.repository.ProductRepository;
 import com.code.BE.repository.StallRepository;
+import com.code.BE.service.external.QRCodeService.QRCodeService;
 import com.code.BE.service.external.barcodeService.BarcodeService;
 import com.code.BE.service.external.imageService.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class ProductServiceImpl implements ProductService {
     private ImageService imageService;
 
     @Autowired
+    private QRCodeService qrCodeService;
+
+    @Autowired
     private StallRepository stallRepository;
 
     private static final String IMAGE_API = "http://localhost:8080/api/v1/images/";
@@ -50,10 +54,15 @@ public class ProductServiceImpl implements ProductService {
         Product product = productMapper.toEntity(productRequest);
         String barCode = barcodeService.generateEAN13BarcodeText(countryCode, manufacturerCode, productCode);
         BufferedImage bufferedImage = barcodeService.generateEAN13BarcodeImage(barCode);
+        BufferedImage bufferedImageORCode = qrCodeService.generateQrcode(barCode);
+
         ImageData imageData = imageService.saveImage(bufferedImage, productRequest.getName());
+        ImageData imageDataQRCode = imageService.saveImage(bufferedImageORCode, barCode);
 
         product.setCode(productCode);
         product.setBarCode(IMAGE_API + imageData.getName());
+        product.setBarCodeText(barCode);
+        product.setQrCode(IMAGE_API + imageDataQRCode.getName());
         product.setStall(stallRepository.findById(productRequest.getStallId()));
         product.setImage(IMAGE_API + productRequest.getImage());
         return productMapper.toResponse(productRepository.saveAndFlush(product));
@@ -75,7 +84,6 @@ public class ProductServiceImpl implements ProductService {
             product.setStallLocation(productRequest.getStallLocation());
             product.setType(productRequest.getType());
             product.setStall(stallRepository.findById(productRequest.getStallId()));
-
             return productMapper.toResponse(productRepository.saveAndFlush(product));
         }
         return null;

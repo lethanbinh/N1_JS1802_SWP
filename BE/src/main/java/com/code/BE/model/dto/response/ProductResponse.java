@@ -22,5 +22,7 @@ public class ProductResponse {
     private String type;
     private String code;
     private String barCode;
+    private String barCodeText;
+    private String qrCode;
     private int stallId;
 }

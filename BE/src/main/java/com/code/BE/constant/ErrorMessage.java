@@ -11,7 +11,6 @@ public class ErrorMessage {
     public static final String STAFF_NOT_FOUND = "Staff not found";
 
     public static final String ORDER_NOT_FOUND = "Order not found";
-    public static final String ORDER_DETAIL_NOT_FOUND = "Order detail not found";
     public static final String CONFIRM_TOKEN_ERROR = "Confirm token is invalid or expired";
 
     // validation
@@ -19,5 +18,8 @@ public class ErrorMessage {
     public static final String EMAIL_EXIST = "Email exists";
     public static final String STALL_CODE_EXIST = "Stall code exists";
     public static final String STALL_CODE_VALIDATION_FAILED = "Stall code must be exactly 6 characters long, starting with \"ST\", followed by exactly 4 digits";
+    public static final String TAX_VALIDATION_FAILED = "Tax must be value from 0 to 1";
+    public static final String PASSWORD_VALIDATION_FAILED = "Password must meet the following criteria: at least 6 characters long, contain at least 1 uppercase letter, 1 number, and 1 special character.";
+    public static final String PHONE_VALIDATION_FAILED = "Incorrect Vietnam Phone";
 
 }

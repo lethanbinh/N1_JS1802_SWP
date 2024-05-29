@@ -1,12 +1,11 @@
 package com.code.BE.service.external.barcodeService;
 
-import com.code.BE.model.entity.Product;
 import com.code.BE.util.BarcodeEANUtil;
-import com.code.BE.util.CodeGeneratorUtil;
 import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.awt.image.BufferedImage;
 
 @Service

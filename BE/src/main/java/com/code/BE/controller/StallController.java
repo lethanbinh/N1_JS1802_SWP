@@ -35,6 +35,7 @@ public class StallController {
     @Autowired
     private StallValidator stallValidator;
 
+    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "")
     public ResponseEntity<ApiResponse<List<StallResponse>>> findAll() throws Exception {
         ApiResponse<List<StallResponse>> apiResponse = new ApiResponse<>();
@@ -46,6 +47,7 @@ public class StallController {
         }
     }
 
+    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "/name/{name}")
     public ResponseEntity<ApiResponse<List<StallResponse>>> findByNameContaining(@PathVariable String name) throws Exception {
         ApiResponse<List<StallResponse>> apiResponse = new ApiResponse<>();
@@ -57,6 +59,7 @@ public class StallController {
         }
     }
 
+    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "/id/{id}")
     public ResponseEntity<ApiResponse<StallResponse>> findById(@PathVariable int id) throws Exception {
         try {
