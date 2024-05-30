@@ -22,4 +22,5 @@ public class ErrorMessage {
     public static final String PASSWORD_VALIDATION_FAILED = "Password must meet the following criteria: at least 6 characters long, contain at least 1 uppercase letter, 1 number, and 1 special character.";
     public static final String PHONE_VALIDATION_FAILED = "Incorrect Vietnam Phone";
 
+    public static final String DATE_VALIDATION_FAILED = "Date is not correct format";
 }

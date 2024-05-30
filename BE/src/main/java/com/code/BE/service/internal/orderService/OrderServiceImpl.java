@@ -7,6 +7,7 @@ import com.code.BE.model.dto.response.OrderResponse;
 import com.code.BE.model.entity.Order;
 import com.code.BE.model.entity.OrderDetail;
 import com.code.BE.model.entity.Product;
+import com.code.BE.model.entity.RevenueStatistics;
 import com.code.BE.model.mapper.OrderDetailMapper;
 import com.code.BE.model.mapper.OrderMapper;
 import com.code.BE.repository.OrderDetailRepository;
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -73,6 +73,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse save(OrderRequest orderRequest) {
         Order order = orderMapper.toEntity(orderRequest);
+        order.setCreateDate(new Date());
         return saveOrderAndOrderDetail(order, orderRequest);
     }
 
@@ -131,7 +132,6 @@ public class OrderServiceImpl implements OrderService {
 
         order.setStatus(orderRequest.getStatus().toUpperCase());
         order.setType(orderRequest.getType().toUpperCase());
-        order.setCreateDate(new Date());
         order.setTotalPrice(totalPrice);
         order.setFinalPrice(totalPrice + totalPrice * orderRequest.getTax());
         order.setTotalBonusPoint(totalPrice / 1000);
