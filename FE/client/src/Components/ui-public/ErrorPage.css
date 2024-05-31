@@ -1,4 +1,3 @@
-/* Assuming there are styles for NavBar, SideBar, and content */
 .content {
     display: flex;
     flex-direction: row;
@@ -7,7 +6,6 @@
   .main-content {
     flex: 1;
     padding: 20px;
-    margin-left: 20px; /* Add some margin to create space between sidebar and content */
   }
   
   .main-content h1 {
@@ -19,8 +17,3 @@
     font-size: 16px;
     color: #666;
   }
-  .section{
-    display: flex;
-    
-  }
- 

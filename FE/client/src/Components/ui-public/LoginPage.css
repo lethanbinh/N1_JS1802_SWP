@@ -30,6 +30,7 @@
     font-size: 16px;
     color: #fff;
     padding: 20px 45px 20px 20px;
+    
 }
 
 .input-box input::placeholder {
@@ -42,6 +43,11 @@
     top: 50%;
     transform: translateY(-50%);
     font-size: 16px;
+   
+}
+.input-box {
+  
+    
 }
 
 .wrapper .remember-forgot {
@@ -72,3 +78,16 @@
     color: #333;
     font-weight: 700;
 }
+/* body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background: url('./assets/background.png') no-repeat;
+  background-size: cover;
+  background-position: center;
+} */

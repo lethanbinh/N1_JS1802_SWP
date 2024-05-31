@@ -34,6 +34,12 @@ export const LoginPage = () => {
     if (username === 'Binh1234' && password === 'Binh123@') {
       return 'admin';
     }
+    if (username === 'Binh12345' && password === 'Binh123@') {
+      return 'manager';
+    }
+    if (username === 'Binh123456' && password === 'Binh123@') {
+      return 'staff';
+    }
     // Nếu không phù hợp với bất kỳ vai trò nào, trả về null hoặc một giá trị mặc định khác
     return null;
   };
