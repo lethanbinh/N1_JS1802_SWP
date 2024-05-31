@@ -1,9 +1,15 @@
 package com.code.BE.model.dto.response;
 
-import com.code.BE.model.entity.User;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RoleResponse {
-    private Long id;
+    private int id;
     private String name;
     private String description;
 }

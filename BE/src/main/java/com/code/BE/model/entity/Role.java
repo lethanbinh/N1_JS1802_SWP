@@ -21,7 +21,7 @@ public class Role {
     private int id;
 
     @NotNull
-    @UniqueElements
+//    @UniqueElements
     @Column(name = "name", nullable = false)
     private String name;
 
