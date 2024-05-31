@@ -9,6 +9,7 @@ public class ErrorMessage {
     public static final String PRODUCT_NOT_FOUND = "Product not found";
     public static final String CUSTOMER_NOT_FOUND = "Customer not found";
     public static final String STAFF_NOT_FOUND = "Staff not found";
+    public static final String ROLE_NOT_FOUND = "Role not found";
 
     public static final String ORDER_NOT_FOUND = "Order not found";
     public static final String CONFIRM_TOKEN_ERROR = "Confirm token is invalid or expired";
@@ -23,4 +24,6 @@ public class ErrorMessage {
     public static final String PHONE_VALIDATION_FAILED = "Incorrect Vietnam Phone";
 
     public static final String DATE_VALIDATION_FAILED = "Date is not correct format";
+
+
 }

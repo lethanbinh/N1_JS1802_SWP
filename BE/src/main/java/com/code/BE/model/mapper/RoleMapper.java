@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {
-    RoleResponse toResponse(Role user);
+    RoleResponse toResponse(Role role);
     List<RoleResponse> toResponseList(List<Role> roleList);
 
     // Map Request to Entity
