@@ -1,14 +1,15 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import LoginPage from './Components/ui-public/LoginPage';
-import ForgotPasswordPage from './Components/ui-public/ForgotPasswordPage';
-import CreateNewPasswordPage from './Components/ui-public/CreateNewPasswordPage'
-import HomePage from './Components/ui-public/HomePage';
-import NavBar from './Components/ui-public/NavBar';
-import SideBar from './Components/ui-public/SideBar';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import AdminDashboard from './Components/ui-private/AdminDashboard';
 import ManagerDashboard from './Components/ui-private/ManagerDashboard';
 import StaffDashboard from './Components/ui-private/StaffDashboard';
-import { isAuthenticated, getUserRole } from './Components/utils/auth';
+import CreateNewPasswordPage from './Components/ui-public/CreateNewPasswordPage';
+import ForgotPasswordPage from './Components/ui-public/ForgotPasswordPage';
+import HomePage from './Components/ui-public/HomePage';
+import LoginPage from './Components/ui-public/LoginPage';
+import NavBar from './Components/ui-public/NavBar';
+import SideBar from './Components/ui-public/SideBar';
+import StaffList from './Components/ui-public/StaffList';
+import { getUserRole, isAuthenticated } from './Components/utils/auth';
 
 const AppRoutes = () => {
   const userRole = getUserRole();
@@ -18,6 +19,7 @@ const AppRoutes = () => {
       <Route path="/login" element={isAuthenticated() ? <Navigate to="/home" /> : <LoginPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/create-new-password" element={<CreateNewPasswordPage />} />
+      <Route path="/manager-dashboard/view-staff-list" element={<StaffList />} />
       <Route path="/" element={<LoginPage />} />
 
       <Route

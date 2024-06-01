@@ -75,111 +75,88 @@ const SideBar = () => {
                         {managerDashboardOpen && (
                             <ul className="nav nav-treeview">
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
+                                    <Link to="/manager-dashboard/view-staff-list" className="nav-link">
                                         
-                                        <p>View Staff</p>
+                                        <p>Staff List</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/create-account" className="nav-link">
+                                    <Link to="/manager-dashboard/create-staff" className="nav-link">
                                         
                                         <p>Create Staff</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/update-account" className="nav-link">
+                                    <Link to="/manager-dashboard/promotion" className="nav-link">
                                         
-                                        <p>Update Staff</p>
+                                        <p>Promotion</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/delete-account" className="nav-link">
-                                        
-                                        <p>Delete Staff</p>
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
-                                        
-                                        <p>View Promotion</p>
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
+                                    <Link to="/manager-dashboard/create-promotion" className="nav-link">
                                         
                                         <p>Create Promotion</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
+                                    <Link to="/manager-dashboard/customer-purchase-history" className="nav-link">
                                         
-                                        <p>Update Promotion</p>
+                                        <p>Customer Purchase History</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
+                                    <Link to="/manager-dashboard/return&exchange-policy" className="nav-link">
                                         
-                                        <p>Delete Promotion</p>
+                                        <p>Return and Exchange Policy</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
-                                        
-                                        <p>View Customer Purchase History</p>
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
-                                        
-                                        <p>View Return and Exchange Policy</p>
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
+                                    <Link to="/manager-dashboard/edit-return&exchange-policy" className="nav-link">
                                         
                                         <p>Edit Return and Exchange Policy</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
+                                    <Link to="/manager-dashboard/stall" className="nav-link">
+                                        
+                                        <p>Stall</p>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/manager-dashboard/add-stall" className="nav-link">
                                         
                                         <p>Add Stall</p>
                                     </Link>
                                 </li>
+                                
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
+                                    <Link to="/manager-dashboard/product-in-stall" className="nav-link">
                                         
-                                        <p>Update Stall</p>
+                                        <p>Product in Stall</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
+                                    <Link to="/manager-dashboard/revenue-all-stalls" className="nav-link">
                                         
-                                        <p>View Product in Stall</p>
+                                        <p>Revenue of all Stalls</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
+                                    <Link to="/manager-dashboard/staffs-statistics" className="nav-link">
                                         
-                                        <p>View Revenue of all Stalls</p>
+                                        <p>Staffs Statistics</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
+                                    <Link to="/manager-dashboard/orders-statistics" className="nav-link">
                                         
-                                        <p>View Stafs Statistics</p>
+                                        <p>Orders Statistics</p>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
+                                    <Link to="/manager-dashboard/products-report" className="nav-link">
                                         
-                                        <p>View Orders Statistics</p>
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/manager-dashboard/view-account" className="nav-link">
-                                        
-                                        <p>View Products Report</p>
+                                        <p>Products Report</p>
                                     </Link>
                                 </li>
                             </ul>

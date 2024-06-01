@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-05-29T19:23:39+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
+    date = "2024-05-31T20:14:14+0700",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.38.0.v20240524-2033, environment: Java 17.0.11 (Eclipse Adoptium)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
@@ -34,18 +34,18 @@ public class UserMapperImpl implements UserMapper {
         if ( id1 != null ) {
             userResponse.setStallId( String.valueOf( id1 ) );
         }
-        userResponse.setId( user.getId() );
-        userResponse.setUsername( user.getUsername() );
-        userResponse.setPassword( user.getPassword() );
-        userResponse.setFullName( user.getFullName() );
-        userResponse.setRegisterDate( user.getRegisterDate() );
-        userResponse.setPhone( user.getPhone() );
-        userResponse.setEmail( user.getEmail() );
         userResponse.setAddress( user.getAddress() );
         userResponse.setAvatar( user.getAvatar() );
-        userResponse.setPointBonus( user.getPointBonus() );
         userResponse.setBirthday( user.getBirthday() );
+        userResponse.setEmail( user.getEmail() );
+        userResponse.setFullName( user.getFullName() );
+        userResponse.setId( user.getId() );
+        userResponse.setPassword( user.getPassword() );
+        userResponse.setPhone( user.getPhone() );
+        userResponse.setPointBonus( user.getPointBonus() );
+        userResponse.setRegisterDate( user.getRegisterDate() );
         userResponse.setStatus( user.isStatus() );
+        userResponse.setUsername( user.getUsername() );
 
         return userResponse;
     }
@@ -72,15 +72,15 @@ public class UserMapperImpl implements UserMapper {
 
         User user = new User();
 
-        user.setUsername( userRequest.getUsername() );
-        user.setFullName( userRequest.getFullName() );
-        user.setPassword( userRequest.getPassword() );
-        user.setPhone( userRequest.getPhone() );
-        user.setEmail( userRequest.getEmail() );
         user.setAddress( userRequest.getAddress() );
         user.setAvatar( userRequest.getAvatar() );
         user.setBirthday( userRequest.getBirthday() );
+        user.setEmail( userRequest.getEmail() );
+        user.setFullName( userRequest.getFullName() );
+        user.setPassword( userRequest.getPassword() );
+        user.setPhone( userRequest.getPhone() );
         user.setStatus( userRequest.isStatus() );
+        user.setUsername( userRequest.getUsername() );
 
         return user;
     }

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-05-29T19:23:38+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
+    date = "2024-05-31T20:14:14+0700",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.38.0.v20240524-2033, environment: Java 17.0.11 (Eclipse Adoptium)"
 )
 @Component
 public class ProductMapperImpl implements ProductMapper {
@@ -26,22 +26,22 @@ public class ProductMapperImpl implements ProductMapper {
         ProductResponse productResponse = new ProductResponse();
 
         productResponse.setStallId( productStallId( product ) );
-        productResponse.setId( product.getId() );
-        productResponse.setName( product.getName() );
-        productResponse.setImage( product.getImage() );
-        productResponse.setDescription( product.getDescription() );
-        productResponse.setPurchasePrice( product.getPurchasePrice() );
-        productResponse.setSellPrice( product.getSellPrice() );
-        productResponse.setQuantity( product.getQuantity() );
-        productResponse.setStatus( product.isStatus() );
-        productResponse.setWeight( product.getWeight() );
-        productResponse.setSize( product.getSize() );
-        productResponse.setStallLocation( product.getStallLocation() );
-        productResponse.setType( product.getType() );
-        productResponse.setCode( product.getCode() );
         productResponse.setBarCode( product.getBarCode() );
         productResponse.setBarCodeText( product.getBarCodeText() );
+        productResponse.setCode( product.getCode() );
+        productResponse.setDescription( product.getDescription() );
+        productResponse.setId( product.getId() );
+        productResponse.setImage( product.getImage() );
+        productResponse.setName( product.getName() );
+        productResponse.setPurchasePrice( product.getPurchasePrice() );
         productResponse.setQrCode( product.getQrCode() );
+        productResponse.setQuantity( product.getQuantity() );
+        productResponse.setSellPrice( product.getSellPrice() );
+        productResponse.setSize( product.getSize() );
+        productResponse.setStallLocation( product.getStallLocation() );
+        productResponse.setStatus( product.isStatus() );
+        productResponse.setType( product.getType() );
+        productResponse.setWeight( product.getWeight() );
 
         return productResponse;
     }
@@ -68,17 +68,17 @@ public class ProductMapperImpl implements ProductMapper {
 
         Product product = new Product();
 
-        product.setName( productRequest.getName() );
-        product.setImage( productRequest.getImage() );
         product.setDescription( productRequest.getDescription() );
+        product.setImage( productRequest.getImage() );
+        product.setName( productRequest.getName() );
         product.setPurchasePrice( productRequest.getPurchasePrice() );
-        product.setSellPrice( productRequest.getSellPrice() );
         product.setQuantity( productRequest.getQuantity() );
-        product.setStatus( productRequest.isStatus() );
-        product.setWeight( productRequest.getWeight() );
+        product.setSellPrice( productRequest.getSellPrice() );
         product.setSize( productRequest.getSize() );
         product.setStallLocation( productRequest.getStallLocation() );
+        product.setStatus( productRequest.isStatus() );
         product.setType( productRequest.getType() );
+        product.setWeight( productRequest.getWeight() );
 
         return product;
     }
