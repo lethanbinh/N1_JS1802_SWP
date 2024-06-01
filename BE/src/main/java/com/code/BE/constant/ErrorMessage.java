@@ -18,12 +18,13 @@ public class ErrorMessage {
     public static final String USERNAME_EXIST = "Username exists";
     public static final String EMAIL_EXIST = "Email exists";
     public static final String STALL_CODE_EXIST = "Stall code exists";
+    public static final String ROLE_EXIST = "Role exists";
+
     public static final String STALL_CODE_VALIDATION_FAILED = "Stall code must be exactly 6 characters long, starting with \"ST\", followed by exactly 4 digits";
     public static final String TAX_VALIDATION_FAILED = "Tax must be value from 0 to 1";
     public static final String PASSWORD_VALIDATION_FAILED = "Password must meet the following criteria: at least 6 characters long, contain at least 1 uppercase letter, 1 number, and 1 special character.";
     public static final String PHONE_VALIDATION_FAILED = "Incorrect Vietnam Phone";
 
     public static final String DATE_VALIDATION_FAILED = "Date is not correct format";
-
-
+    public static final String BIRTHDAY_VALIDATION_FAILED = "Birthday cannot be a day in future";
 }

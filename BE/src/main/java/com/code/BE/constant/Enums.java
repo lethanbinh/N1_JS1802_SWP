@@ -18,4 +18,8 @@ public class Enums {
         EXCHANGE_AND_RETURN,
         WARRANTY
     }
+
+    public enum Role {
+        ADMIN, STAFF, MANAGER
+    }
 }

@@ -8,13 +8,14 @@ import com.code.BE.exception.ValidationException;
 import com.code.BE.model.dto.request.RoleRequest;
 import com.code.BE.model.dto.response.ApiResponse;
 import com.code.BE.model.dto.response.RoleResponse;
-
 import com.code.BE.service.internal.roleService.RoleService;
 import com.code.BE.util.ValidatorUtil;
+import com.code.BE.validator.RoleValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/roles")
-//@PreAuthorize(value = "hasAuthority('ROLE_ADMIN')")
+@PreAuthorize(value = "hasAuthority('ROLE_ADMIN')")
 public class RoleController {
     @Autowired
     private ValidatorUtil validatorUtil;
@@ -31,6 +32,8 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private RoleValidator roleValidator;
 
     @GetMapping(value = "")
     public ResponseEntity<ApiResponse<List<RoleResponse>>> findAll() throws Exception {
@@ -63,6 +66,11 @@ public class RoleController {
     public ResponseEntity<ApiResponse<RoleResponse>> save(@Valid @RequestBody RoleRequest roleRequest, BindingResult bindingResult) throws Exception {
         ApiResponse<RoleResponse> apiResponse = new ApiResponse<>();
         try {
+            if (roleService.findByName(roleRequest.getName()) != null) {
+                throw new ValidationException(ErrorMessage.ROLE_EXIST);
+            }
+
+            roleValidator.validate(roleRequest, bindingResult);
             if (bindingResult.hasErrors()) {
                 Map<String, String> validationErrors = validatorUtil.toErrors(bindingResult.getFieldErrors());
                 throw new ValidationException(validationErrors);
@@ -83,13 +91,14 @@ public class RoleController {
             , @Valid @RequestBody RoleRequest roleRequest
             , BindingResult bindingResult) throws Exception {
         try {
+            if (roleService.findById(id) == null) {
+                throw new NotFoundException(ErrorMessage.ROLE_NOT_FOUND);
+            }
+
+            roleValidator.validate(roleRequest, bindingResult);
             if (bindingResult.hasErrors()) {
                 Map<String, String> validationErrors = validatorUtil.toErrors(bindingResult.getFieldErrors());
                 throw new ValidationException(validationErrors);
-            }
-
-            if (roleService.findById(id) == null) {
-                throw new NotFoundException(ErrorMessage.ROLE_NOT_FOUND);
             }
             ApiResponse<RoleResponse> apiResponse = new ApiResponse<>();
             apiResponse.ok(roleService.editById(id, roleRequest));

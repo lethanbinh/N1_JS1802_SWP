@@ -15,4 +15,6 @@ public interface RoleService {
     RoleResponse save(RoleRequest roleRequest);
 
     RoleResponse editById(int id, RoleRequest roleName);
+
+    RoleResponse findByName(String name);
 }

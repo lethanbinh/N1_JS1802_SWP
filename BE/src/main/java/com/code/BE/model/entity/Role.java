@@ -1,5 +1,6 @@
 package com.code.BE.model.entity;
 
+import com.code.BE.constant.ErrorMessage;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,6 @@ public class Role {
     private int id;
 
     @NotNull
-//    @UniqueElements
     @Column(name = "name", nullable = false)
     private String name;
 

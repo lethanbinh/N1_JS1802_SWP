@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.Date;
+
 @Component
 public class UserValidator implements Validator {
 
@@ -31,6 +33,10 @@ public class UserValidator implements Validator {
 
         if (!userRequest.getPhone().matches(Regex.PHONE_PATTERN)) {
             errors.rejectValue("phone", "error.phone", ErrorMessage.PHONE_VALIDATION_FAILED);
+        }
+
+        if (userRequest.getBirthday().after(new Date())) {
+            errors.rejectValue("birthday", "error.birthday", ErrorMessage.BIRTHDAY_VALIDATION_FAILED);
         }
 
         UserResponse userNameUserValidation = userService.findByUsername(userRequest.getUsername());

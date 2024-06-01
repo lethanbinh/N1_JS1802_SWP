@@ -4,9 +4,7 @@ import com.code.BE.model.dto.request.RoleRequest;
 import com.code.BE.model.dto.response.RoleResponse;
 import com.code.BE.model.entity.Role;
 import com.code.BE.model.mapper.RoleMapper;
-
 import com.code.BE.repository.RoleRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,5 +44,10 @@ public class RoleServiceImpl implements RoleService{
             return roleMapper.toResponse(roleRepository.saveAndFlush(role));
         }
         return null;
+    }
+
+    @Override
+    public RoleResponse findByName(String name) {
+        return roleMapper.toResponse(roleRepository.findByName(name));
     }
 }
