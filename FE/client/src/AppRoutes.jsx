@@ -7,6 +7,7 @@ import ForgotPasswordPage from './Components/ui-public/ForgotPasswordPage';
 import HomePage from './Components/ui-public/HomePage';
 import LoginPage from './Components/ui-public/LoginPage';
 import NavBar from './Components/ui-public/NavBar';
+import PromotionTable from './Components/ui-public/PromotionTable';
 import SideBar from './Components/ui-public/SideBar';
 import StaffList from './Components/ui-public/StaffList';
 import { getUserRole, isAuthenticated } from './Components/utils/auth';
@@ -20,6 +21,7 @@ const AppRoutes = () => {
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/create-new-password" element={<CreateNewPasswordPage />} />
       <Route path="/manager-dashboard/view-staff-list" element={<StaffList />} />
+      <Route path="/manager-dashboard/promotion" element={<PromotionTable />} />
       <Route path="/" element={<LoginPage />} />
 
       <Route
