@@ -1,9 +1,10 @@
 .container {
+    
     margin: 2rem 0;
   }
   
   .table {
-    table-layout: fixed;
+    table-layout: flex;
     width: 100%;
   }
   
@@ -37,4 +38,9 @@
   button {
     margin: 0 0.5rem;
     width: 50px;
+  }
+
+  .table table-striped{
+    display: flex;
+    flex-direction: row;
   }
