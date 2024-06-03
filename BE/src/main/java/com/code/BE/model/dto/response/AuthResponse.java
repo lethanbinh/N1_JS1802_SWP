@@ -19,4 +19,7 @@ public class AuthResponse {
 
     @JsonProperty("refreshToken")
     private String refreshToken;
+
+    @JsonProperty("roleName")
+    private String roleName;
 }

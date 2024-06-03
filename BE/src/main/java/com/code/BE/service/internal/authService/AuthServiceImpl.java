@@ -9,6 +9,8 @@ import com.code.BE.security.JwtToken;
 import com.code.BE.security.UserSecurity;
 import com.code.BE.service.external.mailService.MailService;
 import com.code.BE.service.internal.confirmationTokenService.ConfirmationTokenService;
+import com.code.BE.service.internal.roleService.RoleService;
+import com.code.BE.service.internal.userService.UserService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,6 +43,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private ConfirmationTokenService confirmationTokenService;
 
+    @Autowired
+    private RoleService roleService;
+
     @Override
     public AuthResponse login(AuthRequest authRequest) {
         authenticationManager.authenticate(
@@ -65,6 +70,7 @@ public class AuthServiceImpl implements AuthService {
             authResponse.setUsername(authRequest.getUsername());
             authResponse.setAccessToken(accessToken);
             authResponse.setRefreshToken(refreshToken);
+            authResponse.setRoleName(user.getRole().getName());
 
             return authResponse;
         }
@@ -92,6 +98,7 @@ public class AuthServiceImpl implements AuthService {
                 authResponse.setUsername(username);
                 authResponse.setAccessToken(newAccessToken);
                 authResponse.setRefreshToken(newRefreshToken);
+                authResponse.setRoleName(user.getRole().getName());
 
                 return authResponse;
             }
