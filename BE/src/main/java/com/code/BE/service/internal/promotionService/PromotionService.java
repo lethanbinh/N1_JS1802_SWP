@@ -10,4 +10,5 @@ public interface PromotionService {
     PromotionResponse findById (int id);
     PromotionResponse save (PromotionRequest promotionRequest);
     boolean deleteById (int id);
+    PromotionResponse editById (int id, PromotionRequest promotionRequest);
 }

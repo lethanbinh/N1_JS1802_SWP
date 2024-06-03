@@ -23,7 +23,7 @@ public class Promotion {
 
     @PositiveOrZero
     @Column(name = "discount")
-    private int discount;
+    private double discount;
 
     @NotNull
     @Column(name = "name", nullable = false)

@@ -10,6 +10,16 @@ public class ErrorMessage {
     public static final String CUSTOMER_NOT_FOUND = "Customer not found";
     public static final String STAFF_NOT_FOUND = "Staff not found";
     public static final String ROLE_NOT_FOUND = "Role not found";
+    public static final String PROMOTION_NOT_FOUND = "Promotion not found";
+
+    public static final String DISCOUNT_VALIDATION_FAILED = "Discount must be zero or positive.";
+    public static final String NAME_VALIDATION_FAILED = "Name cannot be empty.";
+    public static final String START_DATE_VALIDATION_FAILED = "Start date cannot be after end date.";
+    public static final String MINIMUM_PRIZE_VALIDATION_FAILED = "Minimum prize must be zero or positive.";
+    public static final String MAXIMUM_PRIZE_VALIDATION_FAILED = "Maximum prize must be zero or positive.";
+    public static final String PRIZE_RANGE_VALIDATION_FAILED = "Minimum prize cannot be greater than maximum prize.";
+
+
 
     public static final String ORDER_NOT_FOUND = "Order not found";
     public static final String CONFIRM_TOKEN_ERROR = "Confirm token is invalid or expired";
@@ -27,4 +37,5 @@ public class ErrorMessage {
 
     public static final String DATE_VALIDATION_FAILED = "Date is not correct format";
     public static final String BIRTHDAY_VALIDATION_FAILED = "Birthday cannot be a day in future";
+
 }
