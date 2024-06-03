@@ -27,7 +27,7 @@ public class User {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "fullName")
+    @Column(name = "full_name")
     private String fullName;
 
     @NotNull
@@ -39,11 +39,11 @@ public class User {
     private Date registerDate;
 
     @Pattern(regexp = Regex.PHONE_PATTERN)
-    @Column(name = "phone")
+    @Column(name = "phone", unique = true)
     private String phone;
 
     @Email
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "address")
@@ -73,9 +73,6 @@ public class User {
 
     @OneToMany(mappedBy = "staff")
     private List<Order> staffOrders;
-
-    @OneToMany(mappedBy = "customer")
-    private List<Order> customerOrders;
 
     @OneToOne(mappedBy = "user")
     private ConfirmationToken confirmationToken;

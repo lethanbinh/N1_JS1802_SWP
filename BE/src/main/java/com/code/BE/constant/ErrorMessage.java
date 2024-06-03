@@ -19,8 +19,6 @@ public class ErrorMessage {
     public static final String MAXIMUM_PRIZE_VALIDATION_FAILED = "Maximum prize must be zero or positive.";
     public static final String PRIZE_RANGE_VALIDATION_FAILED = "Minimum prize cannot be greater than maximum prize.";
 
-
-
     public static final String ORDER_NOT_FOUND = "Order not found";
     public static final String CONFIRM_TOKEN_ERROR = "Confirm token is invalid or expired";
 
@@ -29,6 +27,7 @@ public class ErrorMessage {
     public static final String EMAIL_EXIST = "Email exists";
     public static final String STALL_CODE_EXIST = "Stall code exists";
     public static final String ROLE_EXIST = "Role exists";
+    public static final String PHONE_EXIST = "Phone exists";
 
     public static final String STALL_CODE_VALIDATION_FAILED = "Stall code must be exactly 6 characters long, starting with \"ST\", followed by exactly 4 digits";
     public static final String TAX_VALIDATION_FAILED = "Tax must be value from 0 to 1";
@@ -36,6 +35,8 @@ public class ErrorMessage {
     public static final String PHONE_VALIDATION_FAILED = "Incorrect Vietnam Phone";
 
     public static final String DATE_VALIDATION_FAILED = "Date is not correct format";
+    public static final String DATE_INCORRECT = "Start date cannot after end date";
     public static final String BIRTHDAY_VALIDATION_FAILED = "Birthday cannot be a day in future";
 
+    public static final String PROMOTION_EXPIRED = "Promotion expired";
 }

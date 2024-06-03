@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderRequest {
-
     private String description;
     private String status;
     private String type;
@@ -25,7 +24,7 @@ public class OrderRequest {
     private int promotionId;
     @Positive
     private int staffId;
-    @Positive
-    private int customerId;
+
+    private CustomerRequest customerRequest;
     private List<OrderDetailRequest> orderDetailRequestList;
 }

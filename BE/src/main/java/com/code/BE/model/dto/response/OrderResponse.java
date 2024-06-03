@@ -25,7 +25,7 @@ public class OrderResponse {
     private double refundMoney;
     private int promotionId;
     private int staffId;
-    private int customerId;
 
+    private CustomerResponse customerResponse;
     private List<OrderDetailResponse> orderDetailResponses;
 }

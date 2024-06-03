@@ -1,12 +1,10 @@
 package com.code.BE.model.entity;
 
-import com.code.BE.constant.ErrorMessage;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.List;
 

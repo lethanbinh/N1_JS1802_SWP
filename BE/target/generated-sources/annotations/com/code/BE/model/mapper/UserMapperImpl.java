@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-01T11:28:46+0700",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.38.0.v20240524-2033, environment: Java 17.0.11 (Eclipse Adoptium)"
+    date = "2024-06-03T19:55:04+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
@@ -26,26 +26,20 @@ public class UserMapperImpl implements UserMapper {
 
         UserResponse userResponse = new UserResponse();
 
-        Integer id = userRoleId( user );
-        if ( id != null ) {
-            userResponse.setRoleId( String.valueOf( id ) );
-        }
-        Integer id1 = userStallId( user );
-        if ( id1 != null ) {
-            userResponse.setStallId( String.valueOf( id1 ) );
-        }
+        userResponse.setRoleId( userRoleId( user ) );
+        userResponse.setStallId( userStallId( user ) );
+        userResponse.setId( user.getId() );
+        userResponse.setUsername( user.getUsername() );
+        userResponse.setPassword( user.getPassword() );
+        userResponse.setFullName( user.getFullName() );
+        userResponse.setRegisterDate( user.getRegisterDate() );
+        userResponse.setPhone( user.getPhone() );
+        userResponse.setEmail( user.getEmail() );
         userResponse.setAddress( user.getAddress() );
         userResponse.setAvatar( user.getAvatar() );
-        userResponse.setBirthday( user.getBirthday() );
-        userResponse.setEmail( user.getEmail() );
-        userResponse.setFullName( user.getFullName() );
-        userResponse.setId( user.getId() );
-        userResponse.setPassword( user.getPassword() );
-        userResponse.setPhone( user.getPhone() );
         userResponse.setPointBonus( user.getPointBonus() );
-        userResponse.setRegisterDate( user.getRegisterDate() );
+        userResponse.setBirthday( user.getBirthday() );
         userResponse.setStatus( user.isStatus() );
-        userResponse.setUsername( user.getUsername() );
 
         return userResponse;
     }
@@ -72,15 +66,15 @@ public class UserMapperImpl implements UserMapper {
 
         User user = new User();
 
-        user.setAddress( userRequest.getAddress() );
-        user.setAvatar( userRequest.getAvatar() );
-        user.setBirthday( userRequest.getBirthday() );
-        user.setEmail( userRequest.getEmail() );
+        user.setUsername( userRequest.getUsername() );
         user.setFullName( userRequest.getFullName() );
         user.setPassword( userRequest.getPassword() );
         user.setPhone( userRequest.getPhone() );
+        user.setEmail( userRequest.getEmail() );
+        user.setAddress( userRequest.getAddress() );
+        user.setAvatar( userRequest.getAvatar() );
+        user.setBirthday( userRequest.getBirthday() );
         user.setStatus( userRequest.isStatus() );
-        user.setUsername( userRequest.getUsername() );
 
         return user;
     }
@@ -99,25 +93,25 @@ public class UserMapperImpl implements UserMapper {
         return list;
     }
 
-    private Integer userRoleId(User user) {
+    private int userRoleId(User user) {
         if ( user == null ) {
-            return null;
+            return 0;
         }
         Role role = user.getRole();
         if ( role == null ) {
-            return null;
+            return 0;
         }
         int id = role.getId();
         return id;
     }
 
-    private Integer userStallId(User user) {
+    private int userStallId(User user) {
         if ( user == null ) {
-            return null;
+            return 0;
         }
         Stall stall = user.getStall();
         if ( stall == null ) {
-            return null;
+            return 0;
         }
         int id = stall.getId();
         return id;

@@ -10,6 +10,7 @@ import com.code.BE.model.mapper.UserMapper;
 import com.code.BE.repository.RoleRepository;
 import com.code.BE.repository.StallRepository;
 import com.code.BE.repository.UserRepository;
+import com.code.BE.util.PhoneNumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private PhoneNumberUtil phoneNumberUtil;
 
     private static final String IMAGE_API = "http://localhost:8080/api/v1/images/";
 
@@ -65,6 +69,7 @@ public class UserServiceImpl implements UserService {
 
         user.setAvatar(IMAGE_API + userRequest.getAvatar());
         user.setRole(role);
+        user.setPhone(phoneNumberUtil.normalizePhoneNumber(userRequest.getPhone()));
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         UserResponse userResponse = userMapper.toResponse(userRepository.saveAndFlush(user));
         userResponse.setPassword(userRequest.getPassword());
@@ -76,7 +81,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId);
         if (user != null) {
             user.setUsername(profileUpdateRoleUser.getUsername());
-            user.setPhone(profileUpdateRoleUser.getPhone());
+            user.setPhone(phoneNumberUtil.normalizePhoneNumber(profileUpdateRoleUser.getPhone()));
             user.setEmail(profileUpdateRoleUser.getEmail());
             user.setAddress(profileUpdateRoleUser.getAddress());
             user.setAvatar(IMAGE_API + profileUpdateRoleUser.getAvatar());
@@ -91,7 +96,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId);
         if (user != null) {
             user.setUsername(profileUpdateRoleAdmin.getUsername());
-            user.setPhone(profileUpdateRoleAdmin.getPhone());
+            user.setPhone(phoneNumberUtil.normalizePhoneNumber(profileUpdateRoleAdmin.getPhone()));
             user.setEmail(profileUpdateRoleAdmin.getEmail());
             user.setAddress(profileUpdateRoleAdmin.getAddress());
             user.setAvatar(IMAGE_API + profileUpdateRoleAdmin.getAvatar());
@@ -120,5 +125,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponse> findByRoleName(String name) {
         return userMapper.toResponseList(userRepository.findByRoleName(name.toUpperCase()));
+    }
+
+    @Override
+    public UserResponse findByPhone(String phone) {
+        return userMapper.toResponse(userRepository.findByPhone(phoneNumberUtil.normalizePhoneNumber(phone)));
     }
 }

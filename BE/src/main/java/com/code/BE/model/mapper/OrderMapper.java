@@ -12,7 +12,6 @@ import java.util.List;
 public interface OrderMapper {
     @Mapping(source = "order.promotion.id", target = "promotionId")
     @Mapping(source = "order.staff.id", target = "staffId")
-    @Mapping(source = "order.customer.id", target = "customerId")
 
         // Map Entity to Response
     OrderResponse toResponse(Order order);

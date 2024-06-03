@@ -4,16 +4,15 @@ import com.code.BE.model.dto.request.OrderDetailRequest;
 import com.code.BE.model.dto.request.OrderRequest;
 import com.code.BE.model.dto.response.OrderDetailResponse;
 import com.code.BE.model.dto.response.OrderResponse;
+import com.code.BE.model.entity.Customer;
 import com.code.BE.model.entity.Order;
 import com.code.BE.model.entity.OrderDetail;
 import com.code.BE.model.entity.Product;
-import com.code.BE.model.entity.RevenueStatistics;
+import com.code.BE.model.mapper.CustomerMapper;
 import com.code.BE.model.mapper.OrderDetailMapper;
 import com.code.BE.model.mapper.OrderMapper;
-import com.code.BE.repository.OrderDetailRepository;
-import com.code.BE.repository.OrderRepository;
-import com.code.BE.repository.ProductRepository;
-import com.code.BE.repository.UserRepository;
+import com.code.BE.repository.*;
+import com.code.BE.util.PhoneNumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,10 +34,22 @@ public class OrderServiceImpl implements OrderService {
     private UserRepository userRepository;
 
     @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private PhoneNumberUtil phoneNumberUtil;
+
+    @Autowired
     private OrderMapper orderMapper;
 
     @Autowired
     private OrderDetailMapper orderDetailMapper;
+
+    @Autowired
+    private CustomerMapper customerMapper;
+
+    @Autowired
+    private PromotionRepository promotionRepository;
 
     @Override
     public List<OrderResponse> findAll() {
@@ -130,23 +141,43 @@ public class OrderServiceImpl implements OrderService {
             totalPrice += orderDetail.getTotalPrice();
         }
 
+        Customer customer = customerRepository.findByPhone(phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
+        if (customer == null) {
+            customer = customerMapper.toEntity(orderRequest.getCustomerRequest());
+            customer.setCreateDate(new Date());
+            customer.setUpdateDate(new Date());
+            customer.setPhone(phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
+
+            customer = customerRepository.saveAndFlush(customer);
+        } else {
+            customer.setFullName(orderRequest.getCustomerRequest().getFullName());
+            customer.setEmail(orderRequest.getCustomerRequest().getEmail());
+            customer.setAddress(orderRequest.getCustomerRequest().getAddress());
+            customer.setBirthday(orderRequest.getCustomerRequest().getBirthday());
+            customer.setStatus(orderRequest.getCustomerRequest().isStatus());
+            customer.setUpdateDate(new Date());
+            customer.setPhone(phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
+            customer = customerRepository.saveAndFlush(customer);
+        }
+
         order.setStatus(orderRequest.getStatus().toUpperCase());
         order.setType(orderRequest.getType().toUpperCase());
         order.setTotalPrice(totalPrice);
-        order.setFinalPrice(totalPrice + totalPrice * orderRequest.getTax());
+        order.setFinalPrice(totalPrice + totalPrice * orderRequest.getTax() -
+                totalPrice * promotionRepository.findById(orderRequest.getPromotionId()).getDiscount());
         order.setTotalBonusPoint(totalPrice / 1000);
         order.setRefundMoney((orderRequest.getCustomerGiveMoney() - order.getFinalPrice() > 0) ? (orderRequest.getCustomerGiveMoney() - order.getFinalPrice()) : 0);
-        order.setPromotion(null);
+        order.setPromotion(promotionRepository.findById(orderRequest.getPromotionId()));
         order.setStaff(userRepository.findById(orderRequest.getStaffId()));
-        order.setCustomer(userRepository.findById(orderRequest.getCustomerId()));
+        order.setCustomer(customer);
         Order saveOrder = orderRepository.saveAndFlush(order);
 
         for (OrderDetail orderDetail : productOrderDetailMap.values()) {
             orderDetail.setOrder(saveOrder);
             orderDetailRepository.saveAndFlush(orderDetail);
         }
-
         OrderResponse orderResponse = orderMapper.toResponse(order);
+        orderResponse.setCustomerResponse(customerMapper.toResponse(customer));
         orderResponse.setOrderDetailResponses(orderDetailMapper.toResponseList(new ArrayList<>(productOrderDetailMap.values())));
         return orderResponse;
     }

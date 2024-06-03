@@ -17,4 +17,5 @@ public interface UserService {
     UserResponse updateByIdRoleAdmin (int userId, ProfileUpdateRoleAdmin profileUpdateRoleAdmin);
     boolean deleteById (int id);
     List<UserResponse> findByRoleName (String name);
+    UserResponse findByPhone (String phone);
 }

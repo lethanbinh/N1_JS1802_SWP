@@ -9,19 +9,14 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
+public class CustomerResponse {
     private int id;
-    private String username;
-    private String password;
     private String fullName;
-    private Date registerDate;
     private String phone;
     private String email;
     private String address;
-    private String avatar;
-    private double pointBonus;
+    private Date createDate;
+    private Date updateDate;
     private Date birthday;
     private boolean status;
-    private int roleId;
-    private int stallId;
 }

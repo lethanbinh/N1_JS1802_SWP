@@ -70,7 +70,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private User customer;
+    private Customer customer;
 
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails;

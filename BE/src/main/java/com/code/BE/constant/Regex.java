@@ -12,5 +12,4 @@ public class Regex {
     public static final String PASSWORD_PATTERN = "^(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d]).{6,}$";
     public static final String STALL_CODE_PATTERN = "^ST\\d{4}$";
     public static final String PRODUCT_CODE_PATTERN = "^\\d{5}$";
-
 }

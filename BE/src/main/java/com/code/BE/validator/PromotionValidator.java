@@ -20,7 +20,7 @@ public class PromotionValidator implements Validator {
         PromotionRequest promotionRequest = (PromotionRequest) target;
 
         // Validate discount
-        if (promotionRequest.getDiscount() < 0 || promotionRequest.getDiscount() >= 1) {
+        if (promotionRequest.getDiscount() < 0 || promotionRequest.getDiscount() > 1) {
             errors.rejectValue("discount", "error.discount", ErrorMessage.DISCOUNT_VALIDATION_FAILED);
         }
 

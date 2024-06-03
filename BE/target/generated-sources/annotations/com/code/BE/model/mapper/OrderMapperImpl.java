@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-01T11:28:46+0700",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.38.0.v20240524-2033, environment: Java 17.0.11 (Eclipse Adoptium)"
+    date = "2024-06-03T19:55:04+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
 public class OrderMapperImpl implements OrderMapper {
@@ -28,19 +28,18 @@ public class OrderMapperImpl implements OrderMapper {
 
         orderResponse.setPromotionId( orderPromotionId( order ) );
         orderResponse.setStaffId( orderStaffId( order ) );
-        orderResponse.setCustomerId( orderCustomerId( order ) );
-        orderResponse.setAddress( order.getAddress() );
-        orderResponse.setCreateDate( order.getCreateDate() );
-        orderResponse.setCustomerGiveMoney( order.getCustomerGiveMoney() );
-        orderResponse.setDescription( order.getDescription() );
-        orderResponse.setFinalPrice( order.getFinalPrice() );
         orderResponse.setId( order.getId() );
-        orderResponse.setRefundMoney( order.getRefundMoney() );
+        orderResponse.setDescription( order.getDescription() );
         orderResponse.setStatus( order.getStatus() );
-        orderResponse.setTax( order.getTax() );
-        orderResponse.setTotalBonusPoint( order.getTotalBonusPoint() );
-        orderResponse.setTotalPrice( order.getTotalPrice() );
         orderResponse.setType( order.getType() );
+        orderResponse.setCreateDate( order.getCreateDate() );
+        orderResponse.setAddress( order.getAddress() );
+        orderResponse.setTotalPrice( order.getTotalPrice() );
+        orderResponse.setTax( order.getTax() );
+        orderResponse.setFinalPrice( order.getFinalPrice() );
+        orderResponse.setTotalBonusPoint( order.getTotalBonusPoint() );
+        orderResponse.setCustomerGiveMoney( order.getCustomerGiveMoney() );
+        orderResponse.setRefundMoney( order.getRefundMoney() );
 
         return orderResponse;
     }
@@ -67,12 +66,12 @@ public class OrderMapperImpl implements OrderMapper {
 
         Order order = new Order();
 
-        order.setAddress( orderRequest.getAddress() );
-        order.setCustomerGiveMoney( orderRequest.getCustomerGiveMoney() );
         order.setDescription( orderRequest.getDescription() );
         order.setStatus( orderRequest.getStatus() );
-        order.setTax( orderRequest.getTax() );
         order.setType( orderRequest.getType() );
+        order.setAddress( orderRequest.getAddress() );
+        order.setTax( orderRequest.getTax() );
+        order.setCustomerGiveMoney( orderRequest.getCustomerGiveMoney() );
 
         return order;
     }
@@ -112,18 +111,6 @@ public class OrderMapperImpl implements OrderMapper {
             return 0;
         }
         int id = staff.getId();
-        return id;
-    }
-
-    private int orderCustomerId(Order order) {
-        if ( order == null ) {
-            return 0;
-        }
-        User customer = order.getCustomer();
-        if ( customer == null ) {
-            return 0;
-        }
-        int id = customer.getId();
         return id;
     }
 }
