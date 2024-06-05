@@ -21,7 +21,7 @@ public class Policy {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "detail", columnDefinition = "TEXT")
+    @Column(name = "detail", columnDefinition = "LONGTEXT")
     private String detail;
 
     @NotNull

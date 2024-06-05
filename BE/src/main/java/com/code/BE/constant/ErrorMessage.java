@@ -19,6 +19,7 @@ public class ErrorMessage {
     public static final String MAXIMUM_PRIZE_VALIDATION_FAILED = "Maximum prize must be zero or positive.";
     public static final String PRIZE_RANGE_VALIDATION_FAILED = "Minimum prize cannot be greater than maximum prize.";
 
+    public static final String TYPE_VALIDATION_FAILED = "Type cannot be empty.";
     public static final String ORDER_NOT_FOUND = "Order not found";
     public static final String CONFIRM_TOKEN_ERROR = "Confirm token is invalid or expired";
 
@@ -39,4 +40,8 @@ public class ErrorMessage {
     public static final String BIRTHDAY_VALIDATION_FAILED = "Birthday cannot be a day in future";
 
     public static final String PROMOTION_EXPIRED = "Promotion expired";
+    public static final String POLICY_NOT_FOUND = "Policy not found";
+
+
+
 }
