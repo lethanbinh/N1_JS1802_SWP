@@ -1,7 +1,7 @@
-import React from 'react'
-import CIcon from '@coreui/icons-react'
 import { cilPeople } from '@coreui/icons'
+import CIcon from '@coreui/icons-react'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import React from 'react'
 
 const _nav = [
   {
