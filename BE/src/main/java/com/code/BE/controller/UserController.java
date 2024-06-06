@@ -126,6 +126,28 @@ public class UserController {
         }
     }
 
+    @PostMapping("/all")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> saveAll(@Valid @RequestBody List<UserRequest> userRequests, BindingResult bindingResult) throws Exception {
+        ApiResponse<List<UserResponse>> apiResponse = new ApiResponse<>();
+        try {
+            for (UserRequest user : userRequests) {
+                userValidator.validate(user, bindingResult);
+            }
+            if (bindingResult.hasErrors()) {
+                Map<String, String> validationErrors = validatorUtil.toErrors(bindingResult.getFieldErrors());
+                throw new ValidationException(validationErrors);
+            }
+
+            List<UserResponse> userResponse = userService.saveAll(userRequests);
+            apiResponse.ok(userResponse);
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (ValidationException ex) {
+            throw ex; // Rethrow ValidationException
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
     @PutMapping(value = "/id/{id}")
     public ResponseEntity<ApiResponse<UserResponse>> updateById(@PathVariable int id
             , @Valid @RequestBody ProfileUpdateRoleAdmin profileUpdateRoleAdmin
