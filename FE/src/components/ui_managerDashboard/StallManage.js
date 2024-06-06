@@ -16,11 +16,11 @@ import {
 } from '@coreui/react'
 import React, { useState } from 'react'
 
-const StaffList = () => {
+const Stall = () => {
   const [data, setData] = useState([
-    { id: 1, name: 'Mark', email: 'abc@gmail.com', role: 'Seller' },
-    { id: 2, name: 'Mark', email: 'abc@gmail.com', role: 'Seller' },
-    { id: 3, name: 'Mark', email: 'abc@gmail.com', role: 'Seller' },
+    { id: 1, code: 'ABC', name: 'Mark', description: '@mdo', status: 'Processing', type: 'Gold' },
+    { id: 2, code: 'XYZ', name: 'Jacob', description: '@mdo', status: 'Processing', type: 'Gold' },
+    { id: 3, code: 'QAZ', name: 'Mark', description: '@mdo', status: 'Processing', type: 'Gold' },
   ])
 
   const [editingRow, setEditingRow] = useState(null)
@@ -48,15 +48,14 @@ const StaffList = () => {
   const handleAddNew = () => {
     const newRow = {
       id: data.length + 1,
+      code: '',
       name: '',
-      email: '',
-      role: '',
+      description: '',
+      status: '',
+      type: '',
     }
     setData([...data, newRow])
     setEditingRow(newRow.id)
-  }
-  const handleDelete = (id) => {
-    setData(data.filter((row) => row.id !== id))
   }
 
   return (
@@ -64,16 +63,18 @@ const StaffList = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Staff List</strong>
+            <strong>Stall List</strong>
           </CCardHeader>
           <CCardBody>
             <CTable>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">Id</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Code</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Name</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Email</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Role</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Description</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Type</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
@@ -81,6 +82,18 @@ const StaffList = () => {
                 {data.map((row) => (
                   <CTableRow key={row.id}>
                     <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
+                    <CTableDataCell>
+                      {editingRow === row.id ? (
+                        <CFormInput
+                          type="text"
+                          name="code"
+                          value={formData.code}
+                          onChange={handleInputChange}
+                        />
+                      ) : (
+                        row.code
+                      )}
+                    </CTableDataCell>
                     <CTableDataCell>
                       {editingRow === row.id ? (
                         <CFormInput
@@ -96,24 +109,36 @@ const StaffList = () => {
                     <CTableDataCell>
                       {editingRow === row.id ? (
                         <CFormTextarea
-                          name="email"
-                          value={formData.email}
+                          name="description"
+                          value={formData.description}
                           onChange={handleInputChange}
                         />
                       ) : (
-                        row.email
+                        row.description
                       )}
                     </CTableDataCell>
                     <CTableDataCell>
                       {editingRow === row.id ? (
                         <CFormInput
                           type="text"
-                          name="role"
-                          value={formData.role}
+                          name="status"
+                          value={formData.status}
                           onChange={handleInputChange}
                         />
                       ) : (
-                        row.role
+                        row.status
+                      )}
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      {editingRow === row.id ? (
+                        <CFormInput
+                          type="text"
+                          name="type"
+                          value={formData.type}
+                          onChange={handleInputChange}
+                        />
+                      ) : (
+                        row.type
                       )}
                     </CTableDataCell>
                     <CTableDataCell>
@@ -123,19 +148,16 @@ const StaffList = () => {
                         </CButton>
                       ) : (
                         <CButton color="info" onClick={() => handleEdit(row.id)}>
-                          Edit
+                          Update
                         </CButton>
                       )}
-                      <CButton className="mx-1" color="danger" onClick={() => handleDelete(row.id)}>
-                        Delete
-                      </CButton>
                     </CTableDataCell>
                   </CTableRow>
                 ))}
               </CTableBody>
             </CTable>
             <CButton color="success" className="mt-1" onClick={handleAddNew}>
-              Create New Staff
+              Add New Stall
             </CButton>
           </CCardBody>
         </CCard>
@@ -143,4 +165,4 @@ const StaffList = () => {
     </CRow>
   )
 }
-export default StaffList
+export default Stall

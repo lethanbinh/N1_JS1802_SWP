@@ -54,10 +54,16 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const StaffList = React.lazy(() => import('./components/ui_managerDashboard/StaffList'))
 const Policy = React.lazy(() => import('./components/ui_managerDashboard/Policy'))
 const PromotionList = React.lazy(() => import('./components/ui_managerDashboard/PromotionList'))
-const PurchaseHistoryListManagerDashboard = React.lazy(() => import('./components/ui_public/PurchaseHistoryList'))
+const PurchaseHistoryListManagerDashboard = React.lazy(
+  () => import('./components/ui_public/PurchaseHistoryList'),
+)
+const Stall = React.lazy(() => import('./components/ui_managerDashboard/StallManage'))
 
 //staffDashboard
-const PurchaseHistoryListStaffDashboard = React.lazy(() => import('./components/ui_public/PurchaseHistoryList'))
+const PurchaseHistoryListStaffDashboard = React.lazy(
+  () => import('./components/ui_public/PurchaseHistoryList'),
+)
+const PolicyForStaff = React.lazy(() => import('./components/ui_managerDashboard/Policy'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -106,9 +112,23 @@ const routes = [
   { path: '/widgets', name: 'Widgets', element: Widgets },
   { path: '/manager-dashboard/staff-list', name: 'Staff List', element: StaffList },
   { path: '/manager-dashboard/view-edit-RAEP', name: 'Return & Exchange Policy', element: Policy },
-  { path: '/manager-dashboard/promotion', name: 'Promotion List', element: PromotionList},
-  { path: '/manager-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListManagerDashboard },
-  { path: '/staff-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListStaffDashboard }
+  {
+    path: '/staff-dashboard/view-edit-RAEP',
+    name: 'Return & Exchange Policy',
+    element: PolicyForStaff,
+  },
+  { path: '/manager-dashboard/promotion', name: 'Promotion List', element: PromotionList },
+  {
+    path: '/manager-dashboard/view-CPH',
+    name: 'Customer Purchase History',
+    element: PurchaseHistoryListManagerDashboard,
+  },
+  {
+    path: '/staff-dashboard/view-CPH',
+    name: 'Customer Purchase History',
+    element: PurchaseHistoryListStaffDashboard,
+  },
+  { path: '/manager-dashboard/stall', name: 'Stall', element: Stall },
 ]
 
 export default routes
