@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -74,6 +75,15 @@ public class UserServiceImpl implements UserService {
         UserResponse userResponse = userMapper.toResponse(userRepository.saveAndFlush(user));
         userResponse.setPassword(userRequest.getPassword());
         return userResponse;
+    }
+
+    @Override
+    public List<UserResponse> saveAll(List<UserRequest> userRequests) {
+        List<UserResponse> userResponses = new ArrayList<>();
+        for (UserRequest userRequest : userRequests) {
+            userResponses.add(save(userRequest));
+        }
+        return userResponses;
     }
 
     @Override
