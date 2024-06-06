@@ -14,7 +14,7 @@ public class OrderStatistics {
     private int totalNumberOfOrders;
     private double averageOrderValue;
     private double totalSales;
-    private Map<String, Integer> orderTrends; // Period -> order counts
+    private Map<String, List<Integer>> orderTrends; // Period -> order counts
     private double customerOrderFrequency;
     private double orderAverageNumbers;
     private Map<String, Integer> orderNumbersByCustomerDemographics; // Age/Gender -> order counts

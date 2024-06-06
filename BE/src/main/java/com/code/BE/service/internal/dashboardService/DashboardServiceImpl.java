@@ -66,10 +66,10 @@ public class DashboardServiceImpl implements DashboardService {
         Double totalSales = orderStatisticsRepository.findTotalSales(startDate, endDate);
 
         List<Object[]> orderTrendsRaw = orderStatisticsRepository.findOrderTrends(startDate, endDate);
-        Map<String, Integer> orderTrends = new HashMap<>();
+        Map<String, List<Integer>> orderTrends = new HashMap<>();
         for (Object[] trend : orderTrendsRaw) {
             String period = trend[0] + "-" + trend[1];
-            orderTrends.put(period, ((Number) trend[2]).intValue());
+            orderTrends.put(period, (List<Integer>) trend[2]);
         }
 
         Double customerOrderFrequency = orderStatisticsRepository.findCustomerOrderFrequency(startDate, endDate);
