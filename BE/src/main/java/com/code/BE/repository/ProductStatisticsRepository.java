@@ -26,7 +26,8 @@ public interface ProductStatisticsRepository extends JpaRepository<Product, Inte
     @Query("SELECT p.name, SUM(od.productPrice * od.productQuantity) AS totalSales " +
             "FROM OrderDetail od JOIN od.product p JOIN od.order o " +
             "WHERE o.createDate BETWEEN :startDate AND :endDate " +
-            "GROUP BY p.name")
+            "GROUP BY p.name " +
+            "ORDER BY totalSales DESC")
     List<Object[]> findSalesPerProduct(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("SELECT p.name, SUM(od.productQuantity) / COUNT(od) AS returnRate " +

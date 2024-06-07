@@ -66,10 +66,10 @@ public class DashboardServiceImpl implements DashboardService {
         Double totalSales = orderStatisticsRepository.findTotalSales(startDate, endDate);
 
         List<Object[]> orderTrendsRaw = orderStatisticsRepository.findOrderTrends(startDate, endDate);
-        Map<String, List<Integer>> orderTrends = new HashMap<>();
+        Map<String, Integer> orderTrends = new HashMap<>();
         for (Object[] trend : orderTrendsRaw) {
             String period = trend[0] + "-" + trend[1];
-            orderTrends.put(period, (List<Integer>) trend[2]);
+            orderTrends.put(period, ((Number) trend[2]).intValue());
         }
 
         Double customerOrderFrequency = orderStatisticsRepository.findCustomerOrderFrequency(startDate, endDate);
@@ -97,9 +97,11 @@ public class DashboardServiceImpl implements DashboardService {
         int totalNumberOfProducts = productStatisticsRepository.findTotalNumberOfProducts();
 
         List<Object[]> topSellingProductsRaw = productStatisticsRepository.findTopSellingProducts(startDate, endDate);
-        List<String> topSellingProducts = topSellingProductsRaw.stream()
-                .map(item -> (String) item[0])
-                .collect(Collectors.toList());
+
+        Map<String, Long> topSellingProducts = new HashMap<>();
+        for (Object[] sales : topSellingProductsRaw) {
+            topSellingProducts.put((String) sales[0], (Long)sales[1]);
+        }
 
         List<Object[]> salesPerProductRaw = productStatisticsRepository.findSalesPerProduct(startDate, endDate);
         Map<String, Double> salesPerProduct = new HashMap<>();
@@ -147,10 +149,7 @@ public class DashboardServiceImpl implements DashboardService {
             ordersPerStaff.put((String) orders[0], ((Number) orders[1]).intValue());
         }
 
-        Map<String, Integer> averageOrdersPerStaff = new HashMap<>();
-        for (Object[] orders : ordersPerStaffRaw) {
-            averageOrdersPerStaff.put((String) orders[0], ((Number) orders[1]).intValue());
-        }
+        double averageOrdersPerStaff = (double) (ordersPerStaffRaw.size() / totalNumberOfStaff);
 
         return new StaffStatistics(
                 totalNumberOfStaff,
