@@ -77,8 +77,8 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: 'Products Report',
-        to: '/manager-dashboard/product-report',
+        name: 'Products Statistics',
+        to: '/manager-dashboard/product-statistics',
       },
     ],
   },
