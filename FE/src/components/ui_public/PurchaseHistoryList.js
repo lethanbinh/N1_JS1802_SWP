@@ -66,7 +66,7 @@ const PurchaseHistoryList = () => {
                   <CTableDataCell>@mdo</CTableDataCell>
                   <CTableDataCell>@mdo</CTableDataCell>
                   <CTableDataCell className='mt-1'>
-                    <CButton className='mr-1' color="info">View Details</CButton>
+                    <CButton className='mr-1' color="info" ><a>View</a></CButton>
                   </CTableDataCell>
                 </CTableRow>
               </CTableBody>

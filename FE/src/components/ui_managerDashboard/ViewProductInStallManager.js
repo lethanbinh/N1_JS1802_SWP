@@ -13,14 +13,15 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
+  CDropdownHeader
 } from '@coreui/react'
 import React, { useState } from 'react'
 
-const PromotionList = () => {
+const StallProduct = () => {
   const [data, setData] = useState([
-    { id: 1, discount: 'Mark', name: 'abc@gmail.com', description: 'Seller', startDate: '2021-09-01', endDate: '2021-09-30', minPrice: '100', maxPrice: '1000' },
-    { id: 2, discount: 'Mark', name: 'abc@gmail.com', description: 'Seller', startDate: '2021-09-01', endDate: '2021-09-30', minPrice: '100', maxPrice: '1000' },
-    { id: 3, discount: 'Mark', name: 'abc@gmail.com', description: 'Seller', startDate: '2021-09-01', endDate: '2021-09-30', minPrice: '100', maxPrice: '1000' },
+    { id: 1, code: 'ABC', description: 'J001', name: 'Elegant gold necklace', quantity: 100, price: 100.00, type: 'necklace' },
+    { id: 2, code: 'XYZ', description: 'J001', name: 'Elegant gold necklace', quantity: 50, price: 100.00, type: 'necklace' },
+    { id: 3, code: 'DEF', description: 'J001', name: 'Elegant gold necklace', quantity: 20, price: 100.00, type: 'necklace' },
   ])
 
   const [editingRow, setEditingRow] = useState(null)
@@ -48,15 +49,14 @@ const PromotionList = () => {
   const handleAddNew = () => {
     const newRow = {
       id: data.length + 1,
+      code: '',
       name: '',
-      email: '',
-      role: '',
+      description: '',
+      status: '',
+      type: '',
     }
     setData([...data, newRow])
     setEditingRow(newRow.id)
-  }
-  const handleDelete = (id) => {
-    setData(data.filter((row) => row.id !== id))
   }
 
   return (
@@ -64,21 +64,19 @@ const PromotionList = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Promotion List</strong>
+            <CDropdownHeader><strong>Stall...</strong></CDropdownHeader>
           </CCardHeader>
           <CCardBody>
             <CTable>
               <CTableHead>
                 <CTableRow>
-                <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Discount</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Name</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Start Date</CTableHeaderCell>
-                <CTableHeaderCell scope="col">End Date</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Minimum Price</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Maximum Price</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Action</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Id</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Code</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Description</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Quantity</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Price</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Type</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -89,28 +87,18 @@ const PromotionList = () => {
                       {editingRow === row.id ? (
                         <CFormInput
                           type="text"
-                          name="discount"
-                          value={formData.discount}
+                          name="code"
+                          value={formData.code}
                           onChange={handleInputChange}
                         />
                       ) : (
-                        row.discount
+                        row.code
                       )}
                     </CTableDataCell>
                     <CTableDataCell>
                       {editingRow === row.id ? (
                         <CFormInput
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                        />
-                      ) : (
-                        row.name
-                      )}
-                    </CTableDataCell>
-                    <CTableDataCell>
-                      {editingRow === row.id ? (
-                        <CFormTextarea
+                          type="text"
                           name="description"
                           value={formData.description}
                           onChange={handleInputChange}
@@ -121,77 +109,59 @@ const PromotionList = () => {
                     </CTableDataCell>
                     <CTableDataCell>
                       {editingRow === row.id ? (
-                        <CFormInput
-                          type="text"
-                          name="startDate"
-                          value={formData.startDate}
+                        <CFormTextarea
+                          name="description"
+                          value={formData.name}
                           onChange={handleInputChange}
                         />
                       ) : (
-                        row.startDate
+                        row.description
                       )}
                     </CTableDataCell>
                     <CTableDataCell>
                       {editingRow === row.id ? (
                         <CFormInput
                           type="text"
-                          name="endDate"
-                          value={formData.endDate}
+                          name="quantity"
+                          value={formData.quantity}
                           onChange={handleInputChange}
                         />
                       ) : (
-                        row.endDate
+                        row.quantity
                       )}
                     </CTableDataCell>
                     <CTableDataCell>
                       {editingRow === row.id ? (
                         <CFormInput
                           type="text"
-                          name="minPrice"
-                          value={formData.minPrice}
+                          name="price"
+                          value={formData.price}
                           onChange={handleInputChange}
                         />
                       ) : (
-                        row.minPrice
+                        row.price
                       )}
                     </CTableDataCell>
                     <CTableDataCell>
                       {editingRow === row.id ? (
                         <CFormInput
                           type="text"
-                          name="maxPrice"
-                          value={formData.maxPrice}
+                          name="type"
+                          value={formData.type}
                           onChange={handleInputChange}
                         />
                       ) : (
-                        row.maxPrice
+                        row.type
                       )}
-                    </CTableDataCell>
-                    <CTableDataCell>
-                      {editingRow === row.id ? (
-                        <CButton color="success" onClick={handleSave}>
-                          Save
-                        </CButton>
-                      ) : (
-                        <CButton color="info" onClick={() => handleEdit(row.id)}>
-                          Edit
-                        </CButton>
-                      )}
-                      <CButton className="mx-1" color="danger" onClick={() => handleDelete(row.id)}>
-                        Delete
-                      </CButton>
                     </CTableDataCell>
                   </CTableRow>
                 ))}
               </CTableBody>
             </CTable>
-            <CButton color="success" className="mt-1" onClick={handleAddNew}>
-              Create Promotion
-            </CButton>
           </CCardBody>
         </CCard>
       </CCol>
     </CRow>
   )
 }
-export default PromotionList
+export default StallProduct

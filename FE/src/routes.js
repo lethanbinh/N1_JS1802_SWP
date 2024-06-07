@@ -58,6 +58,13 @@ const PurchaseHistoryListManagerDashboard = React.lazy(() => import('./component
 
 //staffDashboard
 const PurchaseHistoryListStaffDashboard = React.lazy(() => import('./components/ui_public/PurchaseHistoryList'))
+const ViewProductInStallManager = React.lazy(
+  () => import('./components/ui_managerDashboard/ViewProductInStallManager')
+)
+const PolicyForStaff = React.lazy(() => import('./components/ui_managerDashboard/Policy'))
+const ViewProductInStallStaff = React.lazy(
+  () => import('./components/ui_staffDashboard/ViewProductInStallStaff')
+)
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -108,7 +115,33 @@ const routes = [
   { path: '/manager-dashboard/view-edit-RAEP', name: 'Return & Exchange Policy', element: Policy },
   { path: '/manager-dashboard/promotion', name: 'Promotion List', element: PromotionList},
   { path: '/manager-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListManagerDashboard },
-  { path: '/staff-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListStaffDashboard }
+  { path: '/staff-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListStaffDashboard },
+  { path: '/staff-dashboard/view-edit-RAEP',
+    name: 'Return & Exchange Policy',
+    element: PolicyForStaff,
+  },
+  { 
+    path: '/manager-dashboard/promotion', 
+    name: 'Promotion List', 
+    element: PromotionList },
+  {
+    path: '/manager-dashboard/view-CPH',
+    name: 'Customer Purchase History',
+    element: PurchaseHistoryListManagerDashboard,
+  },
+  {
+    path: '/staff-dashboard/view-CPH',
+    name: 'Customer Purchase History',
+    element: PurchaseHistoryListStaffDashboard,
+  },
+  { path: '/manager-dashboard/view-product-in-stall', 
+    name: 'Product in Stall', 
+    element: ViewProductInStallManager 
+  },
+  { path: '/staff-dashboard/view-edit-product', 
+    name: 'Product in Stall', 
+    element: ViewProductInStallStaff 
+  },
 ]
 
 export default routes
