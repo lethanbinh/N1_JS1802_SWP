@@ -49,7 +49,8 @@ const Modals = React.lazy(() => import('./views/notifications/modals/Modals'))
 const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
-
+const GeneralInfoForm = React.lazy(() => import('./components/ui_public/GeneralInfoForm'))
+const AccountList = React.lazy(() => import('./components/ui-adminDasdboard/AccountList'))
 // managerdashboard
 const StaffList = React.lazy(() => import('./components/ui_managerDashboard/StaffList'))
 const Policy = React.lazy(() => import('./components/ui_managerDashboard/Policy'))
@@ -64,6 +65,7 @@ const PurchaseHistoryListStaffDashboard = React.lazy(
   () => import('./components/ui_public/PurchaseHistoryList'),
 )
 const PolicyForStaff = React.lazy(() => import('./components/ui_managerDashboard/Policy'))
+const CustomerInfo = React.lazy(() => import('./components/ui-staffDashboard/CustomerInfo'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -110,6 +112,8 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', element: Modals },
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
+  { path: '/general-info', name: 'General Information', element: GeneralInfoForm },
+  { path: '/admin-dashboard/account-list', name: 'Account List', element: AccountList },
   { path: '/manager-dashboard/staff-list', name: 'Staff List', element: StaffList },
   { path: '/manager-dashboard/view-edit-RAEP', name: 'Return & Exchange Policy', element: Policy },
   {
@@ -128,6 +132,7 @@ const routes = [
     name: 'Customer Purchase History',
     element: PurchaseHistoryListStaffDashboard,
   },
+  { path: '/staff-dashboard/customer-info', name: 'Customer Information', element: CustomerInfo },
   { path: '/manager-dashboard/stall', name: 'Stall', element: Stall },
 ]
 

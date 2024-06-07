@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
+import { GeneralInfoForm } from './ui_public/GeneralInfoForm'
 
 // routes config
 import routes from '../routes'
@@ -23,7 +24,8 @@ const AppContent = () => {
               )
             )
           })}
-          <Route path="/" element={<Navigate to="dashboard" replace />} />
+          <Route path="/general-info" element={<GeneralInfoForm />} />
+          <Route path="/" element={<Navigate to="home" replace />} />
         </Routes>
       </Suspense>
     </CContainer>
