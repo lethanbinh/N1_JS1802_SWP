@@ -58,12 +58,14 @@ const PurchaseHistoryListManagerDashboard = React.lazy(
   () => import('./components/ui_public/PurchaseHistoryList'),
 )
 const Stall = React.lazy(() => import('./components/ui_managerDashboard/StallManage'))
+const Revenue = React.lazy(() => import('./components/ui_managerDashboard/ManagerRevenue'))
 
 //staffDashboard
 const PurchaseHistoryListStaffDashboard = React.lazy(
   () => import('./components/ui_public/PurchaseHistoryList'),
 )
 const PolicyForStaff = React.lazy(() => import('./components/ui_managerDashboard/Policy'))
+const RevenueForEachStall = React.lazy(() => import('./components/ui_staffDashboard/StaffRevenue'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -129,6 +131,8 @@ const routes = [
     element: PurchaseHistoryListStaffDashboard,
   },
   { path: '/manager-dashboard/stall', name: 'Stall', element: Stall },
+  { path: '/manager-dashboard/revenue', name: 'Revenue of Stalls', element: Revenue },
+  { path: '/staff-dashboard/revenue-ofS', name: 'Revenue of Stall', element: RevenueForEachStall },
 ]
 
 export default routes
