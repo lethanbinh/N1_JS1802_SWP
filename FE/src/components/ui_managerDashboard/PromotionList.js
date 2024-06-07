@@ -47,6 +47,9 @@ const PromotionList = () => {
                   <CTableDataCell>@mdo</CTableDataCell>
                   <CTableDataCell>@mdo</CTableDataCell>
                   <CTableDataCell>@mdo</CTableDataCell>
+                  <CTableDataCell className='mt-1'>
+                    <CButton className='mr-1' color="info">Edit</CButton>
+                    <CButton className='mx-1' color="danger">Delete</CButton>
                   <CTableDataCell className="mt-1">
                     <CButton className="mr-1" color="info">
                       Edit
@@ -65,6 +68,9 @@ const PromotionList = () => {
                   <CTableDataCell>@mdo</CTableDataCell>
                   <CTableDataCell>@mdo</CTableDataCell>
                   <CTableDataCell>@mdo</CTableDataCell>
+                  <CTableDataCell className='mt-1'>
+                    <CButton className='mr-1' color="info">Edit</CButton>
+                    <CButton className='mx-1' color="danger">Delete</CButton>
                   <CTableDataCell className="mt-1">
                     <CButton className="mr-1" color="info">
                       Edit
@@ -83,6 +89,9 @@ const PromotionList = () => {
                   <CTableDataCell>@mdo</CTableDataCell>
                   <CTableDataCell>@mdo</CTableDataCell>
                   <CTableDataCell>@mdo</CTableDataCell>
+                  <CTableDataCell className='mt-1'>
+                    <CButton className='mr-1' color="info">Edit</CButton>
+                    <CButton className='mx-1' color="danger">Delete</CButton>
                   <CTableDataCell className="mt-1">
                     <CButton className="mr-1" color="info">
                       Edit
@@ -94,6 +103,7 @@ const PromotionList = () => {
                 </CTableRow>
               </CTableBody>
             </CTable>
+            <CButton className='mt-2' color="success">Add Promotion</CButton>
             <CButton className="mt-2" color="success">
               Add Promotion
             </CButton>
