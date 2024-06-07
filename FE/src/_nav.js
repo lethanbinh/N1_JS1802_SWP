@@ -101,7 +101,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Product in Stall',
-        to: '/manager-dashboard/view-edit-product',
+        to: '/staff-dashboard/view-edit-product',
       },
       {
         component: CNavItem,

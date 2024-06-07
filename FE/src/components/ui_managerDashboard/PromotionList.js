@@ -50,6 +50,13 @@ const PromotionList = () => {
                   <CTableDataCell className='mt-1'>
                     <CButton className='mr-1' color="info">Edit</CButton>
                     <CButton className='mx-1' color="danger">Delete</CButton>
+                  <CTableDataCell className="mt-1">
+                    <CButton className="mr-1" color="info">
+                      Edit
+                    </CButton>
+                    <CButton className="mx-1" color="danger">
+                      Delete
+                    </CButton>
                   </CTableDataCell>
                 </CTableRow>
                 <CTableRow>
@@ -64,6 +71,13 @@ const PromotionList = () => {
                   <CTableDataCell className='mt-1'>
                     <CButton className='mr-1' color="info">Edit</CButton>
                     <CButton className='mx-1' color="danger">Delete</CButton>
+                  <CTableDataCell className="mt-1">
+                    <CButton className="mr-1" color="info">
+                      Edit
+                    </CButton>
+                    <CButton className="mx-1" color="danger">
+                      Delete
+                    </CButton>
                   </CTableDataCell>
                 </CTableRow>
                 <CTableRow>
@@ -78,11 +92,21 @@ const PromotionList = () => {
                   <CTableDataCell className='mt-1'>
                     <CButton className='mr-1' color="info">Edit</CButton>
                     <CButton className='mx-1' color="danger">Delete</CButton>
+                  <CTableDataCell className="mt-1">
+                    <CButton className="mr-1" color="info">
+                      Edit
+                    </CButton>
+                    <CButton className="mx-1" color="danger">
+                      Delete
+                    </CButton>
                   </CTableDataCell>
                 </CTableRow>
               </CTableBody>
             </CTable>
             <CButton className='mt-2' color="success">Add Promotion</CButton>
+            <CButton className="mt-2" color="success">
+              Add Promotion
+            </CButton>
           </CCardBody>
         </CCard>
       </CCol>
