@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-04T23:53:02+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
+    date = "2024-06-07T14:26:13+0700",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.38.0.v20240524-2033, environment: Java 17.0.11 (Eclipse Adoptium)"
 )
 @Component
 public class StallMapperImpl implements StallMapper {
@@ -26,13 +26,13 @@ public class StallMapperImpl implements StallMapper {
         StallResponse stallResponse = new StallResponse();
 
         stallResponse.setStaffId( stallStaffId( stall ) );
-        stallResponse.setId( stall.getId() );
         stallResponse.setCode( stall.getCode() );
-        stallResponse.setName( stall.getName() );
-        stallResponse.setType( stall.getType() );
         stallResponse.setDescription( stall.getDescription() );
+        stallResponse.setId( stall.getId() );
+        stallResponse.setName( stall.getName() );
         stallResponse.setRevenue( stall.getRevenue() );
         stallResponse.setStatus( stall.isStatus() );
+        stallResponse.setType( stall.getType() );
 
         return stallResponse;
     }
@@ -60,10 +60,10 @@ public class StallMapperImpl implements StallMapper {
         Stall stall = new Stall();
 
         stall.setCode( stallRequest.getCode() );
-        stall.setName( stallRequest.getName() );
-        stall.setType( stallRequest.getType() );
         stall.setDescription( stallRequest.getDescription() );
+        stall.setName( stallRequest.getName() );
         stall.setStatus( stallRequest.isStatus() );
+        stall.setType( stallRequest.getType() );
 
         return stall;
     }
