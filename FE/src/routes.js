@@ -60,6 +60,9 @@ const PurchaseHistoryListManagerDashboard = React.lazy(
 )
 const Stall = React.lazy(() => import('./components/ui_managerDashboard/StallManage'))
 const Revenue = React.lazy(() => import('./components/ui_managerDashboard/ManagerRevenue'))
+const StaffStatistic = React.lazy(() => import('./components/ui_managerDashboard/StaffStatistic'))  
+const OrderStatistic = React.lazy(() => import('./components/ui_managerDashboard/OrderStatistic'))
+const ProductStatistic = React.lazy(() => import('./components/ui_managerDashboard/ProductStatistic'))
 
 //staffDashboard
 const PurchaseHistoryListStaffDashboard = React.lazy(() => import('./components/ui_public/PurchaseHistoryList'))
@@ -72,6 +75,7 @@ const ViewProductInStallStaff = React.lazy(
 )
 const CustomerInfo = React.lazy(() => import('./components/ui-staffDashboard/CustomerInfo'))
 const RevenueForEachStall = React.lazy(() => import('./components/ui_staffDashboard/StaffRevenue'))
+const BuyOldProduct = React.lazy(() => import('./components/ui_staffDashboard/BuyOldProduct'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -161,6 +165,10 @@ const routes = [
   { path: '/manager-dashboard/stall', name: 'Stall', element: Stall },
   { path: '/manager-dashboard/revenue', name: 'Revenue of Stalls', element: Revenue },
   { path: '/staff-dashboard/revenue-ofS', name: 'Revenue of Stall', element: RevenueForEachStall },
+  { path: '/manager-dashboard/staff-statistics', name: 'Staff Statistic', element: StaffStatistic },
+  { path: '/manager-dashboard/orders', name: 'Order Statistic', element: OrderStatistic },
+  { path: '/manager-dashboard/product-statistics', name: 'Product Statistic', element: ProductStatistic},
+  { path: '/staff-dashboard/buy-oleP', name: 'Buy Old Product', element: BuyOldProduct}
 ]
 
 export default routes
