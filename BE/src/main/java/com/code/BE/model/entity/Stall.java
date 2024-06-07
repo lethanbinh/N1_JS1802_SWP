@@ -1,5 +1,6 @@
 package com.code.BE.model.entity;
 
+import com.code.BE.constant.ErrorMessage;
 import com.code.BE.constant.Regex;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -36,10 +37,6 @@ public class Stall {
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-
-    @PositiveOrZero
-    @Column(name = "revenue")
-    private double revenue;
 
     @Column(name = "status")
     private boolean status;

@@ -25,9 +25,9 @@ public interface OrderStatisticsRepository extends JpaRepository<Order, Integer>
             "GROUP BY FUNCTION('YEAR', o.createDate), FUNCTION('MONTH', o.createDate)")
     List<Object[]> findOrderTrends(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    @Query("SELECT c.birthday, COUNT(o) " +
+    @Query("SELECT (YEAR(CURRENT_DATE) - YEAR(c.birthday)) - (CASE WHEN MONTH(CURRENT_DATE) < MONTH(c.birthday) OR (MONTH(CURRENT_DATE) = MONTH(c.birthday) AND DAY(CURRENT_DATE) < DAY(c.birthday)) THEN 1 ELSE 0 END) AS age, COUNT(o) " +
             "FROM Order o JOIN Customer c ON o.customer.id = c.id WHERE o.createDate BETWEEN :startDate AND :endDate " +
-            "GROUP BY c.birthday")
+            "GROUP BY age")
     List<Object[]> findOrderNumbersByCustomerDemographics(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("SELECT COUNT(o) / COUNT(DISTINCT o.customer.id) " +

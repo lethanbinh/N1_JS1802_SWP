@@ -12,8 +12,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class ProductStatistics {
     private int totalNumberOfProducts;
-    private List<String> topSellingProducts; // List of top-selling product names
-    private Map<String, Double> salesPerProduct; // Product name -> sales
+    private Map<String, Long> topQuantitySellingProducts; // List of top-selling product names
+    private Map<String, Double> topSalesPerProduct; // Product name -> sales
     private Map<String, Double> returnRates; // Product name -> return rate
     private List<String> productsOutOfStock; // List of product names with low stock
     private double averageSalesPerProduct;

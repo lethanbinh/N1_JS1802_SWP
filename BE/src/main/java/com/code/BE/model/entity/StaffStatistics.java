@@ -16,5 +16,5 @@ public class StaffStatistics {
     private List<String> topPerformingStaff; // List of top-performing staff name by revenue
     private double averageSalesPerStaff;
     private Map<String, Integer> ordersPerStaff; // staff name -> order of this staff
-    private Map<String, Integer> averageOrdersPerStaff; // staff name -> order of this staff
+    private double averageOrdersPerStaff;
 }
