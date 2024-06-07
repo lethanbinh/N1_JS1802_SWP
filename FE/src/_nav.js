@@ -57,7 +57,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Product in Stall',
-        to: '/manager-dashboard/view-edit-product',
+        to: '/manager-dashboard/view-product-in-stall',
         //chặn quyền edit của manager (only view)
       },
       {

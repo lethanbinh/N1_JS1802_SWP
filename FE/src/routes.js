@@ -62,6 +62,14 @@ const Stall = React.lazy(() => import('./components/ui_managerDashboard/StallMan
 const Revenue = React.lazy(() => import('./components/ui_managerDashboard/ManagerRevenue'))
 
 //staffDashboard
+const PurchaseHistoryListStaffDashboard = React.lazy(() => import('./components/ui_public/PurchaseHistoryList'))
+const ViewProductInStallManager = React.lazy(
+  () => import('./components/ui_managerDashboard/ViewProductInStallManager')
+)
+const PolicyForStaff = React.lazy(() => import('./components/ui_managerDashboard/Policy'))
+const ViewProductInStallStaff = React.lazy(
+  () => import('./components/ui_staffDashboard/ViewProductInStallStaff')
+)
 const PurchaseHistoryListStaffDashboard = React.lazy(
   () => import('./components/ui_public/PurchaseHistoryList'),
 )
@@ -118,6 +126,17 @@ const routes = [
   { path: '/admin-dashboard/account-list', name: 'Account List', element: AccountList },
   { path: '/manager-dashboard/staff-list', name: 'Staff List', element: StaffList },
   { path: '/manager-dashboard/view-edit-RAEP', name: 'Return & Exchange Policy', element: Policy },
+  { path: '/manager-dashboard/promotion', name: 'Promotion List', element: PromotionList},
+  { path: '/manager-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListManagerDashboard },
+  { path: '/staff-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListStaffDashboard },
+  { path: '/staff-dashboard/view-edit-RAEP',
+    name: 'Return & Exchange Policy',
+    element: PolicyForStaff,
+  },
+  { 
+    path: '/manager-dashboard/promotion', 
+    name: 'Promotion List', 
+    element: PromotionList },
   {
     path: '/staff-dashboard/view-edit-RAEP',
     name: 'Return & Exchange Policy',
@@ -133,6 +152,14 @@ const routes = [
     path: '/staff-dashboard/view-CPH',
     name: 'Customer Purchase History',
     element: PurchaseHistoryListStaffDashboard,
+  },
+  { path: '/manager-dashboard/view-product-in-stall', 
+    name: 'Product in Stall', 
+    element: ViewProductInStallManager 
+  },
+  { path: '/staff-dashboard/view-edit-product', 
+    name: 'Product in Stall', 
+    element: ViewProductInStallStaff 
   },
   { path: '/staff-dashboard/customer-info', name: 'Customer Information', element: CustomerInfo },
   { path: '/manager-dashboard/stall', name: 'Stall', element: Stall },
