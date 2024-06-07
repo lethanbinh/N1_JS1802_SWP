@@ -22,6 +22,7 @@ public class ErrorMessage {
     public static final String TYPE_VALIDATION_FAILED = "Type cannot be empty.";
     public static final String ORDER_NOT_FOUND = "Order not found";
     public static final String CONFIRM_TOKEN_ERROR = "Confirm token is invalid or expired";
+    public static final String WARRANTY_NOT_FOUND = "warranty not found";
 
     // validation
     public static final String USERNAME_EXIST = "Username exists";
@@ -43,5 +44,8 @@ public class ErrorMessage {
     public static final String POLICY_NOT_FOUND = "Policy not found";
 
 
-
+    public static final String START_DATE_WARRANTY_VALIDATION_FAILED = "Start date cannot be null.";
+    public static final String END_DATE_WARRANTY_VALIDATION_FAILED = "End date cannot be null.";
+    public static final String DATE_RANGE_VALIDATION_FAILED = "Start date must be before or equal to end date.";
+    public static final String ORDER_WARRANTY_VALIDATION_FAILED = "Order warranty cannot be null.";
 }
