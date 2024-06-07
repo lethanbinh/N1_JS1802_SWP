@@ -70,10 +70,6 @@ const PolicyForStaff = React.lazy(() => import('./components/ui_managerDashboard
 const ViewProductInStallStaff = React.lazy(
   () => import('./components/ui_staffDashboard/ViewProductInStallStaff')
 )
-const PurchaseHistoryListStaffDashboard = React.lazy(
-  () => import('./components/ui_public/PurchaseHistoryList'),
-)
-const PolicyForStaff = React.lazy(() => import('./components/ui_managerDashboard/Policy'))
 const CustomerInfo = React.lazy(() => import('./components/ui-staffDashboard/CustomerInfo'))
 const RevenueForEachStall = React.lazy(() => import('./components/ui_staffDashboard/StaffRevenue'))
 
