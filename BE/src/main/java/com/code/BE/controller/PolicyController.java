@@ -24,7 +24,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/polices")
-@PreAuthorize(value = "hasAuthority('POLICY_MANAGER')")
+@PreAuthorize(value = "hasAuthority('ROLE_STAFF')")
 public class PolicyController {
 
     @Autowired
