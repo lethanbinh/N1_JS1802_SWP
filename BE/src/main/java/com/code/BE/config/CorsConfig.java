@@ -8,9 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000") // Thay bằng URL của ứng dụng React
+        registry.addMapping("/**") // Adjust the mapping pattern as needed
+                .allowedOriginPatterns("*") // Add your React app's origin
                 .allowedMethods("*")
+                .allowedHeaders("*")
                 .allowCredentials(true);
     }
 }

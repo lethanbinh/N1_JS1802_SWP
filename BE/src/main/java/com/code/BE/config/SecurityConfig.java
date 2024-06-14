@@ -31,13 +31,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**", "/v3/api-docs/**", "/api/v1/images/**", "/swagger-ui/**")
-                        .permitAll() // Cho phép tất cả mọi người truy cập vào những URL này
-                        .anyRequest() // Tất cả các request còn lại cần phải xác thực mới được truy cập
+                        .permitAll()
+                        .anyRequest()
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // Thêm  lớp Filter kiểm tra JWT
                 .userDetailsService(userDetailsService)
                 .build();
     }
-
 }

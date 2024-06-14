@@ -1,5 +1,7 @@
 const fetchData = async (url, method = 'GET', body = null, token = null) => {
     try {
+        console.log(token)
+
         const headers = {
             'Content-Type': 'application/json',
         };

@@ -33,10 +33,8 @@ const Login = () => {
       return;
     }
 
-    const data = fetchData("http://localhost:8080/api/v1/auth/login", 'POST', { username, password })
+    fetchData("http://localhost:8080/api/v1/auth/login", 'POST', { username, password })
       .then(data => {
-        console.log(data)
-
         if (data.status === 'SUCCESS') {
           UserStorage.storeAuthenticatedUser(
             data.payload.username, 

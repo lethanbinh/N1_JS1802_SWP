@@ -14,17 +14,24 @@ import {
     CTableHeaderCell,
     CTableRow,
 } from '@coreui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import UserStorage from '../../util/UserStorage'
+import fetchData from '../../util/ApiConnection'
 
 const AccountList = () => {
-    const [data, setData] = useState([
-        { id: 1, name: 'An', email: 'an@gmail.com', role: 'Admin' },
-        { id: 2, name: 'Binh', email: 'binh@gmail.com', role: 'Manager' },
-        { id: 3, name: 'Ha', email: 'ha@gmail.com', role: 'Staff' },
-    ])
+    const [data, setData] = useState([])
 
     const [editingRow, setEditingRow] = useState(null)
     const [formData, setFormData] = useState({})
+    const [user, setUser] = useState(UserStorage.getAuthenticatedUser())
+
+    useEffect(() => {
+        fetchData("http://localhost:8080/api/v1/users", "GET", null, user.accessToken)
+            .then(data => {
+                console.log(data)
+                setData(data.payload)
+            })
+    }, [])
 
     const handleEdit = (id) => {
         setEditingRow(id)
@@ -42,6 +49,32 @@ const AccountList = () => {
             }
             return row
         })
+
+        const newUser = data[editingRow - 1];
+        console.log(newUser)
+
+        let roleId = 1
+        if (newUser.role.toLowerCase() == 'manager') {
+            roleId = 2
+        } else if (newUser.role.toLowerCase() == "staff") {
+            roleId = 3
+        }
+
+        const dataSave = {
+            "username": "Hello123456",
+            "fullName": newUser.name,
+            "password": "Binh123@",
+            "phone": "0596741581",
+            "email": newUser.email,
+            "address": "string",
+            "avatar": "string",
+            "birthday": "2024-06-14T12:32:24.158Z",
+            "status": true,
+            "roleId": roleId
+        }
+
+        fetchData("http://localhost:8080/api/v1/users", "POST", dataSave, user.accessToken)
+
         setData(newData)
         setEditingRow(null)
     }
@@ -85,12 +118,12 @@ const AccountList = () => {
                                             {editingRow === row.id ? (
                                                 <CFormInput
                                                     type="text"
-                                                    name="name"
-                                                    value={formData.name}
+                                                    name="fullName"
+                                                    value={formData.fullName}
                                                     onChange={handleInputChange}
                                                 />
                                             ) : (
-                                                row.name
+                                                row.fullName
                                             )}
                                         </CTableDataCell>
                                         <CTableDataCell>
