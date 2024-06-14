@@ -15,6 +15,8 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import UserStorage from '../../util/UserStorage'
+import fetchData from '../../util/ApiConnection'
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -31,20 +33,25 @@ const Login = () => {
       return;
     }
 
-    const userRole = authenticateUser(username, password);
-    if (userRole) {
-      // Save user information to localStorage
-      localStorage.setItem('username', username);
-      localStorage.setItem('userRole', userRole);
-      localStorage.setItem('isAuthenticated', true);
+    const data = fetchData("http://localhost:8080/api/v1/auth/login", 'POST', { username, password })
+      .then(data => {
+        console.log(data)
 
-      // Redirect user to the home page
-      redirectToHomePage(userRole);
-    } else {
-      // Handle login failure
-      console.log('Invalid credentials');
-      setErrors({ general: 'Invalid credentials' });
-    }
+        if (data.status === 'SUCCESS') {
+          UserStorage.storeAuthenticatedUser(
+            data.payload.username, 
+            data.payload.accessToken, 
+            data.payload.refreshToken, 
+            data.payload.roleName
+          )
+
+          redirectToHomePage(data.payload.roleName);
+        } else {
+          // Handle login failure
+          console.log('Invalid credentials');
+          setErrors({ general: 'Username or password Error' });
+        }
+      })
   };
 
   const validateInputs = () => {
@@ -84,22 +91,6 @@ const Login = () => {
     }
 
     return errors;
-  };
-
-  const authenticateUser = (username, password) => {
-    // Perform authentication and determine the user's role based on login information
-    // In this case, we will simply check if the username and password match the predefined values
-    if (username === 'Binh1234' && password === 'Binh123@') {
-      return 'admin';
-    }
-    if (username === 'Binh12345' && password === 'Binh123@') {
-      return 'manager';
-    }
-    if (username === 'Binh123456' && password === 'Binh123@') {
-      return 'staff';
-    }
-    // If no matching role, return null or another default value
-    return null;
   };
 
   const redirectToHomePage = (userRole) => {
