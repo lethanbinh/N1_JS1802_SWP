@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import {
@@ -18,11 +18,17 @@ import { sygnet } from 'src/assets/brand/sygnet'
 
 // sidebar nav config
 import navigation from '../_nav'
+import navigationManager from '../_nav_manager'
+import navigationStaff from '../_nav_staff'
+
+import UserStorage from '../util/UserStorage'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
+
+  const [user, setUser] = useState(UserStorage.getAuthenticatedUser())
 
   return (
     <CSidebar
@@ -46,7 +52,10 @@ const AppSidebar = () => {
           onClick={() => dispatch({ type: 'set', sidebarShow: false })}
         />
       </CSidebarHeader>
-      <AppSidebarNav items={navigation} />
+      {user.roleName === 'admin' ? <AppSidebarNav items={navigation} /> : ""}
+      {user.roleName === 'manager' ? <AppSidebarNav items={navigationManager} /> : ""}
+      {user.roleName === 'staff' ? <AppSidebarNav items={navigationStaff} /> : ""}
+
       <CSidebarFooter className="border-top d-none d-lg-flex">
         <CSidebarToggler
           onClick={() => dispatch({ type: 'set', sidebarUnfoldable: !unfoldable })}
