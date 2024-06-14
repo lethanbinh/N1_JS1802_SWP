@@ -11,15 +11,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PolicyServiceImpl implements PolicyService{
+public class PolicyServiceImpl implements PolicyService {
 
     @Autowired
     private PolicyRepository policyRepository;
 
     @Autowired
     private PolicyMapper policyMapper;
-
-
 
     public List<PolicyResponse> findAll() {
         return policyMapper.toResponseList(policyRepository.findAll());
@@ -32,7 +30,6 @@ public class PolicyServiceImpl implements PolicyService{
 
     @Override
     public PolicyResponse save(PolicyRequest policyRequest) {
-
         Policy policy = policyMapper.toEntity(policyRequest);
         return policyMapper.toResponse(policyRepository.saveAndFlush(policy));
     }

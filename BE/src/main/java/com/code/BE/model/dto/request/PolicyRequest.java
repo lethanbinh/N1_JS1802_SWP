@@ -10,9 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PolicyRequest {
-    @Positive
-    private int id;
-
     @NotNull
     private String name;
     private String detail;
