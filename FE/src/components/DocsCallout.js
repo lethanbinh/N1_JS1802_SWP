@@ -20,10 +20,10 @@ const DocsCallout = (props) => {
       variants, and unique design that matches CoreUI Design System requirements.`}
       <br />
       <br />
-      For more information please visit our official{' '}
+      {/* For more information please visit our official{' '}
       <CLink href={_href} target="_blank">
         documentation of CoreUI Components Library for React.js
-      </CLink>
+      </CLink> */}
       .
     </CCallout>
   )

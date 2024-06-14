@@ -1,4 +1,4 @@
-import { cilPeople } from '@coreui/icons'
+import { cilPeople, cilSettings } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import React from 'react'
@@ -21,6 +21,7 @@ const _nav = [
       },
     ],
   },
+  
   {
     component: CNavGroup,
     name: 'Manager Dashboard',
@@ -91,7 +92,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Billing',
-        to: '/staff-dashboard/bill',
+        to: '/staff-dashboard/invoice',
       },
       {
         component: CNavItem,
@@ -138,6 +139,24 @@ const _nav = [
         component: CNavItem,
         name: 'Products Report of Stall',
         to: '/staff-dashboard/product-report-ofS',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Settings',
+    to: '/settings',
+    icon: <CIcon icon={cilSettings} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Profile',
+        to: '/settings/general-info',
+      },
+      {
+        component: CNavItem,
+        name: 'Logout',
+        to: '/',
       },
     ],
   },
