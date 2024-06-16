@@ -1,7 +1,5 @@
 const fetchData = async (url, method = 'GET', body = null, token = null) => {
     try {
-        console.log(token)
-
         const headers = {
             'Content-Type': 'application/json',
         };
@@ -22,7 +20,8 @@ const fetchData = async (url, method = 'GET', body = null, token = null) => {
         const response = await fetch(url, options);
 
         if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
+            const errorText = await response.text();  // Read the response text
+            throw new Error(`Error: ${response.status} - ${errorText}`);
         }
 
         const data = await response.json();

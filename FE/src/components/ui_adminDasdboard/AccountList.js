@@ -28,7 +28,6 @@ const AccountList = () => {
     useEffect(() => {
         fetchData("http://localhost:8080/api/v1/users", "GET", null, user.accessToken)
             .then(data => {
-                console.log(data)
                 setData(data.payload)
             })
     }, [])

@@ -36,6 +36,7 @@ const _nav = [
         component: CNavItem,
         name: 'Logout',
         to: '/',
+        id: 'logout'
       },
     ],
   },

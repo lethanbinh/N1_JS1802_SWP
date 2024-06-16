@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import {
@@ -30,6 +30,13 @@ const AppSidebar = () => {
 
   const [user, setUser] = useState(UserStorage.getAuthenticatedUser())
 
+  useEffect(() => {
+    const logout = document.querySelector('#logout')
+
+    logout.onclick = () => {
+      localStorage.clear()
+    }
+  })
   return (
     <CSidebar
       className="border-end"
@@ -52,9 +59,9 @@ const AppSidebar = () => {
           onClick={() => dispatch({ type: 'set', sidebarShow: false })}
         />
       </CSidebarHeader>
-      {user.roleName === 'admin' ? <AppSidebarNav items={navigation} /> : ""}
-      {user.roleName === 'manager' ? <AppSidebarNav items={navigationManager} /> : ""}
-      {user.roleName === 'staff' ? <AppSidebarNav items={navigationStaff} /> : ""}
+      {user.roleName.toUpperCase() === 'ADMIN' ? <AppSidebarNav items={navigation} /> : ""}
+      {user.roleName.toUpperCase() === 'MANAGER' ? <AppSidebarNav items={navigationManager} /> : ""}
+      {user.roleName.toUpperCase() === 'STAFF' ? <AppSidebarNav items={navigationStaff} /> : ""}
 
       <CSidebarFooter className="border-top d-none d-lg-flex">
         <CSidebarToggler

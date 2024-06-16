@@ -12,21 +12,22 @@ import {
   CRow,
 } from '@coreui/react'
 import { useNavigate } from 'react-router-dom';
+import fetchData from '../../util/ApiConnection';
 // import CIcon from '@coreui/icons-react'
 // import { cilLockLocked, cilUser } from '@coreui/icons'
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
+    const [emailMessage, setEmailMessage] = useState('')
     const navigate = useNavigate();
-  
+
     const handleForgotPassword = (e) => {
       e.preventDefault();
-      // Thêm logic để xử lý đặt lại mật khẩu, ví dụ: gửi email đến server
-      console.log('Email:', email);
-      // Giả sử gửi email thành công
-      navigate('/create-new-password');
+
+
+      setEmailMessage("An email reset password was sent. Please check your email!!!");
     };
-  
+
     return (
       <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
         <CContainer>
@@ -39,10 +40,10 @@ const ForgotPassword = () => {
                     <p className="text-body-secondary">Type your email</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>@</CInputGroupText>
-                      <CFormInput 
-                        type="email" 
-                        placeholder="Email" 
-                        autoComplete="email" 
+                      <CFormInput
+                        type="email"
+                        placeholder="Email"
+                        autoComplete="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -51,6 +52,8 @@ const ForgotPassword = () => {
                     <div className="d-grid">
                       <CButton color="success" type="submit">Send Email</CButton>
                     </div>
+
+                    <div style={{color: 'red'}} className='email-message'>{emailMessage}</div>
                   </CForm>
                 </CCardBody>
               </CCard>
@@ -60,5 +63,5 @@ const ForgotPassword = () => {
       </div>
     );
   };
-  
+
   export default ForgotPassword

@@ -8,7 +8,7 @@ const _nav_manager = [
     component: CNavTitle,
     name: 'Dashboard',
   },
-  
+
   {
     component: CNavGroup,
     name: 'Manager Dashboard',
@@ -85,6 +85,7 @@ const _nav_manager = [
         component: CNavItem,
         name: 'Logout',
         to: '/',
+        id: 'logout'
       },
     ],
   },

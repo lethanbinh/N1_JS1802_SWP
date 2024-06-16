@@ -38,7 +38,6 @@ const _nav_staff = [
         component: CNavItem,
         name: 'Return & Exchange Policy',
         to: '/staff-dashboard/view-edit-RAEP',
-        //chặn quyền edit của staff (only view)
       },
       {
         component: CNavItem,
@@ -82,6 +81,7 @@ const _nav_staff = [
         component: CNavItem,
         name: 'Logout',
         to: '/',
+        id: 'logout'
       },
     ],
   },

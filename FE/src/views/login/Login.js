@@ -37,9 +37,9 @@ const Login = () => {
       .then(data => {
         if (data.status === 'SUCCESS') {
           UserStorage.storeAuthenticatedUser(
-            data.payload.username, 
-            data.payload.accessToken, 
-            data.payload.refreshToken, 
+            data.payload.username,
+            data.payload.accessToken,
+            data.payload.refreshToken,
             data.payload.roleName
           )
 
@@ -92,14 +92,14 @@ const Login = () => {
   };
 
   const redirectToHomePage = (userRole) => {
-    switch (userRole) {
-      case 'admin':
+    switch (userRole.toUpperCase()) {
+      case 'ADMIN':
         navigate('/admin-dashboard');
         break;
-      case 'manager':
+      case 'MANAGER':
         navigate('/manager-dashboard');
         break;
-      case 'staff':
+      case 'STAFF':
         navigate('/staff-dashboard');
         break;
       default:

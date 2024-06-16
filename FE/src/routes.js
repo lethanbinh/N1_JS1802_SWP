@@ -38,9 +38,6 @@ const routes = [
   { path: '/forgot-password', exact: true, name: 'Forgot Password', element: ForgotPassword },
   { path: '/create-new-password', exact: true, name: 'Create New Password', element: CreateNewPassword },
   { path: '/home', exact: true, name: 'Home' },
-
-  
-
   { path: '/settings/general-info', name: 'Profile', element: GeneralInfoForm },
   //adminDashboard
   { path: '/admin-dashboard/account-list', name: 'Account List', element: AccountList },
