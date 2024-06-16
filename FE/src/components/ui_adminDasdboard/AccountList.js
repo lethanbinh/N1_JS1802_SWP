@@ -14,24 +14,26 @@ import {
     CTableHeaderCell,
     CTableRow,
 } from '@coreui/react'
-import React, { useEffect, useState } from 'react'
-import UserStorage from '../../util/UserStorage'
-import fetchData from '../../util/ApiConnection'
+import React, { useState } from 'react'
 
 const AccountList = () => {
-    const [data, setData] = useState([])
+    const [data, setData] = useState([
+        {
+            id: 1, username: 'user1', fullName: 'An', password: '', phone: '', email: 'an@gmail.com',
+            address: '', avatar: '', birthday: '', status: true, roleId: 'Admin'
+        },
+        {
+            id: 2, username: 'user2', fullName: 'Binh', password: '', phone: '', email: 'binh@gmail.com',
+            address: '', avatar: '', birthday: '', status: true, roleId: 'Manager'
+        },
+        {
+            id: 3, username: 'user3', fullName: 'Ha', password: '', phone: '', email: 'ha@gmail.com',
+            address: '', avatar: '', birthday: '', status: true, roleId: 'Staff'
+        },
+    ])
 
     const [editingRow, setEditingRow] = useState(null)
     const [formData, setFormData] = useState({})
-    const [user, setUser] = useState(UserStorage.getAuthenticatedUser())
-
-    useEffect(() => {
-        fetchData("http://localhost:8080/api/v1/users", "GET", null, user.accessToken)
-            .then(data => {
-                console.log(data)
-                setData(data.payload)
-            })
-    }, [])
 
     const handleEdit = (id) => {
         setEditingRow(id)
@@ -49,45 +51,28 @@ const AccountList = () => {
             }
             return row
         })
-
-        const newUser = data[editingRow - 1];
-        console.log(newUser)
-
-        let roleId = 1
-        if (newUser.role.toLowerCase() == 'manager') {
-            roleId = 2
-        } else if (newUser.role.toLowerCase() == "staff") {
-            roleId = 3
-        }
-
-        const dataSave = {
-            "username": "Hello123456",
-            "fullName": newUser.name,
-            "password": "Binh123@",
-            "phone": "0596741581",
-            "email": newUser.email,
-            "address": "string",
-            "avatar": "string",
-            "birthday": "2024-06-14T12:32:24.158Z",
-            "status": true,
-            "roleId": roleId
-        }
-
-        fetchData("http://localhost:8080/api/v1/users", "POST", dataSave, user.accessToken)
-
         setData(newData)
         setEditingRow(null)
     }
+
     const handleAddNew = () => {
         const newRow = {
             id: data.length + 1,
-            name: '',
+            username: '',
+            fullName: '',
+            password: '',
+            phone: '',
             email: '',
-            role: '',
+            address: '',
+            avatar: '',
+            birthday: '',
+            status: true,
+            roleId: '',
         }
         setData([...data, newRow])
         setEditingRow(newRow.id)
     }
+
     const handleDelete = (id) => {
         setData(data.filter((row) => row.id !== id))
     }
@@ -104,9 +89,16 @@ const AccountList = () => {
                             <CTableHead>
                                 <CTableRow>
                                     <CTableHeaderCell scope="col">Id</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Username</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Full Name</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Password</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
                                     <CTableHeaderCell scope="col">Email</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Role</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Address</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Avatar</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Birthday</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Role ID</CTableHeaderCell>
                                     <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
@@ -118,12 +110,48 @@ const AccountList = () => {
                                             {editingRow === row.id ? (
                                                 <CFormInput
                                                     type="text"
+                                                    name="username"
+                                                    value={formData.username}
+                                                    onChange={handleInputChange}
+                                                />
+                                            ) : (
+                                                row.username
+                                            )}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                            {editingRow === row.id ? (
+                                                <CFormInput
+                                                    type="text"
                                                     name="fullName"
                                                     value={formData.fullName}
                                                     onChange={handleInputChange}
                                                 />
                                             ) : (
                                                 row.fullName
+                                            )}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                            {editingRow === row.id ? (
+                                                <CFormInput
+                                                    type="password"
+                                                    name="password"
+                                                    value={formData.password}
+                                                    onChange={handleInputChange}
+                                                />
+                                            ) : (
+                                                '******'
+                                            )}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                            {editingRow === row.id ? (
+                                                <CFormInput
+                                                    type="text"
+                                                    name="phone"
+                                                    value={formData.phone}
+                                                    onChange={handleInputChange}
+                                                />
+                                            ) : (
+                                                row.phone
                                             )}
                                         </CTableDataCell>
                                         <CTableDataCell>
@@ -139,14 +167,61 @@ const AccountList = () => {
                                         </CTableDataCell>
                                         <CTableDataCell>
                                             {editingRow === row.id ? (
-                                                <CFormInput
-                                                    type="text"
-                                                    name="role"
-                                                    value={formData.role}
+                                                <CFormTextarea
+                                                    name="address"
+                                                    value={formData.address}
                                                     onChange={handleInputChange}
                                                 />
                                             ) : (
-                                                row.role
+                                                row.address
+                                            )}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                            {editingRow === row.id ? (
+                                                <CFormInput
+                                                    type="text"
+                                                    name="avatar"
+                                                    value={formData.avatar}
+                                                    onChange={handleInputChange}
+                                                />
+                                            ) : (
+                                                row.avatar
+                                            )}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                            {editingRow === row.id ? (
+                                                <CFormInput
+                                                    type="date"
+                                                    name="birthday"
+                                                    value={formData.birthday}
+                                                    onChange={handleInputChange}
+                                                />
+                                            ) : (
+                                                row.birthday
+                                            )}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                            {editingRow === row.id ? (
+                                                <CFormInput
+                                                    type="checkbox"
+                                                    name="status"
+                                                    checked={formData.status}
+                                                    onChange={(e) => handleInputChange({ target: { name: 'status', value: e.target.checked } })}
+                                                />
+                                            ) : (
+                                                row.status ? 'Active' : 'Inactive'
+                                            )}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                            {editingRow === row.id ? (
+                                                <CFormInput
+                                                    type="text"
+                                                    name="roleId"
+                                                    value={formData.roleId}
+                                                    onChange={handleInputChange}
+                                                />
+                                            ) : (
+                                                row.roleId
                                             )}
                                         </CTableDataCell>
                                         <CTableDataCell>
