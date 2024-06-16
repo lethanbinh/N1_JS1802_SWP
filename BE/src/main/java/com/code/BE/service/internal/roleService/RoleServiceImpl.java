@@ -32,6 +32,7 @@ public class RoleServiceImpl implements RoleService{
     @Override
     public RoleResponse save(RoleRequest roleRequest) {
         Role role = roleMapper.toEntity(roleRequest);
+        role.setName(roleRequest.getName().toUpperCase());
         return roleMapper.toResponse(roleRepository.saveAndFlush(role));
     }
 
@@ -39,7 +40,7 @@ public class RoleServiceImpl implements RoleService{
     public RoleResponse editById(int id, RoleRequest roleRequest) {
         Role role = roleRepository.findById(id);
         if (role != null) {
-            role.setName(roleRequest.getName());
+            role.setName(roleRequest.getName().toUpperCase());
             role.setDescription(roleRequest.getDescription());
             return roleMapper.toResponse(roleRepository.saveAndFlush(role));
         }
