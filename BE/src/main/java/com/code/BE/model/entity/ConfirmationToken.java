@@ -17,7 +17,7 @@ public class ConfirmationToken {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private long id;
+    private int id;
 
     @Column(name = "confirmation_token")
     private String confirmationToken;

@@ -121,7 +121,7 @@ public class AuthServiceImpl implements AuthService {
             ConfirmationToken oldToken = confirmationTokenService.findByUserId
                     (userRepository.findByUsername(user.getUsername()).getId());
             if (oldToken != null) {
-                confirmationTokenService.deleteTokenByUserId(oldToken.getUser().getId());
+                confirmationTokenService.deleteById(oldToken.getId());
             }
 
             ConfirmationToken confirmationToken = new ConfirmationToken(userRepository.findByEmail(email));
