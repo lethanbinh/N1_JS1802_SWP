@@ -1,30 +1,15 @@
 import React, { useState } from 'react';
 import {
-updateUI
     CButton,
     CCard,
     CCardBody,
     CCardHeader,
     CCol,
     CFormInput,
+    CFormSelect,
     CFormTextarea,
     CRow,
 } from '@coreui/react';
-  CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow
-} from '@coreui/react';
-import React, { useState } from 'react';
-import { uid } from 'uid';
-import InvoiceItem from './Billing/InvoiceItem';
 
 const AddProduct = () => {
     const [product, setProduct] = useState({
@@ -34,13 +19,15 @@ const AddProduct = () => {
         purchasePrice: '',
         sellPrice: '',
         quantity: '',
-        status: true,
+        status: '',
         weight: '',
         size: '',
         stallLocation: '',
         type: '',
         stallId: ''
     });
+
+    const [items, setItems] = useState([]);
 
     // Xử lý thay đổi các trường dữ liệu
     const handleChange = (e) => {
@@ -78,13 +65,21 @@ const AddProduct = () => {
             purchasePrice: '',
             sellPrice: '',
             quantity: '',
-            status: true,
+            status: '',
             weight: '',
             size: '',
             stallLocation: '',
             type: '',
             stallId: ''
         });
+    };
+
+    const deleteItemHandler = (id) => {
+        setItems(items.filter((item) => item.id !== id));
+    };
+
+    const editItemHandler = (id, updatedItem) => {
+        setItems(items.map((item) => (item.id === id ? updatedItem : item)));
     };
 
     return (
@@ -122,25 +117,6 @@ const AddProduct = () => {
                                         src={product.image}
                                         alt="Product Preview"
                                         style={{ width: '100%', height: 'auto', marginTop: '10px' }}
-                        <CTable className="w-full p-4 text-left">
-                            <CTableHead>
-                                <CTableRow className="border-b border-gray-900/10 text-sm md:text-base">
-                                    <CTableHeaderCell>ITEM</CTableHeaderCell>
-                                    <CTableHeaderCell>QTY</CTableHeaderCell>
-                                    <CTableHeaderCell>PRICE</CTableHeaderCell>
-                                    <CTableHeaderCell>ACTION</CTableHeaderCell>
-                                </CTableRow>
-                            </CTableHead>
-                            <CTableBody>
-                                {items.map((item) => (
-                                    <InvoiceItem
-                                        key={item.id}
-                                        id={item.id}
-                                        name={item.name}
-                                        qty={item.qty}
-                                        price={item.price}
-                                        onDeleteItem={deleteItemHandler}
-                                        onEdtiItem={edtiItemHandler}
                                     />
                                 )}
                             </CCol>
@@ -224,25 +200,27 @@ const AddProduct = () => {
                                 />
                             </CCol>
                             <CCol md={4}>
-                                <CFormInput
-                                    type="number"
-                                    name="stallId"
-                                    label="Stall ID"
-                                    value={product.stallId}
+                                <CFormSelect
                                     onChange={handleChange}
-                                />
+                                    aria-label="Default select example">
+                                    <option value="">Select Stall</option>
+                                    <option value="Stall 1">Stall 1</option>
+                                    <option value="Stall 2">Stall 2</option>
+                                    <option value="Stall 3">Stall 3</option>
+                                    <option value="Stall 4">Stall 4</option>
+                                </CFormSelect>
                             </CCol>
                             <CCol md={4}>
-                                <CFormInput
-                                    type="checkbox"
-                                    name="status"
-                                    label="Status"
-                                    checked={product.status}
-                                    onChange={(e) => setProduct((prevProduct) => ({
-                                        ...prevProduct,
-                                        status: e.target.checked
-                                    }))}
-                                />
+                                <CFormSelect
+                                    onChange={handleChange}
+                                    aria-label="Default select example">
+                                    <option value="">Select Status</option>
+                                    <option value="PENDING">PENDING</option>
+                                    <option value="CONFIRMED">CONFIRMED</option>
+                                    <option value="SHIPPED">SHIPPED</option>
+                                    <option value="DELIVERED">DELIVERED</option>
+                                    <option value="CANCELLED">CANCELLED</option>
+                                </CFormSelect>
                             </CCol>
                         </CRow>
                         <CButton

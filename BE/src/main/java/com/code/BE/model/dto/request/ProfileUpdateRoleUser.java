@@ -16,6 +16,8 @@ import java.util.Date;
 public class ProfileUpdateRoleUser {
     @NotNull
     private String username;
+    @NotNull
+    private String fullName;
     @Pattern(regexp = Regex.PHONE_PATTERN)
     private String phone;
     @Email

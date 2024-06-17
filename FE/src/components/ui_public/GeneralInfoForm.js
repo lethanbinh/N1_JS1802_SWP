@@ -18,14 +18,39 @@ import {
 
 const GeneralInfoForm = () => {
     const [birthday, setBirthday] = useState("");
+    const [avatar, setAvatar] = useState("")
+    const [username, setUsername] = useState("")
+    
 
     return (
         <CCard className="mb-4">
             <CCardHeader>
                 <strong>Profile</strong>
-                </CCardHeader>
+            </CCardHeader>
             <CCardBody>
                 <form>
+                    <CRow className="align-items-center">
+                        <CCol md={6} className="mb-3">
+                            <div className="form-group">
+                                <img src="" alt=""/>
+                                <CFormInput required type="file" id="avatar" name="avatar"/>
+                            </div>
+                        </CCol>
+                    </CRow>
+                    <CRow>
+                        <CCol md={6} className="mb-3">
+                            <div className="form-group">
+                                <label htmlFor="username"><strong>Username</strong></label>
+                                <CFormInput required type="text" id="username" placeholder="Enter your username" />
+                            </div>
+                        </CCol>
+                        <CCol md={6} className="mb-3">
+                            <div className="form-group">
+                                <label htmlFor="address"><strong>Address</strong></label>
+                                <CFormInput required type="text" id="address" placeholder="Enter your address" />
+                            </div>
+                        </CCol>
+                    </CRow>
                     <CRow>
                         <CCol md={6} className="mb-3">
                             <div className="form-group">
