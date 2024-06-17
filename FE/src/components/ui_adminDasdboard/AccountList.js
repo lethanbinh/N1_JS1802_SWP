@@ -40,7 +40,8 @@ const AccountList = () => {
     }
 
     const handleInputChange = (event) => {
-        setFormData({ ...formData, [event.target.name]: event.target.value })
+        const { name, value } = event.target
+        setFormData({ ...formData, [name]: value })
     }
 
     const handleSave = () => {
@@ -243,12 +244,16 @@ const AccountList = () => {
                                             </CTableDataCell>
                                             <CTableDataCell>
                                                 {editingRow === row.id ? (
-                                                    <CFormInput
-                                                        type="text"
+                                                    <CFormSelect
                                                         name="roleName"
                                                         value={formData.roleName}
                                                         onChange={handleInputChange}
-                                                    />
+                                                        aria-label="Default select example">
+                                                        <option value="">Select role</option>
+                                                        <option value="ADMIN">ADMIN</option>
+                                                        <option value="STAFF">STAFF</option>
+                                                        <option value="MANAGER">MANAGER</option>
+                                                    </CFormSelect>
                                                 ) : (
                                                     row.roleName
                                                 )}
