@@ -18,5 +18,5 @@ public class PromotionResponse {
     private Date endDate;
     private double minimumPrize;
     private double maximumPrize;
-
+    private boolean status;
 }

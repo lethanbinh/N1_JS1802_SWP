@@ -34,6 +34,7 @@ public class PromotionServiceImpl implements PromotionService{
     @Override
     public PromotionResponse save(PromotionRequest promotionRequest) {
         Promotion promotion = promotionMapper.toEntity(promotionRequest);
+        promotion.setStatus(true);
         return promotionMapper.toResponse(promotionRepository.saveAndFlush(promotion));
     }
 
@@ -41,8 +42,8 @@ public class PromotionServiceImpl implements PromotionService{
     public boolean deleteById(int id) {
         Promotion promotion = promotionRepository.findById(id);
         if (promotion != null) {
-            promotionRepository.deleteById(id);
-//            promotionRepository.saveAndFlush(promotion);
+            promotion.setStatus(false);
+            promotionRepository.saveAndFlush(promotion);
             return true;
         }
         return false;

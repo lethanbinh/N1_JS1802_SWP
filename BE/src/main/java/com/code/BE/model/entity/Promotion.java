@@ -48,6 +48,9 @@ public class Promotion {
     @Column(name = "maximum_prize")
     private double maximumPrize;
 
+    @Column(name = "status")
+    private boolean status;
+
     @OneToMany(mappedBy = "promotion")
     private List<Order> orderList;
     // Getters and setters
