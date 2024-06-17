@@ -203,7 +203,7 @@ const AddProduct = () => {
                             <CCol md={4}>
                                 <CFormSelect
                                     onChange={handleChange}
-                                    aria-label="Default select example">
+                                    label="Stall">
                                     <option value="">Select Stall</option>
                                     <option value="Stall 1">Stall 1</option>
                                     <option value="Stall 2">Stall 2</option>
@@ -214,7 +214,7 @@ const AddProduct = () => {
                             <CCol md={4}>
                                 <CFormSelect
                                     onChange={handleChange}
-                                    aria-label="Default select example">
+                                    label="Status">
                                     <option value="">Select Status</option>
                                     <option value="PENDING">PENDING</option>
                                     <option value="CONFIRMED">CONFIRMED</option>
