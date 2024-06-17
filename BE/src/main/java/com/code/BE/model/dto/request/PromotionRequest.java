@@ -1,4 +1,5 @@
 package com.code.BE.model.dto.request;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
@@ -26,5 +27,8 @@ public class PromotionRequest {
 
     @PositiveOrZero
     private double maximumPrize;
+
+    @Column(name = "status")
+    private boolean status;
 
 }

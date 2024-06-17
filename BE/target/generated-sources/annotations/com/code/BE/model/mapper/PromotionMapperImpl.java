@@ -5,13 +5,13 @@ import com.code.BE.model.dto.response.PromotionResponse;
 import com.code.BE.model.entity.Promotion;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.processing.Generated;
+import javax.annotation.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-15T08:31:44+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
+    date = "2024-06-17T07:41:35+0700",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.38.0.v20240524-2033, environment: Java 17.0.11 (Eclipse Adoptium)"
 )
 @Component
 public class PromotionMapperImpl implements PromotionMapper {
@@ -24,14 +24,14 @@ public class PromotionMapperImpl implements PromotionMapper {
 
         PromotionResponse promotionResponse = new PromotionResponse();
 
-        promotionResponse.setId( promotion.getId() );
-        promotionResponse.setDiscount( promotion.getDiscount() );
-        promotionResponse.setName( promotion.getName() );
         promotionResponse.setDescription( promotion.getDescription() );
-        promotionResponse.setStartDate( promotion.getStartDate() );
+        promotionResponse.setDiscount( promotion.getDiscount() );
         promotionResponse.setEndDate( promotion.getEndDate() );
-        promotionResponse.setMinimumPrize( promotion.getMinimumPrize() );
+        promotionResponse.setId( promotion.getId() );
         promotionResponse.setMaximumPrize( promotion.getMaximumPrize() );
+        promotionResponse.setMinimumPrize( promotion.getMinimumPrize() );
+        promotionResponse.setName( promotion.getName() );
+        promotionResponse.setStartDate( promotion.getStartDate() );
 
         return promotionResponse;
     }
@@ -58,13 +58,13 @@ public class PromotionMapperImpl implements PromotionMapper {
 
         Promotion promotion = new Promotion();
 
-        promotion.setDiscount( promotionRequest.getDiscount() );
-        promotion.setName( promotionRequest.getName() );
         promotion.setDescription( promotionRequest.getDescription() );
-        promotion.setStartDate( promotionRequest.getStartDate() );
+        promotion.setDiscount( promotionRequest.getDiscount() );
         promotion.setEndDate( promotionRequest.getEndDate() );
-        promotion.setMinimumPrize( promotionRequest.getMinimumPrize() );
         promotion.setMaximumPrize( promotionRequest.getMaximumPrize() );
+        promotion.setMinimumPrize( promotionRequest.getMinimumPrize() );
+        promotion.setName( promotionRequest.getName() );
+        promotion.setStartDate( promotionRequest.getStartDate() );
 
         return promotion;
     }

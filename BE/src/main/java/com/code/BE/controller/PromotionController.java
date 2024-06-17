@@ -26,7 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/promotions")
-@PreAuthorize(value = "hasAuthority('ROLE_MANAGER')")
+//@PreAuthorize(value = "hasAuthority('ROLE_MANAGER')")
 public class PromotionController {
     @Autowired
     private ValidatorUtil validatorUtil;
