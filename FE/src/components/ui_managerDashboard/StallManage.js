@@ -66,6 +66,7 @@ const Stall = () => {
             <strong>Stall List</strong>
           </CCardHeader>
           <CCardBody>
+          <div style={{ height: '500px', overflow: 'auto' }}>
             <CTable>
               <CTableHead>
                 <CTableRow>
@@ -157,6 +158,7 @@ const Stall = () => {
                 ))}
               </CTableBody>
             </CTable>
+          </div>
             <CButton color="success" className="mt-1" onClick={handleAddNew}>
               Add New Stall
             </CButton>

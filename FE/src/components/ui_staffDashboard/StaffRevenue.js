@@ -22,6 +22,7 @@ const StaffRevenue = () => {
             <strong>Stall: Golden Rings</strong>
           </CCardHeader>
           <CCardBody>
+          <div style={{ height: '500px', overflow: 'auto' }}>
             <CTable>
               <CTableHead>
                 <CTableRow>
@@ -52,6 +53,7 @@ const StaffRevenue = () => {
                 </CTableRow>
               </CTableBody>
             </CTable>
+            </div>
           </CCardBody>
         </CCard>
       </CCol>

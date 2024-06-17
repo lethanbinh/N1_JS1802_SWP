@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+updateUI
     CButton,
     CCard,
     CCardBody,
@@ -9,6 +10,21 @@ import {
     CFormTextarea,
     CRow,
 } from '@coreui/react';
+  CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow
+} from '@coreui/react';
+import React, { useState } from 'react';
+import { uid } from 'uid';
+import InvoiceItem from './Billing/InvoiceItem';
 
 const AddProduct = () => {
     const [product, setProduct] = useState({
@@ -106,6 +122,25 @@ const AddProduct = () => {
                                         src={product.image}
                                         alt="Product Preview"
                                         style={{ width: '100%', height: 'auto', marginTop: '10px' }}
+                        <CTable className="w-full p-4 text-left">
+                            <CTableHead>
+                                <CTableRow className="border-b border-gray-900/10 text-sm md:text-base">
+                                    <CTableHeaderCell>ITEM</CTableHeaderCell>
+                                    <CTableHeaderCell>QTY</CTableHeaderCell>
+                                    <CTableHeaderCell>PRICE</CTableHeaderCell>
+                                    <CTableHeaderCell>ACTION</CTableHeaderCell>
+                                </CTableRow>
+                            </CTableHead>
+                            <CTableBody>
+                                {items.map((item) => (
+                                    <InvoiceItem
+                                        key={item.id}
+                                        id={item.id}
+                                        name={item.name}
+                                        qty={item.qty}
+                                        price={item.price}
+                                        onDeleteItem={deleteItemHandler}
+                                        onEdtiItem={edtiItemHandler}
                                     />
                                 )}
                             </CCol>

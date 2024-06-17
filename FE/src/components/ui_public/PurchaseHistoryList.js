@@ -23,6 +23,7 @@ const PurchaseHistoryList = () => {
             <strong>Purchase History</strong>
           </CCardHeader>
           <CCardBody>
+          <div style={{ height: '500px', overflow: 'auto' }}>
             <CTable>
               <CTableHead>
                 <CTableRow>
@@ -71,6 +72,7 @@ const PurchaseHistoryList = () => {
                 </CTableRow>
               </CTableBody>
             </CTable>
+          </div>
           </CCardBody>
         </CCard>
       </CCol>

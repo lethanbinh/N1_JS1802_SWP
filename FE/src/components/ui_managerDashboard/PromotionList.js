@@ -67,6 +67,7 @@ const PromotionList = () => {
             <strong>Promotion List</strong>
           </CCardHeader>
           <CCardBody>
+          <div style={{ height: '500px', overflow: 'auto' }}>
             <CTable>
               <CTableHead>
                 <CTableRow>
@@ -185,6 +186,7 @@ const PromotionList = () => {
                 ))}
               </CTableBody>
             </CTable>
+            </div>
         <CButton className="mt-2" color="success">
           Add Promotion
         </CButton>
