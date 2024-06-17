@@ -18,9 +18,9 @@ import React, { useState } from 'react'
 
 const Stall = () => {
   const [data, setData] = useState([
-    { id: 1, code: 'ABC', name: 'Mark', description: '@mdo', status: 'Processing', type: 'Gold' },
-    { id: 2, code: 'XYZ', name: 'Jacob', description: '@mdo', status: 'Processing', type: 'Gold' },
-    { id: 3, code: 'QAZ', name: 'Mark', description: '@mdo', status: 'Processing', type: 'Gold' },
+    { id: 1, code: 'ABC', name: 'Mark', type: 'Gold' , description: '@mdo', status: 'Processing' },
+    { id: 2, code: 'XYZ', name: 'Jacob', type: 'Gold' , description: '@mdo', status: 'Processing' },
+    { id: 3, code: 'QAZ', name: 'Mark', type: 'Gold', description: '@mdo', status: 'Processing' },
   ])
 
   const [editingRow, setEditingRow] = useState(null)
@@ -72,9 +72,9 @@ const Stall = () => {
                   <CTableHeaderCell scope="col">Id</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Code</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Type</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Description</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Type</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
@@ -108,6 +108,18 @@ const Stall = () => {
                     </CTableDataCell>
                     <CTableDataCell>
                       {editingRow === row.id ? (
+                        <CFormInput
+                          type="text"
+                          name="type"
+                          value={formData.type}
+                          onChange={handleInputChange}
+                        />
+                      ) : (
+                        row.type
+                      )}
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      {editingRow === row.id ? (
                         <CFormTextarea
                           name="description"
                           value={formData.description}
@@ -129,18 +141,7 @@ const Stall = () => {
                         row.status
                       )}
                     </CTableDataCell>
-                    <CTableDataCell>
-                      {editingRow === row.id ? (
-                        <CFormInput
-                          type="text"
-                          name="type"
-                          value={formData.type}
-                          onChange={handleInputChange}
-                        />
-                      ) : (
-                        row.type
-                      )}
-                    </CTableDataCell>
+
                     <CTableDataCell>
                       {editingRow === row.id ? (
                         <CButton color="success" onClick={handleSave}>
