@@ -22,6 +22,7 @@ const ManagerRevenue = () => {
             <strong>Revenue</strong>
           </CCardHeader>
           <CCardBody>
+          <div style={{ height: '500px', overflow: 'auto' }}>
             <CTable>
               <CTableHead>
                 <CTableRow>
@@ -52,6 +53,7 @@ const ManagerRevenue = () => {
                 </CTableRow>
               </CTableBody>
             </CTable>
+            </div>
           </CCardBody>
         </CCard>
       </CCol>

@@ -1,16 +1,16 @@
 import {
-    CCard,
-    CCardBody,
-    CCardHeader,
-    CCol,
-    CFormInput,
-    CRow,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CFormInput,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow
 } from '@coreui/react'
 import React, { useState } from 'react'
 
@@ -36,6 +36,7 @@ const BuyOldProduct = () => {
                         <strong>Buy old Product</strong>
                     </CCardHeader>
                     <CCardBody>
+                    <div style={{ height: '500px', overflow: 'auto' }}>
                         <CTable>
                             <CTableHead>
                                 <CTableRow>
@@ -127,6 +128,7 @@ const BuyOldProduct = () => {
                                 ))}
                             </CTableBody>
                         </CTable>
+                    </div>
                     </CCardBody>
                 </CCard>
             </CCol>
