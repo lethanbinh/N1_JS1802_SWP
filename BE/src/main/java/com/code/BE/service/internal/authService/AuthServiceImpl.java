@@ -72,6 +72,7 @@ public class AuthServiceImpl implements AuthService {
                 authResponse.setAccessToken(accessToken);
                 authResponse.setRefreshToken(refreshToken);
                 authResponse.setRoleName(user.getRole().getName());
+                authResponse.setId(user.getId());
 
                 return authResponse;
             }
@@ -109,6 +110,7 @@ public class AuthServiceImpl implements AuthService {
                 authResponse.setAccessToken(newAccessToken);
                 authResponse.setRefreshToken(newRefreshToken);
                 authResponse.setRoleName(user.getRole().getName());
+                authResponse.setId(user.getId());
 
                 return authResponse;
             }
