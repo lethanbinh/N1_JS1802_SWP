@@ -65,7 +65,6 @@ const AccountList = () => {
         const savedData = {
             username: dataFromInput.username || "string",
             fullName: dataFromInput.fullName || "string",
-            password: dataFromInput.password || ".!rJ/;ikPV-5Ji3EFk(", // Using default password if not provided
             phone: dataFromInput.phone || "0374422448", // Using default phone if not provided
             email: dataFromInput.email || "string",
             address: dataFromInput.address || "string",
@@ -189,6 +188,7 @@ const AccountList = () => {
                                                     <CFormInput
                                                         type="password"
                                                         name="password"
+                                                        disabled
                                                         value={formData.password}
                                                         onChange={handleInputChange}
                                                     />

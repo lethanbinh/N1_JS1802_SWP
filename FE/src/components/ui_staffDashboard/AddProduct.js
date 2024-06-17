@@ -82,6 +82,7 @@ const AddProduct = () => {
         setItems(items.map((item) => (item.id === id ? updatedItem : item)));
     };
 
+
     return (
         <CRow>
             <CCol xs={12}>
