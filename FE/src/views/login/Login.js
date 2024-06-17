@@ -40,7 +40,8 @@ const Login = () => {
             data.payload.username,
             data.payload.accessToken,
             data.payload.refreshToken,
-            data.payload.roleName
+            data.payload.roleName,
+            data.payload.id
           )
 
           redirectToHomePage(data.payload.roleName);
