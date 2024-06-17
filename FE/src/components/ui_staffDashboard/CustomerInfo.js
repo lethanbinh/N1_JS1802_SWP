@@ -1,20 +1,20 @@
 import {
-    CButton,
-    CCard,
-    CCardBody,
-    CCardHeader,
-    CCol,
-    CFormInput,
-    CFormTextarea,
-    CRow,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow,
-} from '@coreui/react'
-import React, { useState } from 'react'
+  CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CFormInput,
+  CFormTextarea,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from '@coreui/react';
+import React, { useState } from 'react';
 
 const CustomerInfo = () => {
     const [data, setData] = useState([
@@ -74,6 +74,7 @@ const CustomerInfo = () => {
                         <strong>Customer Information</strong>
                     </CCardHeader>
                     <CCardBody>
+                    <div style={{ height: '500px', overflow: 'auto' }}>
                         <CTable>
                             <CTableHead>
                                 <CTableRow>
@@ -206,6 +207,7 @@ const CustomerInfo = () => {
                                 ))}
                             </CTableBody>
                         </CTable>
+                        </div>
                         <CButton color="success" className="mt-1" onClick={handleAddNew}>
                             Input Customer Informaion
                         </CButton>

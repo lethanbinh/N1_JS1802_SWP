@@ -13,21 +13,21 @@ import {
   CTableRow
 } from '@coreui/react'
 import React, { useState } from 'react'
-  
+
   const StaffStatistic = () => {
     const [data, setData] = useState([
       { id: 1, totalNumStaff: 30, revenuePerStaff: 60.00, TopStaff: 'ABC', avgSalePerStaff: 100.00, ordersPerStaff: 100, avgOrderPerStaff: 100.00 },
       { id: 2, totalNumStaff: 30, revenuePerStaff: 60.00, TopStaff: 'ABC', avgSalePerStaff: 100.00, ordersPerStaff: 100, avgOrderPerStaff: 100.00 },
       { id: 3, totalNumStaff: 30, revenuePerStaff: 60.00, TopStaff: 'ABC', avgSalePerStaff: 100.00, ordersPerStaff: 100, avgOrderPerStaff: 100.00 },
     ])
-  
+
     const [editingRow, setEditingRow] = useState(null)
     const [formData, setFormData] = useState({})
-  
+
     const handleInputChange = (event) => {
       setFormData({ ...formData, [event.target.name]: event.target.value })
     }
-  
+
     return (
       <CRow>
         <CCol xs={12}>
@@ -36,6 +36,7 @@ import React, { useState } from 'react'
               <strong>Staff Statistics</strong>
             </CCardHeader>
             <CCardBody>
+            <div style={{ height: '500px', overflow: 'auto' }}>
               <CTable>
                 <CTableHead>
                   <CTableRow>
@@ -128,6 +129,7 @@ import React, { useState } from 'react'
                   ))}
                 </CTableBody>
               </CTable>
+              </div>
             </CCardBody>
           </CCard>
         </CCol>

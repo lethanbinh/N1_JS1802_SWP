@@ -110,24 +110,21 @@
 // }
 // export default AddProduct
 import {
-    CButton,
-    CCard,
-    CCardBody,
-    CCardHeader,
-    CCol,
-    CFormInput,
-    CFormTextarea,
-    CRow,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow,
-} from '@coreui/react'
-import React, { useState } from 'react'
-import InvoiceItem from './Billing/InvoiceItem'
+  CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow
+} from '@coreui/react';
+import React, { useState } from 'react';
 import { uid } from 'uid';
+import InvoiceItem from './Billing/InvoiceItem';
 
 const AddProduct = () => {
     const [items, setItems] = useState([
@@ -179,6 +176,7 @@ const AddProduct = () => {
                         <strong>Add Product</strong>
                     </CCardHeader>
                     <CCardBody>
+
                         <CTable className="w-full p-4 text-left">
                             <CTableHead>
                                 <CTableRow className="border-b border-gray-900/10 text-sm md:text-base">
