@@ -24,4 +24,6 @@ public class UserResponse {
     private boolean status;
     private int roleId;
     private int stallId;
+    private String roleName;
+    private String stallName;
 }

@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import routes from '../routes'
 
 import { CBreadcrumb, CBreadcrumbItem } from '@coreui/react'
+import UserStorage from '../util/UserStorage'
 
 const AppBreadcrumb = () => {
   const currentLocation = useLocation().pathname
+
+  const [user, setUser] = useState(UserStorage.getAuthenticatedUser())
+  const [link, setLink] = useState('#/admin-dashboard/account-list')
 
   const getRouteName = (pathname, routes) => {
     const currentRoute = routes.find((route) => route.path === pathname)
@@ -29,11 +33,22 @@ const AppBreadcrumb = () => {
     return breadcrumbs
   }
 
+  useEffect(() => {
+    switch (user.roleName.toUpperCase()) {
+      case "STAFF":
+        setLink('#/staff-dashboard/invoice')
+        break;
+      case "MANAGER":
+        setLink('#/manager-dashboard/staff-list')
+        break;
+    }
+  }, [])
+
   const breadcrumbs = getBreadcrumbs(currentLocation)
 
   return (
     <CBreadcrumb className="my-0">
-      <CBreadcrumbItem href="/home">Home</CBreadcrumbItem>
+      <CBreadcrumbItem href={link}>Home</CBreadcrumbItem>
       {breadcrumbs.map((breadcrumb, index) => {
         return (
           <CBreadcrumbItem

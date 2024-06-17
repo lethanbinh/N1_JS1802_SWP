@@ -91,6 +91,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId);
         if (user != null) {
             user.setUsername(profileUpdateRoleUser.getUsername());
+            user.setFullName(profileUpdateRoleUser.getFullName());
             user.setPhone(phoneNumberUtil.normalizePhoneNumber(profileUpdateRoleUser.getPhone()));
             user.setEmail(profileUpdateRoleUser.getEmail());
             user.setAddress(profileUpdateRoleUser.getAddress());

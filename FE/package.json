@@ -1,9 +1,9 @@
 {
-  "name": "@coreui/coreui-free-react-admin-template",
-  "version": "5.0.0",
-  "description": "CoreUI Free React Admin Template",
+  "name": "Jewelry system at the store",
+  "version": "1.0",
+  "description": "Jewelry system at the store",
   "homepage": ".",
-  "author": "GoldenB",
+  "author": "Binh",
   "scripts": {
     "build": "vite build",
     "lint": "eslint \"src/**/*.js\"",
@@ -12,10 +12,10 @@
   },
   "dependencies": {
     "@coreui/chartjs": "^4.0.0",
-    "@coreui/coreui": "^5.0.0",
+    "@coreui/coreui": "^5.0.2",
     "@coreui/icons": "^3.0.1",
     "@coreui/icons-react": "^2.2.1",
-    "@coreui/react": "^5.0.0",
+    "@coreui/react": "^5.1.0",
     "@coreui/react-chartjs": "^3.0.0",
     "@coreui/utils": "^2.0.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",

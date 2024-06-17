@@ -54,6 +54,7 @@ const Policy = () => {
             <strong>Return & Exchange Policy</strong>
           </CCardHeader>
           <CCardBody>
+          <div style={{ height: '500px', overflow: 'auto' }}>
             <CTable>
               <CTableHead>
                 <CTableRow>
@@ -118,6 +119,7 @@ const Policy = () => {
                 ))}
               </CTableBody>
             </CTable>
+          </div>
           </CCardBody>
         </CCard>
       </CCol>

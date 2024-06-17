@@ -1,9 +1,9 @@
 import {
-  CButton,
   CCard,
   CCardBody,
   CCardHeader,
   CCol,
+  CDropdownHeader,
   CFormInput,
   CFormTextarea,
   CRow,
@@ -12,8 +12,7 @@ import {
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
-  CTableRow,
-  CDropdownHeader
+  CTableRow
 } from '@coreui/react'
 import React, { useState } from 'react'
 
@@ -67,6 +66,7 @@ const StallProduct = () => {
             <CDropdownHeader><strong>Stall...</strong></CDropdownHeader>
           </CCardHeader>
           <CCardBody>
+          <div style={{ height: '500px', overflow: 'auto' }}>
             <CTable>
               <CTableHead>
                 <CTableRow>
@@ -158,6 +158,7 @@ const StallProduct = () => {
                 ))}
               </CTableBody>
             </CTable>
+          </div>
           </CCardBody>
         </CCard>
       </CCol>

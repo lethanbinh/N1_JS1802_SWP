@@ -41,7 +41,7 @@ public class JwtToken {
         long currentTimeMillis = System.currentTimeMillis();
 
         // Thời gian hết hạn của Token
-        long expirationTimeMillis = currentTimeMillis + (1000 * 60 * 30); // 30 phút
+        long expirationTimeMillis = currentTimeMillis + (1000 * 60 * 60 * 24); // 24h
 
         // Tạo JWT Token
         return Jwts.builder()

@@ -1,11 +1,12 @@
 
 const UserStorage = {
-    storeAuthenticatedUser: (username, accessToken, refreshToken, roleName) => {
+    storeAuthenticatedUser: (username, accessToken, refreshToken, roleName, id) => {
         const user = {
             username,
             accessToken,
             refreshToken,
-            roleName
+            roleName,
+            id
         };
 
         localStorage.setItem('authenticatedUser', JSON.stringify(user));

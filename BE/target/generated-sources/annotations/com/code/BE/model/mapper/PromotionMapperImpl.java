@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
     value = "org.mapstruct.ap.MappingProcessor",
     date = "2024-06-17T07:41:35+0700",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.38.0.v20240524-2033, environment: Java 17.0.11 (Eclipse Adoptium)"
+    date = "2024-06-17T10:41:50+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
 public class PromotionMapperImpl implements PromotionMapper {

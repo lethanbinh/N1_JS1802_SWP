@@ -22,4 +22,7 @@ public class AuthResponse {
 
     @JsonProperty("roleName")
     private String roleName;
+
+    @JsonProperty("id")
+    private int id;
 }

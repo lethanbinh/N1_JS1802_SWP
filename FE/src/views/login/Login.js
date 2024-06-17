@@ -40,7 +40,8 @@ const Login = () => {
             data.payload.username,
             data.payload.accessToken,
             data.payload.refreshToken,
-            data.payload.roleName
+            data.payload.roleName,
+            data.payload.id
           )
 
           redirectToHomePage(data.payload.roleName);
@@ -94,13 +95,13 @@ const Login = () => {
   const redirectToHomePage = (userRole) => {
     switch (userRole.toUpperCase()) {
       case 'ADMIN':
-        navigate('/admin-dashboard');
-        break;
-      case 'MANAGER':
-        navigate('/manager-dashboard');
+        navigate('/admin-dashboard/account-list');
         break;
       case 'STAFF':
-        navigate('/staff-dashboard');
+        navigate('/staff-dashboard/invoice');
+        break;
+      case 'MANAGER':
+        navigate('/manager-dashboard/staff-list');
         break;
       default:
         navigate('/login');

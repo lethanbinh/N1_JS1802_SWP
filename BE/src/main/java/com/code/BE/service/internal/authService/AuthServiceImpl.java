@@ -72,16 +72,19 @@ public class AuthServiceImpl implements AuthService {
                 authResponse.setAccessToken(accessToken);
                 authResponse.setRefreshToken(refreshToken);
                 authResponse.setRoleName(user.getRole().getName());
+                authResponse.setId(user.getId());
 
                 return authResponse;
             }
         } catch (Exception ex) {
-            AuthResponse authResponse = new AuthResponse();
-            authResponse.setAccessToken("Username or Password Error");
-            authResponse.setRefreshToken("Username or Password Error");
-            authResponse.setRoleName("Username or Password Error");
-            authResponse.setUsername("Username or Password Error");
-            return authResponse;
+//            AuthResponse authResponse = new AuthResponse();
+//            authResponse.setAccessToken("Username or Password Error");
+//            authResponse.setRefreshToken("Username or Password Error");
+//            authResponse.setRoleName("Username or Password Error");
+//            authResponse.setUsername("Username or Password Error");
+//            return authResponse;
+
+            throw ex;
         }
         return null;
     }
@@ -107,6 +110,7 @@ public class AuthServiceImpl implements AuthService {
                 authResponse.setAccessToken(newAccessToken);
                 authResponse.setRefreshToken(newRefreshToken);
                 authResponse.setRoleName(user.getRole().getName());
+                authResponse.setId(user.getId());
 
                 return authResponse;
             }
@@ -130,7 +134,7 @@ public class AuthServiceImpl implements AuthService {
 
             String htmlTemplate = """
                     <div>
-                        <a href="http://localhost:3000/home#/create-new-password?email=${email}&?token=${token}" alt="">
+                        <a href="http://localhost:3000/home#/create-new-password?email=${email}&token=${token}" alt="">
                         Click here to reset your account's password</a>. This link will be expired in 30 minutes.
                     <div>
                     """;
@@ -144,11 +148,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean resetPassword(String email, String password, String token) {
         // check token's email is at the same with email of the account you want to reset
-        if (email.equalsIgnoreCase(
-                confirmationTokenService.findByConfirmationToken(token).getUser().getEmail())
-                && isTokenExpire(token)) {
+        if (email.equalsIgnoreCase(confirmationTokenService.findByConfirmationToken(token).getUser().getEmail())
+                && !isTokenExpire(token)) {
             User user = userRepository.findByEmail(email);
             user.setPassword(passwordEncoder.encode(password));
+
+            // delete token after resetting password
+            confirmationTokenService.deleteById(confirmationTokenService.findByConfirmationToken(token).getId());
             return true;
         }
         return false;

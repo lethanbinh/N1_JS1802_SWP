@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-15T08:31:44+0700",
+    date = "2024-06-17T10:41:50+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
@@ -28,6 +28,8 @@ public class UserMapperImpl implements UserMapper {
 
         userResponse.setRoleId( userRoleId( user ) );
         userResponse.setStallId( userStallId( user ) );
+        userResponse.setRoleName( userRoleName( user ) );
+        userResponse.setStallName( userStallName( user ) );
         userResponse.setId( user.getId() );
         userResponse.setUsername( user.getUsername() );
         userResponse.setPassword( user.getPassword() );
@@ -115,5 +117,35 @@ public class UserMapperImpl implements UserMapper {
         }
         int id = stall.getId();
         return id;
+    }
+
+    private String userRoleName(User user) {
+        if ( user == null ) {
+            return null;
+        }
+        Role role = user.getRole();
+        if ( role == null ) {
+            return null;
+        }
+        String name = role.getName();
+        if ( name == null ) {
+            return null;
+        }
+        return name;
+    }
+
+    private String userStallName(User user) {
+        if ( user == null ) {
+            return null;
+        }
+        Stall stall = user.getStall();
+        if ( stall == null ) {
+            return null;
+        }
+        String name = stall.getName();
+        if ( name == null ) {
+            return null;
+        }
+        return name;
     }
 }

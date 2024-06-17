@@ -31,6 +31,5 @@ public class ProfileUpdateRoleAdmin {
     @Positive
     private int roleId;
 
-    @Positive
     private int stallId;
 }

@@ -1,33 +1,33 @@
 import {
-    CCard,
-    CCardBody,
-    CCardHeader,
-    CCol,
-    CFormInput,
-    CRow,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow
-  } from '@coreui/react'
-  import React, { useState } from 'react'
-    
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CFormInput,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow
+} from '@coreui/react'
+import React, { useState } from 'react'
+
     const ProductReportOfStall = () => {
       const [data, setData] = useState([
         { id: 1, totalNumProduct: 30, topQuantitySellingProducts: 'XYZ', topSalesPerProduct: 'ABC', returnRates: 'DCF', productsOutOfStock: 'ACD', averageSalesPerProduct: 100.00 },
         { id: 2, totalNumProduct: 30, topQuantitySellingProducts: 'XYZ', topSalesPerProduct: 'ABC', returnRates: 'DCF', productsOutOfStock: 'ACD', averageSalesPerProduct: 100.00 },
         { id: 3, totalNumProduct: 30, topQuantitySellingProducts: 'XYZ', topSalesPerProduct: 'ABC', returnRates: 'DCF', productsOutOfStock: 'ACD', averageSalesPerProduct: 100.00 },
       ])
-    
+
       const [editingRow, setEditingRow] = useState(null)
       const [formData, setFormData] = useState({})
-    
+
       const handleInputChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value })
       }
-    
+
       return (
         <CRow>
           <CCol xs={12}>
@@ -36,6 +36,7 @@ import {
                 <strong>Products Report Of Stall</strong>
               </CCardHeader>
               <CCardBody>
+              <div style={{ height: '500px', overflow: 'auto' }}>
                 <CTable>
                   <CTableHead>
                     <CTableRow>
@@ -128,6 +129,7 @@ import {
                     ))}
                   </CTableBody>
                 </CTable>
+              </div>
               </CCardBody>
             </CCard>
           </CCol>
