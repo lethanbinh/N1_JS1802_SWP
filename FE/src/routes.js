@@ -33,14 +33,11 @@ const ProductReportOfStall = React.lazy(() => import('./components/ui_staffDashb
 const routes = [
 
   //public
-  { path: '/', exact: true, name: 'Login', element: <Navigate to="/login" /> },
+  { path: '/', exact: true, name: 'Home', element: <Navigate to="/login" /> },
   { path: '/login', exact: true, name: 'Login', element: Login },
   { path: '/forgot-password', exact: true, name: 'Forgot Password', element: ForgotPassword },
   { path: '/create-new-password', exact: true, name: 'Create New Password', element: CreateNewPassword },
   { path: '/home', exact: true, name: 'Home' },
-
-
-
   { path: '/settings/general-info', name: 'Profile', element: GeneralInfoForm },
   //adminDashboard
   { path: '/admin-dashboard/account-list', name: 'Account List', element: AccountList },
