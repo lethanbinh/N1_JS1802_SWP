@@ -18,18 +18,18 @@ VALUES
 ('J009', 'Ethical jewelry', 'Eco Jewels', 1, 'PURCHASE'),
 ('J010', 'Modern jewelry designs', 'Modern Marvels', 1, 'PURCHASE');
 
-INSERT INTO `promotion` (`description`, `discount`, `end_date`, `maximum_prize`, `minimum_prize`, `name`, `start_date`)
+INSERT INTO `promotion` (`description`, `discount`, `end_date`, `maximum_prize`, `minimum_prize`, `name`, `start_date`, `status`)
 VALUES
-('Summer Sale', 0.1, '2024-07-31', 1000.00, 100.00, 'Summer Delight', '2024-06-01'),
-('Winter Bonanza', 0.2, '2024-12-31', 1500.00, 200.00, 'Winter Wonderland', '2024-11-01'),
-('Spring Fling', 0.3, '2024-05-31', 800.00, 50.00, 'Spring Special', '2024-04-01'),
-('Autumn Festival', 0.4, '2024-10-31', 1200.00, 100.00, 'Autumn Fest', '2024-09-01'),
-('New Year Bash', 0.33, '2025-01-15', 2000.00, 300.00, 'New Year Celebration', '2024-12-15'),
-('Black Friday', 0.12, '2024-11-29', 2500.00, 500.00, 'Black Friday Extravaganza', '2024-11-24'),
-('Cyber Monday', 0.3, '2024-12-02', 2000.00, 400.00, 'Cyber Monday Deals', '2024-11-28'),
-('Valentine\'s Special', 0.4, '2024-02-15', 1000.00, 100.00, 'Valentine\'s Day Sale', '2024-02-01'),
-('Easter Eggstravaganza', 0.2, '2024-04-21', 1500.00, 200.00, 'Easter Sale', '2024-04-01'),
-('Halloween Spooktacular', 0.2, '2024-11-01', 1200.00, 150.00, 'Halloween Sale', '2024-10-15');
+('Summer Sale', 0.1, '2024-07-31', 1000.00, 100.00, 'Summer Delight', '2024-06-01', true),
+('Winter Bonanza', 0.2, '2024-12-31', 1500.00, 200.00, 'Winter Wonderland', '2024-11-01', true),
+('Spring Fling', 0.3, '2024-05-31', 800.00, 50.00, 'Spring Special', '2024-04-01', true),
+('Autumn Festival', 0.4, '2024-10-31', 1200.00, 100.00, 'Autumn Fest', '2024-09-01', true),
+('New Year Bash', 0.33, '2025-01-15', 2000.00, 300.00, 'New Year Celebration', '2024-12-15', true),
+('Black Friday', 0.12, '2024-11-29', 2500.00, 500.00, 'Black Friday Extravaganza', '2024-11-24', true),
+('Cyber Monday', 0.3, '2024-12-02', 2000.00, 400.00, 'Cyber Monday Deals', '2024-11-28', true),
+('Valentine\'s Special', 0.4, '2024-02-15', 1000.00, 100.00, 'Valentine\'s Day Sale', '2024-02-01', true),
+('Easter Eggstravaganza', 0.2, '2024-04-21', 1500.00, 200.00, 'Easter Sale', '2024-04-01', true),
+('Halloween Spooktacular', 0.2, '2024-11-01', 1200.00, 150.00, 'Halloween Sale', '2024-10-15', true);
 
 INSERT INTO `customer` (`address`, `birthday`, `create_date`, `email`, `full_name`, `phone`, `status`, `update_date`)
 VALUES
