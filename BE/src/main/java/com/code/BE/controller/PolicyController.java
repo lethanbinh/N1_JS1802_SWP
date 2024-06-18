@@ -6,6 +6,7 @@ import com.code.BE.exception.ApplicationException;
 import com.code.BE.exception.NotFoundException;
 import com.code.BE.exception.ValidationException;
 import com.code.BE.model.dto.request.PolicyRequest;
+
 import com.code.BE.model.dto.response.ApiResponse;
 import com.code.BE.model.dto.response.PolicyResponse;
 import com.code.BE.service.internal.policyService.PolicyService;
@@ -74,6 +75,29 @@ public class PolicyController {
             }
 
             PolicyResponse PolicyResponse = policyService.save(policyRequest);
+            apiResponse.ok(PolicyResponse);
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (ValidationException ex) {
+            throw ex; // Rethrow ValidationException
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
+    @PutMapping("/id/{id}")
+    public ResponseEntity<ApiResponse<PolicyResponse>> editById(@PathVariable int id, @Valid @RequestBody PolicyRequest policyRequest, BindingResult bindingResult) throws Exception {
+        ApiResponse<PolicyResponse> apiResponse = new ApiResponse<>();
+        try {
+            if(policyService.findById(id) == null) {
+                throw new NotFoundException(ErrorMessage.POLICY_NOT_FOUND);
+            }
+            policyValidator.validate(policyRequest, bindingResult);
+            if (bindingResult.hasErrors()) {
+                Map<String, String> validationErrors = validatorUtil.toErrors(bindingResult.getFieldErrors());
+                throw new ValidationException(validationErrors);
+            }
+
+            PolicyResponse PolicyResponse = policyService.editById(id, policyRequest);
             apiResponse.ok(PolicyResponse);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (ValidationException ex) {
