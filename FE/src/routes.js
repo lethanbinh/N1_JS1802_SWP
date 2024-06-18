@@ -1,10 +1,13 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
+
 //public
 const Login = React.lazy(() => import('./views/login/Login'))
 const ForgotPassword = React.lazy(() => import('./views/resetPassword/ForgotPassword'))
 const CreateNewPassword = React.lazy(() => import('./views/resetPassword/CreateNewPassword'))
 const GeneralInfoForm = React.lazy(() => import('./components/ui_public/GeneralInfoForm'))
+const GoldPrice = React.lazy(() => import('./components/ui_public/GoldPrice'))
+
 //adminDashboard
 const AccountList = React.lazy(() => import('./components/ui_adminDasdboard/AccountList'))
 //managerdashboard
@@ -31,7 +34,6 @@ const OderStatisticOfStall = React.lazy(() => import('./components/ui_staffDashb
 const ProductReportOfStall = React.lazy(() => import('./components/ui_staffDashboard/ProductReportOfStall'))
 
 const routes = [
-
   //public
   { path: '/', exact: true, name: 'Home', element: <Navigate to="/login" /> },
   { path: '/login', exact: true, name: 'Login', element: Login },
@@ -39,6 +41,8 @@ const routes = [
   { path: '/create-new-password', exact: true, name: 'Create New Password', element: CreateNewPassword },
   { path: '/home', exact: true, name: 'Home' },
   { path: '/settings/general-info', name: 'Profile', element: GeneralInfoForm },
+  { path: '/settings/gold-price', name: 'Gold Price Table', element: GoldPrice },
+
   //adminDashboard
   { path: '/admin-dashboard/account-list', name: 'Account List', element: AccountList },
   //managerDashboard

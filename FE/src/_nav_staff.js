@@ -79,6 +79,11 @@ const _nav_staff = [
       },
       {
         component: CNavItem,
+        name: 'Gold Price Table',
+        to: '/settings/gold-price',
+      },
+      {
+        component: CNavItem,
         name: 'Logout',
         to: '/',
         id: 'logout'
