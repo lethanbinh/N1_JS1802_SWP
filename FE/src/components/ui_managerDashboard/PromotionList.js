@@ -27,16 +27,15 @@ import convertDateToJavaFormat from '../../util/DateConvert';
 
 const PromotionList = () => {
   const [data, setData] = useState([]);
-
   const [editingRow, setEditingRow] = useState(null);
   const [formData, setFormData] = useState({});
-  const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser())
-  const [visible, setVisible] = useState(false)
-  const [deleteId, setDeleteId] = useState(null)
+  const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
+  const [visible, setVisible] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const handleEdit = (id) => {
     setEditingRow(id);
-    setFormData(data.find((row) => row.id === id));
+    setFormData(data.find((row) => row.id === id) || {});
   };
 
   const handleInputChange = (event) => {
@@ -51,7 +50,7 @@ const PromotionList = () => {
       return row;
     });
 
-    const dataFromInput = newData[editingRow - 1]
+    const dataFromInput = newData.find(row => row.id === editingRow);
 
     const savedData = {
       discount: dataFromInput.discount || 0,
@@ -59,27 +58,30 @@ const PromotionList = () => {
       description: dataFromInput.description || "String",
       startDate: convertDateToJavaFormat(dataFromInput.startDate) || "2024-06-17T12:43:43.796Z",
       endDate: convertDateToJavaFormat(dataFromInput.endDate) || "2024-06-17T12:43:43.796Z",
-      minimumPrice: dataFromInput.minimumPrize || "String",
-      maximumPrice: dataFromInput.maximumPrize || "String",
+      minimumPrize: dataFromInput.minimumPrize || "String",
+      maximumPrize: dataFromInput.maximumPrize || "String",
+      status: true
     };
-    console.log(savedData)
 
     fetchData(`http://localhost:8080/api/v1/promotions/id/${editingRow}`, 'GET', null, userInfo.accessToken)
       .then((data) => {
         if (data.status === "SUCCESS") {
           fetchData(`http://localhost:8080/api/v1/promotions/id/${editingRow}`, 'PUT', savedData, userInfo.accessToken)
+            .then(() => refreshData());
         } else {
           fetchData(`http://localhost:8080/api/v1/promotions`, 'POST', savedData, userInfo.accessToken)
+            .then(() => refreshData());
         }
-      })
+      });
 
     setData(newData);
     setEditingRow(null);
   };
 
   const handleAddNew = () => {
+    const newId = data.length ? Math.max(...data.map(row => row.id)) + 1 : 1;
     const newRow = {
-      id: data.length + 1,
+      id: newId,
       discount: '',
       name: '',
       description: '',
@@ -87,33 +89,32 @@ const PromotionList = () => {
       endDate: '',
       minimumPrize: '',
       maximumPrize: '',
+      status: true
     };
     setData([...data, newRow]);
-    setEditingRow(newRow.id);
+    setEditingRow(newId);
+    setFormData(newRow);
   };
 
   const handleDelete = (id) => {
-    setVisible(false)
-    setData(data.filter((row) => row.id !== id))
+    setVisible(false);
+    setData(data.filter((row) => row.id !== id));
     fetchData(`http://localhost:8080/api/v1/promotions/${deleteId}`, 'DELETE', null, userInfo.accessToken)
-    setDeleteId(null)
-
-    setTimeout(() => {
-      refreshData()
-    }, 1000)
+      .then(() => refreshData());
+    setDeleteId(null);
   };
 
   const refreshData = () => {
     fetchData("http://localhost:8080/api/v1/promotions", 'GET', null, userInfo.accessToken)
       .then(data => {
-        console.log(data)
-        setData(data.payload)
-      })
-  }
+        console.log(data);
+        setData(data.payload);
+      });
+  };
 
   useEffect(() => {
     refreshData();
-  }, [])
+  }, []);
 
   return (
     <CRow>
@@ -204,24 +205,24 @@ const PromotionList = () => {
                         {editingRow === row.id ? (
                           <CFormInput
                             type="text"
-                            name="minimumPrice"
-                            value={formData.minimumPrice}
+                            name="minimumPrize"
+                            value={formData.minimumPrize}
                             onChange={handleInputChange}
                           />
                         ) : (
-                          row.minimumPrice
+                          row.minimumPrize
                         )}
                       </CTableDataCell>
                       <CTableDataCell>
                         {editingRow === row.id ? (
                           <CFormInput
                             type="text"
-                            name="maximumPrice"
-                            value={formData.maximumPrice}
+                            name="maximumPrize"
+                            value={formData.maximumPrize}
                             onChange={handleInputChange}
                           />
                         ) : (
-                          row.maximumPrice
+                          row.maximumPrize
                         )}
                       </CTableDataCell>
                       <CTableDataCell>
@@ -235,8 +236,8 @@ const PromotionList = () => {
                           </CButton>
                         )}
                         <CButton color="danger" onClick={() => {
-                          setDeleteId(row.id)
-                          setVisible(true)
+                          setDeleteId(row.id);
+                          setVisible(true);
                         }}>Delete</CButton>
                       </CTableDataCell>
                     </CTableRow>
@@ -273,8 +274,6 @@ const PromotionList = () => {
       </CModal>
     </CRow>
   );
-
-
 };
 
 export default PromotionList;
