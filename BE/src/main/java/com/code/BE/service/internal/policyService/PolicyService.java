@@ -10,4 +10,5 @@ public interface PolicyService {
     PolicyResponse findById (int id);
     PolicyResponse save (PolicyRequest policyRequest);
     boolean deleteById (int id);
+    PolicyResponse editById (int id, PolicyRequest policyRequest);
 }

@@ -3,6 +3,7 @@ package com.code.BE.service.internal.policyService;
 import com.code.BE.model.dto.request.PolicyRequest;
 import com.code.BE.model.dto.response.PolicyResponse;
 import com.code.BE.model.entity.Policy;
+import com.code.BE.model.entity.Promotion;
 import com.code.BE.model.mapper.PolicyMapper;
 import com.code.BE.repository.PolicyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,19 @@ public class PolicyServiceImpl implements PolicyService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public PolicyResponse editById(int id, PolicyRequest policyRequest) {
+        Policy policy = policyRepository.findById(id);
+
+        if (policy != null) {
+            policy.setDetail(policyRequest.getDetail());
+            policy.setType(policyRequest.getType());
+            policy.setName(policyRequest.getName());
+
+            return policyMapper.toResponse(policyRepository.saveAndFlush(policy));
+        }
+        return null;
     }
 }
