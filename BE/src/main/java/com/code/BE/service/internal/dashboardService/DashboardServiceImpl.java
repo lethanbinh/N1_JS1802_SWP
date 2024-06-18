@@ -27,19 +27,21 @@ public class DashboardServiceImpl implements DashboardService {
     private StaffStatisticsRepository staffStatisticsRepository;
 
     @Override
-    public RevenueStatistics getRevenueStatistics(Date startDate, Date endDate, Date previousStartDate, Date previousEndDate) {
+    public RevenueStatistics getRevenueStatistics(Date startDate, Date endDate) {
+        // Tổng doanh thu của tất cả các quầy
         Double totalRevenue = revenueStatisticsRepository.findTotalRevenue(startDate, endDate);
 
+        // Doanh thu theo từng quầy hàng
         List<Object[]> revenuePerStallRaw = revenueStatisticsRepository.findRevenuePerStall(startDate, endDate);
         Map<String, Double> revenuePerStall = new HashMap<>();
         for (Object[] revenue : revenuePerStallRaw) {
             revenuePerStall.put((String) revenue[0], (Double) revenue[1]);
         }
 
-        double revenueGrowthRate = revenueStatisticsRepository.findRevenueGrowthRate(startDate, endDate, previousStartDate, previousEndDate);
-
+        // Các quầy hàng hoạt động tốt nhất
         List<String> topPerformingStalls = revenueStatisticsRepository.findTopPerformingStalls(startDate, endDate);
 
+        // Xu hướng doanh thu hàng tháng và hàng quý
         List<Object[]> monthlyQuarterlyRevenueTrendsRaw = revenueStatisticsRepository.findMonthlyQuarterlyRevenueTrends(startDate, endDate);
         Map<String, List<Double>> monthlyQuarterlyRevenueTrends = new HashMap<>();
         for (Object[] trend : monthlyQuarterlyRevenueTrendsRaw) {
@@ -47,12 +49,13 @@ public class DashboardServiceImpl implements DashboardService {
             monthlyQuarterlyRevenueTrends.computeIfAbsent(period, k -> new ArrayList<>()).add((Double) trend[2]);
         }
 
+        // Doanh thu trung bình trên mỗi quầy hàng
         double averageRevenuePerStall = revenueStatisticsRepository.findAverageRevenuePerStall(startDate, endDate);
 
+        // Trả về đối tượng RevenueStatistics
         return new RevenueStatistics(
                 totalRevenue,
                 revenuePerStall,
-                revenueGrowthRate,
                 topPerformingStalls,
                 monthlyQuarterlyRevenueTrends,
                 averageRevenuePerStall

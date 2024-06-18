@@ -19,4 +19,5 @@ public class CustomerResponse {
     private Date updateDate;
     private Date birthday;
     private boolean status;
+    private double bonusPoint;
 }

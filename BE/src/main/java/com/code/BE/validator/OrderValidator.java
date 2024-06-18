@@ -48,12 +48,10 @@ public class OrderValidator implements Validator {
             errors.rejectValue("staffId", "error.staffId", ErrorMessage.STAFF_NOT_FOUND);
         }
 
-        if (promotionService.findById(orderRequest.getPromotionId()) == null) {
-            errors.rejectValue("promotionId", "error.promotionId", ErrorMessage.PROMOTION_NOT_FOUND);
-        }
-
-        if (promotionService.findById(orderRequest.getPromotionId()).getEndDate().before(new Date())) {
-            errors.rejectValue("promotionId", "error.promotionId", ErrorMessage.PROMOTION_EXPIRED);
+        if (promotionService.findById(orderRequest.getPromotionId()) != null) {
+            if (promotionService.findById(orderRequest.getPromotionId()).getEndDate().before(new Date())) {
+                errors.rejectValue("promotionId", "error.promotionId", ErrorMessage.PROMOTION_EXPIRED);
+            }
         }
 
         if (orderRequest.getTax() < 0 || orderRequest.getTax() > 1) {

@@ -4,10 +4,7 @@ import com.code.BE.model.dto.request.OrderDetailRequest;
 import com.code.BE.model.dto.request.OrderRequest;
 import com.code.BE.model.dto.response.OrderDetailResponse;
 import com.code.BE.model.dto.response.OrderResponse;
-import com.code.BE.model.entity.Customer;
-import com.code.BE.model.entity.Order;
-import com.code.BE.model.entity.OrderDetail;
-import com.code.BE.model.entity.Product;
+import com.code.BE.model.entity.*;
 import com.code.BE.model.mapper.CustomerMapper;
 import com.code.BE.model.mapper.OrderDetailMapper;
 import com.code.BE.model.mapper.OrderMapper;
@@ -142,11 +139,14 @@ public class OrderServiceImpl implements OrderService {
         }
 
         Customer customer = customerRepository.findByPhone(phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
+        double bonusPoint = totalPrice / 1000;
+
         if (customer == null) {
             customer = customerMapper.toEntity(orderRequest.getCustomerRequest());
             customer.setCreateDate(new Date());
             customer.setUpdateDate(new Date());
             customer.setPhone(phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
+            customer.setBonusPoint(bonusPoint);
 
             customer = customerRepository.saveAndFlush(customer);
         } else {
@@ -157,17 +157,26 @@ public class OrderServiceImpl implements OrderService {
             customer.setStatus(orderRequest.getCustomerRequest().isStatus());
             customer.setUpdateDate(new Date());
             customer.setPhone(phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
+            customer.setBonusPoint(bonusPoint);
+
             customer = customerRepository.saveAndFlush(customer);
         }
 
         order.setStatus(orderRequest.getStatus().toUpperCase());
         order.setType(orderRequest.getType().toUpperCase());
         order.setTotalPrice(totalPrice);
-        order.setFinalPrice(totalPrice + totalPrice * orderRequest.getTax() -
-                totalPrice * promotionRepository.findById(orderRequest.getPromotionId()).getDiscount());
-        order.setTotalBonusPoint(totalPrice / 1000);
+
+        order.setTotalBonusPoint(bonusPoint);
         order.setRefundMoney((orderRequest.getCustomerGiveMoney() - order.getFinalPrice() > 0) ? (orderRequest.getCustomerGiveMoney() - order.getFinalPrice()) : 0);
-        order.setPromotion(promotionRepository.findById(orderRequest.getPromotionId()));
+        Promotion promotion = promotionRepository.findById(orderRequest.getPromotionId());
+        if (promotion != null) {
+            order.setPromotion(promotion);
+            order.setFinalPrice(totalPrice + totalPrice * orderRequest.getTax() -
+                    totalPrice * promotionRepository.findById(orderRequest.getPromotionId()).getDiscount());
+        } else {
+            order.setPromotion(null);
+            order.setFinalPrice(totalPrice + totalPrice * orderRequest.getTax());
+        }
         order.setStaff(userRepository.findById(orderRequest.getStaffId()));
         order.setCustomer(customer);
         Order saveOrder = orderRepository.saveAndFlush(order);

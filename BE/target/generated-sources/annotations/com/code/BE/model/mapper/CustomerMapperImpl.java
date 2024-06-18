@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-17T10:41:50+0700",
+    date = "2024-06-18T09:23:10+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
@@ -33,6 +33,7 @@ public class CustomerMapperImpl implements CustomerMapper {
         customerResponse.setUpdateDate( customer.getUpdateDate() );
         customerResponse.setBirthday( customer.getBirthday() );
         customerResponse.setStatus( customer.isStatus() );
+        customerResponse.setBonusPoint( customer.getBonusPoint() );
 
         return customerResponse;
     }
@@ -65,6 +66,7 @@ public class CustomerMapperImpl implements CustomerMapper {
         customer.setAddress( customerRequest.getAddress() );
         customer.setBirthday( customerRequest.getBirthday() );
         customer.setStatus( customerRequest.isStatus() );
+        customer.setBonusPoint( customerRequest.getBonusPoint() );
 
         return customer;
     }

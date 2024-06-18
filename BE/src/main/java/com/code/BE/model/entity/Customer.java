@@ -4,6 +4,7 @@ import com.code.BE.constant.Regex;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,6 +51,10 @@ public class Customer {
 
     @Column(name = "status")
     private boolean status;
+
+    @PositiveOrZero
+    @Column(name = "bonus_point")
+    private double bonusPoint;
 
     @OneToMany(mappedBy = "customer")
     private List<Order> customerOrders;

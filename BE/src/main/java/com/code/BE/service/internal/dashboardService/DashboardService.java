@@ -8,7 +8,7 @@ import com.code.BE.model.entity.StaffStatistics;
 import java.util.Date;
 
 public interface DashboardService {
-    RevenueStatistics getRevenueStatistics(Date startDate, Date endDate, Date previousStartDate, Date previousEndDate);
+    RevenueStatistics getRevenueStatistics(Date startDate, Date endDate);
     OrderStatistics getOrderStatistics(Date startDate, Date endDate);
     ProductStatistics getProductStatistics(Date startDate, Date endDate);
     StaffStatistics getStaffStatistics(Date startDate, Date endDate);

@@ -13,8 +13,7 @@ import java.util.Map;
 public class RevenueStatistics {
     private Double totalRevenue;
     private Map<String, Double> revenuePerStall; // Stall name -> revenue
-    private Double revenueGrowthRate;
-    private List<String> topPerformingStalls; // List of top-performing stall names
+    private List<String> topPerformingStalls;
     private Map<String, List<Double>> monthlyQuarterlyRevenueTrends; // Period -> revenue trends
     private Double averageRevenuePerStall;
 }

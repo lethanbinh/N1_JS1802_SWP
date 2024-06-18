@@ -31,28 +31,21 @@ public class DashboardController {
     @Autowired
     private DateConvertService dateConvertService;
 
-    @GetMapping(value = "/revenue-statistics/{startDate}/{endDate}/{previousStartDate}/{previousEndDate}")
+    @GetMapping(value = "/revenue-statistics/{startDate}/{endDate}")
     public ResponseEntity<ApiResponse<RevenueStatistics>> getRevenueStatistics(
             @PathVariable String startDate,
-            @PathVariable String endDate,
-            @PathVariable String previousStartDate,
-            @PathVariable String previousEndDate
+            @PathVariable String endDate
     ) {
         ApiResponse<RevenueStatistics> apiResponse = new ApiResponse<>();
         try {
             Date startDateConvert = dateConvertService.convertToDate(startDate);
             Date endDateConvert = dateConvertService.convertToDate(endDate);
-            Date previousStartDateConvert = dateConvertService.convertToDate(previousStartDate);
-            Date previousEndDateConvert = dateConvertService.convertToDate(previousEndDate);
-            if (startDateConvert.after(endDateConvert) || previousStartDateConvert.after(previousEndDateConvert)) {
+            if (startDateConvert.after(endDateConvert)) {
                 throw new ValidationException(ErrorMessage.DATE_INCORRECT);
             }
 
             apiResponse.ok(dashboardService.getRevenueStatistics(
-                    startDateConvert,
-                    endDateConvert,
-                    previousStartDateConvert,
-                    previousEndDateConvert));
+                    startDateConvert, endDateConvert));
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (ValidationException ex) {
             throw ex;

@@ -21,4 +21,5 @@ public class CustomerRequest {
     private String address;
     private Date birthday;
     private boolean status;
+    private double bonusPoint;
 }

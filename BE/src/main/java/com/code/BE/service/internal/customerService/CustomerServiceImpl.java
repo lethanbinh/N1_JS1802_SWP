@@ -65,6 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setStatus(customerRequest.isStatus());
             customer.setUpdateDate(new Date());
             customer.setPhone(phoneNumberUtil.normalizePhoneNumber(customerRequest.getPhone()));
+            customer.setBonusPoint(customerRequest.getBonusPoint());
             return customerMapper.toResponse(customerRepository.saveAndFlush(customer));
         }
         return null;
