@@ -7,16 +7,16 @@ INSERT INTO `role` (description, name) VALUES ('test', 'manager');
 
 INSERT INTO `stall` (`code`, `description`, `name`, `status`, `type`)
 VALUES
-('J001', 'High-end jewelry store', 'Golden Rings', 1, 'SELL'),
-('J002', 'Luxury diamonds', 'Diamond Dreams', 1, 'SELL'),
-('J003', 'Handcrafted silver', 'Silver Stars', 1, 'SELL'),
-('J004', 'Affordable fashion jewelry', 'Fashion Bling', 1, 'SELL'),
-('J005', 'Exclusive watches', 'Watch Wonderland', 1, 'SELL'),
-('J006', 'Classic gold jewelry', 'Gold Elegance', 1, 'PURCHASE'),
-('J007', 'Custom made jewelry', 'Custom Creations', 1, 'PURCHASE'),
-('J008', 'Unique gemstones', 'Gemstone Gallery', 1, 'PURCHASE'),
-('J009', 'Ethical jewelry', 'Eco Jewels', 1, 'PURCHASE'),
-('J010', 'Modern jewelry designs', 'Modern Marvels', 1, 'PURCHASE');
+('ST0001', 'High-end jewelry store', 'Golden Rings', 1, 'SELL'),
+('ST0002', 'Luxury diamonds', 'Diamond Dreams', 1, 'SELL'),
+('ST0003', 'Handcrafted silver', 'Silver Stars', 1, 'SELL'),
+('ST0004', 'Affordable fashion jewelry', 'Fashion Bling', 1, 'SELL'),
+('ST0005', 'Exclusive watches', 'Watch Wonderland', 1, 'SELL'),
+('ST0006', 'Classic gold jewelry', 'Gold Elegance', 1, 'PURCHASE'),
+('ST0007', 'Custom made jewelry', 'Custom Creations', 1, 'PURCHASE'),
+('ST0008', 'Unique gemstones', 'Gemstone Gallery', 1, 'PURCHASE'),
+('ST0009', 'Ethical jewelry', 'Eco Jewels', 1, 'PURCHASE'),
+('ST0010', 'Modern jewelry designs', 'Modern Marvels', 1, 'PURCHASE');
 
 INSERT INTO `promotion` (`description`, `discount`, `end_date`, `maximum_prize`, `minimum_prize`, `name`, `start_date`, `status`, `bonus_point`)
 VALUES

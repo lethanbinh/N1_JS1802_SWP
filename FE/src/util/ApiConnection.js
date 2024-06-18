@@ -1,8 +1,6 @@
 const fetchData = async (url, method = 'GET', body = null, token = null, contentType = 'application/json') => {
     try {
-        const headers = {
-            'Content-Type': contentType,
-        };
+        const headers = {};
 
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
@@ -14,15 +12,22 @@ const fetchData = async (url, method = 'GET', body = null, token = null, content
         };
 
         if (body) {
-            options.body = JSON.stringify(body);
+            if (contentType === 'multipart/form-data') {
+                options.body = body; // FormData object
+                // Do not set Content-Type header, browser will set it automatically
+            } else {
+                headers['Content-Type'] = contentType;
+                options.body = JSON.stringify(body);
+            }
         }
-        console.log(options)
+
+        console.log(options);
         const response = await fetch(url, options);
 
         const data = await response.json();
         return data;
     } catch (error) {
-        return error;
+        console.error('Fetch error:', error);
     }
 };
 

@@ -72,7 +72,6 @@ const GeneralInfoForm = () => {
             address: formData.address || "",
             fullName: formData.fullName || "",
             birthday: formData.birthday || "",
-            gender: formData.gender || "0", // Assuming "0" is the default value for gender
             email: formData.email || "",
             phone: formData.phone || "",
             avatar: formData.avatar || null, // Handle avatar separately if updated
@@ -92,13 +91,13 @@ const GeneralInfoForm = () => {
         // Assuming you have a function to upload the avatar file
         if (updatedData.avatar instanceof File) {
             const formDataToUpload = new FormData();
-            formDataToUpload.append("file", updatedData.avatar);
-            console.log(formDataToUpload)
+            formDataToUpload.append("image", updatedData.avatar); // Ensure the field name matches the API requirement
+            console.log(formDataToUpload.get("image"));
 
-            fetchData(`http://localhost:8080/api/v1/images`, "POST", formDataToUpload, userInfo.accessToken, "multipart/form-data")
+            fetchData(`http://localhost:8080/api/v1/images`, "POST", formDataToUpload, null, "multipart/form-data")
                 .then((response) => {
-                    console.log(response)
-                    savedData.avatar = response.payload.fileName; // Update avatar field with the file name from the response
+                    console.log(response);
+                    savedData.avatar = response.payload.name; // Update avatar field with the file name from the response
                     return fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "PUT", savedData, userInfo.accessToken);
                 })
                 .then((data) => {
@@ -106,6 +105,7 @@ const GeneralInfoForm = () => {
                     // Optionally, you may want to refresh the data after update
                     // refreshData();
                 })
+                .catch(error => console.log(error));
         } else {
             fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "PUT", savedData, userInfo.accessToken)
                 .then((data) => {
@@ -130,7 +130,7 @@ const GeneralInfoForm = () => {
                         <CCol md={6} className="mb-3">
                             <div className="form-group">
                                 {avatar && <img src={avatar} alt="Avatar" style={{ width: '100px', height: '100px' }} />}
-                                <CFormInput required type="file" id="avatar" name="avatar" onChange={handleAvatarChange} />
+                                <CFormInput type="file" id="avatar" name="avatar" onChange={handleAvatarChange} />
                             </div>
                         </CCol>
                     </CRow>
@@ -177,16 +177,14 @@ const GeneralInfoForm = () => {
                                 <CFormInput
                                     required
                                     type="text"
-                                    id="firstName"
-                                    name="firstName"
-                                    placeholder="Enter your first name"
+                                    id="fullName"
+                                    name="fullName"
+                                    placeholder="Enter your full name"
                                     value={formData.fullName || ""}
                                     onChange={handleInputChange}
                                 />
                             </div>
                         </CCol>
-                    </CRow>
-                    <CRow className="align-items-center">
                         <CCol md={6} className="mb-3">
                             <div className="form-group">
                                 <label htmlFor="birthday">
@@ -211,23 +209,6 @@ const GeneralInfoForm = () => {
                                         </CInputGroup>
                                     )}
                                 />
-                            </div>
-                        </CCol>
-                        <CCol md={6} className="mb-3">
-                            <div className="form-group">
-                                <label htmlFor="gender">
-                                    <strong>Gender</strong>
-                                </label>
-                                <CFormSelect
-                                    id="gender"
-                                    name="gender"
-                                    value={formData.gender || "0"}
-                                    onChange={handleInputChange}
-                                >
-                                    <option value="0">Gender</option>
-                                    <option value="1">Female</option>
-                                    <option value="2">Male</option>
-                                </CFormSelect>
                             </div>
                         </CCol>
                     </CRow>
