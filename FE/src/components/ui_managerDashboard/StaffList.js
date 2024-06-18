@@ -169,7 +169,7 @@ const StaffList = () => {
                                   </CTableRow>
                               </CTableHead>
                               <CTableBody>
-                                  {data.filter(row => row.status).map((row) => (
+                                  {data.filter(row => row.status && row.roleName.toUpperCase() === "STAFF").map((row) => (
                                       <CTableRow key={row.id}>
                                           <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                                           <CTableDataCell>
