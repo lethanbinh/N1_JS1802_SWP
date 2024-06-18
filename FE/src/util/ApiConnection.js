@@ -1,7 +1,7 @@
-const fetchData = async (url, method = 'GET', body = null, token = null) => {
+const fetchData = async (url, method = 'GET', body = null, token = null, contentType = 'application/json') => {
     try {
         const headers = {
-            'Content-Type': 'application/json',
+            'Content-Type': contentType,
         };
 
         if (token) {
@@ -16,7 +16,7 @@ const fetchData = async (url, method = 'GET', body = null, token = null) => {
         if (body) {
             options.body = JSON.stringify(body);
         }
-
+        console.log(options)
         const response = await fetch(url, options);
 
         const data = await response.json();

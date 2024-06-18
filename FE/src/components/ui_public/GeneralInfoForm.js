@@ -27,8 +27,6 @@ const GeneralInfoForm = () => {
     const [editingRow, setEditingRow] = useState(null);
     const [formData, setFormData] = useState({});
     const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
-    const [visible, setVisible] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
 
     useEffect(() => {
         fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "GET", null, userInfo.accessToken)
@@ -39,9 +37,7 @@ const GeneralInfoForm = () => {
                     setData(profileData);
                     setFormData(profileData);
                     setBirthday(profileData.birthday); // assuming birthday is part of profile data
-                    if (profileData.avatar) {
-                        setAvatar(profileData.avatar);
-                    }
+                    setAvatar(profileData.avatar);
                 }
             })
             .catch((error) => {
@@ -69,7 +65,7 @@ const GeneralInfoForm = () => {
 
     const handleSave = (event) => {
         event.preventDefault();
-    
+
         // Prepare updated data from form state
         const updatedData = {
             username: formData.username || "", // Ensure these fields are correctly mapped to your form state
@@ -81,25 +77,28 @@ const GeneralInfoForm = () => {
             phone: formData.phone || "",
             avatar: formData.avatar || null, // Handle avatar separately if updated
         };
-    
+
         // Assuming you have a function to convert the data to the correct format
         const savedData = {
             username: updatedData.username,
             phone: updatedData.phone || "0374422448", // Using default phone if not provided
             email: updatedData.email || "string",
             address: updatedData.address || "string",
-            avatar: updatedData.avatar || " ", // Default value
+            avatar: updatedData.avatar || " ",
+            fullName: updatedData.fullName,
             birthday: convertDateToJavaFormat(updatedData.birthday) || "2024-06-16T08:48:44.695Z", // Default date
         };
-    
+
         // Assuming you have a function to upload the avatar file
         if (updatedData.avatar instanceof File) {
             const formDataToUpload = new FormData();
             formDataToUpload.append("file", updatedData.avatar);
-    
-            fetchData(`http://localhost:8080/api/v1/images/upload`, "POST", formDataToUpload, userInfo.accessToken)
+            console.log(formDataToUpload)
+
+            fetchData(`http://localhost:8080/api/v1/images`, "POST", formDataToUpload, userInfo.accessToken, "multipart/form-data")
                 .then((response) => {
-                    savedData.avatar = response.fileName; // Update avatar field with the file name from the response
+                    console.log(response)
+                    savedData.avatar = response.payload.fileName; // Update avatar field with the file name from the response
                     return fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "PUT", savedData, userInfo.accessToken);
                 })
                 .then((data) => {
@@ -107,9 +106,6 @@ const GeneralInfoForm = () => {
                     // Optionally, you may want to refresh the data after update
                     // refreshData();
                 })
-                .catch((error) => {
-                    console.error("Error updating profile:", error);
-                });
         } else {
             fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "PUT", savedData, userInfo.accessToken)
                 .then((data) => {
@@ -122,7 +118,7 @@ const GeneralInfoForm = () => {
                 });
         }
     };
-    
+
     return (
         <CCard className="mb-4">
             <CCardHeader>

@@ -69,16 +69,29 @@ const AccountList = () => {
             email: dataFromInput.email || "string",
             address: dataFromInput.address || "string",
             avatar: "", // Default value
+            password: dataFromInput.password,
             birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z", // Default date
             status: dataFromInput.status ? true : false,
             roleId
         };
+
+        const updatedData = {
+            username: dataFromInput.username || "string",
+            fullName: dataFromInput.fullName || "string",
+            phone: dataFromInput.phone || "0374422448", // Using default phone if not provided
+            email: dataFromInput.email || "string",
+            address: dataFromInput.address || "string",
+            avatar: "", // Default value
+            birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z", // Default date
+            status: dataFromInput.status ? true : false,
+            roleId
+        }
         console.log(savedData)
 
         fetchData(`http://localhost:8080/api/v1/users/id/${editingRow}`, 'GET', null, userInfo.accessToken)
             .then((data) => {
                 if (data.status === "SUCCESS") {
-                    fetchData(`http://localhost:8080/api/v1/users/id/${editingRow}`, 'PUT', savedData, userInfo.accessToken)
+                    fetchData(`http://localhost:8080/api/v1/users/id/${editingRow}`, 'PUT', updatedData, userInfo.accessToken)
                 } else {
                     fetchData(`http://localhost:8080/api/v1/users`, 'POST', savedData, userInfo.accessToken)
                 }
@@ -188,7 +201,6 @@ const AccountList = () => {
                                                     <CFormInput
                                                         type="password"
                                                         name="password"
-                                                        disabled
                                                         value={formData.password}
                                                         onChange={handleInputChange}
                                                     />
