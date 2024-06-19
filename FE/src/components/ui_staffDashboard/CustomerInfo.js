@@ -103,10 +103,10 @@ const CustomerInfo = () => {
 
     const confirmDelete = () => {
         setVisible(false); // Hide the delete confirmation modal
-    
+
         // Get the customer data to update
         const customerToUpdate = data.find((row) => row.id === deleteId);
-    
+
         // Update customer status to false and handle null values
         const updatedData = {
             fullName: customerToUpdate.fullName || "string",
@@ -116,7 +116,7 @@ const CustomerInfo = () => {
             birthday: customerToUpdate.birthday || convertDateToJavaFormat("2024-06-16"), // Default date
             status: false,
         };
-    
+
         fetchData(`http://localhost:8080/api/v1/customers/id/${deleteId}`, 'PUT', updatedData, userInfo.accessToken)
             .then((response) => {
                 if (response.status === "SUCCESS") {
@@ -139,7 +139,7 @@ const CustomerInfo = () => {
                 alert('Failed to update customer status. Please try again later.');
             });
     };
-    
+
 
     const refreshData = () => {
         fetchData("http://localhost:8080/api/v1/customers", 'GET', null, userInfo.accessToken)
@@ -295,7 +295,8 @@ const CustomerInfo = () => {
                 </CModalFooter>
             </CModal>
         </CRow>
-    );
-};
+    )
+}
 
-export default CustomerInfo;
+export default CustomerInfo
+
