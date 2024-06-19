@@ -151,9 +151,10 @@ public class DashboardServiceImpl implements DashboardService {
         for (Object[] orders : ordersPerStaffRaw) {
             ordersPerStaff.put((String) orders[0], ((Number) orders[1]).intValue());
         }
-
-        double averageOrdersPerStaff = (double) (ordersPerStaffRaw.size() / totalNumberOfStaff);
-
+        double averageOrdersPerStaff = 0;
+        if (totalNumberOfStaff != 0) {
+            averageOrdersPerStaff = (double) (ordersPerStaffRaw.size() / totalNumberOfStaff);
+        }
         return new StaffStatistics(
                 totalNumberOfStaff,
                 revenuePerStaff,

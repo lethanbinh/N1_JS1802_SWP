@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { 
   CCard, 
   CCardBody, 
@@ -10,28 +10,32 @@ import {
   CTableDataCell, 
   CTableHead, 
   CTableHeaderCell, 
-  CTableRow 
+  CTableRow, 
+  CButton 
 } from '@coreui/react';
 
 const MetalPrices = () => {
   const [data, setData] = useState([]);
   const [updatedTime, setUpdatedTime] = useState('');
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const rowRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://api.metals.dev/v1/latest?api_key=CMABYO0HYB0IODCEQLUL659CEQLUL&currency=USD&unit=toz`);
+        const response = await fetch(`https://api.metals.dev/v1/latest?api_key=CFIKX9TJWIGOOUTJJFPQ413TJJFPQ&currency=USD&unit=toz`);
         const result = await response.json();
         if (result.status === "success") {
           const metals = result.metals;
           const updatedTime = result.timestamp;
-          const metalData = Object.keys(metals).map(metal => ({
-            code: metal,
-            description: getMetalDescription(metal),
-            unit: getMetalUnit(metal),
-            symbol: getMetalSymbol(metal),
-            price: metals[metal]
-          }));
+          const metalData = Object.keys(metals)
+            .map(metal => ({
+              code: metal,
+              description: getMetalDescription(metal),
+              unit: getMetalUnit(metal),
+              symbol: getMetalSymbol(metal),
+              price: metals[metal]
+            }));
           setData(metalData);
           setUpdatedTime(new Date(updatedTime).toLocaleString());
         }
@@ -145,15 +149,56 @@ const MetalPrices = () => {
     return symbols[code] || "Unknown symbol";
   };
 
+  const toggleFullScreen = () => {
+    if (!isFullScreen) {
+      if (rowRef.current.requestFullscreen) {
+        rowRef.current.requestFullscreen();
+      } else if (rowRef.current.mozRequestFullScreen) { // Firefox
+        rowRef.current.mozRequestFullScreen();
+      } else if (rowRef.current.webkitRequestFullscreen) { // Chrome, Safari, Opera
+        rowRef.current.webkitRequestFullscreen();
+      } else if (rowRef.current.msRequestFullscreen) { // IE/Edge
+        rowRef.current.msRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) { // Firefox
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) { // Chrome, Safari, Opera
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { // IE/Edge
+        document.msExitFullscreen();
+      }
+    }
+    setIsFullScreen(!isFullScreen);
+  };
+
   return (
-    <CRow>
-      <CCol xs={12}>
-        <CCard className="mb-4">
+    <CRow 
+      ref={rowRef} 
+      style={isFullScreen ? {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 9999,
+        background: 'white',
+        display: 'flex',
+        flexDirection: 'column'
+      } : {}}
+    >
+      <CCol xs={12} style={{ flex: '1 1 auto', overflow: isFullScreen ? 'auto' : 'visible' }}>
+        <CCard className="mb-4" style={{ height: '100%' }}>
           <CCardHeader>
-            <strong>Metal Prices (Updated: {updatedTime})</strong>
+            <strong>Metal Prices</strong>
+            <CButton color="primary" style={{ float: 'right' }} onClick={toggleFullScreen}>
+              {isFullScreen ? 'Exit Full Screen' : 'Full Screen'}
+            </CButton>
           </CCardHeader>
-          <CCardBody>
-            <div style={{ height: '500px', overflow: 'auto' }}>
+          <CCardBody style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
+            <div style={{ flex: '1 1 auto', overflow: 'auto' }}>
               <CTable>
                 <CTableHead>
                   <CTableRow>

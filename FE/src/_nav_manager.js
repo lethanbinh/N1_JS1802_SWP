@@ -46,28 +46,32 @@ const _nav_manager = [
         component: CNavItem,
         name: 'Product in Stall',
         to: '/manager-dashboard/view-product-in-stall',
-        //chặn quyền edit của manager (only view)
       },
       {
         component: CNavItem,
-        name: 'Revenue of Stalls',
-        to: '/manager-dashboard/revenue',
+        name: 'Dashboard',
+        to: '/manager-dashboard/dashboard',
       },
-      {
-        component: CNavItem,
-        name: 'Staff Statistics',
-        to: '/manager-dashboard/staff-statistics',
-      },
-      {
-        component: CNavItem,
-        name: 'Orders Statistics',
-        to: '/manager-dashboard/orders',
-      },
-      {
-        component: CNavItem,
-        name: 'Products Statistics',
-        to: '/manager-dashboard/product-statistics',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Revenue of Stalls',
+      //   to: '/manager-dashboard/revenue',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Staff Statistics',
+      //   to: '/manager-dashboard/staff-statistics',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Orders Statistics',
+      //   to: '/manager-dashboard/orders',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Products Statistics',
+      //   to: '/manager-dashboard/product-statistics',
+      // },
     ],
   },
   {

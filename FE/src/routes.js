@@ -22,6 +22,8 @@ const OrderStatistic = React.lazy(() => import('./components/ui_managerDashboard
 const ProductStatistic = React.lazy(() => import('./components/ui_managerDashboard/ProductStatistic'))
 const ViewProductInStallManager = React.lazy(() => import('./components/ui_managerDashboard/ViewProductInStallManager'))
 const PolicyForStaff = React.lazy(() => import('./components/ui_managerDashboard/Policy'))
+const ManagerDashboard = React.lazy(() => import('./components/ui_managerDashboard/ManagerDashboard'))
+
 //staffDashboard
 const PurchaseHistoryListStaffDashboard = React.lazy(() => import('./components/ui_public/PurchaseHistoryList'))
 const ViewProductInStallStaff = React.lazy(() => import('./components/ui_staffDashboard/ViewProductInStallStaff'))
@@ -59,6 +61,8 @@ const routes = [
   { path: '/manager-dashboard/staff-statistics', name: 'Staff Statistic', element: StaffStatistic },
   { path: '/manager-dashboard/orders', name: 'Order Statistic', element: OrderStatistic },
   { path: '/manager-dashboard/product-statistics', name: 'Product Statistic', element: ProductStatistic },
+  { path: '/manager-dashboard/dashboard', name: 'Manager Dashboard', element: ManagerDashboard },
+
   //staffDashboard
   { path: '/staff-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListStaffDashboard },
   { path: '/staff-dashboard/view-edit-RAEP', name: 'Return & Exchange Policy', element: PolicyForStaff, },
