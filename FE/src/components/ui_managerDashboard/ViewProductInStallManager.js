@@ -5,8 +5,7 @@ import {
   CCardHeader,
   CCol,
   CDropdownHeader,
-  CFormInput,
-  CFormTextarea,
+  CFormSelect,
   CRow,
   CTable,
   CTableBody,
@@ -25,7 +24,7 @@ const StallProduct = () => {
   const [stallName, setStallName] = useState('')
   const [data, setData] = useState([])
   const [error, setError] = useState(null)
-  const [show, setShow] = useState(false)
+  const [stallOptions, setStallOptions] = useState([])
 
   const loadData = async (stallName) => {
     try {
@@ -37,6 +36,23 @@ const StallProduct = () => {
       setError(error.message)
     }
   }
+  console.log(data)
+
+  const loadStallData = async () => {
+    try {
+      const stallData = await fetchData(`http://localhost:8080/api/v1/stalls`, 'GET', null, userInfo.accessToken)
+      setStallOptions(stallData.payload)
+
+      setError(null)
+    } catch (error) {
+      setError(error.message)
+    }
+  }
+  console.log(stallName)
+
+  useEffect(() => {
+    loadStallData()
+  }, [])
 
   useEffect(() => {
     loadData(stallName)
@@ -48,41 +64,43 @@ const StallProduct = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <CDropdownHeader>
+          <CDropdownHeader>
               <strong>
-                <CFormInput
-                  type="text"
-                  placeholder='Stall Name'
+                <CFormSelect
                   name="stallName"
                   value={stallName}
                   onChange={(event) => setStallName(event.target.value)}
-                />
+                >
+                  <option value="">Select Stall</option>
+                  {stallOptions.map(stall => (
+                    <option key={stall.id} value={stall.name}>
+                      {stall.name}
+                    </option>
+                  ))}
+                </CFormSelect>
               </strong>
             </CDropdownHeader>
 
-            <CButton onClick={() => setShow(!show)} type='submit' color="info">
-              Search
-            </CButton>
           </CCardHeader>
-          {show &&
+          {
             <CCardBody>
               <div style={{ height: '500px', overflow: 'auto' }}>
                 <CTable>
                   <CTableHead>
                     <CTableRow>
-                      <CTableHeaderCell scope="col">Id</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Code</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Name</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Quantity</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Purchase Price</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Sell Price</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Type</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Weight</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Size</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Stall Location</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Bar Code Text</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Image</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Id</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Code</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Description</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Name</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Quantity</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Purchase Price</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Sell Price</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Type</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Weight</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Size</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Stall Location</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Bar Code</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Image</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
@@ -100,9 +118,11 @@ const StallProduct = () => {
                           <CTableDataCell>{row.weight}</CTableDataCell>
                           <CTableDataCell>{row.size}</CTableDataCell>
                           <CTableDataCell>{row.stallLocation}</CTableDataCell>
-                          <CTableDataCell>{row.barCodeText}</CTableDataCell>
                           <CTableDataCell>
-                            <img src={row.image} alt={row.name} style={{ width: '50px', height: '50px' }} /> {/* Display image */}
+                            <img src={row.barcode} style={{ width: 'auto', height: '200px' }} />
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <img src={row.image} style={{ width: 'auto', height: '200px' }} /> {/* Display image */}
                           </CTableDataCell>
                         </CTableRow>
                       ))
