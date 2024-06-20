@@ -70,19 +70,19 @@ const StallProduct = () => {
                 <CTable>
                   <CTableHead>
                     <CTableRow>
-                      <CTableHeaderCell scope="col">Id</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Code</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Name</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Quantity</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Purchase Price</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Sell Price</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Type</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Weight</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Size</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Stall Location</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Bar Code Text</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Image</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Id</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Code</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Description</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Name</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Quantity</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Purchase Price</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Sell Price</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Type</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Weight</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Size</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Stall Location</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Bar Code Text</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Image</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
