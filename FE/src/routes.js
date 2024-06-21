@@ -34,6 +34,7 @@ const InvoiceForm = React.lazy(() => import('./components/ui_staffDashboard/Bill
 const AddProduct = React.lazy(() => import('./components/ui_staffDashboard/AddProduct'))
 const OderStatisticOfStall = React.lazy(() => import('./components/ui_staffDashboard/OderStatisticOfStall'))
 const ProductReportOfStall = React.lazy(() => import('./components/ui_staffDashboard/ProductReportOfStall'))
+const StaffDashboard = React.lazy(() => import('./components/ui_staffDashboard/StaffDashboard'))
 
 const routes = [
   //public
@@ -75,7 +76,8 @@ const routes = [
   { path: '/staff-dashboard/invoice', name: 'Invoice', element: InvoiceForm },
   { path: '/staff-dashboard/add-product', name: 'Add Product', element: AddProduct },
   { path: '/staff-dashboard/orders-ofS', name: 'Oders Statistics of Stall', element: OderStatisticOfStall },
-  { path: '/staff-dashboard/product-report-ofS', name: 'Products Report of Stall', element: ProductReportOfStall }
+  { path: '/staff-dashboard/product-report-ofS', name: 'Products Report of Stall', element: ProductReportOfStall },
+  { path: '/staff-dashboard/dashboard', name: 'Staff Dashboard', element: StaffDashboard }
 ]
 
 export default routes

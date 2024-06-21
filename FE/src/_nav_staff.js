@@ -51,18 +51,8 @@ const _nav_staff = [
       },
       {
         component: CNavItem,
-        name: 'Revenue of Stall',
-        to: '/staff-dashboard/revenue-ofS',
-      },
-      {
-        component: CNavItem,
-        name: 'Orders Statistics of Stall',
-        to: '/staff-dashboard/orders-ofS',
-      },
-      {
-        component: CNavItem,
-        name: 'Products Report of Stall',
-        to: '/staff-dashboard/product-report-ofS',
+        name: 'Staff dashboard',
+        to: '/staff-dashboard/dashboard',
       },
     ],
   },
