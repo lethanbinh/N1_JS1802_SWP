@@ -21,7 +21,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
 
     @Override
     public void deleteById(int id) {
-        if (userRepository.findById(id) != null) return;
+        if (confirmationTokenRepository.findById(id) == null) return;
         confirmationTokenRepository.deleteById(id);
     }
 

@@ -26,7 +26,7 @@ public class ProductRequest {
     @PositiveOrZero
     private int quantity;
 
-    private boolean status;
+    private String status;
 
     @PositiveOrZero
     private double weight;

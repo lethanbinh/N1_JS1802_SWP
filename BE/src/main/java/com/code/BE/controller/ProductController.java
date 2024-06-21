@@ -169,22 +169,4 @@ public class ProductController {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
         }
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> deleteById(@PathVariable int id) throws Exception {
-        ApiResponse<String> apiResponse = new ApiResponse<>();
-        try {
-            ProductResponse productResponse = productService.findById(id);
-            if (productResponse == null) {
-                throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
-            }
-            productService.deleteById(id);
-            apiResponse.ok(SuccessMessage.DELETE_SUCCESS);
-            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-        } catch (NotFoundException ex) {
-            throw ex; // Rethrow NotFoundException
-        } catch (Exception ex) {
-            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
-        }
-    }
 }

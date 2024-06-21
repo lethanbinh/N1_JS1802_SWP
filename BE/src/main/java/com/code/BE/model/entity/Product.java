@@ -45,7 +45,7 @@ public class Product {
     private int quantity;
 
     @Column(name = "status")
-    private boolean status;
+    private String status;
 
     @PositiveOrZero
     @Column(name = "weight")

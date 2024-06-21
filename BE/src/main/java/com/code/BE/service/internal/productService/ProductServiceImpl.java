@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
             product.setPurchasePrice(productRequest.getPurchasePrice());
             product.setSellPrice(productRequest.getSellPrice());
             product.setQuantity(productRequest.getQuantity());
-            product.setStatus(productRequest.isStatus());
+            product.setStatus(productRequest.getStatus());
             product.setWeight(productRequest.getWeight());
             product.setSize(productRequest.getSize());
             product.setStallLocation(productRequest.getStallLocation());
@@ -107,17 +107,6 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return null;
-    }
-
-    @Override
-    public boolean deleteById(int id) {
-        Product product = productRepository.findById(id);
-        if (product != null) {
-            product.setStatus(false);
-            productRepository.saveAndFlush(product);
-            return true;
-        }
-        return false;
     }
 
     @Override

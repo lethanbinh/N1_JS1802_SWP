@@ -15,7 +15,7 @@ public class ProductResponse {
     private double purchasePrice;
     private double sellPrice;
     private int quantity;
-    private boolean status;
+    private String status;
     private double weight;
     private String size;
     private String stallLocation;
