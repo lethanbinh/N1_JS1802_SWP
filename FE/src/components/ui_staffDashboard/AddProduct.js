@@ -22,7 +22,7 @@ const AddProduct = () => {
     quantity: '',
     weight: '',
     size: '',
-    status: true,
+    status: 'SELL',
     stallLocation: '',
     type: '',
     stallId: ''
@@ -53,6 +53,7 @@ const AddProduct = () => {
       }));
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -77,8 +78,10 @@ const AddProduct = () => {
       sellPrice: parseFloat(product.sellPrice),
       quantity: parseInt(product.quantity),
       weight: parseFloat(product.weight),
-      status: product.status ? true : false,
+      status: product.status,
     };
+
+    console.log(savedProduct)
 
     try {
       const response = await fetch('http://localhost:8080/api/v1/products', {
@@ -109,7 +112,7 @@ const AddProduct = () => {
         quantity: '',
         weight: '',
         size: '',
-        status: true,
+        status: 'SELL',
         stallLocation: '',
         type: '',
         stallId: ''
@@ -272,6 +275,16 @@ const AddProduct = () => {
                   <option value="2">Stall 2</option>
                   <option value="3">Stall 3</option>
                   <option value="4">Stall 4</option>
+                </CFormSelect>
+              </CCol>
+              <CCol md={4}>
+                <CFormSelect
+                  name="status"
+                  value={product.status}
+                  onChange={handleChange}
+                  label="Status">
+                  <option value="SELL">Sell</option>
+                  <option value="PURCHASE">Purchase</option>
                 </CFormSelect>
               </CCol>
             </CRow>
