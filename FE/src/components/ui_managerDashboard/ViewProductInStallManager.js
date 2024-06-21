@@ -1,4 +1,5 @@
 import {
+  CButton,
   CCard,
   CCardBody,
   CCardHeader,
@@ -12,8 +13,8 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow
-} from '@coreui/react';
-import React, { useEffect, useState } from 'react';
+} from '@coreui/react'
+import React, { useState, useEffect } from 'react'
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 
@@ -26,28 +27,39 @@ const StallProduct = () => {
   const [stallOptions, setStallOptions] = useState([])
 
   const loadData = async (stallName) => {
+    if (!stallName) return; // Do not proceed if stallName is not selected
     try {
       const productData = await fetchData(`http://localhost:8080/api/v1/products/stallName/${stallName}`, 'GET', null, userInfo.accessToken)
-      setData(productData.payload)
-
+      if (productData && productData.payload) {
+        setData(productData.payload)
+      } else {
+        setData([])
+      }
       setError(null)
     } catch (error) {
       setError(error.message)
+      setData([]) // Ensure data is cleared on error
     }
   }
+
   console.log(data)
 
   const loadStallData = async () => {
     try {
       const stallData = await fetchData(`http://localhost:8080/api/v1/stalls`, 'GET', null, userInfo.accessToken)
-      setStallOptions(stallData.payload)
-
+      if (stallData && stallData.payload) {
+        setStallOptions(stallData.payload)
+      } else {
+        setStallOptions([])
+      }
       setError(null)
     } catch (error) {
       setError(error.message)
+      setStallOptions([]) // Ensure stallOptions is cleared on error
     }
   }
-  console.log(stallName)
+
+  console.log(stallOptions)
 
   useEffect(() => {
     loadStallData()
@@ -70,7 +82,7 @@ const StallProduct = () => {
                   value={stallName}
                   onChange={(event) => setStallName(event.target.value)}
                 >
-                  <option value=""> Select Stall </option>
+                  <option value="">Select Stall</option>
                   {stallOptions.map(stall => (
                     <option key={stall.id} value={stall.name}>
                       {stall.name}
@@ -97,6 +109,7 @@ const StallProduct = () => {
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Type</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Weight</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Size</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Status</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Stall Location</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Bar Code</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Image</CTableHeaderCell>
@@ -116,6 +129,7 @@ const StallProduct = () => {
                           <CTableDataCell>{row.type}</CTableDataCell>
                           <CTableDataCell>{row.weight}</CTableDataCell>
                           <CTableDataCell>{row.size}</CTableDataCell>
+                          <CTableDataCell>{row.status}</CTableDataCell>
                           <CTableDataCell>{row.stallLocation}</CTableDataCell>
                           <CTableDataCell>
                             <img src={row.barcode} style={{ width: 'auto', height: '200px' }} />
