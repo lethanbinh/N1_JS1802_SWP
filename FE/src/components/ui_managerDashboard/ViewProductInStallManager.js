@@ -70,7 +70,7 @@ const StallProduct = () => {
                   value={stallName}
                   onChange={(event) => setStallName(event.target.value)}
                 >
-                  <option value="">Select Stall</option>
+                  <option value=""> Select Stall </option>
                   {stallOptions.map(stall => (
                     <option key={stall.id} value={stall.name}>
                       {stall.name}
