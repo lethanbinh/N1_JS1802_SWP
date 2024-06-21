@@ -1,5 +1,4 @@
 import {
-  CButton,
   CCard,
   CCardBody,
   CCardHeader,
@@ -13,8 +12,8 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow
-} from '@coreui/react'
-import React, { useState, useEffect } from 'react'
+} from '@coreui/react';
+import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 
