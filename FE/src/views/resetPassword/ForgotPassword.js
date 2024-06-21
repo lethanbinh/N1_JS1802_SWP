@@ -24,8 +24,7 @@ const ForgotPassword = () => {
   const handleForgotPassword = (e) => {
     e.preventDefault();
 
-    fetchData(`http://localhost:8080/api/v1/auth/send-recover/${email}`,
-      'GET', null)
+    fetchData(`http://localhost:8080/api/v1/auth/send-recover/${email}`)
       .then(data => {
         if (data.status === 'ERROR') {
           setEmailMessage("Email has not been registered or invalid");
