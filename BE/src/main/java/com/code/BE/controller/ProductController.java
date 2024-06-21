@@ -26,7 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/products")
-@PreAuthorize(value = "hasAuthority('ROLE_STAFF')")
+@PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
 public class ProductController {
     @Autowired
     private ProductService productService;
