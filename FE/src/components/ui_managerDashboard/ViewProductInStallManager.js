@@ -1,5 +1,4 @@
 import {
-  CButton,
   CCard,
   CCardBody,
   CCardHeader,
@@ -13,8 +12,8 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow
-} from '@coreui/react'
-import React, { useState, useEffect } from 'react'
+} from '@coreui/react';
+import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 
@@ -71,7 +70,7 @@ const StallProduct = () => {
                   value={stallName}
                   onChange={(event) => setStallName(event.target.value)}
                 >
-                  <option value="">Select Stall</option>
+                  <option value=""> Select Stall </option>
                   {stallOptions.map(stall => (
                     <option key={stall.id} value={stall.name}>
                       {stall.name}
