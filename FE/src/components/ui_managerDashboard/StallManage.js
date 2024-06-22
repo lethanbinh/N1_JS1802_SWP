@@ -5,6 +5,7 @@ import {
   CCardHeader,
   CCol,
   CFormInput,
+  CFormSelect,
   CFormTextarea,
   CRow,
   CTable,
@@ -142,12 +143,14 @@ const Stall = () => {
                       </CTableDataCell>
                       <CTableDataCell>
                         {editingRow === row.id ? (
-                          <CFormInput
-                            type="text"
+                          <CFormSelect
                             name="type"
                             value={formData.type}
                             onChange={handleInputChange}
-                          />
+                          >
+                            <option value="SELL">Sell</option>
+                            <option value="PURCHASE">Purchase</option>
+                          </CFormSelect>
                         ) : (
                           row.type
                         )}

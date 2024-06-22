@@ -5,18 +5,17 @@ import {
   CCardHeader,
   CCol,
   CModal,
-  CModalHeader,
   CModalBody,
-  CModalFooter,
+  CModalHeader,
   CRow,
   CTable,
   CTableBody,
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
-  CTableRow,
-} from '@coreui/react'
-import React, { useState, useEffect } from 'react'
+  CTableRow
+} from '@coreui/react';
+import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 
