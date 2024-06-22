@@ -22,8 +22,8 @@ import {
 
 import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
-import UserStorage from '../../util/UserStorage';
 import convertDateToJavaFormat from '../../util/DateConvert';
+import UserStorage from '../../util/UserStorage';
 
 const PromotionList = () => {
   const [data, setData] = useState([]);

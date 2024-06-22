@@ -22,7 +22,7 @@ const AddProduct = () => {
     quantity: '',
     weight: '',
     size: '',
-    status: 'SELL',
+    status: '',
     stallLocation: '',
     type: '',
     stallId: ''
@@ -112,7 +112,7 @@ const AddProduct = () => {
         quantity: '',
         weight: '',
         size: '',
-        status: 'SELL',
+        status: '',
         stallLocation: '',
         type: '',
         stallId: ''
@@ -283,6 +283,7 @@ const AddProduct = () => {
                   value={product.status}
                   onChange={handleChange}
                   label="Status">
+                  <option value="">Select Stall</option>
                   <option value="SELL">Sell</option>
                   <option value="PURCHASE">Purchase</option>
                 </CFormSelect>

@@ -16,10 +16,6 @@ const Policy = React.lazy(() => import('./components/ui_managerDashboard/Policy'
 const PromotionList = React.lazy(() => import('./components/ui_managerDashboard/PromotionList'))
 const PurchaseHistoryListManagerDashboard = React.lazy(() => import('./components/ui_public/PurchaseHistoryList'))
 const Stall = React.lazy(() => import('./components/ui_managerDashboard/StallManage'))
-const Revenue = React.lazy(() => import('./components/ui_managerDashboard/ManagerRevenue'))
-const StaffStatistic = React.lazy(() => import('./components/ui_managerDashboard/StaffStatistic'))
-const OrderStatistic = React.lazy(() => import('./components/ui_managerDashboard/OrderStatistic'))
-const ProductStatistic = React.lazy(() => import('./components/ui_managerDashboard/ProductStatistic'))
 const ViewProductInStallManager = React.lazy(() => import('./components/ui_managerDashboard/ViewProductInStallManager'))
 const PolicyForStaff = React.lazy(() => import('./components/ui_managerDashboard/Policy'))
 const ManagerDashboard = React.lazy(() => import('./components/ui_managerDashboard/ManagerDashboard'))
@@ -32,8 +28,6 @@ const RevenueForEachStall = React.lazy(() => import('./components/ui_staffDashbo
 const BuyOldProduct = React.lazy(() => import('./components/ui_staffDashboard/BuyOldProduct'))
 const InvoiceForm = React.lazy(() => import('./components/ui_staffDashboard/Billing/InvoiceForm'))
 const AddProduct = React.lazy(() => import('./components/ui_staffDashboard/AddProduct'))
-const OderStatisticOfStall = React.lazy(() => import('./components/ui_staffDashboard/OderStatisticOfStall'))
-const ProductReportOfStall = React.lazy(() => import('./components/ui_staffDashboard/ProductReportOfStall'))
 const StaffDashboard = React.lazy(() => import('./components/ui_staffDashboard/StaffDashboard'))
 
 const routes = [
@@ -58,10 +52,6 @@ const routes = [
   { path: '/manager-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListManagerDashboard },
   { path: '/manager-dashboard/view-product-in-stall', name: 'Product in Stall', element: ViewProductInStallManager },
   { path: '/manager-dashboard/stall', name: 'Stall', element: Stall },
-  { path: '/manager-dashboard/revenue', name: 'Revenue of Stalls', element: Revenue },
-  { path: '/manager-dashboard/staff-statistics', name: 'Staff Statistic', element: StaffStatistic },
-  { path: '/manager-dashboard/orders', name: 'Order Statistic', element: OrderStatistic },
-  { path: '/manager-dashboard/product-statistics', name: 'Product Statistic', element: ProductStatistic },
   { path: '/manager-dashboard/dashboard', name: 'Manager Dashboard', element: ManagerDashboard },
 
   //staffDashboard
@@ -75,8 +65,6 @@ const routes = [
   { path: '/staff-dashboard/buy-oleP', name: 'Buy Old Product', element: BuyOldProduct },
   { path: '/staff-dashboard/invoice', name: 'Invoice', element: InvoiceForm },
   { path: '/staff-dashboard/add-product', name: 'Add Product', element: AddProduct },
-  { path: '/staff-dashboard/orders-ofS', name: 'Oders Statistics of Stall', element: OderStatisticOfStall },
-  { path: '/staff-dashboard/product-report-ofS', name: 'Products Report of Stall', element: ProductReportOfStall },
   { path: '/staff-dashboard/dashboard', name: 'Staff Dashboard', element: StaffDashboard }
 ]
 

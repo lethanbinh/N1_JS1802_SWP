@@ -96,10 +96,10 @@ The software is designed to manage jewelry sales for a company operating a singl
 |-------------|---------------|------------------------|
 | Le Thanh Binh    | N1JS1802-10   | Login                  |
 | Le Thanh Binh    | N1JS1802-11   | Logout                 |
-| Le Xuan Phuong Nam    | N1JS1802-12   | Reset Password         |
-| Le Xuan Phuong Nam    | N1JS1802-13   | View Account           |
-| Le Xuan Phuong Nam    | N1JS1802-14   | Create Account         |
-| Nguyen Thanh Phong    | N1JS1802-15   | Edit Account           |
-| Nguyen Thanh Phong    | N1JS1802-16   | Delete Account         |
-| Tran Nhat Quang    | N1JS1802-17   | View Profile           |
-| Tran Nhat Quang    | N1JS1802-18   | Update Profile         |
+| Nguyen Tran Khanh Ha    | N1JS1802-12   | Reset Password         |
+| Luu Thien An    | N1JS1802-13   | View Account           |
+| Luu Thien An    | N1JS1802-14   | Create Account         |
+| Tran Nhat Quang    | N1JS1802-15   | Edit Account           |
+| Le Xuan Phuong Nam    | N1JS1802-16   | Delete Account         |
+| Nguyen Thanh Phong    | N1JS1802-17   | View Profile           |
+| Nguyen Thanh Phong    | N1JS1802-18   | Update Profile         |

@@ -1,24 +1,22 @@
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCol,
+  CFormInput,
+  CFormLabel,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow
+} from '@coreui/react';
 import React, { useState } from 'react';
 import { uid } from 'uid';
 import InvoiceItem from './InvoiceItem';
 import InvoiceModal from './InvoiceModal';
 import incrementString from './incrementString';
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CFormLabel,
-  CFormInput,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from '@coreui/react';
 
 const date = new Date();
 const today = date.toLocaleDateString('en-GB', {
@@ -112,7 +110,7 @@ const InvoiceForm = () => {
       className="relative flex flex-col px-2 md:flex-row"
       onSubmit={reviewInvoiceHandler}
     >
-      <CCard className='my-6 flex-1 space-y-2 rounded-lg bg-white p-4 shadow-sm sm:space-y-4 md:p-6'>
+      <CCard className='my-6 flex-1 space-y-2 rounded-lg  p-4 shadow-sm sm:space-y-4 md:p-6'>
         <CCardBody>
           <CRow className="flex flex-col justify-between space-y-2 border-b border-gray-900/10 pb-4 md:flex-row md:items-center md:space-y-0">
             <CCol className="flex space-x-2">
@@ -234,7 +232,7 @@ const InvoiceForm = () => {
           </CRow>
         </CCardBody>
       </CCard>
-      <CCard className='my-6 flex-1 space-y-2 rounded-lg bg-white p-4 shadow-sm sm:space-y-4 md:p-6'>
+      <CCard className='my-6 flex-1 space-y-2 rounded-lg  p-4 shadow-sm sm:space-y-4 md:p-6'>
         <CCardBody className="sticky top-0 z-10 space-y-4 divide-y divide-gray-900/10 pb-8 md:pt-6 md:pl-4">
           <CButton
             color="primary" // Tương đương với bg-blue-500
@@ -265,7 +263,7 @@ const InvoiceForm = () => {
               </label>
               <CCol className="flex items-center">
                 <CFormInput
-                  className="w-full rounded-r-none bg-white shadow-sm"
+                  className="w-full rounded-r-none  shadow-sm"
                   type="number"
                   name="tax"
                   id="tax"
@@ -289,7 +287,7 @@ const InvoiceForm = () => {
               </CFormLabel>
               <div className="flex items-center">
                 <CFormInput
-                  className="w-full rounded-r-none bg-white shadow-sm"
+                  className="w-full rounded-r-none  shadow-sm"
                   type="number"
                   name="discount"
                   id="discount"
