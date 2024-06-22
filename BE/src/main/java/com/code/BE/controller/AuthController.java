@@ -102,10 +102,6 @@ public class AuthController {
                 throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
             }
 
-            if (authService.isTokenExpire(resetPasswordRequest.getToken())) {
-                throw new InvalidTokenException(ErrorMessage.CONFIRM_TOKEN_ERROR);
-            }
-
             authService.resetPassword(resetPasswordRequest.getEmail(), resetPasswordRequest.getPassword(), resetPasswordRequest.getToken());
             ApiResponse<String> apiResponse = new ApiResponse<>();
             apiResponse.ok(SuccessMessage.RESET_PASSWORD_SUCCESS);

@@ -148,8 +148,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean resetPassword(String email, String password, String token) {
         // check token's email is at the same with email of the account you want to reset
-        if (email.equalsIgnoreCase(confirmationTokenService.findByConfirmationToken(token).getUser().getEmail())
-                && !isTokenExpire(token)) {
+        if (email.equalsIgnoreCase(confirmationTokenService.findByConfirmationToken(token).getUser().getEmail())) {
             User user = userRepository.findByEmail(email);
             user.setPassword(passwordEncoder.encode(password));
 
