@@ -33,6 +33,7 @@ const AccountList = () => {
     const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser())
     const [visible, setVisible] = useState(false)
     const [deleteId, setDeleteId] = useState(null)
+    const [deletedUsername, setDeletedUsername] = useState(null)
 
     const handleEdit = (id) => {
         setEditingRow(id)
@@ -283,6 +284,7 @@ const AccountList = () => {
                                                 <CButton color="danger" onClick={() => {
                                                     setDeleteId(row.id)
                                                     setVisible(true)
+                                                    setDeletedUsername(row.username)
                                                 }}>Delete</CButton>
 
                                             </CTableDataCell>
@@ -303,20 +305,34 @@ const AccountList = () => {
                 onClose={() => setVisible(false)}
                 aria-labelledby="DeleteConfirmationModalLabel"
             >
+                {deletedUsername !== userInfo.username ? <>
+                    <CModalHeader>
+                        <CModalTitle id="DeleteConfirmationModalLabel">Confirm Deletion</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                        <p>Are you sure you want to delete this account?</p>
+                    </CModalBody>
+                    <CModalFooter>
+                        <CButton color="secondary" onClick={() => setVisible(false)}>
+                            Cancel
+                        </CButton>
+                        <CButton color="danger" onClick={e => handleDelete(deleteId)}>
+                            Delete
+                        </CButton>
+                    </CModalFooter>
+                </> : <>
                 <CModalHeader>
-                    <CModalTitle id="DeleteConfirmationModalLabel">Confirm Deletion</CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-                    <p>Are you sure you want to delete this account?</p>
-                </CModalBody>
-                <CModalFooter>
-                    <CButton color="secondary" onClick={() => setVisible(false)}>
-                        Cancel
-                    </CButton>
-                    <CButton color="danger" onClick={e => handleDelete(deleteId)}>
-                        Delete
-                    </CButton>
-                </CModalFooter>
+                        <CModalTitle id="DeleteConfirmationModalLabel">Delete Error</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                        <p>You are sign in. Cannot delete</p>
+                    </CModalBody>
+                    <CModalFooter>
+                        <CButton color="secondary" onClick={() => setVisible(false)}>
+                            Cancel
+                        </CButton>
+                    </CModalFooter>
+                </>}
             </CModal>
         </CRow>
     )

@@ -141,7 +141,7 @@ const GeneralInfoForm = () => {
                                     <strong>Username</strong>
                                 </label>
                                 <CFormInput
-                                    required
+                                    disabled
                                     type="text"
                                     id="username"
                                     name="username"
