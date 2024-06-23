@@ -58,6 +58,12 @@ const PromotionList = () => {
       setErrorModalVisible(true);
       return;
     }
+    if (parseFloat(formData.discount) < 0 || parseFloat(formData.discount) > 1) {
+      setErrorMessage('Discount must be between 0 and 1.');
+      setErrorModalVisible(true);
+      return;
+    }
+
 
     if (new Date(formData.startDate) > new Date(formData.endDate)) {
       setErrorMessage('Start date cannot be greater than end date.');
@@ -65,8 +71,13 @@ const PromotionList = () => {
       return;
     }
 
-    if (parseFloat(formData.minimumPrize) > parseFloat(formData.maximumPrize)) {
+    if (parseFloat(formData.minimumPrize) > parseFloat(formData.maximumPrize) ) {
       setErrorMessage('Minimum price cannot be greater than maximum price.');
+      setErrorModalVisible(true);
+      return;
+    }
+    if (parseFloat(formData.minimumPrize) < 1 || parseFloat(formData.maximumPrize) < 1) {
+      setErrorMessage('Minimum and maximum price must be greater than 0.');
       setErrorModalVisible(true);
       return;
     }
@@ -97,7 +108,6 @@ const PromotionList = () => {
       maximumPrize: dataFromInput.maximumPrize,
       status: true
     };
-
     const savePromise = isNew
       ? fetchData(`http://localhost:8080/api/v1/promotions`, 'POST', savedData, userInfo.accessToken)
       : fetchData(`http://localhost:8080/api/v1/promotions/id/${editingRow}`, 'PUT', savedData, userInfo.accessToken);
@@ -280,7 +290,7 @@ const PromotionList = () => {
             className="mb-3"
           />
           <CFormInput
-            type="text"
+            type="number"
             name="minimumPrize"
             label="Minimum Price"
             value={formData.minimumPrize}
@@ -288,7 +298,7 @@ const PromotionList = () => {
             className="mb-3"
           />
           <CFormInput
-            type="text"
+            type="number"
             name="maximumPrize"
             label="Maximum Price"
             value={formData.maximumPrize}
@@ -297,10 +307,10 @@ const PromotionList = () => {
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={handleCancelEdit}>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCancelEdit}>
             Cancel
           </CButton>
-          <CButton color="success" onClick={handleSave}>
+          <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
             Save
           </CButton>
         </CModalFooter>
@@ -318,7 +328,7 @@ const PromotionList = () => {
           <p>{errorMessage}</p>
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={handleCloseErrorModal}>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCloseErrorModal}>
             Close
           </CButton>
         </CModalFooter>
