@@ -23,11 +23,14 @@ import '../../customStyles.css'
 const GeneralInfoForm = () => {
     const [birthday, setBirthday] = useState("");
     const [avatar, setAvatar] = useState("");
-    const [username, setUsername] = useState("");
-    const [data, setData] = useState([]);
-    const [editingRow, setEditingRow] = useState(null);
+    const [data, setData] = useState({});
     const [formData, setFormData] = useState({});
     const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
+    const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
+    const [errorPhone, setErrorPhone] = useState("");
+    const [errorEmail, setErrorEmail] = useState("");
+    const [listUser, setListUser] = useState([]);
 
     useEffect(() => {
         fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "GET", null, userInfo.accessToken)
@@ -44,12 +47,9 @@ const GeneralInfoForm = () => {
             .catch((error) => {
                 console.error("Error fetching profile data:", error);
             });
-    }, [userInfo]);
 
-    const handleEdit = (id) => {
-        setEditingRow(id);
-        setFormData(data.find((row) => row.id === id));
-    };
+        loadListUser();
+    }, [userInfo]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -61,6 +61,19 @@ const GeneralInfoForm = () => {
         if (file) {
             setAvatar(URL.createObjectURL(file));
             setFormData({ ...formData, avatar: file });
+        }
+    };
+
+    const loadListUser = async () => {
+        try {
+            const listUserData = await fetchData(`http://localhost:8080/api/v1/users`, "GET", null, userInfo.accessToken);
+            if (listUserData && listUserData.payload) {
+                setListUser(listUserData.payload);
+            } else {
+                setListUser([]);
+            }
+        } catch (error) {
+            console.error("Error fetching list user:", error);
         }
     };
 
@@ -89,12 +102,39 @@ const GeneralInfoForm = () => {
             birthday: convertDateToJavaFormat(updatedData.birthday) || "2024-06-16T08:48:44.695Z", // Default date
         };
 
+        // Check for duplicate phone and email
+        const duplicatePhone = listUser.some(row => row.phone === formData.phone && row.id !== data.id);
+        const duplicateEmail = listUser.some(row => row.email === formData.email && row.id !== data.id);
+
+        if (duplicatePhone && duplicateEmail) {
+            setErrorPhone("Phone number already exists. Please use a unique phone number.");
+            setErrorEmail("Email already exists. Please use a unique email.");
+            setError("Update failed");
+            setMessage("");
+            return;
+        } else if (duplicatePhone && !duplicateEmail) {
+            setErrorPhone("Phone number already exists. Please use a unique phone number.");
+            setErrorEmail(""); // Clear email error if no email conflict
+            setError("Update failed");
+            setMessage("");
+            return;
+        } else if (duplicateEmail) {
+            setErrorEmail("Email already exists. Please use a unique email.");
+            setErrorPhone(""); // Clear phone error if no phone conflict
+            setError("Update failed");
+            setMessage("");
+            return;
+        } else {
+            setErrorPhone("");
+            setErrorEmail("");
+            setError("");
+        }
+
         // Assuming you have a function to upload the avatar file
         if (updatedData.avatar instanceof File) {
             const formDataToUpload = new FormData();
             formDataToUpload.append("image", updatedData.avatar); // Ensure the field name matches the API requirement
             console.log(formDataToUpload.get("image"));
-
             fetchData(`http://localhost:8080/api/v1/images`, "POST", formDataToUpload, null, "multipart/form-data")
                 .then((response) => {
                     console.log(response);
@@ -102,17 +142,25 @@ const GeneralInfoForm = () => {
                     return fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "PUT", savedData, userInfo.accessToken);
                 })
                 .then((data) => {
-                    console.log("Profile updated successfully:", data);
-                    // Optionally, you may want to refresh the data after update
-                    // refreshData();
+                    if (data.status === "SUCCESS") {
+                        setMessage("Update successfully");
+                        setError("");
+                    } else {
+                        setMessage("");
+                        setError("Update failed");
+                    }
                 })
                 .catch(error => console.log(error));
         } else {
             fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "PUT", savedData, userInfo.accessToken)
                 .then((data) => {
-                    console.log("Profile updated successfully:", data);
-                    // Optionally, you may want to refresh the data after update
-                    // refreshData();
+                    if (data.status === "SUCCESS") {
+                        setMessage("Update successfully");
+                        setError("");
+                    } else {
+                        setMessage("");
+                        setError("Update failed");
+                    }
                 })
                 .catch((error) => {
                     console.error("Error updating profile:", error);
@@ -229,6 +277,7 @@ const GeneralInfoForm = () => {
                                     onChange={handleInputChange}
                                 />
                             </div>
+                            <div style={{ color: 'red' }} className='error-email'>{errorEmail}</div>
                         </CCol>
                         <CCol md={6} className="mb-3">
                             <div className="form-group">
@@ -245,12 +294,16 @@ const GeneralInfoForm = () => {
                                     onChange={handleInputChange}
                                 />
                             </div>
+                            <div style={{ color: 'red' }} className='error-phone'>{errorPhone}</div>
                         </CCol>
                     </CRow>
                     <div className="mt-3">
                         <CButton className=" custom-btn custom-btn-primary" color="primary" type="submit" >
                             Save All
                         </CButton>
+
+                        <div style={{ color: 'green' }} className='message'>{message}</div>
+                        <div style={{ color: 'red' }} className='error'>{error}</div>
                     </div>
                 </form>
             </CCardBody>
