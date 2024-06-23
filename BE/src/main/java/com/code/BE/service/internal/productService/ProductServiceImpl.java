@@ -56,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
         BufferedImage bufferedImage = barcodeService.generateEAN13BarcodeImage(barCode);
         BufferedImage bufferedImageORCode = qrCodeService.generateQrcode(barCode);
 
-        ImageData imageData = imageService.saveImage(bufferedImage, productRequest.getName());
+        ImageData imageData = imageService.saveImage(bufferedImage, productCode);
         ImageData imageDataQRCode = imageService.saveImage(bufferedImageORCode, barCode);
 
         product.setCode(productCode);
