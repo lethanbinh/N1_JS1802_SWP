@@ -9,7 +9,7 @@ public interface CustomerService {
     List<CustomerResponse> findAll ();
     CustomerResponse findById (int id);
     List<CustomerResponse> findByFullNameContaining (String name);
-    CustomerResponse findByPhone (String phone);
+    List<CustomerResponse> findByPhone (String keyword);
     CustomerResponse save (CustomerRequest customerRequest);
     CustomerResponse editById (int id, CustomerRequest customerRequest);
     boolean deleteById (int id);

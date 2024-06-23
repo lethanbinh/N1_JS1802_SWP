@@ -24,7 +24,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/stalls")
-@PreAuthorize(value = "hasAuthority('ROLE_MANAGER')")
+//@PreAuthorize(value = "hasAuthority('ROLE_MANAGER')")
 public class StallController {
     @Autowired
     private StallService stallService;

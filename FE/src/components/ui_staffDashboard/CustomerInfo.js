@@ -18,6 +18,8 @@ import {
     CModalBody,
     CModalFooter
 } from '@coreui/react';
+// import { cisSearch } from '@coreui/icons'
+// import CIcon from '@coreui/icons-react'
 import React, { useState, useEffect } from 'react';
 import fetchData from "../../util/ApiConnection";
 import convertDateToJavaFormat from '../../util/DateConvert'
@@ -32,6 +34,7 @@ const CustomerInfo = () => {
     const [visible, setVisible] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const [error, setError] = useState(null);
+    const [search, setSearch] = useState(null);
 
     const handleEdit = (id) => {
         setEditingRow(id);
@@ -41,6 +44,24 @@ const CustomerInfo = () => {
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
+    };
+
+    useEffect(() => {
+        fetchData(`http://localhost:8080/api/v1/customers/phone/${search}`, "GET", null, userInfo.accessToken)
+            .then((response) => {
+                console.log("Customer data fetched successfully:", response);
+                if (response.payload) {
+                    const activeCustomers = response.payload.filter(customer => customer.status);
+                    setData(activeCustomers);
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching profile data:", error);
+            });
+    }, [search]);
+
+    const handleSearch = (event) => {
+        setSearch(event.target.value);
     };
 
     const handleSave = () => {
@@ -145,7 +166,7 @@ const CustomerInfo = () => {
     const refreshData = () => {
         fetchData("http://localhost:8080/api/v1/customers", 'GET', null, userInfo.accessToken)
             .then(data => {
-                const activeCustomers = data.payload.filter(customer => customer.status); // Only include active customers
+                const activeCustomers = data.payload.filter(customer => customer.status);
                 setData(activeCustomers);
                 setError(null); // Clear error on successful fetch
             })
@@ -163,7 +184,18 @@ const CustomerInfo = () => {
             <CCol xs={12}>
                 <CCard className="mb-4">
                     <CCardHeader>
-                        <strong>Customer Information</strong>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <strong>Customer Information</strong>
+                            <div>
+                                <CFormInput
+                                    type="text"
+                                    className="form-control form-control-sm"
+                                    placeholder="Search customer by phone..."
+                                    value={search}
+                                    onChange={handleSearch}
+                                />
+                            </div>
+                        </div>
                     </CCardHeader>
                     <CCardBody>
                         {error && <p style={{ color: 'red' }}>{error}</p>}

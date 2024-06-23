@@ -75,12 +75,9 @@ public class CustomerController {
     }
 
     @GetMapping(value = "/phone/{phone}")
-    public ResponseEntity<ApiResponse<CustomerResponse>> findByPhone(@PathVariable String phone) throws Exception {
+    public ResponseEntity<ApiResponse<List<CustomerResponse>>> findByPhone(@PathVariable String phone) throws Exception {
         try {
-            if (customerService.findByPhone(phone) == null) {
-                throw new NotFoundException(ErrorMessage.CUSTOMER_NOT_FOUND);
-            }
-            ApiResponse<CustomerResponse> apiResponse = new ApiResponse<>();
+            ApiResponse<List<CustomerResponse>> apiResponse = new ApiResponse<>();
             apiResponse.ok(customerService.findByPhone(phone));
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (NotFoundException ex) {

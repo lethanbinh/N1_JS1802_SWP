@@ -16,7 +16,6 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from '@coreui/react';
-import '../../../customStyles.css'
 
 const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
   const deleteItemHandler = () => {
@@ -65,7 +64,7 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
       </td>
       <td className="flex items-center justify-center">
         <CButton
-          className="mx-1 custom-btn custom-btn-danger"
+          className="mx-1"
           onClick={deleteItemHandler}
           color='danger'
         >

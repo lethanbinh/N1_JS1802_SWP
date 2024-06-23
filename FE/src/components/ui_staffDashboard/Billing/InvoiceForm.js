@@ -17,7 +17,6 @@ import { uid } from 'uid';
 import InvoiceItem from './InvoiceItem';
 import InvoiceModal from './InvoiceModal';
 import incrementString from './incrementString';
-import '../../../customStyles.css'
 
 const date = new Date();
 const today = date.toLocaleDateString('en-GB', {
@@ -174,7 +173,28 @@ const InvoiceForm = () => {
                 onChange={(event) => setCustomerName(event.target.value)}
               />
             </CCol>
+            <CCol>
+              <strong
+                htmlFor="phone"
+                className="text-sm font-bold sm:text-base"
+              >
+                Phone:
+              </strong>
+              <CFormInput
+                required
+                className="flex-1"
+                placeholder="Phone"
+                type="string"
+                name="cashierName"
+                id="cashierName"
+                value={cashierName}
+                onChange={(event) => setCashierName(event.target.value)}
+              />
+            </CCol>
           </CRow>
+          <CTableRow className="border-b border-gray-900/10 text-sm md:text-base">
+              <CTableHead><strong>BARCODE</strong></CTableHead>
+            </CTableRow>
           <CTable className="w-full p-4 text-left">
             <CTableHead>
               <CTableRow className="border-b border-gray-900/10 text-sm md:text-base">
@@ -200,7 +220,7 @@ const InvoiceForm = () => {
           </CTable>
           <CButton
             color="primary" // Tương đương với bg-blue-500
-            className="rounded px-4 py-2 text-sm text-white shadow custom-btn custom-btn-primary"
+            className="rounded px-4 py-2 text-sm text-white shadow"
             onClick={addItemHandler}
           >
             Add Item
@@ -237,7 +257,7 @@ const InvoiceForm = () => {
         <CCardBody className="sticky top-0 z-10 space-y-4 divide-y divide-gray-900/10 pb-8 md:pt-6 md:pl-4">
           <CButton
             color="primary" // Tương đương với bg-blue-500
-            className="rounded px-4 py-2 text-sm text-white shadow custom-btn custom-btn-primary"
+            className="rounded px-4 py-2 text-sm text-white shadow"
             onClick={handleReviewInvoice}
           >
             Review Invoice
