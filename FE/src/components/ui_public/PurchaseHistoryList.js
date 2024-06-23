@@ -18,6 +18,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
+import '../../customStyles.css'
 
 const PurchaseHistoryList = () => {
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser())
@@ -90,7 +91,7 @@ const PurchaseHistoryList = () => {
                       <CTableDataCell>{row.totalBonusPoint}</CTableDataCell>
                       <CTableDataCell>{row.status}</CTableDataCell>
                       <CTableDataCell className='mt-1'>
-                        <CButton onClick={() => loadDetails(row.id)} className='mr-1' color="info">View Details</CButton>
+                        <CButton className='custom-btn custom-btn-info mr-1' onClick={() => loadDetails(row.id)} color="info">View Details</CButton>
                       </CTableDataCell>
                     </CTableRow>
                   ))}

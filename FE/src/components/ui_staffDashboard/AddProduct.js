@@ -11,6 +11,7 @@ import {
 } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import UserStorage from '../../util/UserStorage';
+import '../../customStyles.css'
 import fetchData from '../../util/ApiConnection';
 
 const AddProduct = () => {
@@ -313,7 +314,7 @@ const AddProduct = () => {
             </CRow>
             <CButton
               color="primary"
-              className="mt-4"
+              className="mt-4 custom-btn custom-btn-primary"
               onClick={handleSubmit}
             >
               Submit Product

@@ -10,6 +10,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
+import '../../customStyles.css'
 
 const Policy = () => {
   const [data, setData] = useState([]);
@@ -126,13 +127,13 @@ const Policy = () => {
                           <option value="EXCHANGE_AND_RETURN">EXCHANGE_AND_RETURN</option>
                           <option value="WARRANTY">WARRANTY</option>
                         </select>
-                        <CButton color="primary" onClick={handleSave}>Save</CButton>
+                        <CButton className='custom-btn custom-btn-primary' color="primary" onClick={handleSave}>Save</CButton>
                       </div>
                     ) : (
                       <div>
                         <h5>{row.name}</h5>
                         <div dangerouslySetInnerHTML={{ __html: row.detail }} />
-                        <CButton color="secondary" className="mt-2" onClick={() => handleEdit(row.id)}>Edit</CButton>
+                        <CButton color="secondary" className='custom-btn custom-btn-secondary mt-2' onClick={() => handleEdit(row.id)}>Edit</CButton>
                       </div>
                     )}
                   </div>

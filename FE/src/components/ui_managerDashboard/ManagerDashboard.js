@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 import { format } from 'date-fns';
+import '../../customStyles.css'
 
 const ManagerDashboard = () => {
     const [startDate, setStartDate] = useState(new Date());
@@ -114,7 +115,7 @@ const ManagerDashboard = () => {
                     />
                 </div>
                 <div>
-                    <CButton color="primary" onClick={() => loadData(startDate, endDate)}>Load Data</CButton>
+                    <CButton className='custom-btn custom-btn-primary' color="primary" onClick={() => loadData(startDate, endDate)}>Load Data</CButton>
                 </div>
             </div>
 

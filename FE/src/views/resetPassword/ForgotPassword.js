@@ -13,8 +13,7 @@ import {
 } from '@coreui/react'
 import { useNavigate } from 'react-router-dom';
 import fetchData from '../../util/ApiConnection';
-// import CIcon from '@coreui/icons-react'
-// import { cilLockLocked, cilUser } from '@coreui/icons'
+import '../../customStyles.css'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -56,7 +55,7 @@ const ForgotPassword = () => {
                     />
                   </CInputGroup>
                   <div className="d-grid">
-                    <CButton color="success" type="submit">Send Email</CButton>
+                    <CButton className='custom-btn custom-btn-success' color="success" type="submit">Send Email</CButton>
                   </div>
 
                   <div style={{ color: 'red' }} className='email-message'>{emailMessage}</div>

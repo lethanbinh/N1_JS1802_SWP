@@ -15,6 +15,7 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from '@coreui/react';
+import '../../../customStyles.css'
 
 const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items, onAddNextInvoice }) => {
   function closeModal() {
@@ -161,6 +162,7 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items, onAddNextInvoice 
       </CModalBody>
       <CModalFooter>
         <CButton
+          className='custom-btn custom-btn-primary'
           color="primary"
           onClick={SaveAsPDFHandler}
         >
@@ -181,6 +183,7 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items, onAddNextInvoice 
           Download
         </CButton>
         <CButton
+          className='custom-btn custom-btn-secondary'
           color="secondary"
           onClick={addNextInvoiceHandler}
         >

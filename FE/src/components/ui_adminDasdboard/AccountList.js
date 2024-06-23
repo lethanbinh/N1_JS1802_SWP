@@ -24,6 +24,7 @@ import React, { useEffect, useState } from 'react'
 import UserStorage from '../../util/UserStorage'
 import convertDateToJavaFormat from '../../util/DateConvert'
 import fetchData from '../../util/ApiConnection'
+import '../../customStyles.css'
 
 const AccountList = () => {
     const [data, setData] = useState([])
@@ -273,15 +274,15 @@ const AccountList = () => {
                                             </CTableDataCell>
                                             <CTableDataCell>
                                                 {editingRow === row.id ? (
-                                                    <CButton style={{ marginRight: "5px" }} color="success" onClick={handleSave}>
-                                                        Save
-                                                    </CButton>
+                                                    <CButton className="custom-btn custom-btn-success" color="success" onClick={handleSave}>
+                                                    Save
+                                                </CButton>
                                                 ) : (
-                                                    <CButton style={{ marginRight: "5px" }} color="info" onClick={() => handleEdit(row.id)}>
+                                                    <CButton className="custom-btn custom-btn-info" color="info" onClick={() => handleEdit(row.id)}>
                                                         Edit
                                                     </CButton>
                                                 )}
-                                                <CButton color="danger" onClick={() => {
+                                                <CButton className="custom-btn custom-btn-danger" color="danger" onClick={() => {
                                                     setDeleteId(row.id)
                                                     setVisible(true)
                                                     setDeletedUsername(row.username)
@@ -293,7 +294,7 @@ const AccountList = () => {
                                 </CTableBody>
                             </CTable>
                         </div>
-                        <CButton color="success" className="mt-1" onClick={handleAddNew}>
+                        <CButton color="success" className="custom-btn custom-btn-success mt-1" onClick={handleAddNew}>
                             Create New Account
                         </CButton>
                     </CCardBody>
@@ -313,10 +314,10 @@ const AccountList = () => {
                         <p>Are you sure you want to delete this account?</p>
                     </CModalBody>
                     <CModalFooter>
-                        <CButton color="secondary" onClick={() => setVisible(false)}>
+                        <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
                             Cancel
                         </CButton>
-                        <CButton color="danger" onClick={e => handleDelete(deleteId)}>
+                        <CButton className='custom-btn custom-btn-danger' color="danger" onClick={e => handleDelete(deleteId)}>
                             Delete
                         </CButton>
                     </CModalFooter>

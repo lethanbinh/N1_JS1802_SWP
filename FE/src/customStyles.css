@@ -1,0 +1,41 @@
+.custom-btn {
+    margin: .25rem .125rem;
+    transition: background-color 0.3s, color 0.3s; /* Thêm hiệu ứng chuyển đổi mượt mà */
+    color: black;
+  }
+  
+  .custom-btn-secondary:hover {
+    background-color: #56585a; /* Màu đậm hơn khi hover */
+    color: #fff; /* Màu chữ khi hover */
+  }
+
+  .custom-btn-primary:hover {
+    background-color: #003164; /* Màu xanh đậm hơn khi hover */
+    color: #fff; /* Màu chữ khi hover */
+  }
+
+  .custom-btn-info:hover {
+    background-color: #0056b3; /* Màu xanh đậm hơn khi hover */
+    color: #fff; /* Màu chữ khi hover */
+  }
+  
+  .custom-btn-success:hover {
+    background-color: #08721f; /* Màu xanh lá cây đậm hơn khi hover */
+    color: #fff; /* Màu chữ khi hover */
+  }
+  
+  .custom-btn-danger:hover {
+    background-color: #900311; /* Màu đỏ đậm hơn khi hover */
+    color: #fff; /* Màu chữ khi hover */
+  }
+  
+  .custom-link {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s, text-decoration 0.3s; /* Thêm hiệu ứng chuyển đổi mượt mà */
+  }
+  
+  .custom-link:hover {
+    color: #082cf9; /* Màu chữ khi hover */
+    text-decoration: underline; /* Gạch chân khi hover */
+  }

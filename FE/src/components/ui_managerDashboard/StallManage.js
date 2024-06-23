@@ -18,6 +18,7 @@ import {
 import React, { useEffect, useState } from 'react'
 import fetchData from '../../util/ApiConnection'
 import UserStorage from '../../util/UserStorage'
+import '../../customStyles.css'
 
 const Stall = () => {
   const [data, setData] = useState([])
@@ -168,11 +169,11 @@ const Stall = () => {
                       </CTableDataCell>
                       <CTableDataCell>
                         {editingRow === row.id ? (
-                          <CButton color="success" onClick={handleSave}>
+                          <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
                             Save
                           </CButton>
                         ) : (
-                          <CButton color="info" onClick={() => handleEdit(row.id)}>
+                          <CButton className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
                             Update
                           </CButton>
                         )}
@@ -182,7 +183,7 @@ const Stall = () => {
                 </CTableBody>
               </CTable>
             </div>
-            <CButton color="success" className="mt-1" onClick={handleAddNew}>
+            <CButton className='custom-btn custom-btn-success mt-1' color="success"  onClick={handleAddNew}>
               Add New Stall
             </CButton>
           </CCardBody>

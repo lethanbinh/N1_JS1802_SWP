@@ -17,6 +17,7 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import UserStorage from '../../util/UserStorage'
 import fetchData from '../../util/ApiConnection'
+import '../../customStyles.css'
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -149,12 +150,12 @@ const Login = () => {
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton type="submit" color="primary" className="px-4">
+                        <CButton type="submit" color="primary" className="px-4 custom-btn custom-btn-primary">
                           Login
                         </CButton>
                       </CCol>
                       <CCol xs={6} className="text-right">
-                        <Link to="/forgot-password" className="px-0" style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <Link to="/forgot-password" className="custom-link">
                           Forgot password?
                         </Link>
                       </CCol>

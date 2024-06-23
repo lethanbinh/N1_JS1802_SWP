@@ -24,6 +24,7 @@ import React, { useEffect, useState } from 'react'
 import UserStorage from '../../util/UserStorage'
 import convertDateToJavaFormat from '../../util/DateConvert'
 import fetchData from '../../util/ApiConnection'
+import '../../customStyles.css'
 
 const StaffList = () => {
   const [data, setData] = useState([])
@@ -149,7 +150,7 @@ const StaffList = () => {
           <CCol xs={12}>
               <CCard className="mb-4">
                   <CCardHeader>
-                      <strong>Account List</strong>
+                      <strong>Staff List</strong>
                   </CCardHeader>
                   <CCardBody>
                       <div style={{ height: '500px', overflow: 'auto' }}>
@@ -272,15 +273,15 @@ const StaffList = () => {
                                           </CTableDataCell>
                                           <CTableDataCell>
                                               {editingRow === row.id ? (
-                                                  <CButton style={{ marginRight: "5px" }} color="success" onClick={handleSave}>
+                                                  <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
                                                       Save
                                                   </CButton>
                                               ) : (
-                                                  <CButton style={{ marginRight: "5px" }} color="info" onClick={() => handleEdit(row.id)}>
+                                                  <CButton className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
                                                       Edit
                                                   </CButton>
                                               )}
-                                              <CButton color="danger" onClick={() => {
+                                              <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => {
                                                   setDeleteId(row.id)
                                                   setVisible(true)
                                               }}>Delete</CButton>
@@ -291,9 +292,6 @@ const StaffList = () => {
                               </CTableBody>
                           </CTable>
                       </div>
-                      <CButton color="success" className="mt-1" onClick={handleAddNew}>
-                          Create New Account
-                      </CButton>
                   </CCardBody>
               </CCard>
           </CCol>
@@ -310,10 +308,10 @@ const StaffList = () => {
                   <p>Are you sure you want to delete this account?</p>
               </CModalBody>
               <CModalFooter>
-                  <CButton color="secondary" onClick={() => setVisible(false)}>
+                  <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
                       Cancel
                   </CButton>
-                  <CButton color="danger" onClick={e => handleDelete(deleteId)}>
+                  <CButton className='custom-btn custom-btn-danger' color="danger" onClick={e => handleDelete(deleteId)}>
                       Delete
                   </CButton>
               </CModalFooter>
