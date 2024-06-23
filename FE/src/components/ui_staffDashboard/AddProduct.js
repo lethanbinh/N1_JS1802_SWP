@@ -9,9 +9,10 @@ import {
   CFormTextarea,
   CRow,
 } from '@coreui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import UserStorage from '../../util/UserStorage';
 import '../../customStyles.css'
+import fetchData from '../../util/ApiConnection';
 
 const AddProduct = () => {
   const [product, setProduct] = useState({
@@ -30,7 +31,9 @@ const AddProduct = () => {
   });
 
   const [error, setError] = useState('');
-  const userInfo = UserStorage.getAuthenticatedUser();
+  const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser())
+  const [stallOptions, setStallOptions] = useState([])
+  const [image, setImage] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,17 +46,33 @@ const AddProduct = () => {
       [name]: value
     }));
     setError('');
+    console.log(product)
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+
     if (file) {
       setProduct((prevProduct) => ({
         ...prevProduct,
-        image: URL.createObjectURL(file)
+        image: file
       }));
+      setImage(URL.createObjectURL(file))
     }
   };
+
+  const loadStallData = async () => {
+    try {
+      const stallData = await fetchData(`http://localhost:8080/api/v1/stalls`, 'GET', null, userInfo.accessToken)
+      if (stallData && stallData.payload) {
+        setStallOptions(stallData.payload)
+      } else {
+        setStallOptions([])
+      }
+    } catch (error) {
+      setStallOptions([]) // Ensure stallOptions is cleared on error
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,26 +101,25 @@ const AddProduct = () => {
       status: product.status,
     };
 
-    console.log(savedProduct)
-
     try {
-      const response = await fetch('http://localhost:8080/api/v1/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userInfo.accessToken}` // Add the authorization header
-        },
-        body: JSON.stringify(savedProduct)
-      });
+      if (savedProduct.image instanceof File) {
+        const formDataToUpload = new FormData();
+        formDataToUpload.append("image", savedProduct.image);
+        console.log(formDataToUpload.get("image"));
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`Error ${response.status}: ${response.statusText}`, errorText);
-        throw new Error(`Error ${response.status}: ${response.statusText}`);
+        fetchData(`http://localhost:8080/api/v1/images`, "POST", formDataToUpload, null, "multipart/form-data")
+          .then((response) => {
+            console.log(response);
+            savedProduct.image = response.payload.name
+
+            fetchData('http://localhost:8080/api/v1/products', 'POST', savedProduct, userInfo.accessToken)
+              .then((response) => {
+                console.log(response)
+              })
+              .catch(error => setError(error))
+          })
+          .catch(error => setError(error));
       }
-
-      const data = await response.json();
-      console.log('Product added:', data);
 
       // Reset form hoặc chuyển hướng người dùng
       setProduct({
@@ -123,7 +141,10 @@ const AddProduct = () => {
       console.error('There was an error adding the product!', error);
       setError('There was an error adding the product!');
     }
-  };
+  }
+  useEffect(() => {
+    loadStallData()
+  }, [])
 
   return (
     <CRow>
@@ -160,9 +181,9 @@ const AddProduct = () => {
             </CRow>
             <CRow>
               <CCol md={12}>
-                {product.image && (
+                {image && (
                   <img
-                    src={product.image}
+                    src={image}
                     alt="Product Preview"
                     style={{ width: '50%', height: 'auto', marginTop: '10px' }}
                   />
@@ -272,10 +293,11 @@ const AddProduct = () => {
                   onChange={handleChange}
                   label="Stall">
                   <option value="">Select Stall</option>
-                  <option value="1">Stall 1</option>
-                  <option value="2">Stall 2</option>
-                  <option value="3">Stall 3</option>
-                  <option value="4">Stall 4</option>
+                  {stallOptions.map(stall => (
+                    <option key={stall.id} value={stall.id}>
+                      {stall.name}
+                    </option>
+                  ))}
                 </CFormSelect>
               </CCol>
               <CCol md={4}>
@@ -284,7 +306,7 @@ const AddProduct = () => {
                   value={product.status}
                   onChange={handleChange}
                   label="Status">
-                  <option value="">Select Stall</option>
+                  <option value="">Select Type</option>
                   <option value="SELL">Sell</option>
                   <option value="PURCHASE">Purchase</option>
                 </CFormSelect>
