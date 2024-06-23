@@ -40,8 +40,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponse findByPhone(String phone) {
-        return customerMapper.toResponse(customerRepository.findByPhone(phoneNumberUtil.normalizePhoneNumber(phone)));
+    public List<CustomerResponse> findByPhone(String phone) {
+        return customerMapper.toResponseList(
+                customerRepository.findByPhoneContaining(phoneNumberUtil.normalizePhoneNumber(phone)));
     }
 
     @Override

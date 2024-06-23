@@ -29,8 +29,12 @@ const PurchaseHistoryList = () => {
 
   const loadData = async () => {
     try {
-      const purchaseHistoryData = await fetchData(`http://localhost:8080/api/v1/orders`, 'GET', null, userInfo.accessToken)
-      setData(purchaseHistoryData.payload)
+      fetchData(`http://localhost:8080/api/v1/orders`, 'GET', null, userInfo.accessToken)
+        .then((data) => {
+          console.log(data)
+          setData(data.payload)
+        }
+        )
       setError(null)
     } catch (error) {
       setError(error.message)
