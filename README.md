@@ -46,60 +46,60 @@ The software is designed to manage jewelry sales for a company operating a singl
 ### Table 1: User Stories of Each Sprint
 | Sprint   | User Story ID | Description                |
 |----------|----------------|----------------------------|
-| Sprint 1 | N1JS1802-10    | Login                      |
-|          | N1JS1802-11    | Logout                     |
-|          | N1JS1802-12    | Reset Password             |
-|          | N1JS1802-13    | View Account               |
-|          | N1JS1802-14    | Create Account             |
-|          | N1JS1802-15    | Edit Account               |
-|          | N1JS1802-16    | Delete Account             |
-|          | N1JS1802-17    | View Profile               |
-|          | N1JS1802-18    | Update Profile             |
-| Sprint 2 | N1JS1802-19    | Search Staff               |
-|          | N1JS1802-20    | Create Staff               |
-|          | N1JS1802-21    | Edit Staff                 |
-|          | N1JS1802-22    | Delete Staff               |
-|          | N1JS1802-32    | View Promotion             |
-|          | N1JS1802-35    | Create Promotion           |
-|          | N1JS1802-37    | Update Promotion           |
-|          | N1JS1802-38    | Delete Promotion           |
-|          | N1JS1802-25    | View Policies              |
-|          | N1JS1802-29    | Edit Policies              |
-|          | N1JS1802-30    | Delete Policies            |
-|          | N1JS1802-23    | Create Orders              |
-|          | N1JS1802-24    | Update Orders              |
-|          | N1JS1802-26    | Delete Orders              |
-|          | N1JS1802-28    | View Orders                |
-| Sprint 3 | N1JS1802-31    | Print bill from Order      |
-|          | N1JS1802-33    | Export bills               |
-|          | N1JS1802-36    | Import product by barcode  |
-|          | N1JS1802-39    | Apply Promotion to Order   |
-|          | N1JS1802-40    | Add stall                  |
-|          | N1JS1802-41    | Update stall               |
-|          | N1JS1802-43    | View stall                 |
-|          | N1JS1802-53    | Add customers              |
-|          | N1JS1802-54    | Update customers           |
-|          | N1JS1802-55    | Delete customers           |
-|          | N1JS1802-56    | View customers             |
-| Sprint 4 | N1JS1802-42    | Add Product to Stall       |
-|          | N1JS1802-44    | Edit Product               |
-|          | N1JS1802-45    | View Products in Stall     |
-|          | N1JS1802-46    | Delete Product             |
-|          | N1JS1802-47    | Product Dashboard          |
-|          | N1JS1802-48    | Staff Dashboard            |
-|          | N1JS1802-49    | Revenue Dashboard          |
-|          | N1JS1802-50    | Create Policies            |
-|          | N1JS1802-51    | Orders Dashboard           |
+| Sprint 1 | UC-10    | Login                      |
+|          | UC-11    | Logout                     |
+|          | UC-12    | Reset Password             |
+|          | UC-13    | View Account               |
+|          | UC-14    | Create Account             |
+|          | UC-15    | Edit Account               |
+|          | UC-16    | Delete Account             |
+|          | UC-17    | View Profile               |
+|          | UC-18    | Update Profile             |
+| Sprint 2 | UC-19    | Search Staff               |
+|          | UC-20    | Create Staff               |
+|          | UC-21    | Edit Staff                 |
+|          | UC-22    | Delete Staff               |
+|          | UC-32    | View Promotion             |
+|          | UC-35    | Create Promotion           |
+|          | UC-37    | Update Promotion           |
+|          | UC-38    | Delete Promotion           |
+|          | UC-25    | View Policies              |
+|          | UC-29    | Edit Policies              |
+|          | UC-30    | Delete Policies            |
+|          | UC-23    | Create Orders              |
+|          | UC-24    | Update Orders              |
+|          | UC-26    | Delete Orders              |
+|          | UC-28    | View Orders                |
+| Sprint 3 | UC-31    | Print bill from Order      |
+|          | UC-33    | Export bills               |
+|          | UC-36    | Import product by barcode  |
+|          | UC-39    | Apply Promotion to Order   |
+|          | UC-40    | Add stall                  |
+|          | UC-41    | Update stall               |
+|          | UC-43    | View stall                 |
+|          | UC-53    | Add customers              |
+|          | UC-54    | Update customers           |
+|          | UC-55    | Delete customers           |
+|          | UC-56    | View customers             |
+| Sprint 4 | UC-42    | Add Product to Stall       |
+|          | UC-44    | Edit Product               |
+|          | UC-45    | View Products in Stall     |
+|          | UC-46    | Delete Product             |
+|          | UC-47    | Product Dashboard          |
+|          | UC-48    | Staff Dashboard            |
+|          | UC-49    | Revenue Dashboard          |
+|          | UC-50    | Create Policies            |
+|          | UC-51    | Orders Dashboard           |
 
 ### Table 2: Member Assignment for Sprint 1
 | Member Name | User Story ID | Description            |
 |-------------|---------------|------------------------|
-| Le Thanh Binh    | N1JS1802-10   | Login                  |
-| Le Thanh Binh    | N1JS1802-11   | Logout                 |
-| Nguyen Tran Khanh Ha    | N1JS1802-12   | Reset Password         |
-| Luu Thien An    | N1JS1802-13   | View Account           |
-| Luu Thien An    | N1JS1802-14   | Create Account         |
-| Tran Nhat Quang    | N1JS1802-15   | Edit Account           |
-| Le Xuan Phuong Nam    | N1JS1802-16   | Delete Account         |
-| Nguyen Thanh Phong    | N1JS1802-17   | View Profile           |
-| Nguyen Thanh Phong    | N1JS1802-18   | Update Profile         |
+| Le Thanh Binh    | UC-10   | Login                  |
+| Le Thanh Binh    | UC-11   | Logout                 |
+| Nguyen Tran Khanh Ha    | UC-12   | Reset Password         |
+| Luu Thien An    | UC-13   | View Account           |
+| Luu Thien An    | UC-14   | Create Account         |
+| Tran Nhat Quang    | UC-15   | Edit Account           |
+| Le Xuan Phuong Nam    | UC-16   | Delete Account         |
+| Nguyen Thanh Phong    | UC-17   | View Profile           |
+| Nguyen Thanh Phong    | UC-18   | Update Profile         |
