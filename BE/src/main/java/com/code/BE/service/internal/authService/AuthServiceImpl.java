@@ -49,15 +49,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse login(AuthRequest authRequest) {
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            authRequest.getUsername(),
-                            authRequest.getPassword()
-                    )
-            );
-
             User user = userRepository.findByUsername(authRequest.getUsername());
-            if (user != null) {
+            if (user != null && user.getPassword().equals(authRequest.getPassword())) {
                 UserSecurity userSecurity = new UserSecurity(user);
 
                 Map<String, Object> extraClaims = new HashMap<>();
@@ -150,7 +143,7 @@ public class AuthServiceImpl implements AuthService {
         // check token's email is at the same with email of the account you want to reset
         if (email.equalsIgnoreCase(confirmationTokenService.findByConfirmationToken(token).getUser().getEmail())) {
             User user = userRepository.findByEmail(email);
-            user.setPassword(passwordEncoder.encode(password));
+            user.setPassword(password);
 
             // delete token after resetting password
             confirmationTokenService.deleteById(confirmationTokenService.findByConfirmationToken(token).getId());
