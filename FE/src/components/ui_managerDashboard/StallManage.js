@@ -21,6 +21,7 @@ import {
   CTableRow
 } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
+import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 
@@ -173,7 +174,7 @@ const Stall = () => {
                       <CTableDataCell>{row.type}</CTableDataCell>
                       <CTableDataCell>{row.description}</CTableDataCell>
                       <CTableDataCell>
-                        <CButton style={{ marginRight: '5px' }} color="info" onClick={() => handleEdit(row.id)}>
+                        <CButton style={{ marginRight: '5px' }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
                           Update
                         </CButton>
                       </CTableDataCell>
@@ -182,7 +183,7 @@ const Stall = () => {
                 </CTableBody>
               </CTable>
             </div>
-            <CButton className='custom-btn custom-btn-success mt-1' color="success" onClick={handleAddNew}>
+            <CButton className='custom-btn custom-btn-success mt-2' color="success" onClick={handleAddNew}>
               Add New Stall
             </CButton>
           </CCardBody>
@@ -201,7 +202,7 @@ const Stall = () => {
           <p>{errorMessage}</p>
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={() => setErrorModalVisible(false)}>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setErrorModalVisible(false)}>
             Close
           </CButton>
         </CModalFooter>
@@ -252,10 +253,10 @@ const Stall = () => {
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={handleCancelEdit}>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCancelEdit}>
             Cancel
           </CButton>
-          <CButton color="success" onClick={handleSave}>
+          <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
             Save
           </CButton>
         </CModalFooter>

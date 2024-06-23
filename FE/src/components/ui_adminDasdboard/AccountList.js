@@ -21,6 +21,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
+import '../../customStyles.css'
 import fetchData from '../../util/ApiConnection'
 import convertDateToJavaFormat from '../../util/DateConvert'
 import UserStorage from '../../util/UserStorage'
@@ -62,6 +63,14 @@ const AccountList = () => {
       return;
     }
 
+    const birthdayDate = new Date(formData.birthday);
+    const todayDate = new Date();
+    if (birthdayDate > todayDate) {
+      setErrorMessage("Birthday cannot be later than today.");
+      setErrorModalVisible(true);
+      return;
+    }
+
     const duplicateUsername = data.some(row => row.username === formData.username && row.id !== editingRow)
     const duplicatePhone = data.some(row => row.phone === formData.phone && row.id !== editingRow)
     const duplicateEmail = data.some(row => row.email === formData.email && row.id !== editingRow)
@@ -83,6 +92,7 @@ const AccountList = () => {
       setErrorModalVisible(true)
       return
     }
+
 
     let newData;
     if (isNew) {
@@ -127,6 +137,7 @@ const AccountList = () => {
       phone: dataFromInput.phone || "0374422448", // Using default phone if not provided
       email: dataFromInput.email || "string",
       address: dataFromInput.address || "string",
+      password: dataFromInput.password,
       avatar: "", // Default value
       birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z", // Default date
       status: dataFromInput.status ? true : false,
@@ -228,17 +239,17 @@ const AccountList = () => {
                       <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                       <CTableDataCell>{row.username}</CTableDataCell>
                       <CTableDataCell>{row.fullName}</CTableDataCell>
-                      <CTableDataCell>{'******'}</CTableDataCell>
+                      <CTableDataCell>{row.password}</CTableDataCell>
                       <CTableDataCell>{row.phone}</CTableDataCell>
                       <CTableDataCell>{row.email}</CTableDataCell>
                       <CTableDataCell>{row.address}</CTableDataCell>
                       <CTableDataCell>{row.birthday}</CTableDataCell>
                       <CTableDataCell>{row.roleName}</CTableDataCell>
                       <CTableDataCell>
-                        <CButton style={{ marginRight: "5px" }} color="info" onClick={() => handleEdit(row.id)}>
+                        <CButton style={{ marginRight: "5px" }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
                           Edit
                         </CButton>
-                        <CButton color="danger" onClick={() => {
+                        <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => {
                           setDeleteId(row.id)
                           setVisible(true)
                           setDeletedUsername(row.username)
@@ -249,7 +260,7 @@ const AccountList = () => {
                 </CTableBody>
               </CTable>
             </div>
-            <CButton color="success" className="mt-1" onClick={handleAddNew}>
+            <CButton className='custom-btn custom-btn-success mt-2' color="success" onClick={handleAddNew}>
               Create New Account
             </CButton>
           </CCardBody>
@@ -269,10 +280,10 @@ const AccountList = () => {
             <p>Are you sure you want to delete this account?</p>
           </CModalBody>
           <CModalFooter>
-            <CButton color="secondary" onClick={() => setVisible(false)}>
+            <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
               Cancel
             </CButton>
-            <CButton color="danger" onClick={e => handleDelete(deleteId)}>
+            <CButton className='custom-btn custom-btn-danger' color="danger" onClick={e => handleDelete(deleteId)}>
               Delete
             </CButton>
           </CModalFooter>
@@ -284,7 +295,7 @@ const AccountList = () => {
             <p>You are signed in. Cannot delete</p>
           </CModalBody>
           <CModalFooter>
-            <CButton color="secondary" onClick={() => setVisible(false)}>
+            <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
               Cancel
             </CButton>
           </CModalFooter>
@@ -303,7 +314,7 @@ const AccountList = () => {
           <p>{errorMessage}</p>
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={() => setErrorModalVisible(false)}>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setErrorModalVisible(false)}>
             Close
           </CButton>
         </CModalFooter>
@@ -336,7 +347,7 @@ const AccountList = () => {
             className="mb-3"
           />
           <CFormInput
-            type="password"
+            type="text"
             name="password"
             label="Password"
             value={formData.password}
@@ -388,10 +399,10 @@ const AccountList = () => {
           </CFormSelect>
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={handleCancelEdit}>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCancelEdit}>
             Cancel
           </CButton>
-          <CButton color="success" onClick={handleSave}>
+          <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
             Save
           </CButton>
         </CModalFooter>

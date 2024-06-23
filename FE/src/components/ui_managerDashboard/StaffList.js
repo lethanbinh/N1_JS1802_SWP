@@ -20,6 +20,7 @@ import {
   CTableRow
 } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
+import '../../customStyles.css'
 import fetchData from '../../util/ApiConnection'
 import convertDateToJavaFormat from '../../util/DateConvert'
 import UserStorage from '../../util/UserStorage'
@@ -57,6 +58,13 @@ const StaffList = () => {
 
     if (emptyFields.length > 0) {
       setErrorMessage(`Please fill all the fields: ${emptyFields.join(', ')}`);
+      setErrorModalVisible(true);
+      return;
+    }
+    const birthdayDate = new Date(formData.birthday);
+    const todayDate = new Date();
+    if (birthdayDate > todayDate) {
+      setErrorMessage("Birthday cannot be later than today.");
       setErrorModalVisible(true);
       return;
     }
@@ -218,10 +226,10 @@ const StaffList = () => {
                       <CTableDataCell>{row.birthday}</CTableDataCell>
                       <CTableDataCell>{row.roleName}</CTableDataCell>
                       <CTableDataCell>
-                        <CButton style={{ marginRight: "5px" }} color="info" onClick={() => handleEdit(row.id)}>
+                        <CButton style={{ marginRight: "5px" }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
                           Edit
                         </CButton>
-                        <CButton color="danger" onClick={() => {
+                        <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => {
                           setDeleteId(row.id)
                           setVisible(true)
                           setDeletedUsername(row.username)
@@ -249,10 +257,10 @@ const StaffList = () => {
             <p>Are you sure you want to delete this account?</p>
           </CModalBody>
           <CModalFooter>
-            <CButton color="secondary" onClick={() => setVisible(false)}>
+            <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
               Cancel
             </CButton>
-            <CButton color="danger" onClick={e => handleDelete(deleteId)}>
+            <CButton className='custom-btn custom-btn-danger' color="danger" onClick={e => handleDelete(deleteId)}>
               Delete
             </CButton>
           </CModalFooter>
@@ -264,7 +272,7 @@ const StaffList = () => {
             <p>You are signed in. Cannot delete</p>
           </CModalBody>
           <CModalFooter>
-            <CButton color="secondary" onClick={() => setVisible(false)}>
+            <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
               Cancel
             </CButton>
           </CModalFooter>
@@ -283,7 +291,7 @@ const StaffList = () => {
           <p>{errorMessage}</p>
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={() => setErrorModalVisible(false)}>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setErrorModalVisible(false)}>
             Close
           </CButton>
         </CModalFooter>
@@ -316,7 +324,7 @@ const StaffList = () => {
             className="mb-3"
           />
           <CFormInput
-            type="password"
+            type="text"
             name="password"
             label="Password"
             value={formData.password}
@@ -355,10 +363,10 @@ const StaffList = () => {
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={handleCancelEdit}>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCancelEdit}>
             Cancel
           </CButton>
-          <CButton color="success" onClick={handleSave}>
+          <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
             Save
           </CButton>
         </CModalFooter>
