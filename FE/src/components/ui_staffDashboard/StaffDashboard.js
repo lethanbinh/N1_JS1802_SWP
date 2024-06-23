@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import fetchData from "../../util/ApiConnection";
 import UserStorage from "../../util/UserStorage";
 import { format } from 'date-fns';
+import '../../customStyles.css'
 
 const StaffDashboard = () => {
     const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
@@ -59,7 +60,7 @@ const StaffDashboard = () => {
         <CRow>
             <CCol>
                 <CCard>
-                    <CCardHeader>Staff Dashboard</CCardHeader>
+                    <CCardHeader><strong>Staff Dashboard</strong></CCardHeader>
                     <CCardBody>
                         <CRow className="mb-3">
                             <CCol>
@@ -100,7 +101,7 @@ const StaffDashboard = () => {
                                 </CFormSelect>
                             </CCol>
                         </CRow>
-                        <CButton color="primary" onClick={handleFetchData}>Fetch Data</CButton>
+                        <CButton className="custom-btn custom-btn-primary" color="primary" onClick={handleFetchData}>Fetch Data</CButton>
                     </CCardBody>
                 </CCard>
             </CCol>

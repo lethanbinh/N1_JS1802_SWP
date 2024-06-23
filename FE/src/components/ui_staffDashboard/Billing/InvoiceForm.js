@@ -17,6 +17,7 @@ import { uid } from 'uid';
 import InvoiceItem from './InvoiceItem';
 import InvoiceModal from './InvoiceModal';
 import incrementString from './incrementString';
+import '../../../customStyles.css'
 
 const date = new Date();
 const today = date.toLocaleDateString('en-GB', {
@@ -199,7 +200,7 @@ const InvoiceForm = () => {
           </CTable>
           <CButton
             color="primary" // Tương đương với bg-blue-500
-            className="rounded px-4 py-2 text-sm text-white shadow"
+            className="rounded px-4 py-2 text-sm text-white shadow custom-btn custom-btn-primary"
             onClick={addItemHandler}
           >
             Add Item
@@ -236,7 +237,7 @@ const InvoiceForm = () => {
         <CCardBody className="sticky top-0 z-10 space-y-4 divide-y divide-gray-900/10 pb-8 md:pt-6 md:pl-4">
           <CButton
             color="primary" // Tương đương với bg-blue-500
-            className="rounded px-4 py-2 text-sm text-white shadow"
+            className="rounded px-4 py-2 text-sm text-white shadow custom-btn custom-btn-primary"
             onClick={handleReviewInvoice}
           >
             Review Invoice

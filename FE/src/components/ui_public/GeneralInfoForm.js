@@ -18,6 +18,7 @@ import {
 import UserStorage from "../../util/UserStorage";
 import convertDateToJavaFormat from "../../util/DateConvert";
 import fetchData from "../../util/ApiConnection";
+import '../../customStyles.css'
 
 const GeneralInfoForm = () => {
     const [birthday, setBirthday] = useState("");
@@ -247,7 +248,7 @@ const GeneralInfoForm = () => {
                         </CCol>
                     </CRow>
                     <div className="mt-3">
-                        <CButton color="primary" type="submit" >
+                        <CButton className=" custom-btn custom-btn-primary" color="primary" type="submit" >
                             Save All
                         </CButton>
                     </div>

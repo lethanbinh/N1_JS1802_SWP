@@ -11,6 +11,7 @@ import {
 } from '@coreui/react';
 import React, { useState } from 'react';
 import UserStorage from '../../util/UserStorage';
+import '../../customStyles.css'
 
 const AddProduct = () => {
   const [product, setProduct] = useState({
@@ -291,7 +292,7 @@ const AddProduct = () => {
             </CRow>
             <CButton
               color="primary"
-              className="mt-4"
+              className="mt-4 custom-btn custom-btn-primary"
               onClick={handleSubmit}
             >
               Submit Product

@@ -53,14 +53,22 @@ $enable-deprecation-messages: false; /* stylelint-disable-line scss/dollar-varia
     }
 
     // Buttons
-    > .btn,
-    > .btn-group {
+    .btn,
+    .btn-group {
       margin: .25rem .125rem;
+      transition: background-color 0.3s, color 0.3s; /* Thêm hiệu ứng chuyển đổi mượt mà */
     }
-    > .btn-toolbar + .btn-toolbar {
+    
+    .btn:hover,
+    .btn-group:hover {
+      background-color: #007bff; /* Màu nền khi hover */
+      color: #fff; /* Màu chữ khi hover */
+    }
+    
+    .btn-toolbar + .btn-toolbar {
       margin-top: .5rem;
     }
-
+    
     // List groups
     > .list-group {
       max-width: 400px;

@@ -24,6 +24,7 @@ import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
 import convertDateToJavaFormat from '../../util/DateConvert';
 import UserStorage from '../../util/UserStorage';
+import '../../customStyles.css'
 
 const PromotionList = () => {
   const [data, setData] = useState([]);
@@ -227,15 +228,15 @@ const PromotionList = () => {
                       </CTableDataCell>
                       <CTableDataCell>
                         {editingRow === row.id ? (
-                          <CButton color="success" onClick={handleSave}>
+                          <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
                             Save
                           </CButton>
                         ) : (
-                          <CButton color="info" onClick={() => handleEdit(row.id)}>
+                          <CButton className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
                             Edit
                           </CButton>
                         )}
-                        <CButton color="danger" onClick={() => {
+                        <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => {
                           setDeleteId(row.id);
                           setVisible(true);
                         }}>Delete</CButton>
@@ -245,7 +246,7 @@ const PromotionList = () => {
                 </CTableBody>
               </CTable>
             </div>
-            <CButton className="mt-2" color="success" onClick={handleAddNew}>
+            <CButton className='custom-btn custom-btn-success mt-2' color="success" onClick={handleAddNew}>
               Add Promotion
             </CButton>
           </CCardBody>
@@ -264,10 +265,10 @@ const PromotionList = () => {
           <p>Are you sure you want to delete this promotion?</p>
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={() => setVisible(false)}>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
             Cancel
           </CButton>
-          <CButton color="danger" onClick={() => handleDelete(deleteId)}>
+          <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => handleDelete(deleteId)}>
             Delete
           </CButton>
         </CModalFooter>

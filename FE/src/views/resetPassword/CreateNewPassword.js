@@ -15,6 +15,7 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked } from '@coreui/icons'
 import { useNavigate } from 'react-router-dom';
 import fetchData from '../../util/ApiConnection';
+import '../../customStyles.css'
 
 const CreateNewPassword = () => {
   const [password, setPassword] = useState('');
@@ -89,9 +90,9 @@ const CreateNewPassword = () => {
                     />
                   </CInputGroup>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <CButton style={{ color: "white", display: "inline-block", flex: 1, marginRight: "15px" }} color="success" type="submit">Submit</CButton>
-                    <CButton color='danger' style={{ display: "inline-block", flex: 1 }}>
-                      <a style={{ color: "white", textDecoration: "none" }} href='/'>Back to Login</a>
+                    <CButton style={{ display: "inline-block", flex: 1, marginRight: "15px" }} className='custom-btn custom-btn-success' color="success" type="submit">Submit</CButton>
+                    <CButton className='custom-btn custom-btn-danger' color='danger' style={{ display: "inline-block", flex: 1 }}>
+                      <a className='custom-link'href='/'>Back to Login</a>
                     </CButton>
                   </div>
                   <div style={{ color: "red" }}>{message}</div>

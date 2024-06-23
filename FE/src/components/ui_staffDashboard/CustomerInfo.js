@@ -21,7 +21,8 @@ import {
 import React, { useState, useEffect } from 'react';
 import fetchData from "../../util/ApiConnection";
 import convertDateToJavaFormat from '../../util/DateConvert'
-import UserStorage from "../../util/UserStorage"; // Adjust import based on your actual project structure
+import UserStorage from "../../util/UserStorage";
+import '../../customStyles.css'
 
 const CustomerInfo = () => {
     const [data, setData] = useState([]);
@@ -258,15 +259,15 @@ const CustomerInfo = () => {
                                             </CTableDataCell>
                                             <CTableDataCell>
                                                 {editingRow === row.id ? (
-                                                    <CButton color="success" onClick={handleSave}>
+                                                    <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
                                                         Save
                                                     </CButton>
                                                 ) : (
-                                                    <CButton color="info" onClick={() => handleEdit(row.id)}>
+                                                    <CButton className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
                                                         Edit
                                                     </CButton>
                                                 )}
-                                                <CButton className="mx-1" color="danger" onClick={() => handleDelete(row.id)}>
+                                                <CButton className='custom-btn custom-btn-danger mx-1' color="danger" onClick={() => handleDelete(row.id)}>
                                                     Delete
                                                 </CButton>
                                             </CTableDataCell>
@@ -275,7 +276,7 @@ const CustomerInfo = () => {
                                 </CTableBody>
                             </CTable>
                         </div>
-                        <CButton color="success" className="mt-1" onClick={handleAddNew}>
+                        <CButton className='custom-btn custom-btn-success mt-1' color="success" onClick={handleAddNew}>
                             Input Customer Information
                         </CButton>
                     </CCardBody>
@@ -287,11 +288,11 @@ const CustomerInfo = () => {
                     <CModalTitle id="DeleteConfirmationModalLabel">Confirm Deletion</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
-                    <p>Are you sure you want to delete this account?</p>
+                    <p>Are you sure you want to delete this customer?</p>
                 </CModalBody>
                 <CModalFooter>
-                    <CButton color="secondary" onClick={() => setVisible(false)}>Cancel</CButton>
-                    <CButton color="danger" onClick={confirmDelete}>Delete</CButton>
+                    <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>Cancel</CButton>
+                    <CButton className='custom-btn custom-btn-danger' color="danger" onClick={confirmDelete}>Delete</CButton>
                 </CModalFooter>
             </CModal>
         </CRow>
