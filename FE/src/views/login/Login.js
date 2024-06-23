@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { cilLockLocked, cilUser } from '@coreui/icons'
+import CIcon from '@coreui/icons-react'
 import {
   CButton,
   CCard,
@@ -13,11 +13,11 @@ import {
   CInputGroupText,
   CRow,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
-import UserStorage from '../../util/UserStorage'
-import fetchData from '../../util/ApiConnection'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import '../../customStyles.css'
+import fetchData from '../../util/ApiConnection'
+import UserStorage from '../../util/UserStorage'
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -82,8 +82,8 @@ const Login = () => {
       if (!/[A-Z]/.test(password)) {
         errors.password = 'Password must contain at least one uppercase letter (T7)';
       }
-      if (password.length < 8) {
-        errors.password = 'Password must be at least 8 characters long (T8)';
+      if (password.length < 6) {
+        errors.password = 'Password must be at least 6 characters long (T8)';
       }
       if (password.startsWith(' ')) {
         errors.password = 'First character cannot be a space (T9)';
