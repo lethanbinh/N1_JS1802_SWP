@@ -131,10 +131,10 @@ const StallProduct = () => {
                           <CTableDataCell>{row.status}</CTableDataCell>
                           <CTableDataCell>{row.stallLocation}</CTableDataCell>
                           <CTableDataCell>
-                            <img src={row.barcode} style={{ width: 'auto', height: '200px' }} />
+                            <img src={row.barCode} style={{ width: 'auto', height: '50px' }} />
                           </CTableDataCell>
                           <CTableDataCell>
-                            <img src={row.image} style={{ width: 'auto', height: '200px' }} /> {/* Display image */}
+                            <img src={row.image} style={{ width: 'auto', height: '50px' }} /> {/* Display image */}
                           </CTableDataCell>
                         </CTableRow>
                       ))
