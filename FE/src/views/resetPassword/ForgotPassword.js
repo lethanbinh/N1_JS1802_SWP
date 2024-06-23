@@ -18,6 +18,7 @@ import fetchData from '../../util/ApiConnection';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('')
   const [emailMessage, setEmailMessage] = useState('')
   const navigate = useNavigate();
 
@@ -27,11 +28,14 @@ const ForgotPassword = () => {
     fetchData(`http://localhost:8080/api/v1/auth/send-recover/${email}`)
       .then(data => {
         if (data.status === 'ERROR') {
-          setEmailMessage("Email has not been registered or invalid");
+          setEmailError("Email has not been registered or invalid");
+          setEmailMessage("");
         } else {
           setEmailMessage("An email reset password was sent. Please check your email!!!");
+          setEmailError("");
         }
       })
+
   };
 
   return (
@@ -59,7 +63,8 @@ const ForgotPassword = () => {
                     <CButton color="success" type="submit">Send Email</CButton>
                   </div>
 
-                  <div style={{ color: 'red' }} className='email-message'>{emailMessage}</div>
+                  <div style={{ color: 'red' }} className='email-error'>{emailError}</div>
+                  <div style={{ color: 'green' }} className='email-meessage'>{emailMessage}</div>
                 </CForm>
               </CCardBody>
             </CCard>
