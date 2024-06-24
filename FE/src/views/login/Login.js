@@ -36,16 +36,22 @@ const Login = () => {
 
     fetchData("http://localhost:8080/api/v1/auth/login", 'POST', { username, password })
       .then(data => {
-        if (data.status === 'SUCCESS') {
-          UserStorage.storeAuthenticatedUser(
-            data.payload.username,
-            data.payload.accessToken,
-            data.payload.refreshToken,
-            data.payload.roleName,
-            data.payload.id
-          )
+        if (data !== null) {
+          if (data.status === 'SUCCESS') {
+            UserStorage.storeAuthenticatedUser(
+              data.payload.username,
+              data.payload.accessToken,
+              data.payload.refreshToken,
+              data.payload.roleName,
+              data.payload.id
+            )
 
-          redirectToHomePage(data.payload.roleName);
+            redirectToHomePage(data.payload.roleName);
+          } else {
+            // Handle login failure
+            console.log('Invalid credentials');
+            setErrors({ general: 'Username or password Error' });
+          }
         } else {
           // Handle login failure
           console.log('Invalid credentials');

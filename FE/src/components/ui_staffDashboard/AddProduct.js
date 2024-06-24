@@ -34,11 +34,12 @@ const AddProduct = () => {
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser())
   const [stallOptions, setStallOptions] = useState([])
   const [image, setImage] = useState('')
-
+  const [message, setMessage] = useState('')
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (['purchasePrice', 'sellPrice', 'quantity', 'weight'].includes(name) && value < 0) {
       setError(`${name} must be non-negative.`);
+      setMessage('')
       return;
     }
     setProduct((prevProduct) => ({
@@ -46,6 +47,7 @@ const AddProduct = () => {
       [name]: value
     }));
     setError('');
+    setMessage('')
     console.log(product)
   };
 
@@ -114,7 +116,7 @@ const AddProduct = () => {
 
             fetchData('http://localhost:8080/api/v1/products', 'POST', savedProduct, userInfo.accessToken)
               .then((response) => {
-                console.log(response)
+                setMessage('Add product successfully')
               })
               .catch(error => setError(error))
           })
@@ -154,11 +156,6 @@ const AddProduct = () => {
             <strong>Add Product</strong>
           </CCardHeader>
           <CCardBody>
-            {error && (
-              <div style={{ color: 'red', marginBottom: '10px' }}>
-                {error}
-              </div>
-            )}
             <CRow>
               <CCol md={6}>
                 <CFormInput
@@ -319,6 +316,17 @@ const AddProduct = () => {
             >
               Submit Product
             </CButton>
+
+            {error && (
+              <div style={{ color: 'red', marginBottom: '10px' }}>
+                {error}
+              </div>
+            )}
+            {message && (
+              <div style={{ color: 'green', marginBottom: '10px' }}>
+                {message}
+              </div>
+            )}
           </CCardBody>
         </CCard>
       </CCol>

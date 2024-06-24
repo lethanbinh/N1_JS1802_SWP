@@ -126,6 +126,10 @@ public class OrderServiceImpl implements OrderService {
             int productId = orderDetailRequest.getProductId();
             int quantity = orderDetailRequest.getProductQuantity();
             Product product = productRepository.findById(productId);
+            if (product.getQuantity() >= quantity) {
+                product.setQuantity(product.getQuantity() - quantity);
+                productRepository.saveAndFlush(product);
+            }
 
             OrderDetail orderDetail = productOrderDetailMap.getOrDefault(productId, new OrderDetail());
             orderDetail.setProduct(product);
@@ -146,7 +150,7 @@ public class OrderServiceImpl implements OrderService {
             customer.setCreateDate(new Date());
             customer.setUpdateDate(new Date());
             customer.setPhone(phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
-            customer.setBonusPoint(bonusPoint);
+            customer.setBonusPoint(customer.getBonusPoint() + bonusPoint);
 
             customer = customerRepository.saveAndFlush(customer);
         } else {
@@ -157,7 +161,7 @@ public class OrderServiceImpl implements OrderService {
             customer.setStatus(orderRequest.getCustomerRequest().isStatus());
             customer.setUpdateDate(new Date());
             customer.setPhone(phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
-            customer.setBonusPoint(bonusPoint);
+            customer.setBonusPoint(customer.getBonusPoint() + bonusPoint);
 
             customer = customerRepository.saveAndFlush(customer);
         }

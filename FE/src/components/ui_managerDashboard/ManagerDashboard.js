@@ -95,7 +95,7 @@ const ManagerDashboard = () => {
     return (
         <div className="container-fluid" style={{ padding: '20px' }}>
             <div className="d-flex justify-content-between mb-4" style={{ alignItems: 'center' }}>
-                <div>
+                <div style={{width: "50%", display: 'flex', alignItems: 'center'}}>
                     <label style={{ marginRight: '10px' }}>Start Date: </label>
                     <DatePicker
                         selected={startDate}
@@ -104,7 +104,7 @@ const ManagerDashboard = () => {
                         className="form-control"
                     />
                 </div>
-                <div>
+                <div style={{width: "50%", display: 'flex', alignItems: 'center'}}>
                     <label style={{ marginRight: '10px' }}>End Date: </label>
                     <DatePicker
                         selected={endDate}
@@ -113,9 +113,6 @@ const ManagerDashboard = () => {
                         minDate={startDate}
                         className="form-control"
                     />
-                </div>
-                <div>
-                    <CButton className='custom-btn custom-btn-primary' color="primary" onClick={() => loadData(startDate, endDate)}>Load Data</CButton>
                 </div>
             </div>
 

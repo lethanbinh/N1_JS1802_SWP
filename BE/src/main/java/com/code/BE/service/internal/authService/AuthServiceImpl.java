@@ -1,5 +1,7 @@
 package com.code.BE.service.internal.authService;
 
+import com.code.BE.constant.ErrorMessage;
+import com.code.BE.exception.InvalidTokenException;
 import com.code.BE.model.dto.request.AuthRequest;
 import com.code.BE.model.dto.response.AuthResponse;
 import com.code.BE.model.entity.ConfirmationToken;
@@ -69,6 +71,7 @@ public class AuthServiceImpl implements AuthService {
 
                 return authResponse;
             }
+            throw new InvalidTokenException(ErrorMessage.LOGIN_ERROR);
         } catch (Exception ex) {
 //            AuthResponse authResponse = new AuthResponse();
 //            authResponse.setAccessToken("Username or Password Error");
@@ -79,7 +82,6 @@ public class AuthServiceImpl implements AuthService {
 
             throw ex;
         }
-        return null;
     }
 
     @Override

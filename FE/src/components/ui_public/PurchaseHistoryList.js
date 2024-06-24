@@ -31,8 +31,13 @@ const PurchaseHistoryList = () => {
     try {
       fetchData(`http://localhost:8080/api/v1/orders`, 'GET', null, userInfo.accessToken)
         .then((data) => {
-          console.log(data)
-          setData(data.payload)
+          data.payload.forEach(element => {
+            fetchData(`http://localhost:8080/api/v1/users/id/${element.staffId}`, 'GET', null, userInfo.accessToken)
+              .then(user => {
+                element.staffName = user.payload.fullName
+                setData(prevData => [...prevData, element])
+              })
+          });
         }
         )
       setError(null)
@@ -69,7 +74,7 @@ const PurchaseHistoryList = () => {
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Type</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Create Date</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Address</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Staff ID</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Staff Name</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Final Price</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Tax</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Custom Give</CTableHeaderCell>
@@ -87,7 +92,7 @@ const PurchaseHistoryList = () => {
                       <CTableDataCell>{row.type}</CTableDataCell>
                       <CTableDataCell>{row.createDate}</CTableDataCell>
                       <CTableDataCell>{row.address}</CTableDataCell>
-                      <CTableDataCell>{row.staffId}</CTableDataCell>
+                      <CTableDataCell>{row.staffName}</CTableDataCell>
                       <CTableDataCell>{row.finalPrice}</CTableDataCell>
                       <CTableDataCell>{row.tax}</CTableDataCell>
                       <CTableDataCell>{row.customerGiveMoney}</CTableDataCell>
