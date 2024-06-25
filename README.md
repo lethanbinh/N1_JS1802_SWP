@@ -108,25 +108,20 @@ The software is designed to manage jewelry sales for a company operating a singl
 | Le Thanh Binh    | UC-20    | Create Staff               |
 | Nguyen Tran Khanh Ha    | UC-21    | Edit Staff                 |
 | Nguyen Tran Khanh Ha    | UC-22    | Delete Staff               |
-| Luu Thien An    | UC-35    | Create Promotion           |
+| Le Xuan Phuong Nam    | UC-35    | Create Promotion           |
 | Luu Thien An    | UC-37    | Update Promotion           |
 | Tran Nhat Quang    | UC-38    | Delete Promotion           |
-| Tran Nhat Quang    | UC-29    | Edit Policies              |
-| Le Xuan Phuong Nam    | UC-30    | Delete Policies            |
-| Le Xuan Phuong Nam    | UC-23    | Create Orders              |
-| Nguyen Thanh Phong    | UC-24    | Update Orders              |
-| Nguyen Thanh Phong    | UC-26    | Delete Orders              |
+| Nguyen Thanh Phong    | UC-29    | Edit Policies              |
+| Luu Thien An    | UC-23    | Create Orders              |
 ### Table 4: Member Assignment for Sprint 3
 | Member Name | User Story ID | Description            |
 |-------------|---------------|------------------------|
-| Nguyen Thanh Phong    | UC-31    | Print bill from Order      |
 | Nguyen Thanh Phong    | UC-33    | Export bills               |
-| Nguyen Tran Khanh Ha    | UC-36    | Import product by barcode  |
 | Le Thanh Binh    | UC-39    | Apply Promotion to Order   |
 | Luu Thien An    | UC-40    | Add stall                  |
 | Luu Thien An    | UC-41    | Update stall               |
 | Tran Nhat Quang    | UC-53    | Add customers              |
-| Tran Nhat Quang    | UC-54    | Update customers           |
+| Nguyen Tran Khanh Ha    | UC-54    | Update customers           |
 | Le Xuan Phuong Nam    | UC-55    | Delete customers           |
 ### Table 5: Member Assignment for Sprint 4
 | Member Name | User Story ID | Description            |
