@@ -65,7 +65,6 @@ public class UserController {
         }
     }
 
-    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_STAFF')")
     @GetMapping(value = "/username/{username}")
     public ResponseEntity<ApiResponse<UserResponse>> findByUsername(@PathVariable String username) throws Exception {
         try {
@@ -82,7 +81,6 @@ public class UserController {
         }
     }
 
-    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_STAFF')")
     @GetMapping(value = "/email/{email}")
     public ResponseEntity<ApiResponse<UserResponse>> findByEmail(@PathVariable String email) throws Exception {
         try {
@@ -99,7 +97,6 @@ public class UserController {
         }
     }
 
-    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_STAFF')")
     @GetMapping(value = "/roleName/{roleName}")
     public ResponseEntity<ApiResponse<List<UserResponse>>> findByRoleName(@PathVariable String roleName) throws Exception {
         try {
