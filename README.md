@@ -11,7 +11,7 @@
   - [Table 2: Member Assignment for Sprint 1](#table-2-member-assignment-for-sprint-1)
 
 ## Project Description
-The software is designed to manage jewelry sales for a company operating a single store with multiple counters. It handles order creation, invoicing, and warranty slip printing. Products can be inputted via barcode scanning or direct code entry. The software supports pricing calculations based on gold price, labor costs, and stone prices, along with promotional management and customer-specific discounts.
+The software is designed to manage jewelry sales for a company operating a single store with multiple counters. It handles order creation, invoicing, and warranty slip printing. Products can be inputted via barcode scanning or direct code entry. The software supports pricing calculations based on gold prices, labor costs, and stone prices, along with promotional management and customer-specific discounts.
 
 ## Major Features (Epics)
 - **Manage Account**: Includes functionalities like login, logout, password reset, view account, create account, edit account, and delete account.
@@ -23,7 +23,7 @@ The software is designed to manage jewelry sales for a company operating a singl
 - **Manage Stall**: Add, update, and view stalls.
 - **Manage Customers**: Add, update, delete, and view customers.
 - **Manage Products**: Add, edit, view, and delete products in the stall.
-- **Dashboard**: Product, staff, revenue, and orders dashboards.
+- **Dashboard**: Staff, and Manager dashboards.
 
 ## Technologies Used
 - **Backend**:
@@ -85,11 +85,9 @@ The software is designed to manage jewelry sales for a company operating a singl
 |          | UC-44    | Edit Product               |
 |          | UC-45    | View Products in Stall     |
 |          | UC-46    | Delete Product             |
-|          | UC-47    | Product Dashboard          |
+|          | UC-47    | Manager Dashboard          |
 |          | UC-48    | Staff Dashboard            |
-|          | UC-49    | Revenue Dashboard          |
 |          | UC-50    | Create Policies            |
-|          | UC-51    | Orders Dashboard           |
 
 ### Table 2: Member Assignment for Sprint 1
 | Member Name | User Story ID | Description            |
@@ -103,3 +101,35 @@ The software is designed to manage jewelry sales for a company operating a singl
 | Le Xuan Phuong Nam    | UC-16   | Delete Account         |
 | Nguyen Thanh Phong    | UC-17   | View Profile           |
 | Nguyen Thanh Phong    | UC-18   | Update Profile         |
+### Table 3: Member Assignment for Sprint 2
+| Member Name | User Story ID | Description            |
+|-------------|---------------|------------------------|
+| Le Thanh Binh    | UC-19    | Search Customer               |
+| Le Thanh Binh    | UC-20    | Create Staff               |
+| Nguyen Tran Khanh Ha    | UC-21    | Edit Staff                 |
+| Nguyen Tran Khanh Ha    | UC-22    | Delete Staff               |
+| Le Xuan Phuong Nam    | UC-35    | Create Promotion           |
+| Luu Thien An    | UC-37    | Update Promotion           |
+| Tran Nhat Quang    | UC-38    | Delete Promotion           |
+| Nguyen Thanh Phong    | UC-29    | Edit Policies              |
+| Luu Thien An    | UC-23    | Create Orders              |
+### Table 4: Member Assignment for Sprint 3
+| Member Name | User Story ID | Description            |
+|-------------|---------------|------------------------|
+| Nguyen Thanh Phong    | UC-33    | Export bills               |
+| Le Thanh Binh    | UC-39    | Apply Promotion to Order   |
+| Luu Thien An    | UC-40    | Add stall                  |
+| Luu Thien An    | UC-41    | Update stall               |
+| Tran Nhat Quang    | UC-53    | Add customers              |
+| Nguyen Tran Khanh Ha    | UC-54    | Update customers           |
+| Le Xuan Phuong Nam    | UC-55    | Delete customers           |
+### Table 5: Member Assignment for Sprint 4
+| Member Name | User Story ID | Description            |
+|-------------|---------------|------------------------|
+| Nguyen Thanh Phong    | UC-42    | Add Product to Stall       |
+| Le Xuan Phuong Nam    | UC-44    | Edit Product               |
+| Le Xuan Phuong Nam    | UC-45    | View Products in Stall     |
+| Nguyen Tran Khanh Ha    | UC-46    | Delete Product             |
+| Luu Thien An    | UC-48    | Staff Dashboard            |
+| Le Thanh Binh    | UC-49    | Manager Dashboard          |
+| Tran Nhat Quang    | UC-50    | Create Policies            |
