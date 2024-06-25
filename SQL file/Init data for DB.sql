@@ -31,18 +31,18 @@ VALUES
 ('Easter Eggstravaganza', 0.2, '2024-04-21', 1500.00, 200.00, 'Easter Sale', '2024-04-01', true),
 ('Halloween Spooktacular', 0.2, '2024-11-01', 1200.00, 150.00, 'Halloween Sale', '2024-10-15', true);
 
-INSERT INTO `customer` (`address`, `birthday`, `create_date`, `email`, `full_name`, `phone`, `status`, `update_date`)
+INSERT INTO `customer` (`address`, `birthday`, `create_date`, `email`, `full_name`, `phone`, `status`, `update_date`, `bonus_point`)
 VALUES
-('123 Maple St', '1990-01-01', '2024-06-01', 'customer1@example.com', 'John Doe', '0791234567', 1, '2024-06-01'),
-('456 Oak St', '1985-02-14', '2024-06-02', 'customer2@example.com', 'Jane Smith', '0791234568', 1, '2024-06-02'),
-('789 Pine St', '1975-03-30', '2024-06-03', 'customer3@example.com', 'Alice Johnson', '0791234569', 1, '2024-06-03'),
-('101 Elm St', '1988-04-25', '2024-06-04', 'customer4@example.com', 'Bob Brown', '0791234570', 1, '2024-06-04'),
-('202 Birch St', '1992-05-15', '2024-06-05', 'customer5@example.com', 'Charlie Davis', '0791234571', 1, '2024-06-05'),
-('303 Cedar St', '1980-06-20', '2024-06-06', 'customer6@example.com', 'Diana Evans', '0791234572', 1, '2024-06-06'),
-('404 Spruce St', '1995-07-10', '2024-06-07', 'customer7@example.com', 'Edward Wilson', '0791234573', 1, '2024-06-07'),
-('505 Fir St', '1983-08-18', '2024-06-08', 'customer8@example.com', 'Fiona Clark', '0791234574', 1, '2024-06-08'),
-('606 Redwood St', '1998-09-09', '2024-06-09', 'customer9@example.com', 'George Hall', '0791234575', 1, '2024-06-09'),
-('707 Cypress St', '1993-10-11', '2024-06-10', 'customer10@example.com', 'Hannah King', '0791234576', 1, '2024-06-10');
+('123 Maple St', '1990-01-01', '2024-06-01', 'customer1@example.com', 'John Doe', '0791234567', 1, '2024-06-01', 0),
+('456 Oak St', '1985-02-14', '2024-06-02', 'customer2@example.com', 'Jane Smith', '0791234568', 1, '2024-06-02', 0),
+('789 Pine St', '1975-03-30', '2024-06-03', 'customer3@example.com', 'Alice Johnson', '0791234569', 1, '2024-06-03', 0),
+('101 Elm St', '1988-04-25', '2024-06-04', 'customer4@example.com', 'Bob Brown', '0791234570', 1, '2024-06-04', 0),
+('202 Birch St', '1992-05-15', '2024-06-05', 'customer5@example.com', 'Charlie Davis', '0791234571', 1, '2024-06-05', 0),
+('303 Cedar St', '1980-06-20', '2024-06-06', 'customer6@example.com', 'Diana Evans', '0791234572', 1, '2024-06-06', 0),
+('404 Spruce St', '1995-07-10', '2024-06-07', 'customer7@example.com', 'Edward Wilson', '0791234573', 1, '2024-06-07', 0),
+('505 Fir St', '1983-08-18', '2024-06-08', 'customer8@example.com', 'Fiona Clark', '0791234574', 1, '2024-06-08', 0),
+('606 Redwood St', '1998-09-09', '2024-06-09', 'customer9@example.com', 'George Hall', '0791234575', 1, '2024-06-09', 0),
+('707 Cypress St', '1993-10-11', '2024-06-10', 'customer10@example.com', 'Hannah King', '0791234576', 1, '2024-06-10', 0);
 
 INSERT INTO product (barcode, barcode_text, code, description, image, name, purchase_price, qrcode, quantity, sell_price, size, stall_location, type, weight, stall_id, status) VALUES
 ('https://example.com/barcode_1.png', '123456789001', 'J001', 'Elegant gold necklace', 'https://example.com/image_1.png', 'Gold Necklace 1', 200.00, 'https://example.com/qrcode_1.png', 10, 250.00, 'L', 'S1', 'necklace', 0.05, 1, 'SELL'),
@@ -144,9 +144,7 @@ INSERT INTO product (barcode, barcode_text, code, description, image, name, purc
 ('https://example.com/barcode_97.png', '123456789097', 'J097', 'Emerald necklace', 'https://example.com/image_97.png', 'Emerald Necklace 97', 280.00, 'https://example.com/qrcode_97.png', 10, 330.00, 'L', 'S7', 'necklace', 0.97, 2, 'SELL'),
 ('https://example.com/barcode_98.png', '123456789098', 'J098', 'Ruby ring', 'https://example.com/image_98.png', 'Ruby Ring 98', 220.00, 'https://example.com/qrcode_98.png', 9, 270.00, 'M', 'S8', 'ring', 0.98, 3, 'SELL'),
 ('https://example.com/barcode_99.png', '123456789099', 'J099', 'Gold bracelet', 'https://example.com/image_99.png', 'Gold Bracelet 99', 210.00, 'https://example.com/qrcode_99.png', 10, 260.00, 'S', 'S9', 'bracelet', 0.99, 4, 'SELL'),
-('https://example.com/barcode_100.png', '123456789100', 'J100', 'Silver pendant', 'https://example.com/image_100.png', 'Silver Pendant 100', 130.00, 'https://example.com/qrcode_100.png', 12, 180.00, 'L', 'S10', 'pendant', 1.00, 5, 'SELL');-- Xóa dữ liệu hiện tại trong bảng `order_detail` và `orders`
-DELETE FROM order_detail;
-DELETE FROM orders;
+('https://example.com/barcode_100.png', '123456789100', 'J100', 'Silver pendant', 'https://example.com/image_100.png', 'Silver Pendant 100', 130.00, 'https://example.com/qrcode_100.png', 12, 180.00, 'L', 'S10', 'pendant', 1.00, 5, 'SELL');
 
 -- Thêm lại dữ liệu cho bảng `orders` với customer_give_money lớn hơn final_price và refund_money được tính đúng, type được cập nhật
 INSERT INTO orders (address, create_date, customer_give_money, description, final_price, refund_money, status, tax, total_bonus_point, total_price, type, customer_id, promotion_id, staff_id) VALUES
