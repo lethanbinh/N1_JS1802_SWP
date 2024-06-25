@@ -104,7 +104,7 @@ The software is designed to manage jewelry sales for a company operating a singl
 ### Table 3: Member Assignment for Sprint 2
 | Member Name | User Story ID | Description            |
 |-------------|---------------|------------------------|
-| Le Thanh Binh    | UC-19    | Search Staff               |
+| Le Thanh Binh    | UC-19    | Search Customer               |
 | Le Thanh Binh    | UC-20    | Create Staff               |
 | Nguyen Tran Khanh Ha    | UC-21    | Edit Staff                 |
 | Nguyen Tran Khanh Ha    | UC-22    | Delete Staff               |
