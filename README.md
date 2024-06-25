@@ -117,7 +117,6 @@ The software is designed to manage jewelry sales for a company operating a singl
 | Member Name | User Story ID | Description            |
 |-------------|---------------|------------------------|
 | Nguyen Thanh Phong    | UC-33    | Export bills               |
-| Le Thanh Binh    | UC-39    | Apply Promotion to Order   |
 | Luu Thien An    | UC-40    | Add stall                  |
 | Luu Thien An    | UC-41    | Update stall               |
 | Tran Nhat Quang    | UC-53    | Add customers              |
@@ -129,7 +128,6 @@ The software is designed to manage jewelry sales for a company operating a singl
 | Nguyen Thanh Phong    | UC-42    | Add Product to Stall       |
 | Le Xuan Phuong Nam    | UC-44    | Edit Product               |
 | Le Xuan Phuong Nam    | UC-45    | View Products in Stall     |
-| Nguyen Tran Khanh Ha    | UC-46    | Delete Product             |
-| Luu Thien An    | UC-48    | Staff Dashboard            |
+| Le Thanh Binh    | UC-48    | Staff Dashboard            |
 | Le Thanh Binh    | UC-49    | Manager Dashboard          |
 | Tran Nhat Quang    | UC-50    | Create Policies            |
