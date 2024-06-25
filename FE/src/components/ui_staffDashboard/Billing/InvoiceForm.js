@@ -10,13 +10,16 @@ import {
   CTableBody,
   CTableHead,
   CTableHeaderCell,
+  CFormSelect,
   CTableRow
 } from '@coreui/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { uid } from 'uid';
 import InvoiceItem from './InvoiceItem';
 import InvoiceModal from './InvoiceModal';
 import incrementString from './incrementString';
+import  '../../../util/ApiConnection'
+import '../../../util/UserStorage'
 
 const date = new Date();
 const today = date.toLocaleDateString('en-GB', {
@@ -31,7 +34,11 @@ const InvoiceForm = () => {
   const [tax, setTax] = useState('');
   const [invoiceNumber, setInvoiceNumber] = useState(1);
   const [cashierName, setCashierName] = useState('');
-  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [transactionType, setTransactionType] = useState('SELL');
+  const [orderStatus, setOrderStatus] = useState('PENDING');
+  const [barcode, setBarcode] = useState('');
+
   const [items, setItems] = useState([
     {
       id: uid(6),
@@ -40,6 +47,44 @@ const InvoiceForm = () => {
       price: '1.00',
     },
   ]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Prepare request body
+    const requestBody = {
+      cashierName,
+      customerGiveMoney: 0, // Assuming this is always 0 based on your initial data
+      tax: parseFloat(tax),
+      promotionId: 0, // Assuming no promotion for now
+      status: orderStatus,
+      type: transactionType,
+      customerRequest: {
+        fullName: cashierName, // Use cashierName or update as per your requirement
+        phone: customerPhone,
+        email: 'string@gmail.com', // Example email, update if needed
+        address: '', // Update if required
+        birthday: new Date().toISOString(), // Example date, update as per your requirement
+        status: true,
+        bonusPoint: 0, // Assuming no bonus point logic
+      },
+      orderDetailRequestList: items.map((item) => ({
+        productQuantity: item.qty,
+        productId: item.id, // Assuming id is productId based on your initial data
+      })),
+    };
+
+    try {
+      // Make API call
+      const response = await fetchData('http://localhost:8080/api/v1/orders', 'POST', null,  requestBody);
+      console.log('Order created successfully:', response);
+
+      // Handle success scenario, e.g., show confirmation, clear form, etc.
+    } catch (error) {
+      console.error('Error creating order:', error);
+      // Handle error scenario, e.g., show error message to user
+    }
+  };
 
   const reviewInvoiceHandler = (event) => {
     event.preventDefault();
@@ -57,13 +102,15 @@ const InvoiceForm = () => {
       },
     ]);
   };
+
   const handleReviewInvoice = () => {
-    setIsOpen(true); // Hàm xử lý khi click vào button Review Invoice
+    setIsOpen(true);
   };
+
   const addItemHandler = () => {
     const id = uid(6);
-    setItems((prevItem) => [
-      ...prevItem,
+    setItems((prevItems) => [
+      ...prevItems,
       {
         id: id,
         name: '',
@@ -74,7 +121,7 @@ const InvoiceForm = () => {
   };
 
   const deleteItemHandler = (id) => {
-    setItems((prevItem) => prevItem.filter((item) => item.id !== id));
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const edtiItemHandler = (event) => {
@@ -84,23 +131,45 @@ const InvoiceForm = () => {
       value: event.target.value,
     };
 
-    const newItems = items.map((items) => {
-      for (const key in items) {
-        if (key === editedItem.name && items.id === editedItem.id) {
-          items[key] = editedItem.value;
-        }
+    const newItems = items.map((item) => {
+      if (item.id === editedItem.id) {
+        return { ...item, [editedItem.name]: editedItem.value };
       }
-      return items;
+      return item;
     });
 
     setItems(newItems);
   };
 
+  const handleBarcodeChange = (event) => {
+    setBarcode(event.target.value);
+  };
+
+  useEffect(() => {
+    if (barcode.length > 0 && productData[barcode]) {
+      const product = productData[barcode];
+      const id = uid(6);
+      setItems((prevItems) => [
+        ...prevItems,
+        {
+          id: id,
+          name: product.name,
+          qty: 1,
+          price: product.price,
+        },
+      ]);
+      setBarcode('');
+    }
+  }, [barcode]);
+
   const subtotal = items.reduce((prev, curr) => {
-    if (curr.name.trim().length > 0)
-      return prev + Number(curr.price * Math.floor(curr.qty));
-    else return prev;
+    if (curr.name.trim().length > 0) {
+      return prev + Number(curr.price) * Math.floor(curr.qty);
+    } else {
+      return prev;
+    }
   }, 0);
+
   const taxRate = (tax * subtotal) / 100;
   const discountRate = (discount * subtotal) / 100;
   const total = subtotal - discountRate + taxRate;
@@ -108,9 +177,9 @@ const InvoiceForm = () => {
   return (
     <CRow
       className="relative flex flex-col px-2 md:flex-row"
-      onSubmit={reviewInvoiceHandler}
+      onSubmit={handleSubmit}
     >
-      <CCard className='my-6 flex-1 space-y-2 rounded-lg  p-4 shadow-sm sm:space-y-4 md:p-6'>
+      <CCard className='my-6 flex-1 space-y-2 rounded-lg p-4 shadow-sm sm:space-y-4 md:p-6'>
         <CCardBody>
           <CRow className="flex flex-col justify-between space-y-2 border-b border-gray-900/10 pb-4 md:flex-row md:items-center md:space-y-0">
             <CCol className="flex space-x-2">
@@ -118,23 +187,23 @@ const InvoiceForm = () => {
               <span>{today}</span>
             </CCol>
             <CCol className="flex items-center space-x-2">
-              <strong className="font-bold" htmlFor="invoiceNumber">
-                Invoice Number:
+              <strong className="font-bold" htmlFor="transactionType">
+                Order Type:
               </strong>
-              <CFormInput
+              <CFormSelect
                 required
                 className="max-w-[130px]"
-                type="number"
-                name="invoiceNumber"
-                id="invoiceNumber"
-                min="1"
-                step="1"
-                value={invoiceNumber}
-                onChange={(event) => setInvoiceNumber(event.target.value)}
-              />
+                name="transactionType"
+                id="transactionType"
+                value={transactionType}
+                onChange={(event) => setTransactionType(event.target.value)}
+              >
+                <option value="SELL">SELL</option>
+                <option value="PURCHASE">PURCHASE</option>
+              </CFormSelect>
             </CCol>
           </CRow>
-          {/* </div> */}
+
           <h2 className="text-center text-lg font-bold">INVOICE</h2>
           <CRow className="grid grid-cols-2 gap-2 pt-4 pb-8">
             <CCol>
@@ -157,44 +226,65 @@ const InvoiceForm = () => {
             </CCol>
             <CCol>
               <strong
-                htmlFor="customerName"
+                htmlFor="customerPhone"
                 className="col-start-2 row-start-1 text-sm font-bold md:text-base"
               >
-                Customer:
+                Phone Customer:
               </strong>
               <CFormInput
                 required
                 className="flex-1"
-                placeholder="Customer name"
-                type="text"
-                name="customerName"
-                id="customerName"
-                value={customerName}
-                onChange={(event) => setCustomerName(event.target.value)}
+                placeholder="Phone Customer"
+                type="tel"
+                name="customerPhone"
+                id="customerPhone"
+                value={customerPhone}
+                onChange={(event) => setCustomerPhone(event.target.value)}
+                pattern="[0-9]{10}" // Hoặc thay đổi mẫu để phù hợp với định dạng số điện thoại của bạn
+                title="Please enter a valid phone number (10 digits)"
               />
             </CCol>
             <CCol>
               <strong
-                htmlFor="phone"
+                htmlFor="orderStatus"
                 className="text-sm font-bold sm:text-base"
               >
-                Phone:
+                Order Status:
               </strong>
-              <CFormInput
+              <CFormSelect
                 required
                 className="flex-1"
-                placeholder="Phone"
-                type="string"
-                name="cashierName"
-                id="cashierName"
-                value={cashierName}
-                onChange={(event) => setCashierName(event.target.value)}
+                name="orderStatus"
+                id="orderStatus"
+                value={orderStatus}
+                onChange={(event) => setOrderStatus(event.target.value)}
+              >
+                <option value="PENDING">PENDING</option>
+                <option value="CONFIRMED">CONFIRMED</option>
+                <option value="SHIPPED">SHIPPED</option>
+                <option value="DELIVERED">DELIVERED</option>
+                <option value="CANCELLED">CANCELLED</option>
+              </CFormSelect>
+            </CCol>
+          </CRow>
+
+          <CRow className="mb-4">
+            <CCol>
+              <strong htmlFor="barcode" className="text-sm font-bold sm:text-base">
+                Barcode:
+              </strong>
+              <CFormInput
+                className="flex-1"
+                placeholder="Scan or enter barcode"
+                type="text"
+                name="barcode"
+                id="barcode"
+                value={barcode}
+                onChange={handleBarcodeChange}
               />
             </CCol>
           </CRow>
-          <CTableRow className="border-b border-gray-900/10 text-sm md:text-base">
-              <CTableHead><strong>BARCODE</strong></CTableHead>
-            </CTableRow>
+
           <CTable className="w-full p-4 text-left">
             <CTableHead>
               <CTableRow className="border-b border-gray-900/10 text-sm md:text-base">
@@ -219,7 +309,7 @@ const InvoiceForm = () => {
             </CTableBody>
           </CTable>
           <CButton
-            color="primary" // Tương đương với bg-blue-500
+            color="primary"
             className="rounded px-4 py-2 text-sm text-white shadow"
             onClick={addItemHandler}
           >
@@ -230,20 +320,20 @@ const InvoiceForm = () => {
               <strong className="font-bold me-3">Subtotal:</strong>
               <span>${subtotal.toFixed(2)}</span>
             </CCol>
-            <div className="flex w-full justify-between md:w-1/2">
+            <CCol className="flex w-full justify-between md:w-1/2">
               <strong className="font-bold me-3">Discount:</strong>
               <span>
-                ({discount || '0'}%)${discountRate.toFixed(2)}
+                ({discount || '0'}%) ${discountRate.toFixed(2)}
               </span>
-            </div>
-            <div className="flex w-full justify-between md:w-1/2">
+            </CCol>
+            <CCol className="flex w-full justify-between md:w-1/2">
               <strong className="font-bold me-3">Tax:</strong>
               <span>
-                ({tax || '0'}%)${taxRate.toFixed(2)}
+                ({tax || '0'}%) ${taxRate.toFixed(2)}
               </span>
-            </div>
-            <CRow className="border-t border-gray-900-10 pt-2">
-              <CCol className="flex w-full justify-between md-w-1-2">
+            </CCol>
+            <CRow className="border-t border-gray-900/10 pt-2">
+              <CCol className="flex w-full justify-between md:w-1/2">
                 <strong className="font-bold me-3">Total:</strong>
                 <span className="font-bold">
                   ${total % 1 === 0 ? total : total.toFixed(2)}
@@ -253,10 +343,11 @@ const InvoiceForm = () => {
           </CRow>
         </CCardBody>
       </CCard>
-      <CCard className='my-6 flex-1 space-y-2 rounded-lg  p-4 shadow-sm sm:space-y-4 md:p-6'>
+
+      <CCard className='my-6 flex-1 space-y-2 rounded-lg p-4 shadow-sm sm:space-y-4 md:p-6'>
         <CCardBody className="sticky top-0 z-10 space-y-4 divide-y divide-gray-900/10 pb-8 md:pt-6 md:pl-4">
           <CButton
-            color="primary" // Tương đương với bg-blue-500
+            color="primary"
             className="rounded px-4 py-2 text-sm text-white shadow"
             onClick={handleReviewInvoice}
           >
@@ -268,7 +359,7 @@ const InvoiceForm = () => {
             invoiceInfo={{
               invoiceNumber,
               cashierName,
-              customerName,
+              customerPhone,
               subtotal,
               taxRate,
               discountRate,
@@ -284,7 +375,7 @@ const InvoiceForm = () => {
               </label>
               <CCol className="flex items-center">
                 <CFormInput
-                  className="w-full rounded-r-none  shadow-sm"
+                  className="w-full rounded-r-none shadow-sm"
                   type="number"
                   name="tax"
                   id="tax"
@@ -308,7 +399,7 @@ const InvoiceForm = () => {
               </CFormLabel>
               <div className="flex items-center">
                 <CFormInput
-                  className="w-full rounded-r-none  shadow-sm"
+                  className="w-full rounded-r-none shadow-sm"
                   type="number"
                   name="discount"
                   id="discount"
