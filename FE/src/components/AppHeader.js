@@ -44,11 +44,6 @@ const AppHeader = () => {
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
         <CHeaderNav className="d-none d-md-flex">
-          <CNavItem>
-            <CNavLink to="/home" as={NavLink}>
-              Home
-            </CNavLink>
-          </CNavItem>
           {/* <CNavItem>
             <CNavLink href="/contact">Contacts</CNavLink>
           </CNavItem> */}

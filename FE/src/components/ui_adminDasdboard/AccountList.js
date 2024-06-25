@@ -239,7 +239,7 @@ const AccountList = () => {
                       <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                       <CTableDataCell>{row.username}</CTableDataCell>
                       <CTableDataCell>{row.fullName}</CTableDataCell>
-                      <CTableDataCell>{row.password}</CTableDataCell>
+                      <CTableDataCell>****</CTableDataCell>
                       <CTableDataCell>{row.phone}</CTableDataCell>
                       <CTableDataCell>{row.email}</CTableDataCell>
                       <CTableDataCell>{row.address}</CTableDataCell>
@@ -327,7 +327,7 @@ const AccountList = () => {
         size="lg"
       >
         <CModalHeader>
-          <CModalTitle id="EditModalLabel">{isNew ? "Add Promotion" : "Edit Promotion"}</CModalTitle>
+          <CModalTitle id="EditModalLabel">{isNew ? "Add Account" : "Edit Account"}</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
@@ -346,14 +346,14 @@ const AccountList = () => {
             onChange={handleInputChange}
             className="mb-3"
           />
-          <CFormInput
+          {isNew ? <CFormInput
             type="text"
             name="password"
             label="Password"
             value={formData.password}
             onChange={handleInputChange}
             className="mb-3"
-          />
+          /> : ""}
           <CFormInput
             type="text"
             name="phone"

@@ -52,6 +52,20 @@ const StaffList = () => {
     setFormData({ ...formData, [name]: value })
   }
 
+  const handleAddNew = () => {
+    setFormData({
+      id: '',
+      code: '',
+      name: '',
+      description: '',
+      type: '',
+      status: true,
+    });
+    setErrorMessage('');
+    setEditModalVisible(true);
+    setIsNew(true);
+  };
+
   const handleSave = () => {
     const requiredFields = ['username', 'fullName', 'password', 'phone', 'email', 'address', 'birthday', 'roleName'];
     const emptyFields = requiredFields.filter(field => !formData[field]);
@@ -194,7 +208,7 @@ const StaffList = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Account List</strong>
+            <strong>Staff List</strong>
           </CCardHeader>
           <CCardBody>
             <div style={{ height: '500px', overflow: 'auto' }}>
@@ -242,6 +256,10 @@ const StaffList = () => {
             </div>
           </CCardBody>
         </CCard>
+
+        <CButton className='custom-btn custom-btn-success mt-1' color="success" onClick={handleAddNew}>
+          Add New Staff
+        </CButton>
       </CCol>
 
       <CModal
@@ -304,7 +322,7 @@ const StaffList = () => {
         size="lg"
       >
         <CModalHeader>
-          <CModalTitle id="EditModalLabel">{isNew ? "Add Promotion" : "Edit Promotion"}</CModalTitle>
+          <CModalTitle id="EditModalLabel">{isNew ? "Add Staff" : "Edit Staff"}</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
@@ -371,6 +389,8 @@ const StaffList = () => {
           </CButton>
         </CModalFooter>
       </CModal>
+
+
     </CRow>
   )
 }

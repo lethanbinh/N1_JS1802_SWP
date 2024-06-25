@@ -70,8 +70,12 @@ public class UserServiceImpl implements UserService {
 
         user.setAvatar(IMAGE_API + userRequest.getAvatar());
         user.setRole(role);
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setPhone(phoneNumberUtil.normalizePhoneNumber(userRequest.getPhone()));
-        return userMapper.toResponse(userRepository.saveAndFlush(user));
+
+        UserResponse userResponse = userMapper.toResponse(userRepository.saveAndFlush(user));
+        userResponse.setPassword(userRequest.getPassword());
+        return userResponse;
     }
 
     @Override

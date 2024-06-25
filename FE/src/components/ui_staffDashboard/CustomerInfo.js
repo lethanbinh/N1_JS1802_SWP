@@ -202,7 +202,18 @@ const CustomerInfo = () => {
             <CCol xs={12}>
                 <CCard className="mb-4">
                     <CCardHeader>
-                        <strong>Customer Information</strong>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <strong>Customer Information</strong>
+                            <div>
+                                <CFormInput
+                                    type="text"
+                                    className="form-control form-control-sm"
+                                    placeholder="Search customer by phone..."
+                                    value={search}
+                                    onChange={handleSearch}
+                                />
+                            </div>
+                        </div>
                     </CCardHeader>
                     <CCardBody>
                         <div style={{ height: '500px', overflow: 'auto' }}>
