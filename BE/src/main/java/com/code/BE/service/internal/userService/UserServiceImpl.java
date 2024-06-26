@@ -117,6 +117,7 @@ public class UserServiceImpl implements UserService {
             user.setStatus(profileUpdateRoleAdmin.isStatus());
             user.setRole(roleRepository.findById(profileUpdateRoleAdmin.getRoleId()));
             user.setStall(stallRepository.findById(profileUpdateRoleAdmin.getStallId()));
+            user.setFullName(profileUpdateRoleAdmin.getFullName());
 
             return userMapper.toResponse(userRepository.saveAndFlush(user));
         }

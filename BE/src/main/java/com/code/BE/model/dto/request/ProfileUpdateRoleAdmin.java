@@ -16,6 +16,7 @@ public class ProfileUpdateRoleAdmin {
     private String username;
     @Pattern(regexp = Regex.PHONE_PATTERN)
     private String phone;
+    private String fullName;
 
     @Email
     private String email;
