@@ -18,8 +18,8 @@ import { uid } from 'uid';
 import InvoiceItem from './InvoiceItem';
 import InvoiceModal from './InvoiceModal';
 import incrementString from './incrementString';
-import  '../../../util/ApiConnection'
-import '../../../util/UserStorage'
+import fetchData from '../../../util/ApiConnection';
+import UserStorage from '../../../util/UserStorage';
 
 const date = new Date();
 const today = date.toLocaleDateString('en-GB', {
@@ -32,12 +32,15 @@ const InvoiceForm = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [discount, setDiscount] = useState('');
   const [tax, setTax] = useState('');
+  const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
   const [invoiceNumber, setInvoiceNumber] = useState(1);
   const [cashierName, setCashierName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [transactionType, setTransactionType] = useState('SELL');
   const [orderStatus, setOrderStatus] = useState('PENDING');
   const [barcode, setBarcode] = useState('');
+  const [promotion, setPromotion] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const [items, setItems] = useState([
     {
@@ -48,48 +51,66 @@ const InvoiceForm = () => {
     },
   ]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    // Prepare request body
-    const requestBody = {
-      cashierName,
-      customerGiveMoney: 0, // Assuming this is always 0 based on your initial data
-      tax: parseFloat(tax),
-      promotionId: 0, // Assuming no promotion for now
-      status: orderStatus,
-      type: transactionType,
-      customerRequest: {
-        fullName: cashierName, // Use cashierName or update as per your requirement
-        phone: customerPhone,
-        email: 'string@gmail.com', // Example email, update if needed
-        address: '', // Update if required
-        birthday: new Date().toISOString(), // Example date, update as per your requirement
-        status: true,
-        bonusPoint: 0, // Assuming no bonus point logic
-      },
-      orderDetailRequestList: items.map((item) => ({
-        productQuantity: item.qty,
-        productId: item.id, // Assuming id is productId based on your initial data
-      })),
-    };
-
-    try {
-      // Make API call
-      const response = await fetchData('http://localhost:8080/api/v1/orders', 'POST', null,  requestBody);
-      console.log('Order created successfully:', response);
-
-      // Handle success scenario, e.g., show confirmation, clear form, etc.
-    } catch (error) {
-      console.error('Error creating order:', error);
-      // Handle error scenario, e.g., show error message to user
+  useEffect(() => {
+    if (barcode.length > 0) {
+      fetchData(`http://localhost:8080/api/v1/products/barcode/${barcode}`, "GET", null, userInfo.accessToken)
+        .then((response) => {
+          console.log("Product data fetched successfully:", response);
+          if (response.name) {
+            const id = uid(6);
+            const newItem = {
+              id: id,
+              name: response.name,
+              qty: 1,
+              price: response.price,
+            };
+            setItems(prevItems => [...prevItems, newItem]);
+            setBarcode('');
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching product data:", error.message);
+        });
     }
+  }, [barcode, userInfo.accessToken]);
+
+
+  const handleBarcodeChange = (event) => {
+    setBarcode(event.target.value);
   };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setFormSubmitted(true); // Set form submission state to true
+  };
+
+  useEffect(() => {
+    if (formSubmitted) {
+      const createOrder = async () => {
+        try {
+          const response = await fetchData('http://localhost:8080/api/v1/orders', 'POST',
+            null
+            , userInfo.accessToken);
+          console.log('Order created successfully:', response);
+          // Handle success scenario, e.g., show confirmation, clear form, etc.
+        } catch (error) {
+          console.error('Error creating order:', error);
+          // Handle error scenario, e.g., show error message to user
+        } finally {
+          setFormSubmitted(false); // Reset form submission state
+        }
+      };
+
+      createOrder();
+    }
+  }, [formSubmitted, userInfo.accessToken]);
 
   const reviewInvoiceHandler = (event) => {
     event.preventDefault();
     setIsOpen(true);
   };
+
+
 
   const addNextInvoiceHandler = () => {
     setInvoiceNumber((prevNumber) => incrementString(prevNumber));
@@ -107,24 +128,24 @@ const InvoiceForm = () => {
     setIsOpen(true);
   };
 
-  const addItemHandler = () => {
-    const id = uid(6);
-    setItems((prevItems) => [
-      ...prevItems,
-      {
-        id: id,
-        name: '',
-        qty: 1,
-        price: '1.00',
-      },
-    ]);
-  };
+  // const addItemHandler = () => {
+  //   const id = uid(6);
+  //   setItems((prevItems) => [
+  //     ...prevItems,
+  //     {
+  //       id: id,
+  //       name: '',
+  //       qty: 1,
+  //       price: '1.00',
+  //     },
+  //   ]);
+  // };
 
   const deleteItemHandler = (id) => {
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  const edtiItemHandler = (event) => {
+  const editItemHandler = (event) => {
     const editedItem = {
       id: event.target.id,
       name: event.target.name,
@@ -141,27 +162,6 @@ const InvoiceForm = () => {
     setItems(newItems);
   };
 
-  const handleBarcodeChange = (event) => {
-    setBarcode(event.target.value);
-  };
-
-  useEffect(() => {
-    if (barcode.length > 0 && productData[barcode]) {
-      const product = productData[barcode];
-      const id = uid(6);
-      setItems((prevItems) => [
-        ...prevItems,
-        {
-          id: id,
-          name: product.name,
-          qty: 1,
-          price: product.price,
-        },
-      ]);
-      setBarcode('');
-    }
-  }, [barcode]);
-
   const subtotal = items.reduce((prev, curr) => {
     if (curr.name.trim().length > 0) {
       return prev + Number(curr.price) * Math.floor(curr.qty);
@@ -171,7 +171,7 @@ const InvoiceForm = () => {
   }, 0);
 
   const taxRate = (tax * subtotal) / 100;
-  const discountRate = (discount * subtotal) / 100;
+  const discountRate = (promotion * subtotal) / 100;
   const total = subtotal - discountRate + taxRate;
 
   return (
@@ -303,18 +303,18 @@ const InvoiceForm = () => {
                   qty={item.qty}
                   price={item.price}
                   onDeleteItem={deleteItemHandler}
-                  onEdtiItem={edtiItemHandler}
+                  onEditItem={editItemHandler} // Đã sửa thành onEditItem để phù hợp với InvoiceItem
                 />
               ))}
             </CTableBody>
           </CTable>
-          <CButton
+          {/* <CButton
             color="primary"
             className="rounded px-4 py-2 text-sm text-white shadow"
             onClick={addItemHandler}
           >
             Add Item
-          </CButton>
+          </CButton> */}
           <CRow className="flex flex-col items-end space-y-2 pt-6 mt-10">
             <CCol className="flex w-full justify-between md:w-1/2 pt-2">
               <strong className="font-bold me-3">Subtotal:</strong>
@@ -323,9 +323,10 @@ const InvoiceForm = () => {
             <CCol className="flex w-full justify-between md:w-1/2">
               <strong className="font-bold me-3">Discount:</strong>
               <span>
-                ({discount || '0'}%) ${discountRate.toFixed(2)}
+                ({promotion || '0'}%) ${discountRate.toFixed(2)}
               </span>
             </CCol>
+
             <CCol className="flex w-full justify-between md:w-1/2">
               <strong className="font-bold me-3">Tax:</strong>
               <span>
@@ -391,28 +392,28 @@ const InvoiceForm = () => {
               </CCol>
             </CCol>
             <CCol className="space-y-2">
-              <CFormLabel
-                className="text-sm font-bold md:text-base"
-                htmlFor="discount"
-              >
-                Discount rate:
-              </CFormLabel>
-              <div className="flex items-center">
-                <CFormInput
-                  className="w-full rounded-r-none shadow-sm"
-                  type="number"
-                  name="discount"
-                  id="discount"
-                  min="0"
-                  step="0.01"
-                  placeholder="0.0"
-                  value={discount}
-                  onChange={(event) => setDiscount(event.target.value)}
-                />
-                <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
-                  %
-                </span>
-              </div>
+              <CCol className="flex w-full justify-between md:w-1/2">
+                <strong className="font-bold me-3">Discount:</strong>
+                <CFormSelect
+                  className="w-full"
+                  name="promotion"
+                  id="promotion"
+                  value={promotion}
+                  onChange={(event) => setPromotion(event.target.value)}
+                >
+                  <option value="">None</option>
+                  <option value="10">10% Summer Delight</option>
+                  <option value="20">20% Winter Wonderland</option>
+                  <option value="30">30% Spring Special</option>
+                  <option value="40">40% Autumn Fest</option>
+                  <option value="33">33% New Year Celebration</option>
+                  <option value="12">12% Black Friday Extravaganza</option>
+                  <option value="30">30% Cyber Monday Deals</option>
+                  <option value="40">40% Valentine's Day Sale</option>
+                  <option value="20">20% Easter Sale</option>
+                  <option value="20">20% Halloween Sale</option>
+                </CFormSelect>
+              </CCol>
             </CCol>
           </CRow>
         </CCardBody>

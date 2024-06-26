@@ -1,21 +1,24 @@
 const incrementString = (string) => {
-  // Convert pass args to string
+  // Convert passed argument to string
   const str = string.toString();
-  // Extract string's number
-  let number = str.match(/\d+/) === null ? 0 : str.match(/\d+/)[0];
 
-  // Store number's length
-  const numberLength = number.length;
+  // Extract numeric part of the string
+  let numberPart = str.match(/\d+/); // Find the first sequence of digits
+  let prefix = str.replace(/\d+/, ''); // Extract non-numeric prefix
 
-  // Increment number by 1
-  number = (parseInt(number) + 1).toString();
-
-  // If there were leading 0s, add them again
-  while (number.length < numberLength) {
-    number = '0' + number;
+  if (!numberPart) {
+    // If there's no number part, start with 1
+    numberPart = '1';
+  } else {
+    // Increment the numeric part by converting to number and back to string
+    numberPart = (parseInt(numberPart[0]) + 1).toString();
   }
 
-  return str.replace(/[0-9]/g, '').concat(number);
+  // Pad the number with leading zeros if necessary
+  const paddedNumber = numberPart.padStart(str.length - prefix.length, '0');
+
+  // Concatenate prefix and padded number
+  return prefix + paddedNumber;
 };
 
 export default incrementString;
