@@ -27,7 +27,7 @@ import UserStorage from '../../util/UserStorage'
 
 const StaffList = () => {
   const [data, setData] = useState([])
-
+  const [filteredData, setFilteredData] = useState([])
   const [editingRow, setEditingRow] = useState(null)
   const [formData, setFormData] = useState({})
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser())
@@ -37,7 +37,12 @@ const StaffList = () => {
   const [errorMessage, setErrorMessage] = useState("")
   const [errorModalVisible, setErrorModalVisible] = useState(false)
   const [editModalVisible, setEditModalVisible] = useState(false)
+  const [confirmationModalVisible, setConfirmationModalVisible] = useState(false) //hiện popup confirm add
+  const [confirmationInfo, setConfirmationInfo] = useState({ username: "", password: "" }) //dữ liệu tk mk với popup confirm add
+  const [successModalVisible, setSuccessModalVisible] = useState(false)
+  const [deleteSuccessModalVisible, setDeleteSuccessModalVisible] = useState(false)
   const [isNew, setIsNew] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
 
   const handleEdit = (id) => {
     setEditingRow(id)
@@ -52,14 +57,27 @@ const StaffList = () => {
     setFormData({ ...formData, [name]: value })
   }
 
+  const handleSearchChange = (event) => {
+    const { value } = event.target
+    setSearchTerm(value)
+    if (value === "") {
+      setFilteredData(data)
+    } else {
+      setFilteredData(data.filter(row => row.fullName.toLowerCase().includes(value.toLowerCase())))
+    }
+  }
+
   const handleAddNew = () => {
     setFormData({
       id: '',
-      code: '',
-      name: '',
-      description: '',
-      type: '',
-      status: true,
+      username: '',
+      fullName: '',
+      password: '',
+      phone: '',
+      email: '',
+      address: '',
+      birthday: '',
+      roleName: 'Staff', // Set the role to Staff by default
     });
     setErrorMessage('');
     setEditModalVisible(true);
@@ -121,7 +139,8 @@ const StaffList = () => {
 
     const dataFromInput = newData.find(row => row.id === (isNew ? newData.length : editingRow));
 
-    let roleId = 2;
+    const roleId = 2; // Staff role
+
 
     const savedData = {
       username: dataFromInput.username || "string",
@@ -147,7 +166,6 @@ const StaffList = () => {
       status: dataFromInput.status ? true : false,
       roleId: 2
     }
-    console.log(savedData)
 
     fetchData(`http://localhost:8080/api/v1/users/id/${editingRow}`, 'GET', null, userInfo.accessToken)
       .then((data) => {
@@ -163,22 +181,39 @@ const StaffList = () => {
     setEditModalVisible(false)
     setIsNew(false)
 
-    setTimeout(() => {
-      refreshData()
-    }, 1000)
+    let filtered = newData;
+    if (searchTerm !== "") {
+      filtered = filtered.filter(row => row.fullName.toLowerCase().includes(searchTerm.toLowerCase()));
+    }
+    setFilteredData(filtered);
+
+    if (isNew) {
+      // Show confirmation modal with username and password for new user
+      setConfirmationInfo({ username: formData.username, password: formData.password });
+      setConfirmationModalVisible(true);
+    } else {
+      // Show success message for editing existing user
+      setSuccessModalVisible(true);
+    }
   }
-
-
 
   const handleDelete = (id) => {
     setVisible(false)
-    setData(data.filter((row) => row.id !== id))
     fetchData(`http://localhost:8080/api/v1/users/${deleteId}`, 'DELETE', null, userInfo.accessToken)
-    setDeleteId(null)
-
-    setTimeout(() => {
-      refreshData()
-    }, 1000)
+      .then(() => {
+        const updatedData = data.filter((row) => row.id !== id);
+        setData(updatedData);
+        let filtered = updatedData;
+        if (searchTerm !== "") {
+          filtered = filtered.filter(row => row.fullName.toLowerCase().includes(searchTerm.toLowerCase()));
+        }
+        setFilteredData(filtered);
+        setDeleteId(null);
+        setDeleteSuccessModalVisible(true);
+      })
+      .catch((error) => {
+        console.error("Error deleting row:", error);
+      });
   }
 
   const handleCancelEdit = () => {
@@ -190,6 +225,7 @@ const StaffList = () => {
     fetchData("http://localhost:8080/api/v1/users", 'GET', null, userInfo.accessToken)
       .then(data => {
         setData(data.payload)
+        setFilteredData(data.payload)
       })
   }
 
@@ -205,6 +241,13 @@ const StaffList = () => {
             <strong>Staff List</strong>
           </CCardHeader>
           <CCardBody>
+            <CFormInput
+              type="text"
+              placeholder="Search by full name"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="mb-3"
+            />
             <div style={{ height: '500px', overflow: 'auto' }}>
               <CTable>
                 <CTableHead>
@@ -218,11 +261,11 @@ const StaffList = () => {
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Address</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Birthday</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Role</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "200px" }} scope="col">Action</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Actions</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {data.filter(row => row.status && row.roleId === 2).map((row) => (
+                  {filteredData.filter(row => row.status && row.roleId === 2).map((row) => (
                     <CTableRow key={row.id}>
                       <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                       <CTableDataCell>{row.username}</CTableDataCell>
@@ -335,14 +378,16 @@ const StaffList = () => {
             onChange={handleInputChange}
             className="mb-3"
           />
-          <CFormInput
-            type="text"
-            name="password"
-            label="Password"
-            value={formData.password}
-            onChange={handleInputChange}
-            className="mb-3"
-          />
+          {isNew && (
+            <CFormInput
+              type="password"
+              name="password"
+              label="Password"
+              value={formData.password}
+              onChange={handleInputChange}
+              className="mb-3"
+            />
+          )}
           <CFormInput
             type="text"
             name="phone"
@@ -384,7 +429,64 @@ const StaffList = () => {
         </CModalFooter>
       </CModal>
 
+      {/* popup save success of create account and show info account created */}
+      <CModal
+        visible={confirmationModalVisible}
+        onClose={() => setConfirmationModalVisible(false)}
+        aria-labelledby="ConfirmationModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="ConfirmationModalLabel">Account Information</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Your account has been created successfully!</p>
+          <p><strong>Username:</strong> {confirmationInfo.username}</p>
+          <p><strong>Password:</strong> {confirmationInfo.password}</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setConfirmationModalVisible(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
 
+      {/* popup save success of edit */}
+      <CModal
+        visible={successModalVisible}
+        onClose={() => setSuccessModalVisible(false)}
+        aria-labelledby="SuccessModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="SuccessModalLabel">Success</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Your changes have been saved successfully!</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setSuccessModalVisible(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      {/* popup delete success */}
+      <CModal
+        visible={deleteSuccessModalVisible}
+        onClose={() => setDeleteSuccessModalVisible(false)}
+        aria-labelledby="DeleteSuccessModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="DeleteSuccessModalLabel">Delete Successful</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>The account has been deleted successfully!</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setDeleteSuccessModalVisible(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </CRow>
   )
 }

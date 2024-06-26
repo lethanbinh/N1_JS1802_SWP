@@ -27,7 +27,6 @@ import UserStorage from '../../util/UserStorage';
 
 const Stall = () => {
   const [data, setData] = useState([]);
-
   const [editingRow, setEditingRow] = useState(null);
   const [formData, setFormData] = useState({});
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
@@ -35,6 +34,11 @@ const Stall = () => {
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [isNew, setIsNew] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("")
+  const [filteredData, setFilteredData] = useState([])
+  const [confirmationModalVisible, setConfirmationModalVisible] = useState(false)
+  const [successModalVisible, setSuccessModalVisible] = useState(false)
+
 
   const handleEdit = (id) => {
     setEditingRow(id);
@@ -48,6 +52,16 @@ const Stall = () => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const handleSearchChange = (event) => {
+    const { value } = event.target
+    setSearchTerm(value)
+    if (value === "") {
+      setFilteredData(data)
+    } else {
+      setFilteredData(data.filter(row => row.name.toLowerCase().includes(value.toLowerCase())))
+    }
+  }
 
   const handleSave = () => {
     const requiredFields = ['code', 'name', 'description', 'type'];
@@ -110,10 +124,21 @@ const Stall = () => {
     setEditModalVisible(false);
     setIsNew(false);
 
-    setTimeout(() => {
-      refreshData();
-    }, 1000);
+    let filtered = newData;
+    if (searchTerm !== "") {
+      filtered = filtered.filter(row => row.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    }
+    setFilteredData(filtered);
+
+    if (isNew) {
+      // Show success message for adding new user
+      setConfirmationModalVisible(true);
+    } else {
+      // Show success message for editing existing user
+      setSuccessModalVisible(true);
+    }
   };
+
 
   const handleCancelEdit = () => {
     setEditModalVisible(false);
@@ -134,25 +159,35 @@ const Stall = () => {
     setIsNew(true);
   };
 
-  useEffect(() => {
-    refreshData();
-  }, []);
+
 
   const refreshData = () => {
     fetchData('http://localhost:8080/api/v1/stalls', 'GET', null, userInfo.accessToken)
       .then(data => {
         setData(data.payload);
+        setFilteredData(data.payload)
       });
   };
+  useEffect(() => {
+    refreshData();
+  }, []);
 
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
+
           <CCardHeader>
             <strong>Stall List</strong>
           </CCardHeader>
           <CCardBody>
+          <CFormInput
+              type="text"
+              placeholder="Search by full name"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="mb-3"
+            />
             <div style={{ height: '500px', overflow: 'auto' }}>
               <CTable>
                 <CTableHead>
@@ -166,7 +201,7 @@ const Stall = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {data.map((row) => (
+                  {filteredData.map((row) => (
                     <CTableRow key={row.id}>
                       <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                       <CTableDataCell>{row.code}</CTableDataCell>
@@ -261,6 +296,44 @@ const Stall = () => {
           </CButton>
         </CModalFooter>
       </CModal>
+{/* popup save success of create account and show info account created */}
+<CModal
+        visible={confirmationModalVisible}
+        onClose={() => setConfirmationModalVisible(false)}
+        aria-labelledby="ConfirmationModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="ConfirmationModalLabel">Account Information</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Your account has been created successfully!</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setConfirmationModalVisible(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      {/* popup save success of edit */}
+      <CModal
+        visible={successModalVisible}
+        onClose={() => setSuccessModalVisible(false)}
+        aria-labelledby="SuccessModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="SuccessModalLabel">Success</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Your changes have been saved successfully!</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setSuccessModalVisible(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
     </CRow>
   )
 }
