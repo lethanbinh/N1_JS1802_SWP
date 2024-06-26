@@ -67,7 +67,7 @@ const StaffList = () => {
   };
 
   const handleSave = () => {
-    const requiredFields = ['username', 'fullName', 'password', 'phone', 'email', 'address', 'birthday', 'roleName'];
+    const requiredFields = ['username', 'fullName', 'password', 'phone', 'email', 'address', 'birthday'];
     const emptyFields = requiredFields.filter(field => !formData[field]);
 
     if (emptyFields.length > 0) {
@@ -122,13 +122,7 @@ const StaffList = () => {
     const dataFromInput = newData.find(row => row.id === (isNew ? newData.length : editingRow));
 
     let roleId = 2;
-    if (dataFromInput.roleName.toUpperCase() === 'ADMIN') {
-      roleId = 1;
-    } else if (dataFromInput.roleName.toUpperCase() === 'STAFF') {
-      roleId = 2;
-    } else if (dataFromInput.roleName.toUpperCase() === 'MANAGER') {
-      roleId = 3;
-    }
+
     const savedData = {
       username: dataFromInput.username || "string",
       fullName: dataFromInput.fullName || "string",
@@ -151,7 +145,7 @@ const StaffList = () => {
       avatar: "", // Default value
       birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z", // Default date
       status: dataFromInput.status ? true : false,
-      roleId
+      roleId: 2
     }
     console.log(savedData)
 

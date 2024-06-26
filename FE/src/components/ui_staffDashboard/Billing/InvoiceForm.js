@@ -4,20 +4,23 @@ import {
   CCardBody,
   CCol,
   CFormInput,
-  CFormLabel,
   CRow,
   CTable,
   CTableBody,
   CTableHead,
   CTableHeaderCell,
   CFormSelect,
-  CTableRow
+  CTableRow,
+  CTableDataCell,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
 } from '@coreui/react';
 import React, { useState, useEffect } from 'react';
 import { uid } from 'uid';
-import InvoiceItem from './InvoiceItem';
 import InvoiceModal from './InvoiceModal';
-import incrementString from './incrementString';
 import fetchData from '../../../util/ApiConnection';
 import UserStorage from '../../../util/UserStorage';
 
@@ -30,54 +33,45 @@ const today = date.toLocaleDateString('en-GB', {
 
 const InvoiceForm = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [discount, setDiscount] = useState('');
   const [tax, setTax] = useState('');
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
   const [invoiceNumber, setInvoiceNumber] = useState(1);
   const [cashierName, setCashierName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
+  const [customerName, setCustomerName] = useState('')
+  const [address, setAddress] = useState('');
   const [transactionType, setTransactionType] = useState('SELL');
   const [orderStatus, setOrderStatus] = useState('PENDING');
   const [barcode, setBarcode] = useState('');
-  const [promotion, setPromotion] = useState('');
+  const [promotion, setPromotion] = useState([]);
+  const [promotionValue, setPromotionValue] = useState('')
+  const [promotionId, setPromotionId] = useState('')
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [staff, setStaff] = useState([])
+  const [staffId, setStaffId] = useState('')
 
-  const [items, setItems] = useState([
-    {
-      id: uid(6),
-      name: '',
-      qty: 1,
-      price: '1.00',
-    },
-  ]);
+  const [errorMessage, setErrorMessage] = useState("")
+  const [errorModalVisible, setErrorModalVisible] = useState(false)
 
-  useEffect(() => {
-    if (barcode.length > 0) {
-      fetchData(`http://localhost:8080/api/v1/products/barcode/${barcode}`, "GET", null, userInfo.accessToken)
-        .then((response) => {
-          console.log("Product data fetched successfully:", response);
-          if (response.name) {
-            const id = uid(6);
-            const newItem = {
-              id: id,
-              name: response.name,
-              qty: 1,
-              price: response.price,
-            };
-            setItems(prevItems => [...prevItems, newItem]);
-            setBarcode('');
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching product data:", error.message);
-        });
-    }
-  }, [barcode, userInfo.accessToken]);
-
+  const [items, setItems] = useState([]);
 
   const handleBarcodeChange = (event) => {
     setBarcode(event.target.value);
   };
+
+  const loadPromotion = () => {
+    fetchData(`http://localhost:8080/api/v1/promotions`, 'GET', null, userInfo.accessToken)
+      .then(data => {
+        setPromotion(data.payload)
+      })
+  }
+
+  const loadStaff = () => {
+    fetchData("http://localhost:8080/api/v1/users", 'GET', null, userInfo.accessToken)
+      .then(data => {
+        setStaff(data.payload.filter(item => item.roleName.toUpperCase() === "STAFF"))
+      })
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -85,76 +79,134 @@ const InvoiceForm = () => {
   };
 
   useEffect(() => {
-    if (formSubmitted) {
-      const createOrder = async () => {
-        try {
-          const response = await fetchData('http://localhost:8080/api/v1/orders', 'POST',
-            null
-            , userInfo.accessToken);
-          console.log('Order created successfully:', response);
-          // Handle success scenario, e.g., show confirmation, clear form, etc.
-        } catch (error) {
-          console.error('Error creating order:', error);
-          // Handle error scenario, e.g., show error message to user
-        } finally {
-          setFormSubmitted(false); // Reset form submission state
-        }
-      };
+    loadPromotion()
+    loadStaff()
+  }, [])
 
-      createOrder();
+  const validate = () => {
+    if (customerPhone.length < 1) {
+      setErrorMessage(`Please fill customer phone`);
+      setErrorModalVisible(true);
+      return false;
     }
-  }, [formSubmitted, userInfo.accessToken]);
 
-  const reviewInvoiceHandler = (event) => {
-    event.preventDefault();
-    setIsOpen(true);
-  };
+    if (items.length < 1) {
+      setErrorMessage(`Please Add item`);
+      setErrorModalVisible(true);
+      return false;
+    }
 
+    if (tax > 100 || tax < 0) {
+      setErrorMessage(`Tax must be 0 - 100%`);
+      setErrorModalVisible(true);
+      return false;
+    }
 
+    if (customerName.length < 1) {
+      setErrorMessage(`Please fill customer name`);
+      setErrorModalVisible(true);
+      return false;
+    }
 
-  const addNextInvoiceHandler = () => {
-    setInvoiceNumber((prevNumber) => incrementString(prevNumber));
-    setItems([
-      {
-        id: uid(6),
-        name: '',
-        qty: 1,
-        price: '1.00',
-      },
-    ]);
-  };
+    return true;
+  }
 
   const handleReviewInvoice = () => {
+    if (!validate()) {
+      return;
+    }
+
     setIsOpen(true);
   };
 
-  // const addItemHandler = () => {
-  //   const id = uid(6);
-  //   setItems((prevItems) => [
-  //     ...prevItems,
-  //     {
-  //       id: id,
-  //       name: '',
-  //       qty: 1,
-  //       price: '1.00',
-  //     },
-  //   ]);
-  // };
+  const addItemHandler = (e) => {
+    e.preventDefault()
+    fetchData(`http://localhost:8080/api/v1/products/barcode/${barcode}`, 'GET', null, userInfo.accessToken)
+      .then(data => {
+        if (data.status === 'SUCCESS') {
+          if (items.find(item => item.name === data.payload.name)) {
+            const newItems = items.map((item) => {
+              if (item.name === data.payload.name) {
+                return { ...item, qty: item.qty + 1 };
+              }
+              return item;
+            });
+
+            setItems(newItems);
+          } else {
+            const id = uid(6);
+            setItems((prevItems) => [
+              ...prevItems,
+              {
+                productId: data.payload.id,
+                id: id,
+                name: data.payload.name,
+                qty: 1,
+                price: data.payload.sellPrice,
+              },
+            ]);
+          }
+
+          setBarcode('')
+          document.getElementById('barcode-input').focus()
+        } else {
+          setErrorMessage(`Product is not exists`);
+          setErrorModalVisible(true);
+          return;
+        }
+      })
+  };
 
   const deleteItemHandler = (id) => {
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  const editItemHandler = (event) => {
-    const editedItem = {
-      id: event.target.id,
-      name: event.target.name,
-      value: event.target.value,
-    };
+  const handleSaveOrder = () => {
+    if (!validate()) {
+      return;
+    }
+
+    const orderList = []
+    items.map(item => orderList.push({ productQuantity: item.qty, productId: item.productId }))
+
+    let data = {
+      "description": "string",
+      "status": orderStatus,
+      "type": transactionType,
+      "address": address,
+      "tax": tax / 100,
+      "customerGiveMoney": 1000000000000,
+      "promotionId": promotionId,
+      "staffId": staffId,
+      "customerRequest": {
+        "fullName": customerName,
+        "phone": customerPhone,
+        "email": `string${customerPhone}@gmail.com`,
+        "address": address,
+        "birthday": "2024-06-23T10:35:22.814Z",
+        "status": true,
+        "bonusPoint": 0
+      },
+      "orderDetailRequestList": orderList
+    }
+
+    console.log(data)
+
+    fetchData(`http://localhost:8080/api/v1/orders`, 'POST', data, userInfo.accessToken)
+      .then(data => {
+        if (data.status === 'SUCCESS') {
+          setErrorMessage(`Save order successfully`);
+          setErrorModalVisible(true);
+        }
+      })
+  }
+
+  const editItemHandler = (event, id) => {
+    const { name, value } = event.target;
 
     const newItems = items.map((item) => {
-      if (item.id === editedItem.id) {
-        return { ...item, [editedItem.name]: editedItem.value };
+      if (item.id === id) {
+        return { ...item, [name]: value };
       }
       return item;
     });
@@ -171,91 +223,71 @@ const InvoiceForm = () => {
   }, 0);
 
   const taxRate = (tax * subtotal) / 100;
-  const discountRate = (promotion * subtotal) / 100;
+  const discountRate = (promotionValue ? promotionValue * 100 * subtotal : 0) / 100;
   const total = subtotal - discountRate + taxRate;
 
   return (
-    <CRow
-      className="relative flex flex-col px-2 md:flex-row"
-      onSubmit={handleSubmit}
-    >
-      <CCard className='my-6 flex-1 space-y-2 rounded-lg p-4 shadow-sm sm:space-y-4 md:p-6'>
+    <CRow className="relative flex flex-col px-2 md:flex-row" onSubmit={handleSubmit}>
+      <CCard className="my-6 flex-1 rounded-lg p-4 shadow-sm md:p-6">
         <CCardBody>
-          <CRow className="flex flex-col justify-between space-y-2 border-b border-gray-900/10 pb-4 md:flex-row md:items-center md:space-y-0">
-            <CCol className="flex space-x-2">
-              <strong className="font-bold">Current Date: </strong>
-              <span>{today}</span>
-            </CCol>
-            <CCol className="flex items-center space-x-2">
-              <strong className="font-bold" htmlFor="transactionType">
-                Order Type:
-              </strong>
-              <CFormSelect
-                required
-                className="max-w-[130px]"
-                name="transactionType"
-                id="transactionType"
-                value={transactionType}
-                onChange={(event) => setTransactionType(event.target.value)}
-              >
-                <option value="SELL">SELL</option>
-                <option value="PURCHASE">PURCHASE</option>
-              </CFormSelect>
+          <div className="text-center mb-4">
+            <h1 className="text-xl font-bold">GoldenB Jewelry</h1>
+            <p>Phone: +84 912 345 678</p>
+            <p>123 ABC Street, DEF City</p>
+          </div>
+          <CRow className="mb-4">
+            <CCol>
+              <h5 className="font-bold">INVOICE</h5>
+              <p>Date: {today}</p>
             </CCol>
           </CRow>
 
-          <h2 className="text-center text-lg font-bold">INVOICE</h2>
-          <CRow className="grid grid-cols-2 gap-2 pt-4 pb-8">
+          <CRow className="mb-4">
             <CCol>
-              <strong
-                htmlFor="cashierName"
-                className="text-sm font-bold sm:text-base"
+              <strong className="text-sm font-bold">Cashier:</strong>
+              <CFormSelect
+                name="staff"
+                value={staffId}
+                onChange={(event) => setStaffId(event.target.value)}
               >
-                Cashier:
-              </strong>
-              <CFormInput
-                required
-                className="flex-1"
-                placeholder="Cashier name"
-                type="text"
-                name="cashierName"
-                id="cashierName"
-                value={cashierName}
-                onChange={(event) => setCashierName(event.target.value)}
-              />
+                {staff.map(user => (
+                  <option key={user.id} value={user.id}>
+                    {user.fullName}
+                  </option>
+                ))}
+              </CFormSelect>
             </CCol>
             <CCol>
-              <strong
-                htmlFor="customerPhone"
-                className="col-start-2 row-start-1 text-sm font-bold md:text-base"
-              >
-                Phone Customer:
-              </strong>
+              <strong className="text-sm font-bold">Customer Phone:</strong>
               <CFormInput
                 required
                 className="flex-1"
-                placeholder="Phone Customer"
+                placeholder="Customer Phone"
                 type="tel"
-                name="customerPhone"
-                id="customerPhone"
                 value={customerPhone}
                 onChange={(event) => setCustomerPhone(event.target.value)}
-                pattern="[0-9]{10}" // Hoặc thay đổi mẫu để phù hợp với định dạng số điện thoại của bạn
+                pattern="[0-9]{10}"
                 title="Please enter a valid phone number (10 digits)"
               />
             </CCol>
+          </CRow>
+
+          <CRow className="mb-4">
             <CCol>
-              <strong
-                htmlFor="orderStatus"
-                className="text-sm font-bold sm:text-base"
-              >
-                Order Status:
-              </strong>
-              <CFormSelect
+              <strong className="text-sm font-bold">Address:</strong>
+              <CFormInput
                 required
                 className="flex-1"
-                name="orderStatus"
-                id="orderStatus"
+                placeholder="Customer Address"
+                type="text"
+                value={address}
+                onChange={(event) => setAddress(event.target.value)}
+              />
+            </CCol>
+            <CCol>
+              <strong className="text-sm font-bold">Order Status:</strong>
+              <CFormSelect
+                required
                 value={orderStatus}
                 onChange={(event) => setOrderStatus(event.target.value)}
               >
@@ -269,155 +301,236 @@ const InvoiceForm = () => {
           </CRow>
 
           <CRow className="mb-4">
+
             <CCol>
-              <strong htmlFor="barcode" className="text-sm font-bold sm:text-base">
-                Barcode:
-              </strong>
+              <strong className="text-sm font-bold">Order Type:</strong>
+              <CFormSelect
+                required
+                value={transactionType}
+                onChange={(event) => setTransactionType(event.target.value)}
+              >
+                <option value="SELL">SELL</option>
+                <option value="PURCHASE">PURCHASE</option>
+              </CFormSelect>
+            </CCol>
+            <CCol>
+              <strong className="text-sm font-bold">Tax Rate (%):</strong>
               <CFormInput
+                type="number"
+                min={0}
+                max={100}
+                step={1}
+                placeholder="0.0"
+                value={tax}
+                onChange={(event) => setTax(event.target.value)}
+              />
+            </CCol>
+
+
+          </CRow>
+
+          <CRow className='mb-4'>
+            <CCol>
+              <strong className="text-sm font-bold">Discount:</strong>
+              <CFormSelect
+                name="promotionValue"
+                value={promotionValue}
+                onChange={(event) => {
+                  setPromotionId(event.target.key)
+                  setPromotionValue(event.target.value)
+                }
+                }
+              >
+                <option value="">None</option>
+                {promotion.map(promotion => (
+                  <option key={promotion.id} value={promotion.discount}>
+                    {promotion.name} {promotion.discount * 100}%
+                  </option>
+                ))}
+              </CFormSelect>
+            </CCol>
+
+            <CCol>
+              <strong className="text-sm font-bold">Customer Name:</strong>
+              <CFormInput
+                required
                 className="flex-1"
-                placeholder="Scan or enter barcode"
-                type="text"
-                name="barcode"
-                id="barcode"
-                value={barcode}
-                onChange={handleBarcodeChange}
+                placeholder="Customer Name"
+                type="tel"
+                value={customerName}
+                onChange={(event) => setCustomerName(event.target.value)}
               />
             </CCol>
           </CRow>
 
-          <CTable className="w-full p-4 text-left">
+          <CRow className='mb-4'>
+            <form>
+              <CCol>
+                <strong className="text-sm font-bold">Barcode:</strong>
+                <CFormInput
+                  id='barcode-input'
+                  className="flex-1"
+                  placeholder="Scan or enter barcode"
+                  type="text"
+                  value={barcode}
+                  onChange={handleBarcodeChange}
+                />
+              </CCol>
+
+              <CButton
+                type='submit'
+                color="primary"
+                className="rounded px-4 py-2 text-white shadow mt-4"
+                onClick={e => addItemHandler(e)}
+              >
+                Add Item
+              </CButton>
+            </form>
+          </CRow>
+
+
+        </CCardBody>
+      </CCard>
+
+      <CCard className="my-6 flex-1 rounded-lg p-4 shadow-sm md:p-6">
+        <CCardBody>
+          {items.length > 0 && <CTable className="w-full text-left table-auto border " style={{ borderCollapse: "collapse" }}>
             <CTableHead>
-              <CTableRow className="border-b border-gray-900/10 text-sm md:text-base">
-                <CTableHeaderCell>ITEM</CTableHeaderCell>
-                <CTableHeaderCell>QTY</CTableHeaderCell>
-                <CTableHeaderCell>PRICE</CTableHeaderCell>
-                <CTableHeaderCell>ACTION</CTableHeaderCell>
+              <CTableRow>
+                <CTableHeaderCell style={{ border: "1px solid #000" }}>ITEM</CTableHeaderCell>
+                <CTableHeaderCell style={{ border: "1px solid #000" }}>QTY</CTableHeaderCell>
+                <CTableHeaderCell className="text-right" style={{ border: "1px solid #000" }}>UNIT PRICE</CTableHeaderCell>
+                <CTableHeaderCell className="text-right" style={{ border: "1px solid #000" }}>AMOUNT</CTableHeaderCell>
+                <CTableHeaderCell style={{ border: "1px solid #000" }}>ACTION</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
               {items.map((item) => (
-                <InvoiceItem
-                  key={item.id}
-                  id={item.id}
-                  name={item.name}
-                  qty={item.qty}
-                  price={item.price}
-                  onDeleteItem={deleteItemHandler}
-                  onEditItem={editItemHandler} // Đã sửa thành onEditItem để phù hợp với InvoiceItem
-                />
+                <CTableRow key={item.id}>
+                  <CTableDataCell style={{ border: "1px solid #000" }}>
+                    <CFormInput
+                      type="text"
+                      name="name"
+                      placeholder="Item name..."
+                      value={item.name}
+                      onChange={(event) => editItemHandler(event, item.id)}
+                    />
+                  </CTableDataCell>
+                  <CTableDataCell style={{ border: "1px solid #000" }}>
+                    <CFormInput
+                      type="number"
+                      name="qty"
+                      value={item.qty}
+                      onChange={(event) => editItemHandler(event, item.id)}
+                    />
+                  </CTableDataCell>
+                  <CTableDataCell className="text-right" style={{ border: "1px solid #000" }}>
+                    <CFormInput
+                      type="number"
+                      name="price"
+                      value={item.price}
+                      onChange={(event) => editItemHandler(event, item.id)}
+                    />
+                  </CTableDataCell>
+                  <CTableDataCell className="text-right" style={{ border: "1px solid #000" }}>
+                    ${(Number(item.price) * item.qty).toFixed(2)}
+                  </CTableDataCell>
+                  <CTableDataCell style={{ border: "1px solid #000" }}>
+                    <CButton
+                      color="danger"
+                      onClick={() => deleteItemHandler(item.id)}
+                    >
+                      Delete
+                    </CButton>
+                  </CTableDataCell>
+                </CTableRow>
               ))}
             </CTableBody>
-          </CTable>
-          {/* <CButton
-            color="primary"
-            className="rounded px-4 py-2 text-sm text-white shadow"
-            onClick={addItemHandler}
-          >
-            Add Item
-          </CButton> */}
-          <CRow className="flex flex-col items-end space-y-2 pt-6 mt-10">
-            <CCol className="flex w-full justify-between md:w-1/2 pt-2">
-              <strong className="font-bold me-3">Subtotal:</strong>
-              <span>${subtotal.toFixed(2)}</span>
-            </CCol>
-            <CCol className="flex w-full justify-between md:w-1/2">
-              <strong className="font-bold me-3">Discount:</strong>
-              <span>
-                ({promotion || '0'}%) ${discountRate.toFixed(2)}
-              </span>
-            </CCol>
+          </CTable>}
 
-            <CCol className="flex w-full justify-between md:w-1/2">
-              <strong className="font-bold me-3">Tax:</strong>
-              <span>
-                ({tax || '0'}%) ${taxRate.toFixed(2)}
-              </span>
+          <CRow className="flex justify-end pt-6 mt-4">
+            <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+              <strong style={{ display: "inline-block" }} className="font-bold">Subtotal:</strong>
+              <span style={{ display: "inline-block" }}>${subtotal.toFixed(2)}</span>
             </CCol>
-            <CRow className="border-t border-gray-900/10 pt-2">
-              <CCol className="flex w-full justify-between md:w-1/2">
-                <strong className="font-bold me-3">Total:</strong>
-                <span className="font-bold">
-                  ${total % 1 === 0 ? total : total.toFixed(2)}
-                </span>
-              </CCol>
-            </CRow>
+          </CRow>
+
+          <CRow className="flex justify-end">
+            <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+              <strong style={{ display: "inline-block" }} className="font-bold">Discount:</strong>
+              <span style={{ display: "inline-block" }}>({promotionValue ? promotionValue * 100 : '0'}%) -${discountRate.toFixed(2)}</span>
+            </CCol>
+          </CRow>
+
+          <CRow className="flex justify-end">
+            <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+              <strong style={{ display: "inline-block" }} className="font-bold">Tax:</strong>
+              <span style={{ display: "inline-block" }}>({tax || '0'}%) +${taxRate.toFixed(2)}</span>
+            </CCol>
+          </CRow>
+
+          <CRow className="flex justify-end border-t  pt-2 mt-2">
+            <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+              <strong style={{ display: "inline-block" }} className="font-bold">Total:</strong>
+              <span style={{ display: "inline-block" }} className="font-bold">${total % 1 === 0 ? total : total.toFixed(2)}</span>
+            </CCol>
           </CRow>
         </CCardBody>
       </CCard>
 
-      <CCard className='my-6 flex-1 space-y-2 rounded-lg p-4 shadow-sm sm:space-y-4 md:p-6'>
-        <CCardBody className="sticky top-0 z-10 space-y-4 divide-y divide-gray-900/10 pb-8 md:pt-6 md:pl-4">
+      <CCard className="my-6 flex-1 rounded-lg p-4 shadow-sm md:p-6">
+        <CCardBody className="space-y-4">
           <CButton
+            style={{ marginRight: "10px" }}
             color="primary"
-            className="rounded px-4 py-2 text-sm text-white shadow"
+            className="rounded px-4 py-2 text-white shadow"
             onClick={handleReviewInvoice}
           >
             Review Invoice
+          </CButton>
+
+          <CButton
+            color="success"
+            className="rounded px-4 py-2 text-white shadow"
+            onClick={handleSaveOrder}
+          >
+            Save Order
           </CButton>
           <InvoiceModal
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             invoiceInfo={{
-              invoiceNumber,
               cashierName,
               customerPhone,
+              address,
               subtotal,
               taxRate,
               discountRate,
               total,
+              invoiceNumber
             }}
             items={items}
-            onAddNextInvoice={addNextInvoiceHandler}
           />
-          <CRow className="space-y-4 py-2">
-            <CCol className="space-y-2">
-              <label className="text-sm font-bold md:text-base" htmlFor="tax">
-                Tax rate:
-              </label>
-              <CCol className="flex items-center">
-                <CFormInput
-                  className="w-full rounded-r-none shadow-sm"
-                  type="number"
-                  name="tax"
-                  id="tax"
-                  min="0.01"
-                  step="0.01"
-                  placeholder="0.0"
-                  value={tax}
-                  onChange={(event) => setTax(event.target.value)}
-                />
-                <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
-                  %
-                </span>
-              </CCol>
-            </CCol>
-            <CCol className="space-y-2">
-              <CCol className="flex w-full justify-between md:w-1/2">
-                <strong className="font-bold me-3">Discount:</strong>
-                <CFormSelect
-                  className="w-full"
-                  name="promotion"
-                  id="promotion"
-                  value={promotion}
-                  onChange={(event) => setPromotion(event.target.value)}
-                >
-                  <option value="">None</option>
-                  <option value="10">10% Summer Delight</option>
-                  <option value="20">20% Winter Wonderland</option>
-                  <option value="30">30% Spring Special</option>
-                  <option value="40">40% Autumn Fest</option>
-                  <option value="33">33% New Year Celebration</option>
-                  <option value="12">12% Black Friday Extravaganza</option>
-                  <option value="30">30% Cyber Monday Deals</option>
-                  <option value="40">40% Valentine's Day Sale</option>
-                  <option value="20">20% Easter Sale</option>
-                  <option value="20">20% Halloween Sale</option>
-                </CFormSelect>
-              </CCol>
-            </CCol>
-          </CRow>
         </CCardBody>
       </CCard>
+
+      <CModal
+        visible={errorModalVisible}
+        onClose={() => setErrorModalVisible(false)}
+        aria-labelledby="ErrorModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="ErrorModalLabel">Input information error</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>{errorMessage}</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setErrorModalVisible(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </CRow>
   );
 };
