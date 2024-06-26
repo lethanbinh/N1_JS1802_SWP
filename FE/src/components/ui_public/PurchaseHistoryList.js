@@ -16,49 +16,76 @@ import {
   CTableRow
 } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
-import '../../customStyles.css'
 
 const PurchaseHistoryList = () => {
-  const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser())
-  const [data, setData] = useState([])
-  const [error, setError] = useState(null)
-  const [show, setShow] = useState(false)
-  const [orderDetails, setOrderDetails] = useState([])
+  const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [error, setError] = useState(null);
+  const [show, setShow] = useState(false);
+  const [orderDetails, setOrderDetails] = useState([]);
+  const [createDateFilter, setCreateDateFilter] = useState(null);
 
   const loadData = async () => {
     try {
-      fetchData(`http://localhost:8080/api/v1/orders`, 'GET', null, userInfo.accessToken)
-        .then((data) => {
-          data.payload.forEach(element => {
-            fetchData(`http://localhost:8080/api/v1/users/id/${element.staffId}`, 'GET', null, userInfo.accessToken)
-              .then(user => {
-                element.staffName = user.payload.fullName
-                setData(prevData => [...prevData, element])
-              })
-          });
-        }
-        )
-      setError(null)
+      const result = await fetchData(`http://localhost:8080/api/v1/orders`, 'GET', null, userInfo.accessToken);
+      const orders = result.payload;
+
+      const ordersWithStaffNames = await Promise.all(orders.map(async (order) => {
+        const user = await fetchData(`http://localhost:8080/api/v1/users/id/${order.staffId}`, 'GET', null, userInfo.accessToken);
+        return { ...order, staffName: user.payload.fullName };
+      }));
+
+      setData(ordersWithStaffNames);
+      setFilteredData(ordersWithStaffNames);
+      setError(null);
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
     }
-  }
-  console.log(data)
+  };
 
   useEffect(() => {
-    loadData()
-  }, [])
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [createDateFilter]);
 
   const loadDetails = (id) => {
-    const order = data.find((row) => row.id === id)
-    setOrderDetails(order.orderDetailResponses)
-    setShow(true)
-  }
+    const order = data.find((row) => row.id === id);
+    setOrderDetails(order.orderDetailResponses);
+    setShow(true);
+  };
+
+  const handleCreateDateChange = (date) => {
+    setCreateDateFilter(date);
+  };
+
+  const applyFilters = () => {
+    let filtered = data;
+    if (createDateFilter) {
+      filtered = filtered.filter(row => new Date(row.createDate) >= new Date(createDateFilter));
+    }
+    setFilteredData(filtered);
+  };
 
   return (
     <CRow>
+        <div style={{ width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'right', paddingBottom: '10px' }}>
+          <label style={{ marginRight: '10px' }}>Create Date: </label>
+          <DatePicker
+            selected={createDateFilter}
+            onChange={handleCreateDateChange}
+            dateFormat="yyyy-MM-dd"
+            className="form-control"
+          />
+        </div>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
@@ -85,7 +112,7 @@ const PurchaseHistoryList = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {data.map((row) => (
+                  {filteredData.map((row) => (
                     <CTableRow key={row.id}>
                       <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                       <CTableDataCell>{row.description}</CTableDataCell>
@@ -149,7 +176,7 @@ const PurchaseHistoryList = () => {
         </CModalBody>
       </CModal>
     </CRow>
-  )
-}
+  );
+};
 
-export default PurchaseHistoryList
+export default PurchaseHistoryList;

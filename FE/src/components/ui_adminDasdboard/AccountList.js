@@ -28,7 +28,7 @@ import UserStorage from '../../util/UserStorage'
 
 const AccountList = () => {
   const [data, setData] = useState([])
-
+  const [filteredData, setFilteredData] = useState([])
   const [editingRow, setEditingRow] = useState(null)
   const [formData, setFormData] = useState({})
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser())
@@ -38,7 +38,13 @@ const AccountList = () => {
   const [errorMessage, setErrorMessage] = useState("")
   const [errorModalVisible, setErrorModalVisible] = useState(false)
   const [editModalVisible, setEditModalVisible] = useState(false)
+  const [confirmationModalVisible, setConfirmationModalVisible] = useState(false)
+  const [confirmationInfo, setConfirmationInfo] = useState({ username: "", password: "" })
+  const [successModalVisible, setSuccessModalVisible] = useState(false)
+  const [deleteSuccessModalVisible, setDeleteSuccessModalVisible] = useState(false)
   const [isNew, setIsNew] = useState(false)
+  const [selectedRole, setSelectedRole] = useState("")
+  const [searchTerm, setSearchTerm] = useState("")
 
   const handleEdit = (id) => {
     setEditingRow(id)
@@ -51,6 +57,32 @@ const AccountList = () => {
   const handleInputChange = (event) => {
     const { name, value } = event.target
     setFormData({ ...formData, [name]: value })
+  }
+
+  const handleSearchChange = (event) => {
+    const { value } = event.target
+    setSearchTerm(value)
+    let filtered = data
+    if (selectedRole !== "") {
+      filtered = filtered.filter(row => row.roleName.toUpperCase() === selectedRole.toUpperCase())
+    }
+    if (value !== "") {
+      filtered = filtered.filter(row => row.fullName.toLowerCase().includes(value.toLowerCase()))
+    }
+    setFilteredData(filtered)
+  }
+
+  const handleRoleChange = (event) => {
+    const selectedRole = event.target.value
+    setSelectedRole(selectedRole)
+    let filtered = data
+    if (selectedRole !== "") {
+      filtered = filtered.filter(row => row.roleName.toUpperCase() === selectedRole.toUpperCase())
+    }
+    if (searchTerm !== "") {
+      filtered = filtered.filter(row => row.fullName.toLowerCase().includes(searchTerm.toLowerCase()))
+    }
+    setFilteredData(filtered)
   }
 
   const handleSave = () => {
@@ -93,6 +125,13 @@ const AccountList = () => {
       return
     }
 
+    // Check if there are already 2 Admin accounts
+    const adminCount = data.filter(row => row.roleName.toUpperCase() === 'ADMIN').length;
+    if (formData.roleName.toUpperCase() === 'ADMIN' && adminCount >= 2 && !isNew) {
+      setErrorMessage("Only a maximum of 2 Admin accounts are allowed.");
+      setErrorModalVisible(true);
+      return;
+    }
 
     let newData;
     if (isNew) {
@@ -118,6 +157,7 @@ const AccountList = () => {
     } else if (dataFromInput.roleName.toUpperCase() === 'MANAGER') {
       roleId = 3;
     }
+
     const savedData = {
       username: dataFromInput.username || "string",
       fullName: dataFromInput.fullName || "string",
@@ -137,13 +177,11 @@ const AccountList = () => {
       phone: dataFromInput.phone || "0374422448", // Using default phone if not provided
       email: dataFromInput.email || "string",
       address: dataFromInput.address || "string",
-      password: dataFromInput.password,
       avatar: "", // Default value
       birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z", // Default date
       status: dataFromInput.status ? true : false,
       roleId
     }
-    console.log(savedData)
 
     fetchData(`http://localhost:8080/api/v1/users/id/${editingRow}`, 'GET', null, userInfo.accessToken)
       .then((data) => {
@@ -159,9 +197,21 @@ const AccountList = () => {
     setEditModalVisible(false)
     setIsNew(false)
 
-    setTimeout(() => {
-      refreshData()
-    }, 1000)
+    let filtered = newData;
+    if (selectedRole !== "") {
+      filtered = filtered.filter(row => row.roleName.toUpperCase() === selectedRole.toUpperCase());
+    }
+    if (searchTerm !== "") {
+      filtered = filtered.filter(row => row.fullName.toLowerCase().includes(searchTerm.toLowerCase()));
+    }
+    setFilteredData(filtered);
+
+    if (isNew) {
+      setConfirmationInfo({ username: formData.username, password: formData.password });
+      setConfirmationModalVisible(true);
+    } else {
+      setSuccessModalVisible(true);
+    }
   }
 
   const handleAddNew = () => {
@@ -184,13 +234,24 @@ const AccountList = () => {
 
   const handleDelete = (id) => {
     setVisible(false)
-    setData(data.filter((row) => row.id !== id))
     fetchData(`http://localhost:8080/api/v1/users/${deleteId}`, 'DELETE', null, userInfo.accessToken)
-    setDeleteId(null)
-
-    setTimeout(() => {
-      refreshData()
-    }, 1000)
+      .then(() => {
+        const updatedData = data.filter((row) => row.id !== id);
+        setData(updatedData);
+        let filtered = updatedData;
+        if (selectedRole !== "") {
+          filtered = filtered.filter(row => row.roleName.toUpperCase() === selectedRole.toUpperCase());
+        }
+        if (searchTerm !== "") {
+          filtered = filtered.filter(row => row.fullName.toLowerCase().includes(searchTerm.toLowerCase()));
+        }
+        setFilteredData(filtered);
+        setDeleteId(null);
+        setDeleteSuccessModalVisible(true);
+      })
+      .catch((error) => {
+        console.error("Error deleting row:", error);
+      });
   }
 
   const handleCancelEdit = () => {
@@ -202,6 +263,7 @@ const AccountList = () => {
     fetchData("http://localhost:8080/api/v1/users", 'GET', null, userInfo.accessToken)
       .then(data => {
         setData(data.payload)
+        setFilteredData(data.payload)
       })
   }
 
@@ -212,6 +274,33 @@ const AccountList = () => {
   return (
     <CRow>
       <CCol xs={12}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ width: "50%", display: 'flex', alignItems: 'center', justifyContent: 'right', paddingRight: '10px' }}>
+            <CFormSelect
+              name="roleFilter"
+              label="Filter by Role"
+              value={selectedRole}
+              onChange={handleRoleChange}
+              className="mb-3"
+            >
+              <option value="">All</option>
+              <option value="ADMIN">ADMIN</option>
+              <option value="STAFF">STAFF</option>
+              <option value="MANAGER">MANAGER</option>
+            </CFormSelect>
+          </div>
+          <div style={{ width: "50%", display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
+            <CFormInput
+              type="text"
+              placeholder="Search by full name"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="mb-3"
+            />
+          </div>
+
+        </div>
+
         <CCard className="mb-4">
           <CCardHeader>
             <strong>Account List</strong>
@@ -234,7 +323,7 @@ const AccountList = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {data.filter(row => row.status).map((row) => (
+                  {filteredData.filter(row => row.status).map((row) => (
                     <CTableRow key={row.id}>
                       <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                       <CTableDataCell>{row.username}</CTableDataCell>
@@ -404,6 +493,62 @@ const AccountList = () => {
           </CButton>
           <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
             Save
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      <CModal
+        visible={confirmationModalVisible}
+        onClose={() => setConfirmationModalVisible(false)}
+        aria-labelledby="ConfirmationModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="ConfirmationModalLabel">Account Information</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Your account has been created successfully!</p>
+          <p><strong>Username:</strong> {confirmationInfo.username}</p>
+          <p><strong>Password:</strong> {confirmationInfo.password}</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setConfirmationModalVisible(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      <CModal
+        visible={successModalVisible}
+        onClose={() => setSuccessModalVisible(false)}
+        aria-labelledby="SuccessModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="SuccessModalLabel">Success</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Your changes have been saved successfully!</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setSuccessModalVisible(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      <CModal
+        visible={deleteSuccessModalVisible}
+        onClose={() => setDeleteSuccessModalVisible(false)}
+        aria-labelledby="DeleteSuccessModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="DeleteSuccessModalLabel">Delete Successful</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>The account has been deleted successfully!</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setDeleteSuccessModalVisible(false)}>
+            Close
           </CButton>
         </CModalFooter>
       </CModal>

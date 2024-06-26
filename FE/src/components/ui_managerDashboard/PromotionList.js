@@ -21,6 +21,8 @@ import {
 } from '@coreui/react';
 
 import React, { useEffect, useState } from 'react';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import convertDateToJavaFormat from '../../util/DateConvert';
@@ -28,6 +30,7 @@ import UserStorage from '../../util/UserStorage';
 
 const PromotionList = () => {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [editingRow, setEditingRow] = useState(null);
   const [formData, setFormData] = useState({});
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
@@ -37,6 +40,11 @@ const PromotionList = () => {
   const [isNew, setIsNew] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [startDateFilter, setStartDateFilter] = useState(null);
+  const [endDateFilter, setEndDateFilter] = useState(null);
+  const [confirmationModalVisible, setConfirmationModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [deleteSuccessModalVisible, setDeleteSuccessModalVisible] = useState(false);
 
   const handleEdit = (id) => {
     setEditingRow(id);
@@ -64,14 +72,13 @@ const PromotionList = () => {
       return;
     }
 
-
     if (new Date(formData.startDate) > new Date(formData.endDate)) {
       setErrorMessage('Start date cannot be greater than end date.');
       setErrorModalVisible(true);
       return;
     }
 
-    if (parseFloat(formData.minimumPrize) > parseFloat(formData.maximumPrize) ) {
+    if (parseFloat(formData.minimumPrize) > parseFloat(formData.maximumPrize)) {
       setErrorMessage('Minimum price cannot be greater than maximum price.');
       setErrorModalVisible(true);
       return;
@@ -117,6 +124,7 @@ const PromotionList = () => {
       setEditingRow(null);
       setEditModalVisible(false);
       setIsNew(false);
+      setSuccessModalVisible(true); // Show success modal
     });
   };
 
@@ -139,7 +147,10 @@ const PromotionList = () => {
   const handleDelete = (id) => {
     setVisible(false);
     fetchData(`http://localhost:8080/api/v1/promotions/${deleteId}`, 'DELETE', null, userInfo.accessToken)
-      .then(() => refreshData());
+      .then(() => {
+        refreshData();
+        setDeleteSuccessModalVisible(true); // Show delete success modal
+      });
     setDeleteId(null);
   };
 
@@ -152,7 +163,29 @@ const PromotionList = () => {
     fetchData("http://localhost:8080/api/v1/promotions", 'GET', null, userInfo.accessToken)
       .then(data => {
         setData(data.payload);
+        applyFilters(data.payload);
       });
+  };
+
+  const handleStartDateChange = (date) => {
+    setStartDateFilter(date);
+    applyFilters(data, date, endDateFilter);
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDateFilter(date);
+    applyFilters(data, startDateFilter, date);
+  };
+
+  const applyFilters = (data, startDate = startDateFilter, endDate = endDateFilter) => {
+    let filtered = data;
+    if (startDate) {
+      filtered = filtered.filter(row => new Date(row.startDate) >= new Date(startDate));
+    }
+    if (endDate) {
+      filtered = filtered.filter(row => new Date(row.endDate) <= new Date(endDate));
+    }
+    setFilteredData(filtered);
   };
 
   const handleCloseErrorModal = () => {
@@ -166,6 +199,26 @@ const PromotionList = () => {
 
   return (
     <CRow>
+      <div className="d-flex justify-content-between mb-4" style={{ alignItems: 'center' }}>
+        <div style={{ width: "50%", display: 'flex', alignItems: 'center' }}>
+          <label style={{ marginRight: '10px' }}>Start Date: </label>
+          <DatePicker
+            selected={startDateFilter}
+            onChange={handleStartDateChange}
+            dateFormat="yyyy-MM-dd"
+            className="form-control"
+          />
+        </div>
+        <div style={{ width: "50%", display: 'flex', alignItems: 'center' }}>
+          <label style={{ marginRight: '10px' }}>End Date: </label>
+          <DatePicker
+            selected={endDateFilter}
+            onChange={handleEndDateChange}
+            dateFormat="yyyy-MM-dd"
+            className="form-control"
+          />
+        </div>
+      </div>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
@@ -188,7 +241,7 @@ const PromotionList = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {data.filter(row => row.status).map((row) => (
+                  {filteredData.filter(row => row.status).map((row) => (
                     <CTableRow key={row.id}>
                       <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                       <CTableDataCell>{row.discount}</CTableDataCell>
@@ -199,7 +252,7 @@ const PromotionList = () => {
                       <CTableDataCell>{row.minimumPrize}</CTableDataCell>
                       <CTableDataCell>{row.maximumPrize}</CTableDataCell>
                       <CTableDataCell>
-                        <CButton className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
+                        <CButton style={{ marginRight: "5px" }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
                           Edit
                         </CButton>
                         <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => {
@@ -231,7 +284,7 @@ const PromotionList = () => {
           <p>Are you sure you want to delete this promotion?</p>
         </CModalBody>
         <CModalFooter>
-          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
+          <CButton style={{ marginRight: "5px" }} className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
             Cancel
           </CButton>
           <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => handleDelete(deleteId)}>
@@ -329,6 +382,62 @@ const PromotionList = () => {
         </CModalBody>
         <CModalFooter>
           <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCloseErrorModal}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      <CModal
+        visible={confirmationModalVisible}
+        onClose={() => setConfirmationModalVisible(false)}
+        aria-labelledby="ConfirmationModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="ConfirmationModalLabel">Account Information</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Your account has been created successfully!</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setConfirmationModalVisible(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      {/* popup save success of edit */}
+      <CModal
+        visible={successModalVisible}
+        onClose={() => setSuccessModalVisible(false)}
+        aria-labelledby="SuccessModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="SuccessModalLabel">Success</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Your changes have been saved successfully!</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setSuccessModalVisible(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      {/* popup delete success */}
+      <CModal
+        visible={deleteSuccessModalVisible}
+        onClose={() => setDeleteSuccessModalVisible(false)}
+        aria-labelledby="DeleteSuccessModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="DeleteSuccessModalLabel">Delete Successful</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>The account has been deleted successfully!</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setDeleteSuccessModalVisible(false)}>
             Close
           </CButton>
         </CModalFooter>
