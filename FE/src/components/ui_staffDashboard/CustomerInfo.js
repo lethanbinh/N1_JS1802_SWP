@@ -20,8 +20,6 @@ import {
     CTableHeaderCell,
     CTableRow
 } from '@coreui/react';
-// import { cisSearch } from '@coreui/icons'
-// import CIcon from '@coreui/icons-react'
 import React, { useEffect, useState } from 'react';
 import '../../customStyles.css';
 import fetchData from "../../util/ApiConnection";
