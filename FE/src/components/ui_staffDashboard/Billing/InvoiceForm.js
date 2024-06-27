@@ -17,6 +17,7 @@ import {
   CModalTitle,
   CModalBody,
   CModalFooter,
+  CFormTextarea,
 } from '@coreui/react';
 import React, { useState, useEffect } from 'react';
 import { uid } from 'uid';
@@ -38,40 +39,54 @@ const InvoiceForm = () => {
   const [invoiceNumber, setInvoiceNumber] = useState(1);
   const [cashierName, setCashierName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
-  const [customerName, setCustomerName] = useState('')
+  const [customerName, setCustomerName] = useState('');
   const [address, setAddress] = useState('');
   const [transactionType, setTransactionType] = useState('SELL');
   const [orderStatus, setOrderStatus] = useState('PENDING');
   const [barcode, setBarcode] = useState('');
   const [promotion, setPromotion] = useState([]);
-  const [promotionValue, setPromotionValue] = useState('')
-  const [promotionId, setPromotionId] = useState('')
+  const [promotionValue, setPromotionValue] = useState('');
+  const [promotionId, setPromotionId] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [staff, setStaff] = useState([])
-  const [staffId, setStaffId] = useState('')
+  const [staff, setStaff] = useState([]);
+  const [staffId, setStaffId] = useState('');
+  const [customerGiveMoney, setCustomerGiveMoney] = useState(0)
+  const [description, setDescription] = useState('')
 
-  const [errorMessage, setErrorMessage] = useState("")
-  const [errorModalVisible, setErrorModalVisible] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
 
   const [items, setItems] = useState([]);
+
+  const subtotal = items.reduce((prev, curr) => {
+    if (curr.name.trim().length > 0) {
+      return prev + Number(curr.price) * Math.floor(curr.qty);
+    } else {
+      return prev;
+    }
+  }, 0);
+
+  const taxRate = (tax * subtotal) / 100;
+  const discountRate = (promotionValue ? promotionValue * 100 * subtotal : 0) / 100;
+  const total = subtotal - discountRate + taxRate
 
   const handleBarcodeChange = (event) => {
     setBarcode(event.target.value);
   };
 
   const loadPromotion = () => {
-    fetchData(`http://localhost:8080/api/v1/promotions`, 'GET', null, userInfo.accessToken)
+    fetchData('http://localhost:8080/api/v1/promotions', 'GET', null, userInfo.accessToken)
       .then(data => {
-        setPromotion(data.payload)
-      })
-  }
+        setPromotion(data.payload);
+      });
+  };
 
   const loadStaff = () => {
-    fetchData("http://localhost:8080/api/v1/users", 'GET', null, userInfo.accessToken)
+    fetchData('http://localhost:8080/api/v1/users', 'GET', null, userInfo.accessToken)
       .then(data => {
-        setStaff(data.payload.filter(item => item.roleName.toUpperCase() === "STAFF"))
-      })
-  }
+        setStaff(data.payload.filter(item => item.roleName.toUpperCase() === 'STAFF'));
+      });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -79,37 +94,49 @@ const InvoiceForm = () => {
   };
 
   useEffect(() => {
-    loadPromotion()
-    loadStaff()
-  }, [])
+    loadPromotion();
+    loadStaff();
+  }, []);
 
   const validate = () => {
     if (customerPhone.length < 1) {
-      setErrorMessage(`Please fill customer phone`);
+      setErrorMessage('Please fill customer phone');
       setErrorModalVisible(true);
       return false;
     }
 
     if (items.length < 1) {
-      setErrorMessage(`Please Add item`);
+      setErrorMessage('Please Add item');
       setErrorModalVisible(true);
       return false;
     }
 
     if (tax > 100 || tax < 0) {
-      setErrorMessage(`Tax must be 0 - 100%`);
+      setErrorMessage('Tax must be 0 - 100%');
       setErrorModalVisible(true);
       return false;
     }
 
     if (customerName.length < 1) {
-      setErrorMessage(`Please fill customer name`);
+      setErrorMessage('Please fill customer name');
+      setErrorModalVisible(true);
+      return false;
+    }
+
+    if (!customerPhone.match("^(\\+84|0)(3[2-9]|5[6|8|9]|7[0|6|7|8|9]|8[1-5]|9[0-4|6-9])[0-9]{7}$")) {
+      setErrorMessage('Invalid Vietnamese phone numbers');
+      setErrorModalVisible(true);
+      return false;
+    }
+
+    if (customerGiveMoney < total) {
+      setErrorMessage('Customer give money must be greater than total price');
       setErrorModalVisible(true);
       return false;
     }
 
     return true;
-  }
+  };
 
   const handleReviewInvoice = () => {
     if (!validate()) {
@@ -120,7 +147,7 @@ const InvoiceForm = () => {
   };
 
   const addItemHandler = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     fetchData(`http://localhost:8080/api/v1/products/barcode/${barcode}`, 'GET', null, userInfo.accessToken)
       .then(data => {
         if (data.status === 'SUCCESS') {
@@ -147,14 +174,16 @@ const InvoiceForm = () => {
             ]);
           }
 
-          setBarcode('')
-          document.getElementById('barcode-input').focus()
+          setBarcode('');
+          document.getElementById('barcode-input').focus();
         } else {
-          setErrorMessage(`Product is not exists`);
+          setErrorMessage('Product is not exists');
           setErrorModalVisible(true);
+          setBarcode('');
+          document.getElementById('barcode-input').focus();
           return;
         }
-      })
+      });
   };
 
   const deleteItemHandler = (id) => {
@@ -166,8 +195,8 @@ const InvoiceForm = () => {
       return;
     }
 
-    const orderList = []
-    items.map(item => orderList.push({ productQuantity: item.qty, productId: item.productId }))
+    const orderList = [];
+    items.map(item => orderList.push({ productQuantity: item.qty, productId: item.productId }));
 
     let data = {
       "description": "string",
@@ -175,9 +204,10 @@ const InvoiceForm = () => {
       "type": transactionType,
       "address": address,
       "tax": tax / 100,
-      "customerGiveMoney": 1000000000000,
       "promotionId": promotionId,
       "staffId": staffId,
+      "customerGiveMoney": customerGiveMoney,
+      "description": description,
       "customerRequest": {
         "fullName": customerName,
         "phone": customerPhone,
@@ -188,18 +218,18 @@ const InvoiceForm = () => {
         "bonusPoint": 0
       },
       "orderDetailRequestList": orderList
-    }
+    };
 
-    console.log(data)
+    console.log(data);
 
-    fetchData(`http://localhost:8080/api/v1/orders`, 'POST', data, userInfo.accessToken)
+    fetchData('http://localhost:8080/api/v1/orders', 'POST', data, userInfo.accessToken)
       .then(data => {
         if (data.status === 'SUCCESS') {
-          setErrorMessage(`Save order successfully`);
+          setErrorMessage('Save order successfully');
           setErrorModalVisible(true);
         }
-      })
-  }
+      });
+  };
 
   const editItemHandler = (event, id) => {
     const { name, value } = event.target;
@@ -214,17 +244,9 @@ const InvoiceForm = () => {
     setItems(newItems);
   };
 
-  const subtotal = items.reduce((prev, curr) => {
-    if (curr.name.trim().length > 0) {
-      return prev + Number(curr.price) * Math.floor(curr.qty);
-    } else {
-      return prev;
-    }
-  }, 0);
 
-  const taxRate = (tax * subtotal) / 100;
-  const discountRate = (promotionValue ? promotionValue * 100 * subtotal : 0) / 100;
-  const total = subtotal - discountRate + taxRate;
+
+
 
   return (
     <CRow className="relative flex flex-col px-2 md:flex-row" onSubmit={handleSubmit}>
@@ -250,6 +272,7 @@ const InvoiceForm = () => {
                 value={staffId}
                 onChange={(event) => setStaffId(event.target.value)}
               >
+                <option value="">Select Cashier</option>
                 {staff.map(user => (
                   <option key={user.id} value={user.id}>
                     {user.fullName}
@@ -336,14 +359,13 @@ const InvoiceForm = () => {
                 name="promotionValue"
                 value={promotionValue}
                 onChange={(event) => {
-                  setPromotionId(event.target.key)
-                  setPromotionValue(event.target.value)
-                }
-                }
+                  setPromotionId(event.target.selectedOptions[0].getAttribute('data-id'));
+                  setPromotionValue(event.target.value);
+                }}
               >
                 <option value="">None</option>
                 {promotion.map(promotion => (
-                  <option key={promotion.id} value={promotion.discount}>
+                  <option key={promotion.id} value={promotion.discount} data-id={promotion.id}>
                     {promotion.name} {promotion.discount * 100}%
                   </option>
                 ))}
@@ -356,9 +378,34 @@ const InvoiceForm = () => {
                 required
                 className="flex-1"
                 placeholder="Customer Name"
-                type="tel"
+                type="text"
                 value={customerName}
                 onChange={(event) => setCustomerName(event.target.value)}
+              />
+            </CCol>
+          </CRow>
+
+          <CRow>
+            <CCol>
+              <strong className="text-sm font-bold">Customer give money:</strong>
+              <CFormInput
+                required
+                className="flex-1"
+                placeholder="Customer give money"
+                type="text"
+                value={customerGiveMoney}
+                onChange={(event) => setCustomerGiveMoney(event.target.value)}
+              />
+            </CCol>
+            <CCol>
+              <strong className="text-sm font-bold">Description:</strong>
+              <CFormTextarea
+                required
+                className="flex-1"
+                placeholder="Description for order"
+                type="text"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
               />
             </CCol>
           </CRow>
@@ -469,10 +516,24 @@ const InvoiceForm = () => {
             </CCol>
           </CRow>
 
-          <CRow className="flex justify-end border-t  pt-2 mt-2">
+          <CRow className="flex justify-end border-t mt-2">
             <CCol style={{ display: "flex", justifyContent: "space-between" }}>
               <strong style={{ display: "inline-block" }} className="font-bold">Total:</strong>
               <span style={{ display: "inline-block" }} className="font-bold">${total % 1 === 0 ? total : total.toFixed(2)}</span>
+            </CCol>
+          </CRow>
+
+          <CRow className="flex justify-end border-t">
+            <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+              <strong style={{ display: "inline-block" }} className="font-bold">Customer give money:</strong>
+              <span style={{ display: "inline-block" }} className="font-bold">${customerGiveMoney}</span>
+            </CCol>
+          </CRow>
+
+          <CRow className="flex justify-end border-t">
+            <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+              <strong style={{ display: "inline-block" }} className="font-bold">Refund money:</strong>
+              <span style={{ display: "inline-block" }} className="font-bold">${customerGiveMoney >= total ? customerGiveMoney - total : 0}</span>
             </CCol>
           </CRow>
         </CCardBody>
@@ -520,7 +581,7 @@ const InvoiceForm = () => {
         aria-labelledby="ErrorModalLabel"
       >
         <CModalHeader>
-          <CModalTitle id="ErrorModalLabel">Input information error</CModalTitle>
+          <CModalTitle id="ErrorModalLabel">Input information notification</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <p>{errorMessage}</p>

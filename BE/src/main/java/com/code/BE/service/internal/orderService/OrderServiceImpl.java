@@ -171,7 +171,6 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalPrice(totalPrice);
 
         order.setTotalBonusPoint(bonusPoint);
-        order.setRefundMoney((orderRequest.getCustomerGiveMoney() - order.getFinalPrice() > 0) ? (orderRequest.getCustomerGiveMoney() - order.getFinalPrice()) : 0);
         Promotion promotion = promotionRepository.findById(orderRequest.getPromotionId());
         if (promotion != null) {
             order.setPromotion(promotion);
@@ -181,6 +180,9 @@ public class OrderServiceImpl implements OrderService {
             order.setPromotion(null);
             order.setFinalPrice(totalPrice + totalPrice * orderRequest.getTax());
         }
+        order.setRefundMoney((orderRequest.getCustomerGiveMoney() - order.getFinalPrice() > 0)
+                ? (orderRequest.getCustomerGiveMoney() - order.getFinalPrice()) : 0);
+
         order.setStaff(userRepository.findById(orderRequest.getStaffId()));
         order.setCustomer(customer);
         Order saveOrder = orderRepository.saveAndFlush(order);
