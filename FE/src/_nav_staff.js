@@ -21,8 +21,13 @@ const _nav_staff = [
       },
       {
         component: CNavItem,
-        name: 'Add Product',
-        to: '/staff-dashboard/add-product',
+        name: 'Add Sell Product',
+        to: '/staff-dashboard/add-sell-product',
+      },
+      {
+        component: CNavItem,
+        name: 'Add Purchase Product',
+        to: '/staff-dashboard/add-purchase-product',
       },
       {
         component: CNavItem,
