@@ -13,8 +13,8 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow
-} from '@coreui/react'
-import React, { useState, useEffect } from 'react'
+} from '@coreui/react';
+import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 
@@ -25,6 +25,9 @@ const StallProduct = () => {
   const [data, setData] = useState([])
   const [error, setError] = useState(null)
   const [stallOptions, setStallOptions] = useState([])
+  const [stallStatus, setStallStatus] = useState('')
+  const [filterData, setFilterData] = useState([])
+
 
   const loadData = async (stallName) => {
     if (!stallName) return; // Do not proceed if stallName is not selected
@@ -59,7 +62,21 @@ const StallProduct = () => {
     }
   }
 
-  console.log(stallOptions)
+  const searchSell = () => {
+    const filteredData = data.filter((item) => item.status === 'SELL')
+    setFilterData(filteredData)
+  }
+
+  const searchPurchase = () => {
+    const filteredData = data.filter((item) => item.status === 'PURCHASE')
+    setFilterData(filteredData)
+  }
+
+  const searchAll = () => {
+    setFilterData(data)
+  }
+
+  console.log(filterData)
 
   useEffect(() => {
     loadStallData()
@@ -75,12 +92,14 @@ const StallProduct = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-          <CDropdownHeader>
+            <CDropdownHeader>
               <strong>
                 <CFormSelect
                   name="stallName"
                   value={stallName}
-                  onChange={(event) => setStallName(event.target.value)}
+                  onChange={(event) =>
+                    setStallName(event.target.value)
+                  }
                 >
                   <option value="">Select Stall</option>
                   {stallOptions.map(stall => (
@@ -89,6 +108,45 @@ const StallProduct = () => {
                     </option>
                   ))}
                 </CFormSelect>
+                <CButton
+                  style={{ marginRight: '10px', marginBottom: '10px', marginTop: '10px' }}
+                  className='custom-btn custom-btn-info'
+                  color="warning"
+                  onClick={
+                    () => {
+                      setStallStatus('')
+                      searchAll()
+                    }
+                  }
+                >
+                  All Product
+                </CButton>
+                <CButton
+                  style={{ marginRight: '10px', marginBottom: '10px', marginTop: '10px' }}
+                  className='custom-btn custom-btn-info'
+                  color="warning"
+                  onClick={
+                    () => {
+                      setStallStatus('SELL')
+                      searchSell()
+                    }
+                  }
+                >
+                  Sell Product
+                </CButton>
+                <CButton
+                  style={{ marginBottom: '10px', marginTop: '10px' }}
+                  className='custom-btn custom-btn-info'
+                  color="warning"
+                  onClick={
+                    () => {
+                      setStallStatus('PURCHASE')
+                      searchPurchase()
+                    }
+                  }
+                >
+                  Purchase Product
+                </CButton>
               </strong>
             </CDropdownHeader>
 
@@ -117,7 +175,7 @@ const StallProduct = () => {
                   </CTableHead>
                   <CTableBody>
                     {
-                      data.map((row, index) => (
+                      filterData.map((row) => (
                         <CTableRow key={row.id}>
                           <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                           <CTableDataCell>{row.code}</CTableDataCell>
@@ -132,10 +190,10 @@ const StallProduct = () => {
                           <CTableDataCell>{row.status}</CTableDataCell>
                           <CTableDataCell>{row.stallLocation}</CTableDataCell>
                           <CTableDataCell>
-                            <img src={row.barcode} style={{ width: 'auto', height: '200px' }} />
+                            <img src={row.barCode} style={{ width: 'auto', height: '50px' }} />
                           </CTableDataCell>
                           <CTableDataCell>
-                            <img src={row.image} style={{ width: 'auto', height: '200px' }} /> {/* Display image */}
+                            <img src={row.image} style={{ width: 'auto', height: '50px' }} /> {/* Display image */}
                           </CTableDataCell>
                         </CTableRow>
                       ))
