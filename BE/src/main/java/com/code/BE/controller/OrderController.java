@@ -152,7 +152,7 @@ public class OrderController {
     }
 
     @PutMapping(value = "/edit-status/{id}/{status}")
-    public ResponseEntity<ApiResponse<Boolean>> updateOrderStatus(@PathVariable int id
+    public ResponseEntity<ApiResponse<Boolean>> editOrderStatus(@PathVariable int id
             ,@PathVariable String status) throws Exception {
         try {
             OrderResponse orderResponse = orderService.findById(id);

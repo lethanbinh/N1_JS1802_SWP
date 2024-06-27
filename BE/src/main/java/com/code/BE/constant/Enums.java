@@ -22,4 +22,8 @@ public class Enums {
     public enum Role {
         ADMIN, STAFF, MANAGER
     }
+
+    public enum PaymentMethod {
+        CASH, BANK_TRANSFER, DOMESTIC_ATM, CREDIT_OR_DEBIT_CARD, INSTALLMENT_CREDIT_CARD, PAYMENT_GATEWAY
+    }
 }

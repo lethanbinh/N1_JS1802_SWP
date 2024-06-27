@@ -8,6 +8,8 @@ import com.code.BE.exception.ValidationException;
 import com.code.BE.model.dto.request.CustomerRequest;
 import com.code.BE.model.dto.response.ApiResponse;
 import com.code.BE.model.dto.response.CustomerResponse;
+import com.code.BE.model.entity.Customer;
+import com.code.BE.repository.CustomerRepository;
 import com.code.BE.service.internal.customerService.CustomerService;
 import com.code.BE.util.ValidatorUtil;
 import com.code.BE.validator.CustomerValidator;
@@ -29,6 +31,9 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Autowired
     private ValidatorUtil validatorUtil;
@@ -124,6 +129,31 @@ public class CustomerController {
 
             ApiResponse<CustomerResponse> apiResponse = new ApiResponse<>();
             apiResponse.ok(customerService.editById(id, customerRequest));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (ValidationException ex) {
+            throw ex; // Rethrow ValidationException
+        } catch (NotFoundException ex) {
+            throw ex; // Rethrow NotFoundException
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
+    @PatchMapping(value = "/bonus/{phone}/{point}")
+    public ResponseEntity<ApiResponse<CustomerResponse>> editCustomerBonusPoint(@PathVariable String phone
+            , @PathVariable double point) throws Exception {
+        try {
+            Customer customer = customerRepository.findByPhone(phone);
+            if (customer == null) {
+                throw new NotFoundException(ErrorMessage.CUSTOMER_NOT_FOUND);
+            }
+
+            if (point < 0 || customer.getBonusPoint() < point) {
+                throw new ValidationException(ErrorMessage.BONUS_POINT_VALIDATION_FAILED);
+            }
+
+            ApiResponse<CustomerResponse> apiResponse = new ApiResponse<>();
+            apiResponse.ok(customerService.useBonusPoint(phone, point));
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (ValidationException ex) {
             throw ex; // Rethrow ValidationException

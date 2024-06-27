@@ -14,10 +14,10 @@ public interface OrderStatisticsRepository extends JpaRepository<Order, Integer>
     @Query("SELECT COUNT(o) FROM Order o WHERE o.createDate BETWEEN :startDate AND :endDate")
     int findTotalNumberOfOrders(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    @Query("SELECT AVG(o.finalPrice) FROM Order o WHERE o.createDate BETWEEN :startDate AND :endDate")
+    @Query("SELECT AVG(o.totalPrice) FROM Order o WHERE o.createDate BETWEEN :startDate AND :endDate")
     Double findAverageOrderValue(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    @Query("SELECT SUM(o.finalPrice) FROM Order o WHERE o.createDate BETWEEN :startDate AND :endDate")
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.createDate BETWEEN :startDate AND :endDate")
     Double findTotalSales(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("SELECT FUNCTION('YEAR', o.createDate) AS year, FUNCTION('MONTH', o.createDate) AS month, COUNT(o) " +

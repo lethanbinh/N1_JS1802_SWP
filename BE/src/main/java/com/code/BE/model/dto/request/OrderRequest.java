@@ -1,6 +1,5 @@
 package com.code.BE.model.dto.request;
 
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,13 +15,27 @@ public class OrderRequest {
     private String status;
     private String type;
     private String address;
+
     @PositiveOrZero
-    private double tax;
+    private double totalPrice = 0;
+
     @PositiveOrZero
-    private double customerGiveMoney;
+    private double tax = 0;
+
+    @PositiveOrZero
+    private double totalBonusPoint = 0;
+
+    @PositiveOrZero
+    private double customerGiveMoney = 0;
+
+    @PositiveOrZero
+    private double refundMoney = 0;
+
+    private String sendMoneyMethod;
+
     @PositiveOrZero
     private int promotionId;
-    @Positive
+    @PositiveOrZero
     private int staffId;
 
     private CustomerRequest customerRequest;

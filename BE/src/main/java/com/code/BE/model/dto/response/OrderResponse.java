@@ -19,10 +19,11 @@ public class OrderResponse {
     private String address;
     private double totalPrice;
     private double tax;
-    private double finalPrice;
     private double totalBonusPoint;
     private double customerGiveMoney;
     private double refundMoney;
+    private String sendMoneyMethod;
+
     private int promotionId;
     private int staffId;
 

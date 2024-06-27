@@ -71,5 +71,12 @@ public class OrderValidator implements Validator {
             throw new IllegalArgumentException("Invalid order types: " + orderRequest.getType() + ". Valid types are: " +
                     Arrays.toString(Enums.OrderType.values()));
         }
+
+        try {
+            Enums.PaymentMethod.valueOf(orderRequest.getSendMoneyMethod().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid order payment method: " + orderRequest.getSendMoneyMethod() + ". Valid payment methods are: " +
+                    Arrays.toString(Enums.PaymentMethod.values()));
+        }
     }
 }

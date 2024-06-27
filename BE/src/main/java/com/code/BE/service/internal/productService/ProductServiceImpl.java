@@ -115,6 +115,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductResponse reduceQuantity(int id, int quantity) {
+        Product product = productRepository.findById(id);
+        if (product != null) {
+            if (quantity >= 0 && product.getQuantity() >= quantity) {
+                product.setQuantity(product.getQuantity() - quantity);
+                return productMapper.toResponse(productRepository.saveAndFlush(product));
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean checkQuantity(int id, int quantity) {
+        Product product = productRepository.findById(id);
+        if (product != null) {
+            return quantity >= 0 && product.getQuantity() >= quantity;
+        }
+        return false;
+    }
+
+    @Override
     public List<ProductResponse> findByStallNameContaining(String name) {
         return productMapper.toResponseList(productRepository.findByStallNameContaining(name));
     }

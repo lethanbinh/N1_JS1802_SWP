@@ -38,27 +38,25 @@ public class Order {
 
     @PositiveOrZero
     @Column(name = "total_price")
-    private double totalPrice;
+    private double totalPrice = 0;
 
     @PositiveOrZero
     @Column(name = "tax")
-    private double tax;
-
-    @PositiveOrZero
-    @Column(name = "final_price")
-    private double finalPrice;
+    private double tax = 0;
 
     @PositiveOrZero
     @Column(name = "total_bonus_point")
-    private double totalBonusPoint;
+    private double totalBonusPoint = 0;
 
     @PositiveOrZero
     @Column(name = "customer_give_money")
-    private double customerGiveMoney;
+    private double customerGiveMoney = 0;
 
-    @PositiveOrZero
     @Column(name = "refund_money")
-    private double refundMoney;
+    private double refundMoney = 0;
+
+    @Column(name = "send_money_method")
+    private String sendMoneyMethod;
 
     @ManyToOne
     @JoinColumn(name = "promotion_id")

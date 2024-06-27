@@ -48,4 +48,7 @@ public class ErrorMessage {
     public static final String END_DATE_WARRANTY_VALIDATION_FAILED = "End date cannot be null.";
     public static final String DATE_RANGE_VALIDATION_FAILED = "Start date must be before or equal to end date.";
     public static final String ORDER_WARRANTY_VALIDATION_FAILED = "Order warranty cannot be null.";
+    public static final String BONUS_POINT_VALIDATION_FAILED = "Bonus point < 0 or customer does not have enough point";
+
+    public static final String PRODUCT_OUT_OF_STOCK = "Quantity in stall is not enough";
 }

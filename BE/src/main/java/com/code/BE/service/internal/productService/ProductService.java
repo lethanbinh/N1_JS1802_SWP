@@ -14,4 +14,6 @@ public interface ProductService {
     ProductResponse findByBarcode (String barcode);
     List<ProductResponse> findByStallNameContaining (String name);
     List<ProductResponse> findByNameContaining (String name);
+    ProductResponse reduceQuantity (int id, int quantity);
+    boolean checkQuantity (int id, int quantity);
 }

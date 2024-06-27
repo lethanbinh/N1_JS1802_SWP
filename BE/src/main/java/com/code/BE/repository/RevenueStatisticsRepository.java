@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface RevenueStatisticsRepository extends JpaRepository<Order, Integer> {
     // Tổng doanh thu của tất cả các quầy
-    @Query("SELECT COALESCE(SUM(o.finalPrice), 0) FROM Order o WHERE o.createDate BETWEEN :startDate AND :endDate")
+    @Query("SELECT COALESCE(SUM(o.totalPrice), 0) FROM Order o WHERE o.createDate BETWEEN :startDate AND :endDate")
     Double findTotalRevenue(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     // Doanh thu theo từng quầy hàng
@@ -45,7 +45,7 @@ public interface RevenueStatisticsRepository extends JpaRepository<Order, Intege
     List<String> findTopPerformingStalls(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     // Xu hướng doanh thu hàng tháng và hàng quý
-    @Query("SELECT FUNCTION('MONTH', o.createDate) AS month, FUNCTION('QUARTER', o.createDate) AS quarter, COALESCE(SUM(o.finalPrice), 0) " +
+    @Query("SELECT FUNCTION('MONTH', o.createDate) AS month, FUNCTION('QUARTER', o.createDate) AS quarter, COALESCE(SUM(o.totalPrice), 0) " +
             "FROM Order o WHERE o.createDate BETWEEN :startDate AND :endDate GROUP BY FUNCTION('MONTH', o.createDate), FUNCTION('QUARTER', o.createDate)")
     List<Object[]> findMonthlyQuarterlyRevenueTrends(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

@@ -43,7 +43,6 @@ public class ProductController {
     @Autowired
     private CodeGeneratorUtil codeGeneratorUtil;
 
-    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "")
     public ResponseEntity<ApiResponse<List<ProductResponse>>> findAll() throws Exception {
         ApiResponse<List<ProductResponse>> apiResponse = new ApiResponse<>();
@@ -55,7 +54,6 @@ public class ProductController {
         }
     }
 
-    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "/id/{id}")
     public ResponseEntity<ApiResponse<ProductResponse>> findById(@PathVariable int id) throws Exception {
         try {
@@ -72,7 +70,6 @@ public class ProductController {
         }
     }
 
-    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "/stallName/{stallName}")
     public ResponseEntity<ApiResponse<List<ProductResponse>>> findByStallNameContaining(@PathVariable String stallName) throws Exception {
         try {
@@ -84,7 +81,6 @@ public class ProductController {
         }
     }
 
-    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "/name/{name}")
     public ResponseEntity<ApiResponse<List<ProductResponse>>> findByNameContaining(@PathVariable String name) throws Exception {
         try {
@@ -96,7 +92,6 @@ public class ProductController {
         }
     }
 
-    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "/barcode/{barcode}")
     public ResponseEntity<ApiResponse<ProductResponse>> findByBarcode(@PathVariable String barcode) throws Exception {
         try {
@@ -105,6 +100,26 @@ public class ProductController {
             }
             ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
             apiResponse.ok(productService.findByBarcode(barcode));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (NotFoundException ex) {
+            throw ex; // Rethrow NotFoundException
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
+    @GetMapping(value = "/check-quantity/{id}/{quantity}")
+    public ResponseEntity<ApiResponse<ProductResponse>> checkQuantity(@PathVariable int id, @PathVariable int quantity) throws Exception {
+        try {
+            if (productService.findById(id) == null) {
+                throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
+            }
+
+            if (!productService.checkQuantity(id, quantity)) {
+                throw new ApplicationException(ErrorMessage.PRODUCT_OUT_OF_STOCK);
+            }
+            ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
+            apiResponse.ok(productService.findById(id));
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (NotFoundException ex) {
             throw ex; // Rethrow NotFoundException
@@ -160,6 +175,30 @@ public class ProductController {
 
             ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
             apiResponse.ok(productService.editById(id, productRequest));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (ValidationException ex) {
+            throw ex; // Rethrow ValidationException
+        } catch (NotFoundException ex) {
+            throw ex; // Rethrow NotFoundException
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
+    @PatchMapping(value = "/reduce-quantity/{id}/{quantity}")
+    public ResponseEntity<ApiResponse<ProductResponse>> reduceQuantity(@PathVariable int id, @PathVariable int quantity) throws Exception {
+        try {
+            ProductResponse productResponse = productService.findById(id);
+            if (productResponse == null) {
+                throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
+            }
+
+            if (!productService.checkQuantity(id, quantity)) {
+                throw new ApplicationException(ErrorMessage.PRODUCT_OUT_OF_STOCK);
+            }
+
+            ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
+            apiResponse.ok(productService.reduceQuantity(id, quantity));
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (ValidationException ex) {
             throw ex; // Rethrow ValidationException

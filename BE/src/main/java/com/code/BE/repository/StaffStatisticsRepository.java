@@ -14,7 +14,7 @@ public interface StaffStatisticsRepository extends JpaRepository<User, Integer> 
     @Query("SELECT COUNT(u) FROM User u JOIN u.role r WHERE r.name = 'staff' AND u.registerDate BETWEEN :startDate AND :endDate")
     int findTotalNumberOfStaff(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    @Query("SELECT u.username, SUM(o.finalPrice) AS totalRevenue " +
+    @Query("SELECT u.username, SUM(o.totalPrice) AS totalRevenue " +
             "FROM Order o JOIN o.staff u " +
             "WHERE u.role.name = 'staff' AND o.createDate BETWEEN :startDate AND :endDate " +
             "GROUP BY u.username")
@@ -23,11 +23,11 @@ public interface StaffStatisticsRepository extends JpaRepository<User, Integer> 
     @Query("SELECT u.username FROM Order o JOIN o.staff u " +
             "WHERE u.role.name = 'staff' AND o.createDate BETWEEN :startDate AND :endDate " +
             "GROUP BY u.username " +
-            "ORDER BY SUM(o.finalPrice) DESC")
+            "ORDER BY SUM(o.totalPrice) DESC")
     List<String> findTopPerformingStaff(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("SELECT AVG(s.totalSales) " +
-            "FROM (SELECT SUM(o.finalPrice) AS totalSales " +
+            "FROM (SELECT SUM(o.totalPrice) AS totalSales " +
             "      FROM Order o JOIN o.staff u " +
             "      WHERE u.role.name = 'staff' AND o.createDate BETWEEN :startDate AND :endDate " +
             "      GROUP BY u.id) s")

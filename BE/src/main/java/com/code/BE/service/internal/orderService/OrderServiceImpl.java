@@ -4,7 +4,10 @@ import com.code.BE.model.dto.request.OrderDetailRequest;
 import com.code.BE.model.dto.request.OrderRequest;
 import com.code.BE.model.dto.response.OrderDetailResponse;
 import com.code.BE.model.dto.response.OrderResponse;
-import com.code.BE.model.entity.*;
+import com.code.BE.model.entity.Customer;
+import com.code.BE.model.entity.Order;
+import com.code.BE.model.entity.OrderDetail;
+import com.code.BE.model.entity.Product;
 import com.code.BE.model.mapper.CustomerMapper;
 import com.code.BE.model.mapper.OrderDetailMapper;
 import com.code.BE.model.mapper.OrderMapper;
@@ -131,16 +134,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse saveOrderAndOrderDetail(Order order, OrderRequest orderRequest) {
         Map<Integer, OrderDetail> productOrderDetailMap = new HashMap<>();
-        double totalPrice = 0;
-
         for (OrderDetailRequest orderDetailRequest : orderRequest.getOrderDetailRequestList()) {
             int productId = orderDetailRequest.getProductId();
             int quantity = orderDetailRequest.getProductQuantity();
             Product product = productRepository.findById(productId);
-            if (product.getQuantity() >= quantity) {
-                product.setQuantity(product.getQuantity() - quantity);
-                productRepository.saveAndFlush(product);
-            }
 
             OrderDetail orderDetail = productOrderDetailMap.getOrDefault(productId, new OrderDetail());
             orderDetail.setProduct(product);
@@ -150,18 +147,17 @@ public class OrderServiceImpl implements OrderService {
             orderDetail.setTotalPrice(orderDetail.getProductPrice() * orderDetail.getProductQuantity());
 
             productOrderDetailMap.put(productId, orderDetail);
-            totalPrice += orderDetail.getTotalPrice();
         }
 
-        Customer customer = customerRepository.findByPhone(phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
-        double bonusPoint = totalPrice / 1000;
+        Customer customer = customerRepository.findByPhone(
+                phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
 
         if (customer == null) {
             customer = customerMapper.toEntity(orderRequest.getCustomerRequest());
             customer.setCreateDate(new Date());
             customer.setUpdateDate(new Date());
             customer.setPhone(phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
-            customer.setBonusPoint(customer.getBonusPoint() + bonusPoint);
+            customer.setBonusPoint(orderRequest.getTotalBonusPoint());
 
             customer = customerRepository.saveAndFlush(customer);
         } else {
@@ -172,27 +168,18 @@ public class OrderServiceImpl implements OrderService {
             customer.setStatus(orderRequest.getCustomerRequest().isStatus());
             customer.setUpdateDate(new Date());
             customer.setPhone(phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
-            customer.setBonusPoint(customer.getBonusPoint() + bonusPoint);
+            customer.setBonusPoint(orderRequest.getTotalBonusPoint());
 
             customer = customerRepository.saveAndFlush(customer);
         }
 
         order.setStatus(orderRequest.getStatus().toUpperCase());
         order.setType(orderRequest.getType().toUpperCase());
-        order.setTotalPrice(totalPrice);
-
-        order.setTotalBonusPoint(bonusPoint);
-        Promotion promotion = promotionRepository.findById(orderRequest.getPromotionId());
-        if (promotion != null) {
-            order.setPromotion(promotion);
-            order.setFinalPrice(totalPrice + totalPrice * orderRequest.getTax() -
-                    totalPrice * promotionRepository.findById(orderRequest.getPromotionId()).getDiscount());
-        } else {
-            order.setPromotion(null);
-            order.setFinalPrice(totalPrice + totalPrice * orderRequest.getTax());
-        }
-        order.setRefundMoney((orderRequest.getCustomerGiveMoney() - order.getFinalPrice() > 0)
-                ? (orderRequest.getCustomerGiveMoney() - order.getFinalPrice()) : 0);
+        order.setTotalPrice(orderRequest.getTotalPrice());
+        order.setTotalBonusPoint(order.getTotalBonusPoint());
+        order.setPromotion(promotionRepository.findById(orderRequest.getPromotionId()));
+        order.setRefundMoney(orderRequest.getRefundMoney());
+        order.setSendMoneyMethod(order.getSendMoneyMethod());
 
         order.setStaff(userRepository.findById(orderRequest.getStaffId()));
         order.setCustomer(customer);
@@ -204,7 +191,8 @@ public class OrderServiceImpl implements OrderService {
         }
         OrderResponse orderResponse = orderMapper.toResponse(order);
         orderResponse.setCustomerResponse(customerMapper.toResponse(customer));
-        orderResponse.setOrderDetailResponses(orderDetailMapper.toResponseList(new ArrayList<>(productOrderDetailMap.values())));
+        orderResponse.setOrderDetailResponses(
+                orderDetailMapper.toResponseList(new ArrayList<>(productOrderDetailMap.values())));
         return orderResponse;
     }
 
