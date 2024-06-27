@@ -1,5 +1,6 @@
 package com.code.BE.controller;
 
+import com.code.BE.constant.Enums;
 import com.code.BE.constant.ErrorMessage;
 import com.code.BE.exception.ApplicationException;
 import com.code.BE.exception.NotFoundException;
@@ -20,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -139,6 +141,34 @@ public class OrderController {
 
             ApiResponse<OrderResponse> apiResponse = new ApiResponse<>();
             apiResponse.ok(orderService.editById(id, orderRequest));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (ValidationException ex) {
+            throw ex; // Rethrow ValidationException
+        } catch (NotFoundException ex) {
+            throw ex; // Rethrow NotFoundException
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
+    @PutMapping(value = "/edit-status/{id}/{status}")
+    public ResponseEntity<ApiResponse<Boolean>> updateOrderStatus(@PathVariable int id
+            ,@PathVariable String status) throws Exception {
+        try {
+            OrderResponse orderResponse = orderService.findById(id);
+            if (orderResponse == null) {
+                throw new NotFoundException(ErrorMessage.ORDER_NOT_FOUND);
+            }
+
+            try {
+                Enums.OrderStatus.valueOf(status);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Invalid order status: " + status + ". Valid statuses are: " +
+                        Arrays.toString(Enums.OrderStatus.values()));
+            }
+
+            ApiResponse<Boolean> apiResponse = new ApiResponse<>();
+            apiResponse.ok(orderService.editOrderStatus(status, id));
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (ValidationException ex) {
             throw ex; // Rethrow ValidationException

@@ -101,6 +101,17 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
+    @Override
+    public boolean editOrderStatus(String status, int id) {
+        Order order = orderRepository.findById(id);
+        if (order != null) {
+            order.setStatus(status);
+            orderRepository.saveAndFlush(order);
+            return true;
+        }
+        return false;
+    }
+
     // reuse services
     @Override
     public List<OrderDetailResponse> findOrderDetailsByOrderId(int id) {

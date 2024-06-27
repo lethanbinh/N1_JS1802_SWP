@@ -146,6 +146,14 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items, onAddNextInvoice 
             <span style={{display: "inline-block"}} className="font-bold">Total:</span>
             <span style={{display: "inline-block"}} className="font-bold">${invoiceInfo.total.toFixed(2)}</span>
           </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span style={{display: "inline-block"}} className="font-bold">Customer Give Money:</span>
+            <span style={{display: "inline-block"}} className="font-bold">${invoiceInfo.customerGiveMoney}</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span style={{display: "inline-block"}} className="font-bold">Refund Money:</span>
+            <span style={{display: "inline-block"}} className="font-bold">${invoiceInfo.refundMoney}</span>
+          </div>
         </div>
         <div className="text-center mt-4">
           <p className="text-sm">Thank you!</p>

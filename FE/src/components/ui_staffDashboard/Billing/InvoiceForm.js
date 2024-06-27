@@ -51,7 +51,7 @@ const InvoiceForm = () => {
   const [staff, setStaff] = useState([]);
   const [staffId, setStaffId] = useState('');
   const [customerGiveMoney, setCustomerGiveMoney] = useState(0)
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState('none')
 
   const [errorMessage, setErrorMessage] = useState("");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
@@ -568,7 +568,9 @@ const InvoiceForm = () => {
               taxRate,
               discountRate,
               total,
-              invoiceNumber
+              invoiceNumber,
+              customerGiveMoney,
+              refundMoney: `${customerGiveMoney >= total ? customerGiveMoney - total : 0}`
             }}
             items={items}
           />

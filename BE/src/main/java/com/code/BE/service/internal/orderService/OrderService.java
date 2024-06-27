@@ -14,6 +14,7 @@ public interface OrderService {
     List<OrderResponse> findByCustomerFullNameContaining (String name);
     OrderResponse save (OrderRequest orderRequest);
     OrderResponse editById (int id, OrderRequest orderRequest);
+    boolean editOrderStatus (String status, int id);
 
     // reuse services
     List<OrderDetailResponse> findOrderDetailsByOrderId (int id);

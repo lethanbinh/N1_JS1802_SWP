@@ -4,9 +4,12 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
+  CFormSelect,
   CModal,
   CModalBody,
+  CModalFooter,
   CModalHeader,
+  CModalTitle,
   CRow,
   CTable,
   CTableBody,
@@ -30,6 +33,10 @@ const PurchaseHistoryList = () => {
   const [show, setShow] = useState(false);
   const [orderDetails, setOrderDetails] = useState([]);
   const [createDateFilter, setCreateDateFilter] = useState(null);
+  const [editModalVisible, setEditModalVisible] = useState(false)
+  const [currentStatus, setCurrentStatus] = useState('')
+  const [orderId, setOrderId] = useState('')
+
 
   const loadData = async () => {
     try {
@@ -57,6 +64,19 @@ const PurchaseHistoryList = () => {
     applyFilters();
   }, [createDateFilter]);
 
+  const handleCancelEdit = () => {
+    setEditModalVisible(false);
+  }
+
+  const handleSave = () => {
+    fetchData(`http://localhost:8080/api/v1/orders/edit-status/${orderId}/${currentStatus}`, 'PUT', null, userInfo.accessToken)
+      .then(data => {
+          console.log(data)
+          setEditModalVisible(false)
+          loadData()
+      })
+  }
+
   const loadDetails = (id) => {
     const order = data.find((row) => row.id === id);
     setOrderDetails(order.orderDetailResponses);
@@ -77,15 +97,15 @@ const PurchaseHistoryList = () => {
 
   return (
     <CRow>
-        <div style={{ width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'right', paddingBottom: '10px' }}>
-          <label style={{ marginRight: '10px' }}>Create Date: </label>
-          <DatePicker
-            selected={createDateFilter}
-            onChange={handleCreateDateChange}
-            dateFormat="yyyy-MM-dd"
-            className="form-control"
-          />
-        </div>
+      <div style={{ width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'right', paddingBottom: '10px' }}>
+        <label style={{ marginRight: '10px' }}>Create Date: </label>
+        <DatePicker
+          selected={createDateFilter}
+          onChange={handleCreateDateChange}
+          dateFormat="yyyy-MM-dd"
+          className="form-control"
+        />
+      </div>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
@@ -108,7 +128,7 @@ const PurchaseHistoryList = () => {
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Refund Money</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Bonus Point</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Status</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Action</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "300px" }} scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -127,8 +147,14 @@ const PurchaseHistoryList = () => {
                       <CTableDataCell>{row.totalBonusPoint}</CTableDataCell>
                       <CTableDataCell>{row.status}</CTableDataCell>
                       <CTableDataCell className='mt-1'>
-                        <CButton className='custom-btn custom-btn-info mr-1' onClick={() => loadDetails(row.id)} color="info">View Details</CButton>
+                        <CButton style={{marginRight: "10px"}} className='custom-btn custom-btn-info mr-1' onClick={() => loadDetails(row.id)} color="info">View Details</CButton>
+                        <CButton className='custom-btn custom-btn-info mr-1' color="warning" onClick={() => {
+                          setEditModalVisible(true)
+                          setCurrentStatus(row.status)
+                          setOrderId(row.id)
+                        }}>Edit Status</CButton>
                       </CTableDataCell>
+
                     </CTableRow>
                   ))}
                 </CTableBody>
@@ -174,6 +200,38 @@ const PurchaseHistoryList = () => {
             </CTable>
           </div>
         </CModalBody>
+      </CModal>
+
+      <CModal
+        visible={editModalVisible}
+        onClose={handleCancelEdit}
+        aria-labelledby="EditModalLabel"
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle id="EditModalLabel">Edit order Status</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormSelect
+            required
+            value={currentStatus}
+            onChange={(event) => setCurrentStatus(event.target.value)}
+          >
+            <option value="PENDING">PENDING</option>
+            <option value="CONFIRMED">CONFIRMED</option>
+            <option value="SHIPPED">SHIPPED</option>
+            <option value="DELIVERED">DELIVERED</option>
+            <option value="CANCELLED">CANCELLED</option>
+          </CFormSelect>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCancelEdit}>
+            Cancel
+          </CButton>
+          <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
+            Save
+          </CButton>
+        </CModalFooter>
       </CModal>
     </CRow>
   );
