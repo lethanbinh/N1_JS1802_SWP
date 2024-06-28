@@ -4,8 +4,6 @@ public class Enums {
     public enum OrderStatus {
         PENDING,
         CONFIRMED,
-        SHIPPED,
-        DELIVERED,
         CANCELLED
     }
 
