@@ -168,7 +168,7 @@ public class OrderServiceImpl implements OrderService {
             customer.setStatus(orderRequest.getCustomerRequest().isStatus());
             customer.setUpdateDate(new Date());
             customer.setPhone(phoneNumberUtil.normalizePhoneNumber(orderRequest.getCustomerRequest().getPhone()));
-            customer.setBonusPoint(orderRequest.getTotalBonusPoint());
+            customer.setBonusPoint(customer.getBonusPoint() + orderRequest.getTotalBonusPoint());
 
             customer = customerRepository.saveAndFlush(customer);
         }
