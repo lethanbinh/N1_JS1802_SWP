@@ -122,8 +122,8 @@ const PurchaseHistoryList = () => {
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Create Date</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Address</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Staff Name</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Final Price</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Tax</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Price</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col"> (%)</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Custom Give</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Refund Money</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Bonus Point</CTableHeaderCell>
@@ -140,8 +140,8 @@ const PurchaseHistoryList = () => {
                       <CTableDataCell>{row.createDate}</CTableDataCell>
                       <CTableDataCell>{row.address}</CTableDataCell>
                       <CTableDataCell>{row.staffName}</CTableDataCell>
-                      <CTableDataCell>{row.finalPrice}</CTableDataCell>
-                      <CTableDataCell>{row.tax}</CTableDataCell>
+                      <CTableDataCell>{row.totalPrice}</CTableDataCell>
+                      <CTableDataCell>{row.tax && row.tax * 100}</CTableDataCell>
                       <CTableDataCell>{row.customerGiveMoney}</CTableDataCell>
                       <CTableDataCell>{row.refundMoney}</CTableDataCell>
                       <CTableDataCell>{row.totalBonusPoint}</CTableDataCell>

@@ -16,4 +16,5 @@ public interface ProductService {
     List<ProductResponse> findByNameContaining (String name);
     ProductResponse reduceQuantity (int id, int quantity);
     boolean checkQuantity (int id, int quantity);
+    ProductResponse addQuantity(int id, int quantity);
 }

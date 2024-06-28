@@ -24,6 +24,7 @@ import { uid } from 'uid';
 import InvoiceModal from './InvoiceModal';
 import fetchData from '../../../util/ApiConnection';
 import UserStorage from '../../../util/UserStorage';
+import { convertJavaDateToJSDate } from '../../../util/DateConvert';
 
 const date = new Date();
 const today = date.toLocaleDateString('en-GB', {
@@ -34,10 +35,8 @@ const today = date.toLocaleDateString('en-GB', {
 
 const InvoiceForm = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [tax, setTax] = useState('');
+  const [tax, setTax] = useState(0);
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
-  const [invoiceNumber, setInvoiceNumber] = useState(1);
-  const [cashierName, setCashierName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerName, setCustomerName] = useState('');
   const [address, setAddress] = useState('');
@@ -50,11 +49,14 @@ const InvoiceForm = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [staff, setStaff] = useState([]);
   const [staffId, setStaffId] = useState('');
+  const [staffName, setStaffName] = useState('')
   const [customerGiveMoney, setCustomerGiveMoney] = useState(0)
   const [description, setDescription] = useState('none')
-
+  const [sendMoneyMethod, setSendMoneyMethod] = useState('CASH')
+  const [bonusPointExchange, setBonusPointExchange] = useState(0)
   const [errorMessage, setErrorMessage] = useState("");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [confirmModalVisible, setconfirmModalVisible] = useState(false);
 
   const [items, setItems] = useState([]);
 
@@ -66,9 +68,9 @@ const InvoiceForm = () => {
     }
   }, 0);
 
-  const taxRate = (tax * subtotal) / 100;
-  const discountRate = (promotionValue ? promotionValue * 100 * subtotal : 0) / 100;
-  const total = subtotal - discountRate + taxRate
+  const taxRate = transactionType === 'SELL' ? (tax * subtotal) / 100 : 0;
+  const discountRate = transactionType === 'SELL' ? (promotionValue ? promotionValue * 100 * subtotal : 0) / 100 : 0;
+  const total = transactionType === 'SELL' ? subtotal - discountRate + taxRate - bonusPointExchange : subtotal
 
   const handleBarcodeChange = (event) => {
     setBarcode(event.target.value);
@@ -87,6 +89,11 @@ const InvoiceForm = () => {
         setStaff(data.payload.filter(item => item.roleName.toUpperCase() === 'STAFF'));
       });
   };
+
+  const handleResetBarcode = () => {
+    setBarcode('');
+    document.getElementById('barcode-input').focus();
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -129,12 +136,13 @@ const InvoiceForm = () => {
       return false;
     }
 
-    if (customerGiveMoney < total) {
-      setErrorMessage('Customer give money must be greater than total price');
-      setErrorModalVisible(true);
-      return false;
+    if (transactionType === 'SELL') {
+      if (customerGiveMoney < total) {
+        setErrorMessage('Customer give money must be greater than total price');
+        setErrorModalVisible(true);
+        return false;
+      }
     }
-
     return true;
   };
 
@@ -143,7 +151,18 @@ const InvoiceForm = () => {
       return;
     }
 
-    setIsOpen(true);
+    fetchData(`http://localhost:8080/api/v1/customers/check-point/${customerPhone}/${bonusPointExchange}`, 'GET', null, userInfo.accessToken)
+      .then(data => {
+        console.log(data, bonusPointExchange)
+        if (data.status === 'ERROR' && bonusPointExchange > 0 && transactionType === 'SELL') {
+          setErrorMessage('Customer does not have enough point');
+          setErrorModalVisible(true);
+          return;
+        }
+
+        setIsOpen(true);
+      })
+
   };
 
   const addItemHandler = (e) => {
@@ -154,6 +173,13 @@ const InvoiceForm = () => {
           if (items.find(item => item.name === data.payload.name)) {
             const newItems = items.map((item) => {
               if (item.name === data.payload.name) {
+                if (data.payload.quantity < item.qty + 1 && transactionType === 'SELL') {
+                  setErrorMessage('Product quantity in stall is not enough');
+                  setErrorModalVisible(true);
+                  handleResetBarcode()
+                  return item;
+                }
+
                 return { ...item, qty: item.qty + 1 };
               }
               return item;
@@ -162,6 +188,12 @@ const InvoiceForm = () => {
             setItems(newItems);
           } else {
             const id = uid(6);
+            if (data.payload.quantity < 1 && transactionType === 'SELL') {
+              setErrorMessage('Product quantity in stall is not enough');
+              setErrorModalVisible(true);
+              handleResetBarcode()
+              return;
+            }
             setItems((prevItems) => [
               ...prevItems,
               {
@@ -170,17 +202,17 @@ const InvoiceForm = () => {
                 name: data.payload.name,
                 qty: 1,
                 price: data.payload.sellPrice,
+                image: data.payload.image,
+                description: data.payload.description
               },
             ]);
           }
 
-          setBarcode('');
-          document.getElementById('barcode-input').focus();
+          handleResetBarcode()
         } else {
           setErrorMessage('Product is not exists');
           setErrorModalVisible(true);
-          setBarcode('');
-          document.getElementById('barcode-input').focus();
+          handleResetBarcode()
           return;
         }
       });
@@ -195,58 +227,110 @@ const InvoiceForm = () => {
       return;
     }
 
-    const orderList = [];
-    items.map(item => orderList.push({ productQuantity: item.qty, productId: item.productId }));
-
-    let data = {
-      "description": "string",
-      "status": orderStatus,
-      "type": transactionType,
-      "address": address,
-      "tax": tax / 100,
-      "promotionId": promotionId,
-      "staffId": staffId,
-      "customerGiveMoney": customerGiveMoney,
-      "description": description,
-      "customerRequest": {
-        "fullName": customerName,
-        "phone": customerPhone,
-        "email": `string${customerPhone}@gmail.com`,
-        "address": address,
-        "birthday": "2024-06-23T10:35:22.814Z",
-        "status": true,
-        "bonusPoint": 0
-      },
-      "orderDetailRequestList": orderList
-    };
-
-    console.log(data);
-
-    fetchData('http://localhost:8080/api/v1/orders', 'POST', data, userInfo.accessToken)
+    fetchData(`http://localhost:8080/api/v1/customers/check-point/${customerPhone}/${bonusPointExchange}`, 'GET', null, userInfo.accessToken)
       .then(data => {
-        if (data.status === 'SUCCESS') {
-          setErrorMessage('Save order successfully');
+        console.log(data, bonusPointExchange)
+        if (data.status === 'ERROR' && bonusPointExchange > 0 && transactionType === 'SELL') {
+          setErrorMessage('Customer does not have enough point');
           setErrorModalVisible(true);
+          return;
         }
-      });
+
+        const orderList = [];
+        items.map(item => orderList.push({ productQuantity: item.qty, productId: item.productId }));
+
+        let saveData = {
+          "description": description,
+          "status": orderStatus,
+          "type": transactionType,
+          "address": address,
+          "totalPrice": total,
+          "tax": tax / 100,
+          "totalBonusPoint": `${(transactionType === 'SELL' && orderStatus === 'CONFIRMED') ? total / 100 : 0}`,
+          "customerGiveMoney": customerGiveMoney,
+          "refundMoney": `${customerGiveMoney >= total ? customerGiveMoney - total : 0}`,
+          "sendMoneyMethod": sendMoneyMethod,
+          "promotionId": promotionId,
+          "staffId": staffId,
+          "customerRequest": {
+            "fullName": customerName,
+            "phone": customerPhone,
+            "email": `string${customerPhone}@gmail.com`,
+            "address": address,
+            "birthday": "2024-06-23T10:35:22.814Z",
+            "status": true,
+            "bonusPoint": `${(transactionType === 'SELL' && orderStatus === 'CONFIRMED') ? total / 100 : 0}`
+          },
+          "orderDetailRequestList": orderList
+        };
+        console.log(saveData);
+
+        fetchData('http://localhost:8080/api/v1/orders', 'POST', saveData, userInfo.accessToken)
+          .then(data => {
+            if (data.status === 'SUCCESS') {
+              setErrorMessage('Save order successfully');
+              setErrorModalVisible(true);
+            }
+          });
+
+        if (orderStatus === 'CONFIRMED' && transactionType === 'SELL') {
+          // reduce product quantity and reduce bonus point if transaction type is sell and order status is confirmed
+          items.forEach(item => {
+            fetchData(`http://localhost:8080/api/v1/products/reduce-quantity/${item.productId}/${item.qty}`, 'PATCH', null, userInfo.accessToken)
+          })
+
+          fetchData(`http://localhost:8080/api/v1/customers/bonus/${customerPhone}/${bonusPointExchange}`, 'PATCH', null, userInfo.accessToken)
+        } else if (orderStatus === 'CONFIRMED' && transactionType === 'PURCHASE') {
+          items.forEach(item => {
+            fetchData(`http://localhost:8080/api/v1/products/add-quantity/${item.productId}/${item.qty}`, 'PATCH', null, userInfo.accessToken)
+          })
+        }
+      })
   };
 
-  const editItemHandler = (event, id) => {
+  const editItemHandler = (event, productId) => {
     const { name, value } = event.target;
 
     const newItems = items.map((item) => {
-      if (item.id === id) {
-        return { ...item, [name]: value };
+      if (item.productId === productId) {
+        let newValue = value;
+        if (name === "qty") {
+          if (newValue < 0) {
+            newValue = 0;
+          }
+          return { ...item, [name]: newValue };
+        }
+        return { ...item, [name]: newValue };
       }
       return item;
     });
 
     setItems(newItems);
+
+    // Validate quantity against stock quantity
+    if (name === "qty" && value > 0) {
+      fetchData(`http://localhost:8080/api/v1/products/id/${productId}`, 'GET', null, userInfo.accessToken)
+        .then(product => {
+          if (product.payload.quantity < Number(value) && transactionType === 'SELL') {
+            setErrorMessage('Product quantity in stall is not enough');
+            setErrorModalVisible(true);
+
+            // Reset to available quantity immediately
+            const updatedItems = items.map((item) => {
+              if (item.productId === productId) {
+                return { ...item, qty: product.payload.quantity }; // Reset to available quantity
+              }
+              return item;
+            });
+            setItems(updatedItems);
+          }
+        });
+    }
   };
 
-
-
-
+  const handleBlur = (productId) => {
+    setItems((prevItems) => prevItems.filter((item) => item.productId !== productId || item.qty > 0));
+  };
 
   return (
     <CRow className="relative flex flex-col px-2 md:flex-row" onSubmit={handleSubmit}>
@@ -270,18 +354,23 @@ const InvoiceForm = () => {
               <CFormSelect
                 name="staff"
                 value={staffId}
-                onChange={(event) => setStaffId(event.target.value)}
+                onChange={(event) => {
+                  const selectedOption = event.target.options[event.target.selectedIndex];
+                  setStaffName(selectedOption.getAttribute("data-name"));
+                  setStaffId(event.target.value);
+                }}
               >
                 <option value="">Select Cashier</option>
                 {staff.map(user => (
-                  <option key={user.id} value={user.id}>
+                  <option key={user.id} value={user.id} data-name={user.fullName}>
                     {user.fullName}
                   </option>
                 ))}
               </CFormSelect>
             </CCol>
+
             <CCol>
-              <strong className="text-sm font-bold">Customer Phone:</strong>
+              <strong className="text-sm font-bold">Customer Phone {transactionType === 'SELL' ? "(Fill to check bonus point*):" : ""}</strong>
               <CFormInput
                 required
                 className="flex-1"
@@ -307,70 +396,6 @@ const InvoiceForm = () => {
                 onChange={(event) => setAddress(event.target.value)}
               />
             </CCol>
-            <CCol>
-              <strong className="text-sm font-bold">Order Status:</strong>
-              <CFormSelect
-                required
-                value={orderStatus}
-                onChange={(event) => setOrderStatus(event.target.value)}
-              >
-                <option value="PENDING">PENDING</option>
-                <option value="CONFIRMED">CONFIRMED</option>
-                <option value="SHIPPED">SHIPPED</option>
-                <option value="DELIVERED">DELIVERED</option>
-                <option value="CANCELLED">CANCELLED</option>
-              </CFormSelect>
-            </CCol>
-          </CRow>
-
-          <CRow className="mb-4">
-
-            <CCol>
-              <strong className="text-sm font-bold">Order Type:</strong>
-              <CFormSelect
-                required
-                value={transactionType}
-                onChange={(event) => setTransactionType(event.target.value)}
-              >
-                <option value="SELL">SELL</option>
-                <option value="PURCHASE">PURCHASE</option>
-              </CFormSelect>
-            </CCol>
-            <CCol>
-              <strong className="text-sm font-bold">Tax Rate (%):</strong>
-              <CFormInput
-                type="number"
-                min={0}
-                max={100}
-                step={1}
-                placeholder="0.0"
-                value={tax}
-                onChange={(event) => setTax(event.target.value)}
-              />
-            </CCol>
-
-
-          </CRow>
-
-          <CRow className='mb-4'>
-            <CCol>
-              <strong className="text-sm font-bold">Discount:</strong>
-              <CFormSelect
-                name="promotionValue"
-                value={promotionValue}
-                onChange={(event) => {
-                  setPromotionId(event.target.selectedOptions[0].getAttribute('data-id'));
-                  setPromotionValue(event.target.value);
-                }}
-              >
-                <option value="">None</option>
-                {promotion.map(promotion => (
-                  <option key={promotion.id} value={promotion.discount} data-id={promotion.id}>
-                    {promotion.name} {promotion.discount * 100}%
-                  </option>
-                ))}
-              </CFormSelect>
-            </CCol>
 
             <CCol>
               <strong className="text-sm font-bold">Customer Name:</strong>
@@ -385,20 +410,20 @@ const InvoiceForm = () => {
             </CCol>
           </CRow>
 
-          <CRow>
+          <CRow className="mb-4">
             <CCol>
-              <strong className="text-sm font-bold">Customer give money:</strong>
-              <CFormInput
+              <strong className="text-sm font-bold">Order Type:</strong>
+              <CFormSelect
                 required
-                className="flex-1"
-                placeholder="Customer give money"
-                type="text"
-                value={customerGiveMoney}
-                onChange={(event) => setCustomerGiveMoney(event.target.value)}
-              />
+                value={transactionType}
+                onChange={(event) => setTransactionType(event.target.value)}
+              >
+                <option value="SELL">SELL</option>
+                <option value="PURCHASE">PURCHASE</option>
+              </CFormSelect>
             </CCol>
             <CCol>
-              <strong className="text-sm font-bold">Description:</strong>
+              <strong className="text-sm font-bold">Order Description:</strong>
               <CFormTextarea
                 required
                 className="flex-1"
@@ -410,10 +435,38 @@ const InvoiceForm = () => {
             </CCol>
           </CRow>
 
+          {transactionType === 'SELL' ? <CRow className='mb-4'>
+            <CCol>
+              <strong className="text-sm font-bold">Customer give money:</strong>
+              <CFormInput
+                required
+                className="flex-1"
+                placeholder="Customer give money"
+                type="text"
+                value={customerGiveMoney}
+                onChange={(event) => setCustomerGiveMoney(event.target.value)}
+              />
+            </CCol>
+
+            <CCol>
+              <strong className="text-sm font-bold">Tax Rate (%):</strong>
+              <CFormInput
+                type="number"
+                min={0}
+                max={100}
+                step={1}
+                placeholder="0.0"
+                value={tax}
+                onChange={(event) => setTax(event.target.value)}
+              />
+            </CCol>
+          </CRow> : ""}
+
+
           <CRow className='mb-4'>
-            <form>
-              <CCol>
-                <strong className="text-sm font-bold">Barcode:</strong>
+            <CCol>
+              <form>
+                <strong className="text-sm font-bold">Barcode {transactionType === 'SELL' ? "(Scan to get discount*)" : ""}:</strong>
                 <CFormInput
                   id='barcode-input'
                   className="flex-1"
@@ -422,20 +475,29 @@ const InvoiceForm = () => {
                   value={barcode}
                   onChange={handleBarcodeChange}
                 />
-              </CCol>
-
-              <CButton
-                type='submit'
-                color="primary"
-                className="rounded px-4 py-2 text-white shadow mt-4"
-                onClick={e => addItemHandler(e)}
-              >
-                Add Item
-              </CButton>
-            </form>
+                <CButton
+                  type='submit'
+                  color="primary"
+                  className="rounded px-4 py-2 text-white shadow mt-4"
+                  onClick={e => addItemHandler(e)}
+                >
+                  Add Item
+                </CButton>
+              </form>
+            </CCol>
+            {transactionType === 'SELL' ? <CCol>
+              <strong className="text-sm font-bold">Bonus point exchange</strong>
+              <CFormInput
+                required
+                className="flex-1"
+                placeholder="0"
+                min={0}
+                type="number"
+                value={bonusPointExchange}
+                onChange={(event) => setBonusPointExchange(event.target.value)}
+              />
+            </CCol> : ""}
           </CRow>
-
-
         </CCardBody>
       </CCard>
 
@@ -446,6 +508,8 @@ const InvoiceForm = () => {
               <CTableRow>
                 <CTableHeaderCell style={{ border: "1px solid #000" }}>ITEM</CTableHeaderCell>
                 <CTableHeaderCell style={{ border: "1px solid #000" }}>QTY</CTableHeaderCell>
+                <CTableHeaderCell style={{ border: "1px solid #000" }}>IMAGE</CTableHeaderCell>
+                <CTableHeaderCell style={{ border: "1px solid #000" }}>DESCRIPTION</CTableHeaderCell>
                 <CTableHeaderCell className="text-right" style={{ border: "1px solid #000" }}>UNIT PRICE</CTableHeaderCell>
                 <CTableHeaderCell className="text-right" style={{ border: "1px solid #000" }}>AMOUNT</CTableHeaderCell>
                 <CTableHeaderCell style={{ border: "1px solid #000" }}>ACTION</CTableHeaderCell>
@@ -456,11 +520,12 @@ const InvoiceForm = () => {
                 <CTableRow key={item.id}>
                   <CTableDataCell style={{ border: "1px solid #000" }}>
                     <CFormInput
+                      readOnly
                       type="text"
                       name="name"
                       placeholder="Item name..."
                       value={item.name}
-                      onChange={(event) => editItemHandler(event, item.id)}
+                      onChange={(event) => editItemHandler(event, item.productId)}
                     />
                   </CTableDataCell>
                   <CTableDataCell style={{ border: "1px solid #000" }}>
@@ -468,15 +533,30 @@ const InvoiceForm = () => {
                       type="number"
                       name="qty"
                       value={item.qty}
-                      onChange={(event) => editItemHandler(event, item.id)}
+                      onChange={(event) => editItemHandler(event, item.productId)}
+                      onBlur={() => handleBlur(item.productId)}
+                    />
+                  </CTableDataCell>
+                  <CTableDataCell style={{ border: "1px solid #000" }}>
+                    <img src={item.image} alt='jewelry' style={{ width: "100px", height: "100px" }} />
+                  </CTableDataCell>
+                  <CTableDataCell style={{ border: "1px solid #000" }}>
+                    <CFormInput
+                      readOnly
+                      type="text"
+                      name="description"
+                      placeholder="Item description..."
+                      value={item.description}
+                      onChange={(event) => editItemHandler(event, item.productId)}
                     />
                   </CTableDataCell>
                   <CTableDataCell className="text-right" style={{ border: "1px solid #000" }}>
                     <CFormInput
+                      readOnly
                       type="number"
                       name="price"
                       value={item.price}
-                      onChange={(event) => editItemHandler(event, item.id)}
+                      onChange={(event) => editItemHandler(event, item.productId)}
                     />
                   </CTableDataCell>
                   <CTableDataCell className="text-right" style={{ border: "1px solid #000" }}>
@@ -495,47 +575,119 @@ const InvoiceForm = () => {
             </CTableBody>
           </CTable>}
 
-          <CRow className="flex justify-end pt-6 mt-4">
-            <CCol style={{ display: "flex", justifyContent: "space-between" }}>
-              <strong style={{ display: "inline-block" }} className="font-bold">Subtotal:</strong>
-              <span style={{ display: "inline-block" }}>${subtotal.toFixed(2)}</span>
-            </CCol>
-          </CRow>
+          <h3 className='text-center'>Bill Calculate</h3>
+          <div style={{ display: "flex" }} className='mt-4'>
+            <div style={{ flex: 2, paddingRight: "40px" }}>
+              {transactionType === 'SELL' ? <>
+                <CRow className="flex justify-end pt-6">
+                  <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+                    <strong style={{ display: "inline-block" }} className="font-bold">Subtotal:</strong>
+                    <span style={{ display: "inline-block" }}>${subtotal.toFixed(2)}</span>
+                  </CCol>
+                </CRow>
+                <CRow className="flex justify-end">
+                  <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+                    <strong style={{ display: "inline-block" }} className="font-bold">Discount:</strong>
+                    <span style={{ display: "inline-block" }}>({promotionValue ? promotionValue * 100 : '0'}%) - ${discountRate.toFixed(2)}</span>
+                  </CCol>
+                </CRow>
+                <CRow className="flex justify-end">
+                  <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+                    <strong style={{ display: "inline-block" }} className="font-bold">Tax:</strong>
+                    <span style={{ display: "inline-block" }}>({tax || '0'}%) + ${taxRate.toFixed(2)}</span>
+                  </CCol>
+                </CRow>
+                <CRow className="flex justify-end">
+                  <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+                    <strong style={{ display: "inline-block" }} className="font-bold">Exchange bonus Point:</strong>
+                    <span style={{ display: "inline-block" }}>- ${bonusPointExchange}</span>
+                  </CCol>
+                </CRow>
+              </> : ""}
 
-          <CRow className="flex justify-end">
-            <CCol style={{ display: "flex", justifyContent: "space-between" }}>
-              <strong style={{ display: "inline-block" }} className="font-bold">Discount:</strong>
-              <span style={{ display: "inline-block" }}>({promotionValue ? promotionValue * 100 : '0'}%) -${discountRate.toFixed(2)}</span>
-            </CCol>
-          </CRow>
+              <CRow className="flex justify-end border-t mt-2">
+                <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+                  <strong style={{ display: "inline-block" }} className="font-bold">Total:</strong>
+                  <span style={{ display: "inline-block" }} className="font-bold">${total % 1 === 0 ? total : total.toFixed(2)}</span>
+                </CCol>
+              </CRow>
 
-          <CRow className="flex justify-end">
-            <CCol style={{ display: "flex", justifyContent: "space-between" }}>
-              <strong style={{ display: "inline-block" }} className="font-bold">Tax:</strong>
-              <span style={{ display: "inline-block" }}>({tax || '0'}%) +${taxRate.toFixed(2)}</span>
-            </CCol>
-          </CRow>
+              {transactionType === 'SELL' ? <>
+                <CRow className="flex justify-end border-t">
+                  <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+                    <strong style={{ display: "inline-block" }} className="font-bold">Customer give money:</strong>
+                    <span style={{ display: "inline-block" }} className="font-bold">${customerGiveMoney}</span>
+                  </CCol>
+                </CRow>
 
-          <CRow className="flex justify-end border-t mt-2">
-            <CCol style={{ display: "flex", justifyContent: "space-between" }}>
-              <strong style={{ display: "inline-block" }} className="font-bold">Total:</strong>
-              <span style={{ display: "inline-block" }} className="font-bold">${total % 1 === 0 ? total : total.toFixed(2)}</span>
-            </CCol>
-          </CRow>
+                <CRow className="flex justify-end border-t">
+                  <CCol style={{ display: "flex", justifyContent: "space-between" }}>
+                    <strong style={{ display: "inline-block" }} className="font-bold">Refund money:</strong>
+                    <span style={{ display: "inline-block" }} className="font-bold">${customerGiveMoney >= total ? customerGiveMoney - total : 0}</span>
+                  </CCol>
+                </CRow>
+              </> : ""}
+            </div>
+            <div style={{ flex: 1 }}>
+              <CRow className='mb-4'>
+                {transactionType === 'SELL' ?
+                  <>
+                    <strong className="text-sm font-bold">Discount:</strong>
+                    <CFormSelect
+                      name="promotionValue"
+                      value={promotionValue}
+                      onChange={(event) => {
+                        setPromotionId(event.target.selectedOptions[0].getAttribute('data-id'));
+                        setPromotionValue(event.target.value);
+                      }}
+                    >
+                      <option value="">None</option>
+                      {promotion
+                        .filter(promotion => {
+                          const currentDate = new Date();
+                          return currentDate >= convertJavaDateToJSDate(promotion.startDate)
+                            && currentDate <= convertJavaDateToJSDate(promotion.endDate)
+                            && total >= promotion.minimumPrize
+                            && total <= promotion.maximumPrize
+                            ;
+                        })
+                        .map(promotion => (
+                          <option key={promotion.id} value={promotion.discount} data-id={promotion.id}>
+                            {promotion.name} {promotion.discount * 100}%
+                          </option>
+                        ))
+                      }
+                    </CFormSelect>
+                  </> : ""}
 
-          <CRow className="flex justify-end border-t">
-            <CCol style={{ display: "flex", justifyContent: "space-between" }}>
-              <strong style={{ display: "inline-block" }} className="font-bold">Customer give money:</strong>
-              <span style={{ display: "inline-block" }} className="font-bold">${customerGiveMoney}</span>
-            </CCol>
-          </CRow>
+                <strong className="text-sm font-bold">{transactionType === 'SELL' ? "Payment method" : "Recieve money method"}</strong>
+                <CFormSelect
+                  required
+                  value={sendMoneyMethod}
+                  onChange={(event) => setSendMoneyMethod(event.target.value)}
+                >
+                  <option value="CASH">{transactionType === 'SELL' ? "Payment " : "Recieve "}by cash</option>
+                  <option value="BANK_TRANSFER">{transactionType === 'SELL' ? "Payment " : "Recieve "}by bank transfer</option>
+                  <option value="DOMESTIC_ATM">{transactionType === 'SELL' ? "Payment " : "Recieve "}by domestic ATM card</option>
+                  <option value="CREDIT_OR_DEBIT_CARD">{transactionType === 'SELL' ? "Payment " : "Recieve "}by credit card or debit card</option>
+                  {transactionType === 'SELL' ? <><option value="INSTALLMENT_CREDIT_CARD">Installment payment by credit card</option>
+                    <option value="PAYMENT_GATEWAY">Payment by online payment gateway</option></> : ""}
+                </CFormSelect>
+                <strong className="text-sm font-bold">Order Status:</strong>
+                <CFormSelect
+                  required
+                  value={orderStatus}
+                  onChange={(event) => setOrderStatus(event.target.value)}
+                >
+                  <option value="PENDING">PENDING</option>
+                  <option value="CONFIRMED">CONFIRMED</option>
+                  <option value="CANCELLED">CANCELLED</option>
+                </CFormSelect>
+              </CRow>
+            </div>
+          </div>
 
-          <CRow className="flex justify-end border-t">
-            <CCol style={{ display: "flex", justifyContent: "space-between" }}>
-              <strong style={{ display: "inline-block" }} className="font-bold">Refund money:</strong>
-              <span style={{ display: "inline-block" }} className="font-bold">${customerGiveMoney >= total ? customerGiveMoney - total : 0}</span>
-            </CCol>
-          </CRow>
+
         </CCardBody>
       </CCard>
 
@@ -553,7 +705,7 @@ const InvoiceForm = () => {
           <CButton
             color="success"
             className="rounded px-4 py-2 text-white shadow"
-            onClick={handleSaveOrder}
+            onClick={() => setconfirmModalVisible(true)}
           >
             Save Order
           </CButton>
@@ -561,15 +713,17 @@ const InvoiceForm = () => {
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             invoiceInfo={{
-              cashierName,
+              customerName,
+              staffName,
+              transactionType,
               customerPhone,
               address,
               subtotal,
               taxRate,
               discountRate,
               total,
-              invoiceNumber,
               customerGiveMoney,
+              bonusPointExchange,
               refundMoney: `${customerGiveMoney >= total ? customerGiveMoney - total : 0}`
             }}
             items={items}
@@ -591,6 +745,32 @@ const InvoiceForm = () => {
         <CModalFooter>
           <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setErrorModalVisible(false)}>
             Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      <CModal
+        visible={confirmModalVisible}
+        onClose={() => setconfirmModalVisible(false)}
+        aria-labelledby="ErrorModalLabel"
+      >
+        <CModalHeader>
+          <CModalTitle id="ErrorModalLabel">Confirm Order</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Do you want to save this order? </p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='custom-btn custom-btn-secondary'
+            color="secondary" onClick={() => setconfirmModalVisible(false)}>
+            Close
+          </CButton>
+          <CButton className='custom-btn custom-btn-success'
+            color="success" onClick={() => {
+              handleSaveOrder()
+              setconfirmModalVisible(false)
+            }}>
+            Save
           </CButton>
         </CModalFooter>
       </CModal>

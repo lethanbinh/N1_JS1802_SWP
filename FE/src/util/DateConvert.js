@@ -14,4 +14,16 @@ const convertDateToJavaFormat = (dateString) => {
     return isoDateString;
 };
 
+export function convertJavaDateToJSDate(javaDateString) {
+    // Ensure the Java date string is in ISO format
+    const isoDateString = javaDateString
+        .replace('T', ' ') // Replace 'T' with a space
+        .replace('Z', '')  // Remove 'Z' if present
+        .replace(/-/g, '/') // Replace dashes with slashes for Safari compatibility
+        .replace(/\.\d+/, ''); // Remove milliseconds if present
+
+    // Create and return the JavaScript Date object
+    return new Date(isoDateString);
+}
+ 
 export default convertDateToJavaFormat;

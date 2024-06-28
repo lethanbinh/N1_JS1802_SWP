@@ -230,6 +230,7 @@ const CustomerInfo = () => {
                     <CTableHeaderCell scope="col">Address</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Birthday</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Bonus Point</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
@@ -243,6 +244,7 @@ const CustomerInfo = () => {
                       <CTableDataCell>{row.address}</CTableDataCell>
                       <CTableDataCell>{row.birthday}</CTableDataCell>
                       <CTableDataCell>{row.status ? 'true' : 'false'}</CTableDataCell>
+                      <CTableDataCell>{row.bonusPoint}</CTableDataCell>
                       <CTableDataCell>
                         <CButton style={{ marginRight: '10px' }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
                           Edit

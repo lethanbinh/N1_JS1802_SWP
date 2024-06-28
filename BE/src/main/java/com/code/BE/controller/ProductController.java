@@ -208,4 +208,24 @@ public class ProductController {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
         }
     }
+
+    @PatchMapping(value = "/add-quantity/{id}/{quantity}")
+    public ResponseEntity<ApiResponse<ProductResponse>> addQuantity(@PathVariable int id, @PathVariable int quantity) throws Exception {
+        try {
+            ProductResponse productResponse = productService.findById(id);
+            if (productResponse == null) {
+                throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
+            }
+
+            ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
+            apiResponse.ok(productService.addQuantity(id, quantity));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (ValidationException ex) {
+            throw ex; // Rethrow ValidationException
+        } catch (NotFoundException ex) {
+            throw ex; // Rethrow NotFoundException
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
 }

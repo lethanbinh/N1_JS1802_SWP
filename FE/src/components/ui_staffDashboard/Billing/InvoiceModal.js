@@ -17,14 +17,9 @@ import {
 } from '@coreui/react';
 import '../../../customStyles.css';
 
-const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items, onAddNextInvoice }) => {
+const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
   const closeModal = () => {
     setIsOpen(false);
-  };
-
-  const addNextInvoiceHandler = () => {
-    setIsOpen(false);
-    onAddNextInvoice();
   };
 
   const SaveAsPDFHandler = () => {
@@ -73,7 +68,7 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items, onAddNextInvoice 
             pdf.addImage(imgData, imageType, 0, 0, pdfWidth, pageHeight);
           }
 
-          pdf.save(`invoice-${invoiceInfo.invoiceNumber}.pdf`);
+          pdf.save(`invoice}.pdf`);
         };
       })
       .catch((error) => {
@@ -95,7 +90,7 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items, onAddNextInvoice 
         <div className="mb-4" style={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ flex: 1 }}>
             <p className="font-bold">INVOICE TO:</p>
-            <p>{invoiceInfo.cashierName}</p>
+            <p>{invoiceInfo.customerName}</p>
             <p>{invoiceInfo.customerPhone}</p>
             <p>{invoiceInfo.address}</p>
           </div>
@@ -108,6 +103,8 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items, onAddNextInvoice 
         </div>
         <div className="text-sm mb-4">
           <p className="font-bold">Date: {new Date().toLocaleDateString()}</p>
+          <p className="font-bold">Order Type: {invoiceInfo.transactionType}</p>
+          <p className="font-bold">Staff: {invoiceInfo.staffName}</p>
         </div>
         <CTable className="w-full mb-4 text-sm" style={{ borderCollapse: "collapse" }}>
           <CTableHead>
@@ -130,30 +127,40 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items, onAddNextInvoice 
           </CTableBody>
         </CTable>
         <div className="flex flex-col items-end text-sm">
+          {invoiceInfo.transactionType === 'SELL' ? <>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ display: "inline-block" }} className="font-bold">Subtotal:</span>
+              <span style={{ display: "inline-block" }}>${invoiceInfo.subtotal.toFixed(2)}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ display: "inline-block" }} className="font-bold">Discount:</span>
+              <span style={{ display: "inline-block" }}>- ${invoiceInfo.discountRate}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ display: "inline-block" }} className="font-bold">Tax:</span>
+              <span style={{ display: "inline-block" }}>+ ${invoiceInfo.taxRate}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ display: "inline-block" }} className="font-bold">Exchange bonus Point:</span>
+              <span style={{ display: "inline-block" }}>- ${invoiceInfo.bonusPointExchange}</span>
+            </div>
+          </> : ""}
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{display: "inline-block"}} className="font-bold">Subtotal:</span>
-            <span style={{display: "inline-block"}}>${invoiceInfo.subtotal.toFixed(2)}</span>
+            <span style={{ display: "inline-block" }} className="font-bold">Total:</span>
+            <span style={{ display: "inline-block" }} className="font-bold">${invoiceInfo.total.toFixed(2)}</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{display: "inline-block"}} className="font-bold">Discount:</span>
-            <span style={{display: "inline-block"}}>- ${invoiceInfo.discountRate.toFixed(2)}</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{display: "inline-block"}} className="font-bold">Tax:</span>
-            <span style={{display: "inline-block"}}>+ ${invoiceInfo.taxRate.toFixed(2)}</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{display: "inline-block"}} className="font-bold">Total:</span>
-            <span style={{display: "inline-block"}} className="font-bold">${invoiceInfo.total.toFixed(2)}</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{display: "inline-block"}} className="font-bold">Customer Give Money:</span>
-            <span style={{display: "inline-block"}} className="font-bold">${invoiceInfo.customerGiveMoney}</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{display: "inline-block"}} className="font-bold">Refund Money:</span>
-            <span style={{display: "inline-block"}} className="font-bold">${invoiceInfo.refundMoney}</span>
-          </div>
+
+          {invoiceInfo.transactionType === 'SELL' ? <>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ display: "inline-block" }} className="font-bold">Customer Give Money:</span>
+              <span style={{ display: "inline-block" }} className="font-bold">${invoiceInfo.customerGiveMoney}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ display: "inline-block" }} className="font-bold">Refund Money:</span>
+              <span style={{ display: "inline-block" }} className="font-bold">${invoiceInfo.refundMoney}</span>
+            </div>
+          </> : ""}
+
         </div>
         <div className="text-center mt-4">
           <p className="text-sm">Thank you!</p>
