@@ -1,5 +1,7 @@
 package com.code.BE.constant;
 
+import java.util.Map;
+
 public class ErrorMessage {
     // authenticate and authorize
     public static final String LOGIN_ERROR = "Username or password error";
@@ -51,4 +53,5 @@ public class ErrorMessage {
     public static final String BONUS_POINT_VALIDATION_FAILED = "Bonus point < 0 or customer does not have enough point";
 
     public static final String PRODUCT_OUT_OF_STOCK = "Quantity in stall is not enough";
+    public static final String CUSTOMER_BONUS_POINT_NOT_ENOUGH = "Bonus point is not enough";
 }

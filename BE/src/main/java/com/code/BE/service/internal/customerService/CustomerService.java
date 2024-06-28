@@ -13,5 +13,6 @@ public interface CustomerService {
     CustomerResponse save (CustomerRequest customerRequest);
     CustomerResponse editById (int id, CustomerRequest customerRequest);
     boolean deleteById (int id);
+    boolean checkBonusPoint (String phone, double point);
     CustomerResponse useBonusPoint (String phone, double point);
 }
