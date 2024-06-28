@@ -78,7 +78,7 @@ const CustomerInfo = () => {
   };
 
   const handleSave = () => {
-    const requiredFields = ['fullName', 'phone', 'email', 'address', 'birthday', 'status'];
+    const requiredFields = ['fullName', 'phone', 'email', 'address', 'birthday', 'status', 'bonusPoint'];
     const emptyFields = requiredFields.filter(field => !formData[field]);
 
     if (emptyFields.length > 0) {
@@ -135,6 +135,7 @@ const CustomerInfo = () => {
       address: dataFromInput.address || "string",
       birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z", // Default date
       status: dataFromInput.status ? true : false,
+      bonusPoint: dataFromInput.bonusPoint || 0,
     };
 
     console.log(savedData);
@@ -165,6 +166,7 @@ const CustomerInfo = () => {
       address: '',
       birthday: '',
       status: true,
+      bonusPoint: 0
     });
     setEditModalVisible(true);
     setIsNew(true);
@@ -347,6 +349,14 @@ const CustomerInfo = () => {
             <option value="true">true</option>
             <option value="false">false</option>
           </CFormSelect>
+          <CFormInput
+            type="number"
+            name="bonusPoint"
+            label="Bonus Point"
+            value={formData.bonusPoint}
+            onChange={handleInputChange}
+            className="mb-3"
+          />
         </CModalBody>
         <CModalFooter>
           <CButton style={{ marginRight: '10px' }} color="secondary" onClick={handleCancelEdit}>
