@@ -23,6 +23,6 @@ public interface StaffDashboardRepository extends JpaRepository<User, Integer> {
             "FROM Order o " +
             "JOIN o.orderDetails od " +
             "JOIN od.product p " +
-            "WHERE o.createDate BETWEEN :startDate AND :endDate AND p.stall.id = :stallId")
+            "WHERE o.createDate BETWEEN :startDate AND :endDate AND o.type = 'SELL' AND p.stall.id = :stallId")
     List<Object[]> findStaffStatistics(@Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("stallId") int stallId);
 }

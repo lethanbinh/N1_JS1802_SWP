@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface RevenueStatisticsRepository extends JpaRepository<Order, Integer> {
     // Tổng doanh thu của tất cả các quầy
-    @Query("SELECT COALESCE(SUM(o.totalPrice), 0) FROM Order o WHERE o.createDate BETWEEN :startDate AND :endDate")
+    @Query("SELECT COALESCE(SUM(o.totalPrice), 0) FROM Order o WHERE o.createDate BETWEEN :startDate AND :endDate AND o.type = 'SELL'")
     Double findTotalRevenue(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     // Doanh thu theo từng quầy hàng
@@ -20,7 +20,7 @@ public interface RevenueStatisticsRepository extends JpaRepository<Order, Intege
             "JOIN od.order o " +
             "JOIN od.product p " +
             "JOIN p.stall s " +
-            "WHERE o.createDate BETWEEN :startDate AND :endDate " +
+            "WHERE o.createDate BETWEEN :startDate AND :endDate AND o.type = 'SELL' " +
             "GROUP BY s.name")
     List<Object[]> findRevenuePerStall(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
@@ -30,7 +30,7 @@ public interface RevenueStatisticsRepository extends JpaRepository<Order, Intege
             "JOIN od.order o " +
             "JOIN od.product p " +
             "JOIN p.stall s " +
-            "WHERE o.createDate BETWEEN :startDate AND :endDate " +
+            "WHERE o.createDate BETWEEN :startDate AND :endDate AND o.type = 'SELL' " +
             "GROUP BY s.name) sub")
     Double findAverageRevenuePerStall(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
@@ -39,13 +39,13 @@ public interface RevenueStatisticsRepository extends JpaRepository<Order, Intege
             "JOIN od.order o " +
             "JOIN od.product p " +
             "JOIN p.stall s " +
-            "WHERE o.createDate BETWEEN :startDate AND :endDate " +
+            "WHERE o.createDate BETWEEN :startDate AND :endDate AND o.type = 'SELL' " +
             "GROUP BY s.name " +
             "ORDER BY SUM(od.totalPrice) DESC")
     List<String> findTopPerformingStalls(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     // Xu hướng doanh thu hàng tháng và hàng quý
     @Query("SELECT FUNCTION('MONTH', o.createDate) AS month, FUNCTION('QUARTER', o.createDate) AS quarter, COALESCE(SUM(o.totalPrice), 0) " +
-            "FROM Order o WHERE o.createDate BETWEEN :startDate AND :endDate GROUP BY FUNCTION('MONTH', o.createDate), FUNCTION('QUARTER', o.createDate)")
+            "FROM Order o WHERE o.createDate BETWEEN :startDate AND :endDate AND o.type = 'SELL' GROUP BY FUNCTION('MONTH', o.createDate), FUNCTION('QUARTER', o.createDate)")
     List<Object[]> findMonthlyQuarterlyRevenueTrends(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

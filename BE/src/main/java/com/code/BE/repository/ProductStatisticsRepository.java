@@ -44,7 +44,7 @@ public interface ProductStatisticsRepository extends JpaRepository<Product, Inte
     @Query("SELECT AVG(s.totalSales) " +
             "FROM (SELECT SUM(od.productPrice * od.productQuantity) AS totalSales " +
             "      FROM OrderDetail od JOIN od.order o " +
-            "      WHERE o.createDate BETWEEN :startDate AND :endDate " +
+            "      WHERE o.createDate BETWEEN :startDate AND :endDate AND o.type = 'SELL' " +
             "      GROUP BY od.product.id) s")
     Double findAverageSalesPerProduct(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

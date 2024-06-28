@@ -16,12 +16,12 @@ public interface StaffStatisticsRepository extends JpaRepository<User, Integer> 
 
     @Query("SELECT u.username, SUM(o.totalPrice) AS totalRevenue " +
             "FROM Order o JOIN o.staff u " +
-            "WHERE u.role.name = 'staff' AND o.createDate BETWEEN :startDate AND :endDate " +
+            "WHERE u.role.name = 'staff' AND o.createDate BETWEEN :startDate AND :endDate AND o.type = 'SELL' " +
             "GROUP BY u.username")
     List<Object[]> findRevenuePerStaff(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("SELECT u.username FROM Order o JOIN o.staff u " +
-            "WHERE u.role.name = 'staff' AND o.createDate BETWEEN :startDate AND :endDate " +
+            "WHERE u.role.name = 'staff' AND o.createDate BETWEEN :startDate AND :endDate AND o.type = 'SELL' " +
             "GROUP BY u.username " +
             "ORDER BY SUM(o.totalPrice) DESC")
     List<String> findTopPerformingStaff(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
@@ -29,13 +29,13 @@ public interface StaffStatisticsRepository extends JpaRepository<User, Integer> 
     @Query("SELECT AVG(s.totalSales) " +
             "FROM (SELECT SUM(o.totalPrice) AS totalSales " +
             "      FROM Order o JOIN o.staff u " +
-            "      WHERE u.role.name = 'staff' AND o.createDate BETWEEN :startDate AND :endDate " +
+            "      WHERE u.role.name = 'staff' AND o.createDate BETWEEN :startDate AND :endDate AND o.type = 'SELL' " +
             "      GROUP BY u.id) s")
     Double findAverageSalesPerStaff(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("SELECT u.username, COUNT(o) " +
             "FROM Order o JOIN o.staff u " +
-            "WHERE u.role.name = 'staff' AND o.createDate BETWEEN :startDate AND :endDate " +
+            "WHERE u.role.name = 'staff' AND o.createDate BETWEEN :startDate AND :endDate AND o.type = 'SELL' " +
             "GROUP BY u.username")
     List<Object[]> findOrdersPerStaff(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }
