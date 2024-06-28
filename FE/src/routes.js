@@ -27,7 +27,8 @@ const CustomerInfo = React.lazy(() => import('./components/ui_staffDashboard/Cus
 const RevenueForEachStall = React.lazy(() => import('./components/ui_staffDashboard/StaffRevenue'))
 const BuyOldProduct = React.lazy(() => import('./components/ui_staffDashboard/BuyOldProduct'))
 const InvoiceForm = React.lazy(() => import('./components/ui_staffDashboard/Billing/InvoiceForm'))
-const AddProduct = React.lazy(() => import('./components/ui_staffDashboard/AddProduct'))
+const AddSellProduct = React.lazy(() => import('./components/ui_staffDashboard/AddSellProduct'))
+const AddPurchaseProduct = React.lazy(() => import('./components/ui_staffDashboard/AddPurchaseProduct'))
 const StaffDashboard = React.lazy(() => import('./components/ui_staffDashboard/StaffDashboard'))
 
 const routes = [
@@ -64,7 +65,8 @@ const routes = [
   { path: '/staff-dashboard/revenue-ofS', name: 'Revenue of Stall', element: RevenueForEachStall },
   { path: '/staff-dashboard/buy-oleP', name: 'Buy Old Product', element: BuyOldProduct },
   { path: '/staff-dashboard/invoice', name: 'Invoice', element: InvoiceForm },
-  { path: '/staff-dashboard/add-product', name: 'Add Product', element: AddProduct },
+  { path: '/staff-dashboard/add-sell-product', name: 'Add Sell Product', element: AddSellProduct },
+  { path: '/staff-dashboard/add-purchase-product', name: 'Add Purchase Product', element: AddPurchaseProduct },
   { path: '/staff-dashboard/dashboard', name: 'Staff Dashboard', element: StaffDashboard }
 ]
 
