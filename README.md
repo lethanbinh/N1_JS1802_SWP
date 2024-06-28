@@ -65,11 +65,6 @@ The software is designed to manage jewelry sales for a company operating a singl
 |          | UC-38    | Delete Promotion           |
 |          | UC-25    | View Policies              |
 |          | UC-29    | Edit Policies              |
-|          | UC-30    | Delete Policies            |
-|          | UC-23    | Create Orders              |
-|          | UC-24    | Update Orders              |
-|          | UC-26    | Delete Orders              |
-|          | UC-28    | View Orders                |
 | Sprint 3 | UC-31    | Print bill from Order      |
 |          | UC-33    | Export bills               |
 |          | UC-36    | Import product by barcode  |
@@ -81,6 +76,7 @@ The software is designed to manage jewelry sales for a company operating a singl
 |          | UC-54    | Update customers           |
 |          | UC-55    | Delete customers           |
 |          | UC-56    | View customers             |
+|          | UC-30    | Delete Policies            |
 | Sprint 4 | UC-42    | Add Product to Stall       |
 |          | UC-44    | Edit Product               |
 |          | UC-45    | View Products in Stall     |
@@ -88,6 +84,10 @@ The software is designed to manage jewelry sales for a company operating a singl
 |          | UC-47    | Manager Dashboard          |
 |          | UC-48    | Staff Dashboard            |
 |          | UC-50    | Create Policies            |
+|          | UC-23    | Create Orders              |
+|          | UC-24    | Update Orders              |
+|          | UC-26    | Delete Orders              |
+|          | UC-28    | View Orders                |
 
 ### Table 2: Member Assignment for Sprint 1
 | Member Name | User Story ID | Description            |
@@ -112,7 +112,6 @@ The software is designed to manage jewelry sales for a company operating a singl
 | Luu Thien An    | UC-37    | Update Promotion           |
 | Tran Nhat Quang    | UC-38    | Delete Promotion           |
 | Nguyen Thanh Phong    | UC-29    | Edit Policies              |
-| Luu Thien An    | UC-23    | Create Orders              |
 ### Table 4: Member Assignment for Sprint 3
 | Member Name | User Story ID | Description            |
 |-------------|---------------|------------------------|
@@ -125,6 +124,7 @@ The software is designed to manage jewelry sales for a company operating a singl
 ### Table 5: Member Assignment for Sprint 4
 | Member Name | User Story ID | Description            |
 |-------------|---------------|------------------------|
+| Luu Thien An    | UC-23    | Create Orders              |
 | Nguyen Thanh Phong    | UC-42    | Add Product to Stall       |
 | Le Xuan Phuong Nam    | UC-44    | Edit Product               |
 | Le Xuan Phuong Nam    | UC-45    | View Products in Stall     |
