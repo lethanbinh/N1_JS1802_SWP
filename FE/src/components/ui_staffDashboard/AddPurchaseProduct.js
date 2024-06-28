@@ -35,11 +35,11 @@ const AddProduct = () => {
     stallId: ''
   });
 
+  const [addedProduct, setAddedProduct] = useState(null);
   const [error, setError] = useState('');
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser())
   const [stallOptions, setStallOptions] = useState([])
   const [image, setImage] = useState('')
-  const [message, setMessage] = useState('')
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
 
@@ -47,7 +47,6 @@ const AddProduct = () => {
     const { name, value } = e.target;
     if (['purchasePrice', 'sellPrice', 'quantity', 'weight'].includes(name) && value < 0) {
       setError(`${name} must be non-negative.`);
-      setMessage('')
       setErrorModalVisible(true);
       return;
     }
@@ -56,7 +55,6 @@ const AddProduct = () => {
       [name]: value
     }));
     setError('');
-    setMessage('')
     console.log(product)
   };
 
@@ -128,6 +126,11 @@ const AddProduct = () => {
 
             fetchData('http://localhost:8080/api/v1/products', 'POST', savedProduct, userInfo.accessToken)
               .then((response) => {
+                const addedProductWithStallName = {
+                  ...response.payload,
+                  stallName: stallOptions.find(stall => stall.id === response.payload.stallId).name
+                };
+                setAddedProduct(addedProductWithStallName); // Store the added product details
                 setSuccessModalVisible(true); // Show success modal
               })
               .catch(error => {
@@ -277,7 +280,7 @@ const AddProduct = () => {
                     onChange={handleChange}
                     label="Stall Location">
                     <option value="">Select location</option>
-                    {stallOptions.map(stall=>(
+                    {stallOptions.map(stall => (
                       <option key={stall.id} value={stall.id}>
                         {stall.id}
                       </option>
@@ -307,7 +310,7 @@ const AddProduct = () => {
                     onChange={handleChange}
                     label="Stall">
                     <option value="">Select Stall</option>
-                    {stallOptions.map(stall=>(
+                    {stallOptions.map(stall => (
                       <option key={stall.id} value={stall.id}>
                         {stall.name}
                       </option>
@@ -328,12 +331,36 @@ const AddProduct = () => {
         </CCol>
       </CRow>
 
-      <CModal visible={successModalVisible} onClose={() => setSuccessModalVisible(false)}>
+      <CModal visible={successModalVisible} onClose={() => setSuccessModalVisible(false)} size='lg'>
         <CModalHeader onClose={() => setSuccessModalVisible(false)}>
           <CModalTitle>Success</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Product added successfully!
+          <div color='success' style={{ textAlign: 'center' }}>
+            <p>Product added successfully!</p>
+          </div>
+          {addedProduct && (
+            <div className='d-flex'>
+              <div className='flex-grow-1' style={{ marginTop: '10px' }}>
+                <p><strong>Name:</strong> {addedProduct.name}</p>
+                <p><strong>Description:</strong> {addedProduct.description}</p>
+                <p><strong>Purchase Price:</strong> {addedProduct.purchasePrice}</p>
+                <p><strong>Sell Price:</strong> {addedProduct.sellPrice}</p>
+                <p><strong>Quantity:</strong> {addedProduct.quantity}</p>
+                <p><strong>Weight:</strong> {addedProduct.weight}</p>
+                <p><strong>Size:</strong> {addedProduct.size}</p>
+                <p><strong>Stall Name:</strong> {addedProduct.stallName}</p>
+                <p><strong>Stall Location:</strong> {addedProduct.stallLocation}</p>
+                <p><strong>Type:</strong> {addedProduct.type}</p>
+              </div>
+              <div className='flex-shrink-1'>
+                <p><strong>Image:</strong></p>
+                <img src={addedProduct.image} alt={addedProduct.name} style={{ width: '300px', height: 'fit-content', marginTop: '10px' }} />
+                <p><strong>Barcode:</strong></p>
+                <img src={addedProduct.barCode} alt="Barcode" style={{ width: '300px', height: '100px', marginTop: '10px' }} />
+              </div>
+            </div>
+          )}
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setSuccessModalVisible(false)}>

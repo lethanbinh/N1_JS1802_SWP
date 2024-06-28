@@ -126,6 +126,7 @@ const PurchaseHistoryList = () => {
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Tax</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Custom Give</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Refund Money</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Payment methods</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Bonus Point</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Status</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "300px" }} scope="col">Action</CTableHeaderCell>
@@ -144,6 +145,7 @@ const PurchaseHistoryList = () => {
                       <CTableDataCell>{row.tax}</CTableDataCell>
                       <CTableDataCell>{row.customerGiveMoney}</CTableDataCell>
                       <CTableDataCell>{row.refundMoney}</CTableDataCell>
+                      <CTableDataCell>{row.sendMoneyMethod}</CTableDataCell>
                       <CTableDataCell>{row.totalBonusPoint}</CTableDataCell>
                       <CTableDataCell>{row.status}</CTableDataCell>
                       <CTableDataCell className='mt-1'>
@@ -179,6 +181,7 @@ const PurchaseHistoryList = () => {
                 <CTableRow>
                   <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">ID</CTableHeaderCell>
                   <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Order ID</CTableHeaderCell>
+                  <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Product ID</CTableHeaderCell>
                   <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Product Name</CTableHeaderCell>
                   <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Product Price</CTableHeaderCell>
                   <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Product Quantity</CTableHeaderCell>
@@ -190,6 +193,7 @@ const PurchaseHistoryList = () => {
                   <CTableRow key={row.id}>
                     <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                     <CTableDataCell>{row.orderId}</CTableDataCell>
+                    <CTableDataCell>{row.productId}</CTableDataCell>
                     <CTableDataCell>{row.productName}</CTableDataCell>
                     <CTableDataCell>{row.productPrice}</CTableDataCell>
                     <CTableDataCell>{row.productQuantity}</CTableDataCell>
