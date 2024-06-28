@@ -9,6 +9,7 @@ import com.code.BE.model.dto.request.CustomerRequest;
 import com.code.BE.model.dto.response.ApiResponse;
 import com.code.BE.model.dto.response.CustomerResponse;
 import com.code.BE.model.entity.Customer;
+import com.code.BE.model.mapper.CustomerMapper;
 import com.code.BE.repository.CustomerRepository;
 import com.code.BE.service.internal.customerService.CustomerService;
 import com.code.BE.util.ValidatorUtil;
@@ -41,6 +42,9 @@ public class CustomerController {
     @Autowired
     private CustomerValidator customerValidator;
 
+    @Autowired
+    private CustomerMapper customerMapper;
+
     @GetMapping(value = "")
     public ResponseEntity<ApiResponse<List<CustomerResponse>>> findAll() throws Exception {
         ApiResponse<List<CustomerResponse>> apiResponse = new ApiResponse<>();
@@ -71,6 +75,26 @@ public class CustomerController {
             }
             ApiResponse<CustomerResponse> apiResponse = new ApiResponse<>();
             apiResponse.ok(customerService.findById(id));
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (NotFoundException ex) {
+            throw ex; // Rethrow NotFoundException
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
+
+    @GetMapping(value = "/check-point/{phone}/{point}")
+    public ResponseEntity<ApiResponse<CustomerResponse>> checkBonusPoint(@PathVariable String phone, @PathVariable double point) throws Exception {
+        try {
+            if (customerRepository.findByPhone(phone) == null) {
+                throw new NotFoundException(ErrorMessage.CUSTOMER_NOT_FOUND);
+            }
+
+            if (!customerService.checkBonusPoint(phone, point)) {
+                throw new ValidationException(ErrorMessage.CUSTOMER_BONUS_POINT_NOT_ENOUGH);
+            }
+            ApiResponse<CustomerResponse> apiResponse = new ApiResponse<>();
+            apiResponse.ok(customerMapper.toResponse(customerRepository.findByPhone(phone)));
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (NotFoundException ex) {
             throw ex; // Rethrow NotFoundException

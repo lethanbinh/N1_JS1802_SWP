@@ -84,6 +84,15 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public boolean checkBonusPoint(String phone, double point) {
+        Customer customer = customerRepository.findByPhone(phone);
+        if (customer != null) {
+            return (point >= 0 && customer.getBonusPoint() >= point);
+        }
+        return false;
+    }
+
+    @Override
     public CustomerResponse useBonusPoint(String phone, double point) {
         Customer customer = customerRepository.findByPhone(phone);
         if (customer != null) {

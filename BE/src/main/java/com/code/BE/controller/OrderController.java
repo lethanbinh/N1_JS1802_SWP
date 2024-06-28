@@ -41,7 +41,6 @@ public class OrderController {
     @Autowired
     private OrderDetailValidator orderDetailValidator;
 
-    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "")
     public ResponseEntity<ApiResponse<List<OrderResponse>>> findAll() throws Exception {
         ApiResponse<List<OrderResponse>> apiResponse = new ApiResponse<>();
@@ -53,7 +52,6 @@ public class OrderController {
         }
     }
 
-    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "/id/{id}")
     public ResponseEntity<ApiResponse<OrderResponse>> findById(@PathVariable int id) throws Exception {
         try {
@@ -70,7 +68,6 @@ public class OrderController {
         }
     }
 
-    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "/staffName/{staffName}")
     public ResponseEntity<ApiResponse<List<OrderResponse>>> findByStaffFullNameContaining(@PathVariable String staffName) throws Exception {
         try {
@@ -82,7 +79,6 @@ public class OrderController {
         }
     }
 
-    @PreAuthorize(value = "hasAuthority('ROLE_STAFF') or hasAuthority('ROLE_MANAGER')")
     @GetMapping(value = "/customerName/{customerName}")
     public ResponseEntity<ApiResponse<List<OrderResponse>>> findByCustomerFullNameContaining(@PathVariable String customerName) throws Exception {
         try {
