@@ -60,14 +60,22 @@ const PromotionList = () => {
   const handleSave = () => {
     const requiredFields = ['discount', 'name', 'description', 'startDate', 'endDate', 'minimumPrize', 'maximumPrize'];
     const emptyFields = requiredFields.filter(field => !formData[field]);
+    const today = new Date();
+
+    if (new Date(formData.endDate) < today) {
+      setErrorMessage("Enddate must be greater than today. Please choose another date.");
+      setErrorModalVisible(true);
+      return;
+    }
 
     if (emptyFields.length > 0) {
       setErrorMessage(`Please fill all the fields: ${emptyFields.join(', ')}`);
       setErrorModalVisible(true);
       return;
     }
-    if (parseFloat(formData.discount) < 0 || parseFloat(formData.discount) > 1) {
-      setErrorMessage('Discount must be between 0 and 1.');
+
+    if (parseFloat(formData.discount) <= 0 || parseFloat(formData.discount) >= 100) {
+      setErrorMessage('Discount must be between 0 and 100.');
       setErrorModalVisible(true);
       return;
     }
@@ -83,6 +91,7 @@ const PromotionList = () => {
       setErrorModalVisible(true);
       return;
     }
+
     if (parseFloat(formData.minimumPrize) < 1 || parseFloat(formData.maximumPrize) < 1) {
       setErrorMessage('Minimum and maximum price must be greater than 0.');
       setErrorModalVisible(true);
@@ -92,12 +101,12 @@ const PromotionList = () => {
     let newData;
     if (isNew) {
       const newId = data.length ? Math.max(...data.map(row => row.id)) + 1 : 1;
-      const newRow = { ...formData, id: newId, status: true };
+      const newRow = { ...formData, id: newId, status: true, discount: parseFloat(formData.discount) / 100 };
       newData = [...data, newRow];
     } else {
       newData = data.map((row) => {
         if (row.id === editingRow) {
-          return { ...row, ...formData };
+          return { ...row, ...formData, discount: parseFloat(formData.discount) / 100 };
         }
         return row;
       });
@@ -115,6 +124,7 @@ const PromotionList = () => {
       maximumPrize: dataFromInput.maximumPrize,
       status: true
     };
+
     const savePromise = isNew
       ? fetchData(`http://localhost:8080/api/v1/promotions`, 'POST', savedData, userInfo.accessToken)
       : fetchData(`http://localhost:8080/api/v1/promotions/id/${editingRow}`, 'PUT', savedData, userInfo.accessToken);
@@ -127,6 +137,7 @@ const PromotionList = () => {
       setSuccessModalVisible(true); // Show success modal
     });
   };
+
 
   const handleAddNew = () => {
     setFormData({
