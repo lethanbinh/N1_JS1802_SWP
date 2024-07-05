@@ -1,5 +1,5 @@
-import { cilLockLocked, cilUser } from '@coreui/icons'
-import CIcon from '@coreui/icons-react'
+import { cilLockLocked, cilUser } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
 import {
   CButton,
   CCard,
@@ -12,12 +12,12 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
-} from '@coreui/react'
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import '../../customStyles.css'
-import fetchData from '../../util/ApiConnection'
-import UserStorage from '../../util/UserStorage'
+} from '@coreui/react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import '../../customStyles.css';
+import fetchData from '../../util/ApiConnection';
+import UserStorage from '../../util/UserStorage';
 
 const Login = () => {
   const [username, setUsername] = useState('');

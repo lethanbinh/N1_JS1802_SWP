@@ -112,7 +112,7 @@ const PurchaseHistoryList = () => {
             <strong>Purchase History</strong>
           </CCardHeader>
           <CCardBody>
-            <div style={{ height: '500px', overflow: 'auto' }}>
+            <div style={{ height: '480px', overflow: 'auto' }}>
               <CTable>
                 <CTableHead>
                   <CTableRow>

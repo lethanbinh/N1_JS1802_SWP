@@ -1,4 +1,4 @@
-import { cilPeople, cilSettings } from '@coreui/icons'
+import { cilMoney, cilPeople } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import React from 'react'
@@ -62,28 +62,12 @@ const _nav_staff = [
     ],
   },
   {
-    component: CNavGroup,
-    name: 'Settings',
-    to: '/settings',
-    icon: <CIcon icon={cilSettings} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Profile',
-        to: '/settings/general-info',
-      },
-      {
-        component: CNavItem,
-        name: 'Gold Price Table',
-        to: '/settings/gold-price',
-      },
-      {
-        component: CNavItem,
-        name: 'Logout',
-        to: '/',
-        id: 'logout'
-      },
-    ],
+
+    component: CNavItem,
+    name: 'Gold Price Table',
+    to: '/settings/gold-price',
+    icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
+
   },
 ]
 

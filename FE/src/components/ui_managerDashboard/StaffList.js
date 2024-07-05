@@ -248,7 +248,7 @@ const StaffList = () => {
               onChange={handleSearchChange}
               className="mb-3"
             />
-            <div style={{ height: '500px', overflow: 'auto' }}>
+            <div style={{ height: '420px', overflow: 'auto' }}>
               <CTable>
                 <CTableHead>
                   <CTableRow>
@@ -289,14 +289,17 @@ const StaffList = () => {
                     </CTableRow>
                   ))}
                 </CTableBody>
+
               </CTable>
+
             </div>
+            <CButton className='custom-btn custom-btn-success mt-1' color="success" onClick={handleAddNew}>
+              Add New Staff
+            </CButton>
           </CCardBody>
         </CCard>
 
-        <CButton className='custom-btn custom-btn-success mt-1' color="success" onClick={handleAddNew}>
-          Add New Staff
-        </CButton>
+
       </CCol>
 
       <CModal
