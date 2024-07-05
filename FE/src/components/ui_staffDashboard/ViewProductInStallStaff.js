@@ -153,7 +153,7 @@ const StallProduct = () => {
           </CCardHeader>
           {
             <CCardBody>
-              <div style={{ height: '500px', overflow: 'auto' }}>
+              <div style={{ height: '450px', overflow: 'auto' }}>
                 <CTable>
                   <CTableHead>
                     <CTableRow>

@@ -69,7 +69,7 @@ const BuyOldProduct = () => {
               onChange={handleSearchChange}
               className="mb-3"
             />
-            <div style={{ height: '500px', overflow: 'auto' }}>
+            <div style={{ height: '480px', overflow: 'auto' }}>
               <CTable>
                 <CTableHead>
                   <CTableRow>

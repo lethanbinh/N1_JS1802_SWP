@@ -1,7 +1,6 @@
-import React, { Suspense, useEffect } from 'react'
+import { CSpinner } from '@coreui/react'
+import React, { Suspense } from 'react'
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -12,21 +11,6 @@ const ForgotPassword = React.lazy(() => import('./views/resetPassword/ForgotPass
 const CreateNewPassword = React.lazy(() => import('./views/resetPassword/CreateNewPassword'))
 
 const App = () => {
-  const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
-  const storedTheme = useSelector((state) => state.theme)
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.href.split('?')[1])
-    const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0]
-    if (theme) {
-      setColorMode(theme)
-    }
-
-    if (!isColorModeSet()) {
-      setColorMode(storedTheme)
-    }
-  }, [storedTheme, isColorModeSet, setColorMode]) // Add dependencies to ensure proper updates
-
   return (
     <HashRouter>
       <Suspense

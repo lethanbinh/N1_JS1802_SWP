@@ -1,4 +1,4 @@
-import { cilContrast, cilMenu, cilMoon, cilSun } from '@coreui/icons'
+import { cilAccountLogout, cilContrast, cilMenu, cilMoon, cilSettings, cilSun, cilUser } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import {
   CContainer,
@@ -9,23 +9,26 @@ import {
   CHeader,
   CHeaderNav,
   CHeaderToggler,
-  CNavItem,
-  CNavLink,
   useColorModes,
 } from '@coreui/react'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 
+import { CBreadcrumb, CBreadcrumbItem } from '@coreui/react'
+import UserStorage from '../util/UserStorage'
 import { AppHeaderDropdown } from './header/index'
-import { AppBreadcrumb } from './index'
 
 const AppHeader = () => {
   const headerRef = useRef()
   const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
 
+
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
+
+  const [user, setUser] = useState(UserStorage.getAuthenticatedUser())
+  const [link, setLink] = useState('#/admin-dashboard/account-list')
 
   useEffect(() => {
     document.addEventListener('scroll', () => {
@@ -33,6 +36,21 @@ const AppHeader = () => {
         headerRef.current.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0)
     })
   }, [])
+
+  useEffect(() => {
+    setColorMode('light')
+  }, [setColorMode])
+
+  useEffect(() => {
+    switch (user.roleName.toUpperCase()) {
+      case "STAFF":
+        setLink('#/staff-dashboard/invoice')
+        break;
+      case "MANAGER":
+        setLink('#/manager-dashboard/dashboard')
+        break;
+    }
+  }, [user.roleName])
 
   return (
     <CHeader position="sticky" className="mb-4 p-0" ref={headerRef}>
@@ -44,18 +62,13 @@ const AppHeader = () => {
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
         <CHeaderNav className="d-none d-md-flex">
-          {/* <CNavItem>
-            <CNavLink href="/contact">Contacts</CNavLink>
-          </CNavItem> */}
-          {/* <CNavItem>
-            <CNavLink href="/setting">Settings</CNavLink>
-          </CNavItem> */}
+          <CBreadcrumb className="my-0">
+            <CBreadcrumbItem href={link} className="breadcrumb-home-link">Home</CBreadcrumbItem>
+
+          </CBreadcrumb>
         </CHeaderNav>
         <CHeaderNav className="ms-auto"></CHeaderNav>
         <CHeaderNav>
-          <li className="nav-item py-1">
-            <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
-          </li>
           <CDropdown variant="nav-item" placement="bottom-end">
             <CDropdownToggle caret={false}>
               {colorMode === 'dark' ? (
@@ -85,25 +98,34 @@ const AppHeader = () => {
               >
                 <CIcon className="me-2" icon={cilMoon} size="lg" /> Dark
               </CDropdownItem>
+            </CDropdownMenu>
+          </CDropdown>
+          <CDropdown variant="nav-item" placement="bottom-end">
+            <CDropdownToggle caret={false}>
+              <CIcon icon={cilSettings} size="lg" />
+            </CDropdownToggle>
+            <CDropdownMenu>
               <CDropdownItem
-                active={colorMode === 'auto'}
                 className="d-flex align-items-center"
-                as="button"
-                type="button"
-                onClick={() => setColorMode('auto')}
-              >
-                <CIcon className="me-2" icon={cilContrast} size="lg" /> Auto
+                name='Profile'
+                as={NavLink}
+                to="/settings/general-info"
+              ><CIcon className="me-2" icon={cilUser} size="lg" />
+                Profile
+              </CDropdownItem>
+              <CDropdownItem
+                className="d-flex align-items-center"
+                name='Logout'
+                id='logout'
+                as={NavLink}
+                to="/"
+              ><CIcon className="me-2" icon={cilAccountLogout} size="lg" />
+                Logout
               </CDropdownItem>
             </CDropdownMenu>
           </CDropdown>
-          <li className="nav-item py-1">
-            <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
-          </li>
           <AppHeaderDropdown />
         </CHeaderNav>
-      </CContainer>
-      <CContainer className="px-4" fluid>
-        <AppBreadcrumb />
       </CContainer>
     </CHeader>
   )

@@ -180,6 +180,7 @@ const AddProduct = () => {
               <strong>Add Purchase Product</strong>
             </CCardHeader>
             <CCardBody>
+            <div style={{ height: 'fit-content'}}>
               <CRow>
                 <CCol md={6}>
                   <CFormInput
@@ -326,6 +327,7 @@ const AddProduct = () => {
               >
                 Submit Product
               </CButton>
+            </div>
             </CCardBody>
           </CCard>
         </CCol>
