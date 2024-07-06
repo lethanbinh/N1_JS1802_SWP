@@ -114,7 +114,7 @@ const StallProduct = () => {
                   color="warning"
                   onClick={
                     () => {
-                      setStallStatus('')
+                      setStallStatus('') 
                       searchAll()
                     }
                   }
@@ -153,11 +153,12 @@ const StallProduct = () => {
           </CCardHeader>
           {
             <CCardBody>
-              <div style={{ height: '450px', overflow: 'auto' }}>
+              <div style={{ height: '500px', overflow: 'auto' }}>
                 <CTable>
                   <CTableHead>
                     <CTableRow>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Id</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Id</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "200px" }} scope="col">Image</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Code</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Description</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Name</CTableHeaderCell>
@@ -170,7 +171,6 @@ const StallProduct = () => {
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Status</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Stall Location</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Bar Code</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Image</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
@@ -178,6 +178,9 @@ const StallProduct = () => {
                       filterData.map((row) => (
                         <CTableRow key={row.id}>
                           <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
+                          <CTableDataCell>
+                            <img src={row.image} style={{ width: 'auto', height: '200px' }} /> {/* Display image */}
+                          </CTableDataCell>
                           <CTableDataCell>{row.code}</CTableDataCell>
                           <CTableDataCell>{row.description}</CTableDataCell>
                           <CTableDataCell>{row.name}</CTableDataCell>
@@ -190,10 +193,7 @@ const StallProduct = () => {
                           <CTableDataCell>{row.status}</CTableDataCell>
                           <CTableDataCell>{row.stallLocation}</CTableDataCell>
                           <CTableDataCell>
-                            <img src={row.barCode} style={{ width: 'auto', height: '50px' }} />
-                          </CTableDataCell>
-                          <CTableDataCell>
-                            <img src={row.image} style={{ width: 'auto', height: '50px' }} /> {/* Display image */}
+                            <img src={row.barCode} style={{ width: 'auto', height: '100px' }} />
                           </CTableDataCell>
                         </CTableRow>
                       ))
