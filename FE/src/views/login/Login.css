@@ -1,0 +1,54 @@
+.bg-image {
+  position: relative;
+  background-image: url('122.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: inherit;
+  background-size: inherit;
+  background-position: inherit;
+  background-repeat: inherit;
+  filter: blur(8px); /* Blur effect */
+  z-index: 0; /* Ensure the pseudo-element is behind the login card */
+}
+
+.login-card {
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.741); /* Increase transparency */
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(76, 69, 69, 0.57);
+  width: 100%;
+  max-width: 800px; /* Adjust the width to fit the image and the form */
+  display: flex;
+  flex-direction: row; /* Align items horizontally */
+  align-items: center;
+  z-index: 1; /* Ensure the card is above the blurred background */
+}
+
+.login-image {
+  width: 40%; /* Adjust the width as needed */
+  height: auto;
+  object-fit: cover; /* Ensure the image covers the space properly */
+  border-radius: 16px 0 0 16px; /* Rounded corners on the left */
+}
+
+.login-form {
+  width: 80%; /* Adjust the width as needed */
+  padding: 1rem;
+  text-align: center;
+}

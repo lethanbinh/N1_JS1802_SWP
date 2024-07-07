@@ -15,9 +15,10 @@ import {
 } from '@coreui/react';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
+import loginImage from '../../views/login/1232.png'; // Update with the correct path to your image
+import './Login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -116,13 +117,14 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+    <div className="bg-image">
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md={8}>
-            <CCardGroup>
-              <CCard className="p-4">
-                <CCardBody>
+            <CCardGroup className='justify-content-center ml-2'>
+              <CCard className="login-card p-3">
+                <img src={loginImage} alt="Login Illustration" className="login-image" />
+                <CCardBody className="login-form">
                   <CForm onSubmit={handleLogin}>
                     <h1>Login</h1>
                     <p className="text-body-secondary">Sign In to your account</p>
