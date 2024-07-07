@@ -103,10 +103,10 @@ const BuyOldProduct = () => {
                       <CTableDataCell>{row.size}</CTableDataCell>
                       <CTableDataCell>{row.stallLocation}</CTableDataCell>
                       <CTableDataCell>
-                        <img src={row.barcode} style={{ width: 'auto', height: '200px' }} alt="barcode"/>
+                        <img src={row.barCode} style={{ width: 'auto', height: '100px' }} alt="barcode"/>
                       </CTableDataCell>
                       <CTableDataCell>
-                        <img src={row.image} style={{ width: 'auto', height: '200px' }} alt="product"/>
+                        <img src={row.image} style={{ width: 'auto', height: '150px' }} alt="product"/>
                       </CTableDataCell>
                     </CTableRow>
                   ))}

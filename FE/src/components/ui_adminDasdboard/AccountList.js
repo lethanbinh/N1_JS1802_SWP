@@ -306,7 +306,7 @@ const AccountList = () => {
             <strong>Account List</strong>
           </CCardHeader>
           <CCardBody>
-            <div style={{ height: '420px', overflow: 'auto' }}>
+            <div style={{ height: '90vh', overflow: 'auto' }}>
               <CTable>
                 <CTableHead>
                   <CTableRow>

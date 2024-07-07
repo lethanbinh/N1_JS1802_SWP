@@ -174,7 +174,7 @@ const AddProduct = () => {
   return (
     <>
       <CRow>
-        <CCol xs={12}>
+        <CCol xs={12} >
           <CCard className="mb-4">
             <CCardHeader>
               <strong>Add Purchase Product</strong>
