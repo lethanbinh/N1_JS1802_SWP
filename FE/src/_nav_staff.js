@@ -31,6 +31,12 @@ const _nav_staff = [
       },
       {
         component: CNavItem,
+        name: 'Promotion List',
+        to: '/staff-dashboard/promotion',
+        //button view, update, delete - phía dưới cùng tạo button create new promotion link to page create
+      },
+      {
+        component: CNavItem,
         name: 'Product in Stall',
         to: '/staff-dashboard/view-edit-product',
       },

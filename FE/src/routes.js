@@ -17,7 +17,6 @@ const PromotionList = React.lazy(() => import('./components/ui_managerDashboard/
 const PurchaseHistoryListManagerDashboard = React.lazy(() => import('./components/ui_public/PurchaseHistoryList'))
 const Stall = React.lazy(() => import('./components/ui_managerDashboard/StallManage'))
 const ViewProductInStallManager = React.lazy(() => import('./components/ui_managerDashboard/ViewProductInStallManager'))
-const PolicyForStaff = React.lazy(() => import('./components/ui_managerDashboard/Policy'))
 const ManagerDashboard = React.lazy(() => import('./components/ui_managerDashboard/ManagerDashboard'))
 
 //staffDashboard
@@ -29,6 +28,8 @@ const InvoiceForm = React.lazy(() => import('./components/ui_staffDashboard/Bill
 const AddSellProduct = React.lazy(() => import('./components/ui_staffDashboard/AddSellProduct'))
 const AddPurchaseProduct = React.lazy(() => import('./components/ui_staffDashboard/AddPurchaseProduct'))
 const StaffDashboard = React.lazy(() => import('./components/ui_staffDashboard/StaffDashboard'))
+const PolicyForStaff = React.lazy(() => import('./components/ui_managerDashboard/Policy'))
+const PromotionListForStaff = React.lazy(() => import('./components/ui_staffDashboard/PromotionListforStaff'))
 
 const routes = [
   //public
@@ -58,6 +59,7 @@ const routes = [
   { path: '/staff-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListStaffDashboard },
   { path: '/staff-dashboard/view-edit-RAEP', name: 'Return & Exchange Policy', element: PolicyForStaff, },
   { path: '/staff-dashboard/view-edit-RAEP', name: 'Return & Exchange Policy', element: PolicyForStaff, },
+  { path: '/staff-dashboard/promotion', name: 'Promotion List', element: PromotionListForStaff, },
   { path: '/staff-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListStaffDashboard, },
   { path: '/staff-dashboard/view-edit-product', name: 'Product in Stall', element: ViewProductInStallStaff },
   { path: '/staff-dashboard/customer-info', name: 'Customer Information', element: CustomerInfo },

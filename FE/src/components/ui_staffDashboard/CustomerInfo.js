@@ -221,7 +221,7 @@ const CustomerInfo = () => {
             <strong>Customer Information</strong>
           </CCardHeader>
           <CCardBody>
-            <div style={{ height: '420px', overflow: 'auto' }}>
+            <div style={{ height: '60vh', overflow: 'auto' }}>
               <CTable>
                 <CTableHead>
                   <CTableRow>
