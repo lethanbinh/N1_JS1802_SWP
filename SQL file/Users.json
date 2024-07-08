@@ -6,7 +6,7 @@
       "phone": "0794163535",
       "email": "user1@example.com",
       "address": "123 Main St",
-      "avatar": "avatar1.png",
+      "avatar": "https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg",
       "birthday": "2024-06-06T08:43:01.487Z",
       "status": true,
       "roleId": 1
@@ -18,7 +18,7 @@
       "phone": "0794163536",
       "email": "user2@example.com",
       "address": "124 Main St",
-      "avatar": "avatar2.png",
+      "avatar": "https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg",
       "birthday": "2024-06-06T08:43:01.487Z",
       "status": true,
       "roleId": 2
@@ -30,10 +30,10 @@
       "phone": "0794163537",
       "email": "user3@example.com",
       "address": "125 Main St",
-      "avatar": "avatar3.png",
+      "avatar": "https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg",
       "birthday": "2024-06-06T08:43:01.487Z",
       "status": true,
-      "roleId": 3
+      "roleId": 2
     },
     {
       "username": "user4",
@@ -42,10 +42,10 @@
       "phone": "0794163538",
       "email": "user4@example.com",
       "address": "126 Main St",
-      "avatar": "avatar4.png",
+      "avatar": "https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg",
       "birthday": "2024-06-06T08:43:01.487Z",
       "status": true,
-      "roleId": 1
+      "roleId": 2
     },
     {
       "username": "user5",
@@ -54,70 +54,10 @@
       "phone": "0794163539",
       "email": "user5@example.com",
       "address": "127 Main St",
-      "avatar": "avatar5.png",
-      "birthday": "2024-06-06T08:43:01.487Z",
-      "status": true,
-      "roleId": 2
-    },
-    {
-      "username": "user6",
-      "fullName": "User Six",
-      "password": "Binh123@",
-      "phone": "0794163540",
-      "email": "user6@example.com",
-      "address": "128 Main St",
-      "avatar": "avatar6.png",
+      "avatar": "https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg",
       "birthday": "2024-06-06T08:43:01.487Z",
       "status": true,
       "roleId": 3
-    },
-    {
-      "username": "user7",
-      "fullName": "User Seven",
-      "password": "Binh123@",
-      "phone": "0794163541",
-      "email": "user7@example.com",
-      "address": "129 Main St",
-      "avatar": "avatar7.png",
-      "birthday": "2024-06-06T08:43:01.487Z",
-      "status": true,
-      "roleId": 1
-    },
-    {
-      "username": "user8",
-      "fullName": "User Eight",
-      "password": "Binh123@",
-      "phone": "0794163542",
-      "email": "user8@example.com",
-      "address": "130 Main St",
-      "avatar": "avatar8.png",
-      "birthday": "2024-06-06T08:43:01.487Z",
-      "status": true,
-      "roleId": 2
-    },
-    {
-      "username": "user9",
-      "fullName": "User Nine",
-      "password": "Binh123@",
-      "phone": "0794163543",
-      "email": "user9@example.com",
-      "address": "131 Main St",
-      "avatar": "avatar9.png",
-      "birthday": "2024-06-06T08:43:01.487Z",
-      "status": true,
-      "roleId": 3
-    },
-    {
-      "username": "user10",
-      "fullName": "User Ten",
-      "password": "Binh123@",
-      "phone": "0794163544",
-      "email": "user10@example.com",
-      "address": "132 Main St",
-      "avatar": "avatar10.png",
-      "birthday": "2024-06-06T08:43:01.487Z",
-      "status": true,
-      "roleId": 1
     }
   ]
   

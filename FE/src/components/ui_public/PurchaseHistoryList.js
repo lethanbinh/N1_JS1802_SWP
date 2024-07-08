@@ -224,8 +224,6 @@ const PurchaseHistoryList = () => {
           >
             <option value="PENDING">PENDING</option>
             <option value="CONFIRMED">CONFIRMED</option>
-            <option value="SHIPPED">SHIPPED</option>
-            <option value="DELIVERED">DELIVERED</option>
             <option value="CANCELLED">CANCELLED</option>
           </CFormSelect>
         </CModalBody>

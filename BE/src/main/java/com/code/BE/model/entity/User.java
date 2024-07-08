@@ -77,5 +77,8 @@ public class User {
     @OneToOne(mappedBy = "user")
     private ConfirmationToken confirmationToken;
 
+    @OneToMany(mappedBy = "staff")
+    private List<StaffDashboardDaily> staffDashboardDailies;
+
     // Getters and setters
 }
