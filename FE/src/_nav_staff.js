@@ -57,11 +57,6 @@ const _nav_staff = [
       },
       {
         component: CNavItem,
-        name: 'Buy Old Products',
-        to: '/staff-dashboard/buy-oleP',
-      },
-      {
-        component: CNavItem,
         name: 'Staff dashboard',
         to: '/staff-dashboard/dashboard',
       },

@@ -101,7 +101,7 @@ const StaffDashboard = () => {
                                 </CFormSelect>
                             </CCol>
                         </CRow>
-                        <CButton className="custom-btn custom-btn-primary" color="primary" onClick={handleFetchData}>Fetch Data</CButton>
+                        <CButton className="custom-btn custom-btn-primary" color="primary" onClick={handleFetchData}>Get Data</CButton>
                     </CCardBody>
                 </CCard>
             </CCol>

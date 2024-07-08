@@ -71,9 +71,9 @@ const PurchaseHistoryList = () => {
   const handleSave = () => {
     fetchData(`http://localhost:8080/api/v1/orders/edit-status/${orderId}/${currentStatus}`, 'PUT', null, userInfo.accessToken)
       .then(data => {
-          console.log(data)
-          setEditModalVisible(false)
-          loadData()
+        console.log(data)
+        setEditModalVisible(false)
+        loadData()
       })
   }
 
@@ -112,7 +112,7 @@ const PurchaseHistoryList = () => {
             <strong>Purchase History</strong>
           </CCardHeader>
           <CCardBody>
-            <div style={{ height: '480px', overflow: 'auto' }}>
+            <div style={{ height: '70vh', overflow: 'auto' }}>
               <CTable>
                 <CTableHead>
                   <CTableRow>
@@ -124,7 +124,7 @@ const PurchaseHistoryList = () => {
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Staff Name</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Price</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col"> (%)</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Custom Give</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Customer Give</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Refund Money</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Payment methods</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Bonus Point</CTableHeaderCell>
@@ -149,12 +149,13 @@ const PurchaseHistoryList = () => {
                       <CTableDataCell>{row.totalBonusPoint}</CTableDataCell>
                       <CTableDataCell>{row.status}</CTableDataCell>
                       <CTableDataCell className='mt-1'>
-                        <CButton style={{marginRight: "10px"}} className='custom-btn custom-btn-info mr-1' onClick={() => loadDetails(row.id)} color="info">View Details</CButton>
-                        <CButton className='custom-btn custom-btn-info mr-1' color="warning" onClick={() => {
+                        <CButton style={{ marginRight: "10px" }} className='custom-btn custom-btn-info mr-1' onClick={() => loadDetails(row.id)} color="info">View Details</CButton>
+
+                        {row.status.toUpperCase() === 'CONFIRMED' ? "" : <CButton className='custom-btn custom-btn-info mr-1' color="warning" onClick={() => {
                           setEditModalVisible(true)
                           setCurrentStatus(row.status)
                           setOrderId(row.id)
-                        }}>Edit Status</CButton>
+                        }}>Edit Status</CButton>}
                       </CTableDataCell>
 
                     </CTableRow>

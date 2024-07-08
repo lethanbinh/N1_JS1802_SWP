@@ -248,19 +248,17 @@ const StaffList = () => {
               onChange={handleSearchChange}
               className="mb-3"
             />
-            <div style={{ height: '420px', overflow: 'auto' }}>
+            <div style={{ height: '65vh', overflow: 'auto' }}>
               <CTable>
                 <CTableHead>
                   <CTableRow>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Id</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Username</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Full Name</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Password</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Phone</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Email</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Address</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Birthday</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Role</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Actions</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
@@ -270,12 +268,10 @@ const StaffList = () => {
                       <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                       <CTableDataCell>{row.username}</CTableDataCell>
                       <CTableDataCell>{row.fullName}</CTableDataCell>
-                      <CTableDataCell>{'******'}</CTableDataCell>
                       <CTableDataCell>{row.phone}</CTableDataCell>
                       <CTableDataCell>{row.email}</CTableDataCell>
                       <CTableDataCell>{row.address}</CTableDataCell>
                       <CTableDataCell>{row.birthday}</CTableDataCell>
-                      <CTableDataCell>{row.roleName}</CTableDataCell>
                       <CTableDataCell>
                         <CButton style={{ marginRight: "5px" }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
                           Edit

@@ -188,7 +188,7 @@ const Stall = () => {
               onChange={handleSearchChange}
               className="mb-3"
             />
-            <div style={{ height: '420px', overflow: 'auto' }}>
+            <div style={{ height: '65vh', overflow: 'auto' }}>
               <CTable>
                 <CTableHead>
                   <CTableRow>
