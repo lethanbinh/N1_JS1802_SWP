@@ -78,7 +78,7 @@ const CustomerInfo = () => {
   };
 
   const handleSave = () => {
-    const requiredFields = ['fullName', 'phone', 'email', 'address', 'birthday', 'status', 'bonusPoint'];
+    const requiredFields = ['fullName', 'phone', 'email', 'address', 'birthday'];
     const emptyFields = requiredFields.filter(field => !formData[field]);
 
     if (emptyFields.length > 0) {
@@ -87,7 +87,6 @@ const CustomerInfo = () => {
       return;
     }
 
-    // Validate birthday
     const today = new Date();
     const birthday = new Date(formData.birthday);
     if (birthday > today) {
@@ -96,21 +95,27 @@ const CustomerInfo = () => {
       return;
     }
 
-    const duplicatePhone = data.some(row => row.phone === formData.phone && row.id !== editingRow)
-    const duplicateEmail = data.some(row => row.email === formData.email && row.id !== editingRow)
+    const duplicatePhone = data.some(row => row.phone === formData.phone && row.id !== editingRow);
+    const duplicateEmail = data.some(row => row.email === formData.email && row.id !== editingRow);
 
     if (duplicatePhone) {
-      setErrorMessage("Phone number already exists. Please use a unique phone number.")
-      setErrorModalVisible(true)
-      return
+      setErrorMessage("Phone number already exists. Please use a unique phone number.");
+      setErrorModalVisible(true);
+      return;
     }
 
     if (duplicateEmail) {
-      setErrorMessage("Email already exists. Please use a unique email.")
-      setErrorModalVisible(true)
-      return
+      setErrorMessage("Email already exists. Please use a unique email.");
+      setErrorModalVisible(true);
+      return;
     }
 
+    const newBonusPoint = parseInt(formData.bonusPoint);
+    if (newBonusPoint < 0) {
+      setErrorMessage("Bonus point cannot be negative.");
+      setErrorModalVisible(true);
+      return;
+    }
 
     let newData;
     if (isNew) {
@@ -118,44 +123,43 @@ const CustomerInfo = () => {
       const newRow = { ...formData, id: newId, status: true };
       newData = [...data, newRow];
     } else {
-      newData = data.map((row) => {
-        if (row.id === editingRow) {
-          return { ...row, ...formData };
-        }
-        return row;
-      });
+      newData = data.map((row) => (row.id === editingRow ? { ...row, ...formData } : row));
     }
 
     const dataFromInput = newData.find(row => row.id === (isNew ? newData.length : editingRow));
 
     const savedData = {
       fullName: dataFromInput.fullName || "string",
-      phone: dataFromInput.phone || "0374422448", // Default phone if not provided
+      phone: dataFromInput.phone || "0374422448",
       email: dataFromInput.email || "string",
       address: dataFromInput.address || "string",
-      birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z", // Default date
-      status: dataFromInput.status ? true : false,
+      status: true,
+      birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z",
       bonusPoint: dataFromInput.bonusPoint || 0,
     };
 
     console.log(savedData);
 
     const savePromise = isNew
-      ? fetchData(`http://localhost:8080/api/v1/customers`, 'POST ', savedData, userInfo.accessToken)
+      ? fetchData(`http://localhost:8080/api/v1/customers`, 'POST', savedData, userInfo.accessToken)
       : fetchData(`http://localhost:8080/api/v1/customers/id/${editingRow}`, 'PUT', savedData, userInfo.accessToken);
 
     savePromise.then(() => {
-      setSuccessModalVisible(true); // Show success modal on save
+      setSuccessModalVisible(true);
       refreshData();
       setEditingRow(null);
       setEditModalVisible(false);
       setIsNew(false);
+    }).catch((error) => {
+      setErrorMessage(`Error saving data: ${error.message}`);
+      setErrorModalVisible(true);
     });
 
     setTimeout(() => {
       refreshData();
     }, 1000);
   };
+
 
   const handleAddNew = () => {
     setFormData({
@@ -207,14 +211,14 @@ const CustomerInfo = () => {
   return (
     <CRow>
       <div style={{ width: "50%", display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
-          <CFormInput
-            type="text"
-            className="form-control mb-3"
-            placeholder="Search customer by phone"
-            value={search}
-            onChange={handleSearch}
-          />
-        </div>
+        <CFormInput
+          type="text"
+          className="form-control mb-3"
+          placeholder="Search customer by phone"
+          value={search}
+          onChange={handleSearch}
+        />
+      </div>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
@@ -231,7 +235,6 @@ const CustomerInfo = () => {
                     <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Address</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Birthday</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Bonus Point</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                   </CTableRow>
@@ -245,7 +248,6 @@ const CustomerInfo = () => {
                       <CTableDataCell>{row.email}</CTableDataCell>
                       <CTableDataCell>{row.address}</CTableDataCell>
                       <CTableDataCell>{row.birthday}</CTableDataCell>
-                      <CTableDataCell>{row.status ? 'true' : 'false'}</CTableDataCell>
                       <CTableDataCell>{row.bonusPoint}</CTableDataCell>
                       <CTableDataCell>
                         <CButton style={{ marginRight: '10px' }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
@@ -303,7 +305,7 @@ const CustomerInfo = () => {
             type="text"
             name="fullName"
             label="Full Name"
-            value={formData.fullName}
+            value={formData.fullName || ''}
             onChange={handleInputChange}
             className="mb-3"
           />
@@ -311,7 +313,7 @@ const CustomerInfo = () => {
             type="text"
             name="phone"
             label="Phone"
-            value={formData.phone}
+            value={formData.phone || ''}
             onChange={handleInputChange}
             className="mb-3"
           />
@@ -319,7 +321,7 @@ const CustomerInfo = () => {
             type="text"
             name="email"
             label="Email"
-            value={formData.email}
+            value={formData.email || ''}
             onChange={handleInputChange}
             className="mb-3"
           />
@@ -327,7 +329,7 @@ const CustomerInfo = () => {
             type="text"
             name="address"
             label="Address"
-            value={formData.address}
+            value={formData.address || ''}
             onChange={handleInputChange}
             className="mb-3"
           />
@@ -335,25 +337,15 @@ const CustomerInfo = () => {
             type="date"
             name="birthday"
             label="Birthday"
-            value={formData.birthday}
+            value={formData.birthday || ''}
             onChange={handleInputChange}
             className="mb-3"
           />
-          <CFormSelect
-            name="status"
-            label="Status"
-            value={formData.status ? "true" : "false"}
-            onChange={handleInputChange}
-            className="mb-3"
-          >
-            <option value="true">true</option>
-            <option value="false">false</option>
-          </CFormSelect>
           <CFormInput
             type="number"
             name="bonusPoint"
             label="Bonus Point"
-            value={formData.bonusPoint}
+            value={formData.bonusPoint || 0}
             onChange={handleInputChange}
             className="mb-3"
           />
