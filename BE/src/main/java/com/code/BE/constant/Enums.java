@@ -9,7 +9,8 @@ public class Enums {
 
     public enum OrderType {
         SELL,
-        PURCHASE
+        PURCHASE,
+        EXCHANGE_AND_RETURN
     }
 
     public enum PolicyType {

@@ -420,6 +420,7 @@ const InvoiceForm = () => {
               >
                 <option value="SELL">SELL</option>
                 <option value="PURCHASE">PURCHASE</option>
+                <option value="EXCHANGE_AND_RETURN">EXCHANGE_AND_RETURN</option>
               </CFormSelect>
             </CCol>
             <CCol>
