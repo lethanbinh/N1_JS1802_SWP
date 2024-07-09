@@ -6,6 +6,7 @@ import {
   CCol,
   CDropdownHeader,
   CFormSelect,
+  CHeader,
   CRow,
   CTable,
   CTableBody,
@@ -24,10 +25,31 @@ const StallProduct = () => {
   const [stallName, setStallName] = useState('')
   const [data, setData] = useState([])
   const [error, setError] = useState(null)
-  const [stallOptions, setStallOptions] = useState([])
+  const [stallInfo, setStallInfo] = useState([])
   const [stallStatus, setStallStatus] = useState('')
   const [filterData, setFilterData] = useState([])
+  const [user, setUser] = useState({})
 
+  const loadUser = async () => {
+    try {
+      const userData = await fetchData(`http://localhost:8080/api/v1/users/id/${userInfo.id}`, 'GET', null, userInfo.accessToken)
+      if (userData && userData.payload) {
+        setUser(userData.payload)
+      } else {
+        setUser({})
+      }
+      setError(null)
+    } catch (error) {
+      setError(error.message)
+      setUser({}) // Ensure user is cleared on error
+    }
+  }
+
+  useEffect(() => {
+    loadUser()
+  }, [])
+
+  console.log(user)
 
   const loadData = async (stallName) => {
     if (!stallName) return; // Do not proceed if stallName is not selected
@@ -35,30 +57,35 @@ const StallProduct = () => {
       const productData = await fetchData(`http://localhost:8080/api/v1/products/stallName/${stallName}`, 'GET', null, userInfo.accessToken)
       if (productData && productData.payload) {
         setData(productData.payload)
+        setFilterData(productData.payload)
       } else {
         setData([])
+        setFilterData([])
       }
       setError(null)
     } catch (error) {
       setError(error.message)
       setData([]) // Ensure data is cleared on error
+      setFilterData([]) // Ensure filterData is cleared on error
     }
   }
 
-  console.log(data)
-
-  const loadStallData = async () => {
+  const loadStallData = async (stallId) => {
+    if (!stallId) return; // Do not proceed if stallName is not selected
     try {
-      const stallData = await fetchData(`http://localhost:8080/api/v1/stalls`, 'GET', null, userInfo.accessToken)
+      const stallData = await fetchData(`http://localhost:8080/api/v1/stalls/id/${stallId}`, 'GET', null, userInfo.accessToken)
       if (stallData && stallData.payload) {
-        setStallOptions(stallData.payload)
+        setStallInfo(stallData.payload)
+        setStallName(stallData.payload.name)
       } else {
-        setStallOptions([])
+        setStallInfo([])
+        setStallName('')
       }
       setError(null)
     } catch (error) {
       setError(error.message)
-      setStallOptions([]) // Ensure stallOptions is cleared on error
+      setStallInfo([]) // Ensure stallInfo is cleared on error
+      setStallName('') // Ensure stallName is cleared on error
     }
   }
 
@@ -72,19 +99,16 @@ const StallProduct = () => {
     setFilterData(filteredData)
   }
 
-  const searchAll = () => {
-    setFilterData(data)
-  }
-
-  console.log(filterData)
-
   useEffect(() => {
-    loadStallData()
-  }, [])
+    loadStallData(user.stallId)
+  }, [user.stallId])
 
   useEffect(() => {
     loadData(stallName)
   }, [stallName])
+
+  console.log(stallInfo)
+  console.log(data)
 
 
   return (
@@ -94,33 +118,7 @@ const StallProduct = () => {
           <CCardHeader>
             <CDropdownHeader>
               <strong>
-                <CFormSelect
-                  name="stallName"
-                  value={stallName}
-                  onChange={(event) =>
-                    setStallName(event.target.value)
-                  }
-                >
-                  <option value="">Select Stall</option>
-                  {stallOptions.map(stall => (
-                    <option key={stall.id} value={stall.name}>
-                      {stall.name}
-                    </option>
-                  ))}
-                </CFormSelect>
-                <CButton
-                  style={{ marginRight: '10px', marginBottom: '10px', marginTop: '10px' }}
-                  className='custom-btn custom-btn-info'
-                  color="warning"
-                  onClick={
-                    () => {
-                      setStallStatus('') 
-                      searchAll()
-                    }
-                  }
-                >
-                  All Product
-                </CButton>
+                <CHeader style={{fontSize: '20px'}}>{stallName}</CHeader>
                 <CButton
                   style={{ marginRight: '10px', marginBottom: '10px', marginTop: '10px' }}
                   className='custom-btn custom-btn-info'
