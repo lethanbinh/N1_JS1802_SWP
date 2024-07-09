@@ -173,6 +173,9 @@ const PromotionList = () => {
   const refreshData = () => {
     fetchData("http://localhost:8080/api/v1/promotions", 'GET', null, userInfo.accessToken)
       .then(data => {
+        data.payload.forEach(element => {
+          element.discount *= 100
+        });
         setData(data.payload);
         applyFilters(data.payload);
       });
@@ -241,7 +244,7 @@ const PromotionList = () => {
                 <CTableHead>
                   <CTableRow>
                     <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Discount</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Discount (%)</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Name</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Description</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Start Date</CTableHeaderCell>
@@ -315,9 +318,9 @@ const PromotionList = () => {
         </CModalHeader>
         <CModalBody>
           <CFormInput
-            type="text"
+            type="number"
             name="discount"
-            label="Discount"
+            label="Discount (%)"
             value={formData.discount}
             onChange={handleInputChange}
             className="mb-3"
