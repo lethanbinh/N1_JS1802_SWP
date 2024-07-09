@@ -16,6 +16,10 @@ import {
   CTable,
   CTableBody,
   CTableDataCell,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
   CTableHead,
   CTableHeaderCell,
   CTableRow,
@@ -25,6 +29,7 @@ import '../../customStyles.css'
 import fetchData from '../../util/ApiConnection'
 import convertDateToJavaFormat from '../../util/DateConvert'
 import UserStorage from '../../util/UserStorage'
+import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 
 const AccountList = () => {
   const [data, setData] = useState([])
@@ -336,14 +341,19 @@ const AccountList = () => {
                       <CTableDataCell>{row.birthday}</CTableDataCell>
                       <CTableDataCell>{row.roleName}</CTableDataCell>
                       <CTableDataCell>
-                        <CButton style={{ marginRight: "5px" }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
-                          Edit
-                        </CButton>
-                        <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => {
-                          setDeleteId(row.id)
-                          setVisible(true)
-                          setDeletedUsername(row.username)
-                        }}>Delete</CButton>
+                        <CDropdown className="position-relative">
+                          <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
+                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-500" />
+                          </CDropdownToggle>
+                          <CDropdownMenu>
+                            <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
+                            <CDropdownItem onClick={() => {
+                              setDeleteId(row.id)
+                              setVisible(true)
+                              setDeletedUsername(row.username)
+                            }}>Delete</CDropdownItem>
+                          </CDropdownMenu>
+                        </CDropdown>
                       </CTableDataCell>
                     </CTableRow>
                   ))}

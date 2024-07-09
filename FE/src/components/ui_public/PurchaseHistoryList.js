@@ -11,6 +11,10 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -24,6 +28,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
+import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 
 const PurchaseHistoryList = () => {
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
@@ -147,7 +152,7 @@ const PurchaseHistoryList = () => {
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Payment methods</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Bonus Point</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Status</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "300px" }} scope="col">Action</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "200px" }} scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -165,16 +170,22 @@ const PurchaseHistoryList = () => {
                       <CTableDataCell>{row.sendMoneyMethod}</CTableDataCell>
                       <CTableDataCell>{row.totalBonusPoint}</CTableDataCell>
                       <CTableDataCell>{row.status}</CTableDataCell>
-                      <CTableDataCell className='mt-1'>
-                        <CButton style={{ marginRight: "10px" }} className='custom-btn custom-btn-info mr-1' onClick={() => loadDetails(row.id)} color="info">View Details</CButton>
-
-                        {row.status.toUpperCase() === 'CONFIRMED' ? "" : <CButton className='custom-btn custom-btn-info mr-1' color="warning" onClick={() => {
-                          setEditModalVisible(true)
-                          setCurrentStatus(row.status)
-                          setOrderId(row.id)
-                        }}>Edit Status</CButton>}
+                      <CTableDataCell>
+                        <CDropdown className="position-relative">
+                          <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
+                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-500" />
+                          </CDropdownToggle>
+                          <CDropdownMenu>
+                            <CDropdownItem onClick={() => loadDetails(row.id)}>View Details</CDropdownItem>
+                            {row.status.toUpperCase() === 'CONFIRMED' ? "" : 
+                            <CDropdownItem onClick={() => {
+                              setEditModalVisible(true)
+                              setCurrentStatus(row.status)
+                              setOrderId(row.id)
+                            }}>Edit Status</CDropdownItem>}
+                          </CDropdownMenu>
+                        </CDropdown>
                       </CTableDataCell>
-
                     </CTableRow>
                   ))}
                 </CTableBody>

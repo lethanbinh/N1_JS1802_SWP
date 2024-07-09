@@ -13,6 +13,10 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -24,6 +28,7 @@ import React, { useEffect, useState } from 'react';
 import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
+import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 
 const Stall = () => {
   const [data, setData] = useState([]);
@@ -197,7 +202,7 @@ const Stall = () => {
                     <CTableHeaderCell scope="col">Name</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Type</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Action</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -209,9 +214,14 @@ const Stall = () => {
                       <CTableDataCell>{row.type}</CTableDataCell>
                       <CTableDataCell>{row.description}</CTableDataCell>
                       <CTableDataCell>
-                        <CButton style={{ marginRight: '5px' }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
-                          Update
-                        </CButton>
+                        <CDropdown className="position-relative">
+                          <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
+                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-500" />
+                          </CDropdownToggle>
+                          <CDropdownMenu>
+                            <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
+                          </CDropdownMenu>
+                        </CDropdown>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
