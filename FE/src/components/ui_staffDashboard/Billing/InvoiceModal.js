@@ -111,8 +111,8 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
             <CTableRow>
               <CTableHeaderCell style={{ border: "1px solid #000" }}>ITEM</CTableHeaderCell>
               <CTableHeaderCell style={{ border: "1px solid #000" }}>QTY</CTableHeaderCell>
-              <CTableHeaderCell style={{ border: "1px solid #000" }} className="text-right ">UNIT PRICE</CTableHeaderCell>
-              <CTableHeaderCell style={{ border: "1px solid #000" }} className="text-right ">AMOUNT</CTableHeaderCell>
+              <CTableHeaderCell style={{ border: "1px solid #000", textAlign: 'right' }} className="text-right ">UNIT PRICE</CTableHeaderCell>
+              <CTableHeaderCell style={{ border: "1px solid #000", textAlign: 'right' }} className="text-right ">AMOUNT</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
@@ -120,8 +120,8 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
               <CTableRow key={item.id}>
                 <CTableDataCell style={{ border: "1px solid #000" }}>{item.name}</CTableDataCell>
                 <CTableDataCell style={{ border: "1px solid #000" }}>{item.qty}</CTableDataCell>
-                <CTableDataCell style={{ border: "1px solid #000" }} className="text-right ">${Number(item.price).toFixed(2)}</CTableDataCell>
-                <CTableDataCell style={{ border: "1px solid #000" }} className="text-right ">${(Number(item.price) * item.qty).toFixed(2)}</CTableDataCell>
+                <CTableDataCell style={{ border: "1px solid #000", textAlign: 'right' }} className="text-right ">{Number(item.price).toFixed(2)}VND</CTableDataCell>
+                <CTableDataCell style={{ border: "1px solid #000", textAlign: 'right' }} className="text-right ">{(Number(item.price) * item.qty).toFixed(2)}VND</CTableDataCell>
               </CTableRow>
             ))}
           </CTableBody>
@@ -130,34 +130,34 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
           {invoiceInfo.transactionType === 'SELL' ? <>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Subtotal:</span>
-              <span style={{ display: "inline-block" }}>${invoiceInfo.subtotal.toFixed(2)}</span>
+              <span style={{ display: "inline-block" }}>{invoiceInfo.subtotal.toFixed(2)}VND</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Discount:</span>
-              <span style={{ display: "inline-block" }}>- ${invoiceInfo.discountRate}</span>
+              <span style={{ display: "inline-block" }}>- {invoiceInfo.discountRate}VND</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Tax:</span>
-              <span style={{ display: "inline-block" }}>+ ${invoiceInfo.taxRate}</span>
+              <span style={{ display: "inline-block" }}>+ {invoiceInfo.taxRate}VND</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Exchange bonus Point:</span>
-              <span style={{ display: "inline-block" }}>- ${invoiceInfo.bonusPointExchange}</span>
+              <span style={{ display: "inline-block" }}>- {invoiceInfo.bonusPointExchange}VND</span>
             </div>
           </> : ""}
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span style={{ display: "inline-block" }} className="font-bold">Total:</span>
-            <span style={{ display: "inline-block" }} className="font-bold">${invoiceInfo.total.toFixed(2)}</span>
+            <span style={{ display: "inline-block" }} className="font-bold">{invoiceInfo.total.toFixed(2)}VND</span>
           </div>
 
           {invoiceInfo.transactionType === 'SELL' ? <>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Customer Give Money:</span>
-              <span style={{ display: "inline-block" }} className="font-bold">${invoiceInfo.customerGiveMoney}</span>
+              <span style={{ display: "inline-block" }} className="font-bold">{invoiceInfo.customerGiveMoney}VND</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Refund Money:</span>
-              <span style={{ display: "inline-block" }} className="font-bold">${invoiceInfo.refundMoney}</span>
+              <span style={{ display: "inline-block" }} className="font-bold">{invoiceInfo.refundMoney}VND</span>
             </div>
           </> : ""}
 
