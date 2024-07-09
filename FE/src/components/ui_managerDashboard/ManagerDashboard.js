@@ -95,7 +95,7 @@ const ManagerDashboard = () => {
     return (
         <div className="container-fluid" style={{ padding: '20px' }}>
             <div className="d-flex justify-content-between mb-4" style={{ alignItems: 'center' }}>
-                <div style={{width: "50%", display: 'flex', alignItems: 'center'}}>
+                <div style={{ width: "50%", display: 'flex', alignItems: 'center' }}>
                     <label style={{ marginRight: '10px' }}>Start Date: </label>
                     <DatePicker
                         selected={startDate}
@@ -104,7 +104,7 @@ const ManagerDashboard = () => {
                         className="form-control"
                     />
                 </div>
-                <div style={{width: "50%", display: 'flex', alignItems: 'center'}}>
+                <div style={{ width: "50%", display: 'flex', alignItems: 'center' }}>
                     <label style={{ marginRight: '10px' }}>End Date: </label>
                     <DatePicker
                         selected={endDate}
@@ -133,7 +133,7 @@ const ManagerDashboard = () => {
                                     <p>Total Orders</p>
                                 </div>
                                 <div style={{ textAlign: 'center' }}>
-                                    <h4>${orderStats.totalSales || 0}</h4>
+                                    <h4>{orderStats.totalSales || 0}VND</h4>
                                     <p>Total Sales</p>
                                 </div>
                             </div>
@@ -165,7 +165,7 @@ const ManagerDashboard = () => {
                         <CCardBody>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
                                 <div style={{ textAlign: 'center' }}>
-                                    <h4>${orderStats.averageOrderValue || 0}</h4>
+                                    <h4>{orderStats.averageOrderValue || 0}VND</h4>
                                     <p>Avg. Order Value</p>
                                 </div>
                                 <div style={{ textAlign: 'center' }}>
@@ -219,7 +219,7 @@ const ManagerDashboard = () => {
                             <div style={{ textAlign: 'center', marginBottom: '20px' }}>
                                 <h4>{productStats.totalNumberOfProducts || 0}</h4>
                                 <p>Total Products</p>
-                                <h4>{productStats.averageSalesPerProduct || 0}</h4>
+                                <h4>{productStats.averageSalesPerProduct || 0}%</h4>
                                 <p>Avg. Sales per Product</p>
                             </div>
                             <CChartBar
@@ -251,7 +251,7 @@ const ManagerDashboard = () => {
                             <div style={{ textAlign: 'center', marginBottom: '20px' }}>
                                 <h4>{staffStats.totalNumberOfStaff || 0}</h4>
                                 <p>Total Staff</p>
-                                <h4>{staffStats.averageSalesPerStaff || 0}</h4>
+                                <h4>{staffStats.averageSalesPerStaff || 0}%</h4>
                                 <p>Avg. Sales per Staff</p>
                             </div>
                             <CChartDoughnut
@@ -295,9 +295,9 @@ const ManagerDashboard = () => {
                         <CCardHeader>Revenue Trends</CCardHeader>
                         <CCardBody>
                             <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-                                <h4>${revenueStats.totalRevenue || 0}</h4>
+                                <h4>{revenueStats.totalRevenue || 0}VND</h4>
                                 <p>Total Revenue</p>
-                                <h4>${revenueStats.averageRevenuePerStall || 0}</h4>
+                                <h4>{revenueStats.averageRevenuePerStall || 0}%</h4>
                                 <p>Avg. Revenue per Stall</p>
                             </div>
                             <CChartPie

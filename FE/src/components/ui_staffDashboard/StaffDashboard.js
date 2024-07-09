@@ -111,7 +111,7 @@ const StaffDashboard = () => {
                         <CCardHeader>Dashboard Data</CCardHeader>
                         <CCardBody>
                             <CRow className="mb-3">
-                                <CCol>Total Revenue: {data.totalRevenue}</CCol>
+                                <CCol>Total Revenue: {data.totalRevenue}VND</CCol>
                             </CRow>
                             <CRow className="mb-3">
                                 <CCol>Total Number of Sales: {data.totalNumberOfSales}</CCol>
@@ -123,7 +123,7 @@ const StaffDashboard = () => {
                                 <CCol>Total Customers Served: {data.totalCustomersServed}</CCol>
                             </CRow>
                             <CRow className="mb-3">
-                                <CCol>Daily Transaction Amount: {data.dailyTransactionAmount}</CCol>
+                                <CCol>Daily Transaction Amount: {data.dailyTransactionAmount}VND</CCol>
                             </CRow>
                             <CRow className="mb-3">
                                 <CCol>Daily Sales Quantity: {data.dailySalesQuantity}</CCol>
