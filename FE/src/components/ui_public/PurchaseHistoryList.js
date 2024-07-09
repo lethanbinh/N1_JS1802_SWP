@@ -75,6 +75,8 @@ const PurchaseHistoryList = () => {
         setEditModalVisible(false)
         loadData()
       })
+
+    
   }
 
   const loadDetails = (id) => {
@@ -127,7 +129,6 @@ const PurchaseHistoryList = () => {
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Address</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "140px" }} scope="col">Staff Name</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "120px", textAlign: 'right' }} scope="col">Total Price</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "100px", textAlign: 'center' }} scope="col"> (%)</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "140px", textAlign: 'right' }} scope="col">Customer Give</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px", textAlign: 'right' }} scope="col">Refund Money</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Payment methods</CTableHeaderCell>
@@ -146,7 +147,6 @@ const PurchaseHistoryList = () => {
                       <CTableDataCell>{row.address}</CTableDataCell>
                       <CTableDataCell>{row.staffName}</CTableDataCell>
                       <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.totalPrice)}</CTableDataCell>
-                      <CTableDataCell style={{ textAlign: 'center' }}>{row.tax && row.tax * 100}</CTableDataCell>
                       <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.customerGiveMoney)}</CTableDataCell>
                       <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.refundMoney)}</CTableDataCell>
                       <CTableDataCell>{row.sendMoneyMethod}</CTableDataCell>

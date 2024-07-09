@@ -50,7 +50,7 @@ const InvoiceForm = () => {
   const [promotionId, setPromotionId] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [staff, setStaff] = useState([]);
-  const [staffId, setStaffId] = useState('');
+  const [staffId, setStaffId] = useState(0);
   const [staffName, setStaffName] = useState('')
   const [customerGiveMoney, setCustomerGiveMoney] = useState(0)
   const [description, setDescription] = useState('none')
@@ -108,6 +108,12 @@ const InvoiceForm = () => {
   }, []);
 
   const validate = () => {
+    if (staffId <= 0) {
+      setErrorMessage('Please choose cashier');
+      setErrorModalVisible(true);
+      return false;
+    }
+
     if (customerPhone.length < 1) {
       setErrorMessage('Please fill customer phone');
       setErrorModalVisible(true);
@@ -376,7 +382,7 @@ const InvoiceForm = () => {
             </CCol>
 
             <CCol>
-              <strong className="text-sm font-bold">Customer Phone {transactionType === 'SELL' ? "(Fill to check bonus point*):" : ""}</strong>
+              <strong className="text-sm font-bold">Customer Phone</strong>
               <CFormInput
                 required
                 className="flex-1"
@@ -663,8 +669,8 @@ const InvoiceForm = () => {
                           const currentDate = new Date();
                           return currentDate >= convertJavaDateToJSDate(promotion.startDate)
                             && currentDate <= convertJavaDateToJSDate(promotion.endDate)
-                            && total >= promotion.minimumPrize
-                            && total <= promotion.maximumPrize
+                            && subtotal >= promotion.minimumPrize
+                            && subtotal <= promotion.maximumPrize
                             ;
                         })
                         .map(promotion => (
