@@ -99,13 +99,14 @@ const Policy = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardBody>
-            <div style={{ height: '500px', overflow: 'auto' }}>
+            <div style={{ height: '80vh', overflow: 'auto' }}>
               {data.map((row, index) => (
                 <React.Fragment key={row.id}>
                   {index > 0 && <hr />} {/* Add a horizontal rule between sections */}
                   <div className="mb-3">
                     {editingRow === row.id ? (
                       <div>
+                        <CButton className='custom-btn custom-btn-primary mb-4' color="primary" onClick={handleSave}>Save</CButton>
                         <input
                           type="text"
                           name="name"
@@ -127,13 +128,14 @@ const Policy = () => {
                           <option value="EXCHANGE_AND_RETURN">EXCHANGE_AND_RETURN</option>
                           <option value="WARRANTY">WARRANTY</option>
                         </select>
-                        <CButton className='custom-btn custom-btn-primary' color="primary" onClick={handleSave}>Save</CButton>
                       </div>
                     ) : (
                       <div>
+                        {userInfo.roleName.toUpperCase() === 'MANAGER' &&
+                          <CButton color="secondary" className='custom-btn custom-btn-secondary mt-2  mb-4' onClick={() => handleEdit(row.id)}>Edit</CButton>
+                        }
                         <h5>{row.name}</h5>
                         <div dangerouslySetInnerHTML={{ __html: row.detail }} />
-                        <CButton color="secondary" className='custom-btn custom-btn-secondary mt-2' onClick={() => handleEdit(row.id)}>Edit</CButton>
                       </div>
                     )}
                   </div>

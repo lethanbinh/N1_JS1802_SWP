@@ -4,7 +4,10 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
+  CFormLabel,
+  CInputGroup,
   CFormInput,
+  CInputGroupText,
   CFormTextarea,
   CModal,
   CModalBody,
@@ -211,6 +214,10 @@ const PromotionList = () => {
     refreshData();
   }, []);
 
+  const formatPrice = (price) => {
+    return `${price} VND`;
+  };
+
   return (
     <CRow>
       <div className="d-flex justify-content-between mb-4" style={{ alignItems: 'center' }}>
@@ -249,8 +256,8 @@ const PromotionList = () => {
                     <CTableHeaderCell scope="col">Description</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Start Date</CTableHeaderCell>
                     <CTableHeaderCell scope="col">End Date</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Minimum Price</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Maximum Price</CTableHeaderCell>
+                    <CTableHeaderCell scope="col" style={{ textAlign: 'right' }}>Minimum Price</CTableHeaderCell>
+                    <CTableHeaderCell scope="col" style={{ textAlign: 'right' }}>Maximum Price</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
@@ -263,8 +270,8 @@ const PromotionList = () => {
                       <CTableDataCell>{row.description}</CTableDataCell>
                       <CTableDataCell>{row.startDate}</CTableDataCell>
                       <CTableDataCell>{row.endDate}</CTableDataCell>
-                      <CTableDataCell>{row.minimumPrize}</CTableDataCell>
-                      <CTableDataCell>{row.maximumPrize}</CTableDataCell>
+                      <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.minimumPrize)}</CTableDataCell>
+                      <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.maximumPrize)}</CTableDataCell>
                       <CTableDataCell>
                         <CButton style={{ marginRight: "5px" }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
                           Edit
@@ -278,6 +285,7 @@ const PromotionList = () => {
                   ))}
                 </CTableBody>
               </CTable>
+
             </div>
             <CButton className='custom-btn custom-btn-success mt-2' color="success" onClick={handleAddNew}>
               Add Promotion
@@ -356,22 +364,32 @@ const PromotionList = () => {
             onChange={handleInputChange}
             className="mb-3"
           />
-          <CFormInput
-            type="number"
-            name="minimumPrize"
-            label="Minimum Price"
-            value={formData.minimumPrize}
-            onChange={handleInputChange}
-            className="mb-3"
-          />
-          <CFormInput
-            type="number"
-            name="maximumPrize"
-            label="Maximum Price"
-            value={formData.maximumPrize}
-            onChange={handleInputChange}
-            className="mb-3"
-          />
+          <div className="mb-3">
+            <CFormLabel htmlFor="minimumPrize">Minimum Price</CFormLabel>
+            <CInputGroup>
+              <CFormInput
+                id="minimumPrize"
+                type="number"
+                name="minimumPrize"
+                value={formData.minimumPrize}
+                onChange={handleInputChange}
+              />
+              <CInputGroupText>VND</CInputGroupText>
+            </CInputGroup>
+          </div>
+          <div className="mb-3">
+            <CFormLabel htmlFor="maximumPrize">Maximum Price</CFormLabel>
+            <CInputGroup>
+              <CFormInput
+                id="maximumPrize"
+                type="number"
+                name="maximumPrize"
+                value={formData.maximumPrize}
+                onChange={handleInputChange}
+              />
+              <CInputGroupText>VND</CInputGroupText>
+            </CInputGroup>
+          </div>
         </CModalBody>
         <CModalFooter>
           <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCancelEdit}>

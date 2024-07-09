@@ -109,8 +109,9 @@ const StallProduct = () => {
 
   console.log(stallInfo)
   console.log(data)
-
-
+  const formatPrice = (price) => {
+    return `${price} VND`;
+  };
   return (
     <CRow>
       <CCol xs={12}>
@@ -119,6 +120,33 @@ const StallProduct = () => {
             <CDropdownHeader>
               <strong>
                 <CHeader style={{fontSize: '20px'}}>{stallName}</CHeader>
+                <CFormSelect
+                  name="stallName"
+                  value={stallName}
+                  onChange={(event) =>
+                    setStallName(event.target.value)
+                  }
+                >
+                  <option value="">Select Stall</option>
+                  {stallOptions.map(stall => (
+                    <option key={stall.id} value={stall.name}>
+                      {stall.name}
+                    </option>
+                  ))}
+                </CFormSelect>
+                <CButton
+                  style={{ marginRight: '10px', marginBottom: '10px', marginTop: '10px' }}
+                  className='custom-btn custom-btn-info'
+                  color="warning"
+                  onClick={
+                    () => {
+                      setStallStatus('')
+                      searchAll()
+                    }
+                  }
+                >
+                  All Product
+                </CButton>
                 <CButton
                   style={{ marginRight: '10px', marginBottom: '10px', marginTop: '10px' }}
                   className='custom-btn custom-btn-info'
@@ -160,9 +188,9 @@ const StallProduct = () => {
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Code</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Description</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Name</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Quantity</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Purchase Price</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Sell Price</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Quantity</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "130px", textAlign: 'right' }} scope="col">Purchase Price</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "130px", textAlign: 'right' }} scope="col">Sell Price</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Type</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Weight</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Size</CTableHeaderCell>
@@ -183,8 +211,8 @@ const StallProduct = () => {
                           <CTableDataCell>{row.description}</CTableDataCell>
                           <CTableDataCell>{row.name}</CTableDataCell>
                           <CTableDataCell>{row.quantity}</CTableDataCell>
-                          <CTableDataCell>{row.purchasePrice}</CTableDataCell>
-                          <CTableDataCell>{row.sellPrice}</CTableDataCell>
+                          <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.purchasePrice)}</CTableDataCell>
+                          <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.sellPrice)}</CTableDataCell>
                           <CTableDataCell>{row.type}</CTableDataCell>
                           <CTableDataCell>{row.weight}</CTableDataCell>
                           <CTableDataCell>{row.size}</CTableDataCell>

@@ -5,6 +5,9 @@ import {
   CCardHeader,
   CCol,
   CFormInput,
+  CFormLabel,
+  CInputGroup,
+  CInputGroupText,
   CFormSelect,
   CFormTextarea,
   CModal,
@@ -223,22 +226,30 @@ const AddProduct = () => {
               </CRow>
               <CRow className='mt-4'>
                 <CCol md={4}>
-                  <CFormInput
-                    type="number"
-                    name="purchasePrice"
-                    label="Purchase Price"
-                    value={product.purchasePrice}
-                    onChange={handleChange}
-                  />
+                  <CFormLabel htmlFor="purchasePrice">Purchase Price</CFormLabel>
+                  <CInputGroup className="mb-3">
+                    <CFormInput
+                      id="purchasePrice"
+                      type="number"
+                      name="purchasePrice"
+                      value={product.purchasePrice}
+                      onChange={handleChange}
+                    />
+                    <CInputGroupText>VND</CInputGroupText>
+                  </CInputGroup>
                 </CCol>
                 <CCol md={4}>
-                  <CFormInput
-                    type="number"
-                    name="sellPrice"
-                    label="Sell Price"
-                    value={product.sellPrice}
-                    onChange={handleChange}
-                  />
+                  <CFormLabel htmlFor="sellPrice">Sell Price</CFormLabel>
+                  <CInputGroup className="mb-3">
+                    <CFormInput
+                      id="sellPrice"
+                      type="number"
+                      name="sellPrice"
+                      value={product.sellPrice}
+                      onChange={handleChange}
+                    />
+                    <CInputGroupText>VND</CInputGroupText>
+                  </CInputGroup>
                 </CCol>
                 <CCol md={4}>
                   <CFormInput
@@ -344,8 +355,8 @@ const AddProduct = () => {
               <div className='flex-grow-1' style={{ marginTop: '10px' }}>
                 <p><strong>Name:</strong> {addedProduct.name}</p>
                 <p><strong>Description:</strong> {addedProduct.description}</p>
-                <p><strong>Purchase Price:</strong> {addedProduct.purchasePrice}</p>
-                <p><strong>Sell Price:</strong> {addedProduct.sellPrice}</p>
+                <p><strong>Purchase Price:</strong> {addedProduct.purchasePrice}VND</p>
+                <p><strong>Sell Price:</strong> {addedProduct.sellPrice}VND</p>
                 <p><strong>Quantity:</strong> {addedProduct.quantity}</p>
                 <p><strong>Weight:</strong> {addedProduct.weight}</p>
                 <p><strong>Size:</strong> {addedProduct.size}</p>

@@ -75,6 +75,21 @@ const PurchaseHistoryList = () => {
         setEditModalVisible(false)
         loadData()
       })
+
+    fetchData(`http://localhost:8080/api/v1/orders/id/${orderId}`, 'GET', null, userInfo.accessToken)
+      .then(order => {
+        if (order.payload.status === 'CONFIRMED' && order.payload.type === 'SELL') {
+          // reduce product quantity and reduce bonus point if transaction type is sell and order status is confirmed
+          order.payload.orderDetailResponses.forEach(item => {
+            fetchData(`http://localhost:8080/api/v1/products/reduce-quantity/${item.id}/${item.productQuantity}`, 'PATCH', null, userInfo.accessToken)
+          })
+
+        } else if (order.payload.status === 'CONFIRMED' && order.payload.type === 'PURCHASE') {
+          order.payload.orderDetailResponses.forEach(item => {
+            fetchData(`http://localhost:8080/api/v1/products/add-quantity/${item.id}/${item.productQuantity}`, 'PATCH', null, userInfo.accessToken)
+          })
+        }
+      })
   }
 
   const loadDetails = (id) => {
@@ -93,6 +108,10 @@ const PurchaseHistoryList = () => {
       filtered = filtered.filter(row => new Date(row.createDate) >= new Date(createDateFilter));
     }
     setFilteredData(filtered);
+  };
+
+  const formatPrice = (price) => {
+    return `${price} VND`;
   };
 
   return (
@@ -121,11 +140,10 @@ const PurchaseHistoryList = () => {
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Type</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Create Date</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Address</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Staff Name</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Price</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col"> (%)</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Customer Give</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Refund Money</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "140px" }} scope="col">Staff Name</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "120px", textAlign: 'right' }} scope="col">Total Price</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "140px", textAlign: 'right' }} scope="col">Customer Give</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "160px", textAlign: 'right' }} scope="col">Refund Money</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Payment methods</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Bonus Point</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Status</CTableHeaderCell>
@@ -141,10 +159,9 @@ const PurchaseHistoryList = () => {
                       <CTableDataCell>{row.createDate}</CTableDataCell>
                       <CTableDataCell>{row.address}</CTableDataCell>
                       <CTableDataCell>{row.staffName}</CTableDataCell>
-                      <CTableDataCell>{row.totalPrice}</CTableDataCell>
-                      <CTableDataCell>{row.tax && row.tax * 100}</CTableDataCell>
-                      <CTableDataCell>{row.customerGiveMoney}</CTableDataCell>
-                      <CTableDataCell>{row.refundMoney}</CTableDataCell>
+                      <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.totalPrice)}</CTableDataCell>
+                      <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.customerGiveMoney)}</CTableDataCell>
+                      <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.refundMoney)}</CTableDataCell>
                       <CTableDataCell>{row.sendMoneyMethod}</CTableDataCell>
                       <CTableDataCell>{row.totalBonusPoint}</CTableDataCell>
                       <CTableDataCell>{row.status}</CTableDataCell>
@@ -180,13 +197,13 @@ const PurchaseHistoryList = () => {
             <CTable>
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">ID</CTableHeaderCell>
-                  <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Order ID</CTableHeaderCell>
-                  <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Product ID</CTableHeaderCell>
+                  <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">ID</CTableHeaderCell>
+                  <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Order ID</CTableHeaderCell>
+                  <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Product ID</CTableHeaderCell>
                   <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Product Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Product Price</CTableHeaderCell>
-                  <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Product Quantity</CTableHeaderCell>
-                  <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Price</CTableHeaderCell>
+                  <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Product Quantity</CTableHeaderCell>
+                  <CTableHeaderCell style={{ minWidth: "70px", textAlign: 'right' }} scope="col">Product Price</CTableHeaderCell>
+                  <CTableHeaderCell style={{ minWidth: "70px", textAlign: 'right' }} scope="col">Total Price</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -196,9 +213,9 @@ const PurchaseHistoryList = () => {
                     <CTableDataCell>{row.orderId}</CTableDataCell>
                     <CTableDataCell>{row.productId}</CTableDataCell>
                     <CTableDataCell>{row.productName}</CTableDataCell>
-                    <CTableDataCell>{row.productPrice}</CTableDataCell>
                     <CTableDataCell>{row.productQuantity}</CTableDataCell>
-                    <CTableDataCell>{row.totalPrice}</CTableDataCell>
+                    <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.productPrice)}</CTableDataCell>
+                    <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.totalPrice)}</CTableDataCell>
                   </CTableRow>
                 ))}
               </CTableBody>

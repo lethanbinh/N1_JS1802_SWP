@@ -3,6 +3,8 @@ import {
   CCard,
   CCardBody,
   CCol,
+  CInputGroupText,
+  CInputGroup,
   CFormInput,
   CRow,
   CTable,
@@ -48,7 +50,7 @@ const InvoiceForm = () => {
   const [promotionId, setPromotionId] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [staff, setStaff] = useState([]);
-  const [staffId, setStaffId] = useState('');
+  const [staffId, setStaffId] = useState(0);
   const [staffName, setStaffName] = useState('')
   const [customerGiveMoney, setCustomerGiveMoney] = useState(0)
   const [description, setDescription] = useState('none')
@@ -106,6 +108,12 @@ const InvoiceForm = () => {
   }, []);
 
   const validate = () => {
+    if (staffId <= 0) {
+      setErrorMessage('Please choose cashier');
+      setErrorModalVisible(true);
+      return false;
+    }
+
     if (customerPhone.length < 1) {
       setErrorMessage('Please fill customer phone');
       setErrorModalVisible(true);
@@ -246,7 +254,7 @@ const InvoiceForm = () => {
           "address": address,
           "totalPrice": total,
           "tax": tax / 100,
-          "totalBonusPoint": `${(transactionType === 'SELL' && orderStatus === 'CONFIRMED') ? total / 100 : 0}`,
+          "totalBonusPoint": `${total / 100}`,
           "customerGiveMoney": customerGiveMoney,
           "refundMoney": `${customerGiveMoney >= total ? customerGiveMoney - total : 0}`,
           "sendMoneyMethod": sendMoneyMethod,
@@ -259,7 +267,7 @@ const InvoiceForm = () => {
             "address": address,
             "birthday": "2024-06-23T10:35:22.814Z",
             "status": true,
-            "bonusPoint": `${(transactionType === 'SELL' && orderStatus === 'CONFIRMED') ? total / 100 : 0}`
+            "bonusPoint": `${total / 100}`
           },
           "orderDetailRequestList": orderList
         };
@@ -332,6 +340,10 @@ const InvoiceForm = () => {
     setItems((prevItems) => prevItems.filter((item) => item.productId !== productId || item.qty > 0));
   };
 
+  const formatPrice = (price) => {
+    return `${price} VND`;
+  };
+
   return (
     <CRow className="relative flex flex-col px-2 md:flex-row" onSubmit={handleSubmit}>
       <CCard className="my-6 flex-1 rounded-lg p-4 shadow-sm md:p-6">
@@ -370,7 +382,7 @@ const InvoiceForm = () => {
             </CCol>
 
             <CCol>
-              <strong className="text-sm font-bold">Customer Phone {transactionType === 'SELL' ? "(Fill to check bonus point*):" : ""}</strong>
+              <strong className="text-sm font-bold">Customer Phone</strong>
               <CFormInput
                 required
                 className="flex-1"
@@ -420,7 +432,6 @@ const InvoiceForm = () => {
               >
                 <option value="SELL">SELL</option>
                 <option value="PURCHASE">PURCHASE</option>
-                <option value="EXCHANGE_AND_RETURN">EXCHANGE_AND_RETURN</option>
               </CFormSelect>
             </CCol>
             <CCol>
@@ -439,14 +450,17 @@ const InvoiceForm = () => {
           {transactionType === 'SELL' ? <CRow className='mb-4'>
             <CCol>
               <strong className="text-sm font-bold">Customer give money:</strong>
-              <CFormInput
-                required
-                className="flex-1"
-                placeholder="Customer give money"
-                type="text"
-                value={customerGiveMoney}
-                onChange={(event) => setCustomerGiveMoney(event.target.value)}
-              />
+              <CInputGroup>
+                <CFormInput
+                  required
+                  className="flex-1"
+                  placeholder="Customer give money"
+                  type="text"
+                  value={customerGiveMoney}
+                  onChange={(event) => setCustomerGiveMoney(event.target.value)}
+                />
+                <CInputGroupText>VND</CInputGroupText>
+              </CInputGroup>
             </CCol>
 
             <CCol>
@@ -467,7 +481,7 @@ const InvoiceForm = () => {
           <CRow className='mb-4'>
             <CCol>
               <form>
-                <strong className="text-sm font-bold">Barcode {transactionType === 'SELL' ? "(Scan to get discount*)" : ""}:</strong>
+                <strong className="text-sm font-bold">Barcode {transactionType === 'SELL' ? "" : ""}:</strong>
                 <CFormInput
                   id='barcode-input'
                   className="flex-1"
@@ -552,16 +566,23 @@ const InvoiceForm = () => {
                     />
                   </CTableDataCell>
                   <CTableDataCell className="text-right" style={{ border: "1px solid #000" }}>
-                    <CFormInput
-                      readOnly
-                      type="number"
-                      name="price"
-                      value={item.price}
-                      onChange={(event) => editItemHandler(event, item.productId)}
-                    />
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <CFormInput
+                        readOnly
+                        type="number"
+                        name="price"
+                        value={item.price}
+                        onChange={(event) => editItemHandler(event, item.productId)}
+                        style={{ textAlign: 'left', border: '1px solid #D8D4D3', width: '100%' }}
+                      />
+                      <span style={{ marginLeft: '5px' }}>VND</span>
+                    </div>
                   </CTableDataCell>
-                  <CTableDataCell className="text-right" style={{ border: "1px solid #000" }}>
-                    ${(Number(item.price) * item.qty).toFixed(2)}
+                  <CTableDataCell className="text-right" style={{ border: "1px solid #000", textAlign: 'right', padding: '13px 12px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                      <span>{(Number(item.price) * item.qty).toFixed(2)}</span>
+                      <span>VND</span>
+                    </div>
                   </CTableDataCell>
                   <CTableDataCell style={{ border: "1px solid #000" }}>
                     <CButton
@@ -583,25 +604,25 @@ const InvoiceForm = () => {
                 <CRow className="flex justify-end pt-6">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Subtotal:</strong>
-                    <span style={{ display: "inline-block" }}>${subtotal.toFixed(2)}</span>
+                    <span style={{ display: "inline-block" }}>{subtotal.toFixed(2)}VND</span>
                   </CCol>
                 </CRow>
                 <CRow className="flex justify-end">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Discount:</strong>
-                    <span style={{ display: "inline-block" }}>({promotionValue ? promotionValue * 100 : '0'}%) - ${discountRate.toFixed(2)}</span>
+                    <span style={{ display: "inline-block" }}>({promotionValue ? promotionValue * 100 : '0'}%) - {discountRate.toFixed(2)}VND</span>
                   </CCol>
                 </CRow>
                 <CRow className="flex justify-end">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Tax:</strong>
-                    <span style={{ display: "inline-block" }}>({tax || '0'}%) + ${taxRate.toFixed(2)}</span>
+                    <span style={{ display: "inline-block" }}>({tax || '0'}%) + {taxRate.toFixed(2)}VND</span>
                   </CCol>
                 </CRow>
                 <CRow className="flex justify-end">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Exchange bonus Point:</strong>
-                    <span style={{ display: "inline-block" }}>- ${bonusPointExchange}</span>
+                    <span style={{ display: "inline-block" }}>- {bonusPointExchange}VND</span>
                   </CCol>
                 </CRow>
               </> : ""}
@@ -609,7 +630,7 @@ const InvoiceForm = () => {
               <CRow className="flex justify-end border-t mt-2">
                 <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                   <strong style={{ display: "inline-block" }} className="font-bold">Total:</strong>
-                  <span style={{ display: "inline-block" }} className="font-bold">${total % 1 === 0 ? total : total.toFixed(2)}</span>
+                  <span style={{ display: "inline-block" }} className="font-bold">{total % 1 === 0 ? total : total.toFixed(2)}VND</span>
                 </CCol>
               </CRow>
 
@@ -617,14 +638,14 @@ const InvoiceForm = () => {
                 <CRow className="flex justify-end border-t">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Customer give money:</strong>
-                    <span style={{ display: "inline-block" }} className="font-bold">${customerGiveMoney}</span>
+                    <span style={{ display: "inline-block" }} className="font-bold">{customerGiveMoney}VND</span>
                   </CCol>
                 </CRow>
 
                 <CRow className="flex justify-end border-t">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Refund money:</strong>
-                    <span style={{ display: "inline-block" }} className="font-bold">${customerGiveMoney >= total ? customerGiveMoney - total : 0}</span>
+                    <span style={{ display: "inline-block" }} className="font-bold">{customerGiveMoney >= total ? customerGiveMoney - total : 0}VND</span>
                   </CCol>
                 </CRow>
               </> : ""}
@@ -648,8 +669,8 @@ const InvoiceForm = () => {
                           const currentDate = new Date();
                           return currentDate >= convertJavaDateToJSDate(promotion.startDate)
                             && currentDate <= convertJavaDateToJSDate(promotion.endDate)
-                            && total >= promotion.minimumPrize
-                            && total <= promotion.maximumPrize
+                            && subtotal >= promotion.minimumPrize
+                            && subtotal <= promotion.maximumPrize
                             ;
                         })
                         .map(promotion => (

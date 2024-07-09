@@ -4,6 +4,9 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
+  CFormLabel,
+  CInputGroup,
+  CInputGroupText,
   CFormInput,
   CFormSelect,
   CFormTextarea,
@@ -180,154 +183,162 @@ const AddProduct = () => {
               <strong>Add Purchase Product</strong>
             </CCardHeader>
             <CCardBody>
-            <div style={{ height: 'fit-content'}}>
-              <CRow>
-                <CCol md={6}>
-                  <CFormInput
-                    type="text"
-                    name="name"
-                    label="Name"
-                    value={product.name}
-                    onChange={handleChange}
-                  />
-                </CCol>
-                <CCol md={6}>
-                  <CFormInput
-                    type="file"
-                    name="image"
-                    label="Image"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                  />
-                </CCol>
-              </CRow>
-              <CRow>
-                <CCol md={12}>
-                  {image && (
-                    <img
-                      src={image}
-                      alt="Product Preview"
-                      style={{ width: '50%', height: 'auto', marginTop: '10px' }}
+              <div style={{ height: 'fit-content' }}>
+                <CRow>
+                  <CCol md={6}>
+                    <CFormInput
+                      type="text"
+                      name="name"
+                      label="Name"
+                      value={product.name}
+                      onChange={handleChange}
                     />
-                  )}
-                </CCol>
-              </CRow>
-              <CRow className='mt-4'>
-                <CCol md={12}>
-                  <CFormTextarea
-                    name="description"
-                    label="Description"
-                    value={product.description}
-                    onChange={handleChange}
-                  />
-                </CCol>
-              </CRow>
-              <CRow className='mt-4'>
-                <CCol md={4}>
-                  <CFormInput
-                    type="number"
-                    name="purchasePrice"
-                    label="Purchase Price"
-                    value={product.purchasePrice}
-                    onChange={handleChange}
-                  />
-                </CCol>
-                <CCol md={4}>
-                  <CFormInput
-                    type="number"
-                    name="sellPrice"
-                    label="Sell Price"
-                    value={product.sellPrice}
-                    onChange={handleChange}
-                  />
-                </CCol>
-                <CCol md={4}>
-                  <CFormInput
-                    type="number"
-                    name="quantity"
-                    label="Quantity"
-                    value={product.quantity}
-                    onChange={handleChange}
-                  />
-                </CCol>
-              </CRow>
-              <CRow className='mt-4'>
-                <CCol md={4}>
-                  <CFormInput
-                    type="number"
-                    name="weight"
-                    label="Weight"
-                    value={product.weight}
-                    onChange={handleChange}
-                  />
-                </CCol>
-                <CCol md={4}>
-                  <CFormSelect
-                    name="size"
-                    value={product.size}
-                    onChange={handleChange}
-                    label="Size">
-                    <option value="">Select Size</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                  </CFormSelect>
-                </CCol>
-                <CCol md={4}>
+                  </CCol>
+                  <CCol md={6}>
+                    <CFormInput
+                      type="file"
+                      name="image"
+                      label="Image"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol md={12}>
+                    {image && (
+                      <img
+                        src={image}
+                        alt="Product Preview"
+                        style={{ width: '50%', height: 'auto', marginTop: '10px' }}
+                      />
+                    )}
+                  </CCol>
+                </CRow>
+                <CRow className='mt-4'>
+                  <CCol md={12}>
+                    <CFormTextarea
+                      name="description"
+                      label="Description"
+                      value={product.description}
+                      onChange={handleChange}
+                    />
+                  </CCol>
+                </CRow>
+                <CRow className='mt-4'>
+                  <CCol md={4}>
+                    <CFormLabel htmlFor="purchasePrice">Purchase Price</CFormLabel>
+                    <CInputGroup className="mb-3">
+                      <CFormInput
+                        id="purchasePrice"
+                        type="number"
+                        name="purchasePrice"
+                        value={product.purchasePrice}
+                        onChange={handleChange}
+                      />
+                      <CInputGroupText>VND</CInputGroupText>
+                    </CInputGroup>
+                  </CCol>
+                  <CCol md={4}>
+                    <CFormLabel htmlFor="sellPrice">Sell Price</CFormLabel>
+                    <CInputGroup className="mb-3">
+                      <CFormInput
+                        id="sellPrice"
+                        type="number"
+                        name="sellPrice"
+                        value={product.sellPrice}
+                        onChange={handleChange}
+                      />
+                      <CInputGroupText>VND</CInputGroupText>
+                    </CInputGroup>
+                  </CCol>
+                  <CCol md={4}>
+                    <CFormInput
+                      type="number"
+                      name="quantity"
+                      label="Quantity"
+                      value={product.quantity}
+                      onChange={handleChange}
+                    />
+                  </CCol>
+                </CRow>
+                <CRow className='mt-4'>
+                  <CCol md={4}>
+                    <CFormInput
+                      type="number"
+                      name="weight"
+                      label="Weight"
+                      value={product.weight}
+                      onChange={handleChange}
+                    />
+                  </CCol>
+                  <CCol md={4}>
+                    <CFormSelect
+                      name="size"
+                      value={product.size}
+                      onChange={handleChange}
+                      label="Size">
+                      <option value="">Select Size</option>
+                      <option value="S">S</option>
+                      <option value="M">M</option>
+                      <option value="L">L</option>
+                    </CFormSelect>
+                  </CCol>
+                  <CCol md={4}>
 
-                  <CFormSelect
-                    name="stallLocation"
-                    value={product.stallLocation}
-                    onChange={handleChange}
-                    label="Stall Location">
-                    <option value="">Select location</option>
-                    {stallOptions.map(stall => (
-                      <option key={stall.id} value={stall.id}>
-                        {stall.id}
-                      </option>
-                    ))}
-                  </CFormSelect>
-                </CCol>
-              </CRow>
-              <CRow className='mt-4'>
-                <CCol md={4}>
-                  <CFormSelect
-                    name="type"
-                    value={product.type}
-                    onChange={handleChange}
-                    label="Type">
-                    <option value="">Select Type</option>
-                    <option value="necklace">Necklace</option>
-                    <option value="ring">Ring</option>
-                    <option value="earrings">Earrings</option>
-                    <option value="bracelet">Bracelet</option>
-                    <option value="pendant">Pendant</option>
-                  </CFormSelect>
-                </CCol>
-                <CCol md={4}>
-                  <CFormSelect
-                    name="stallId"
-                    value={product.stallId}
-                    onChange={handleChange}
-                    label="Stall">
-                    <option value="">Select Stall</option>
-                    {stallOptions.map(stall => (
-                      <option key={stall.id} value={stall.id}>
-                        {stall.name}
-                      </option>
-                    ))}
-                  </CFormSelect>
-                </CCol>
+                    <CFormSelect
+                      name="stallLocation"
+                      value={product.stallLocation}
+                      onChange={handleChange}
+                      label="Stall Location">
+                      <option value="">Select location</option>
+                      {stallOptions.map(stall => (
+                        <option key={stall.id} value={stall.id}>
+                          {stall.id}
+                        </option>
+                      ))}
+                    </CFormSelect>
+                  </CCol>
+                </CRow>
+                <CRow className='mt-4'>
+                  <CCol md={4}>
+                    <CFormSelect
+                      name="type"
+                      value={product.type}
+                      onChange={handleChange}
+                      label="Type">
+                      <option value="">Select Type</option>
+                      <option value="necklace">Necklace</option>
+                      <option value="ring">Ring</option>
+                      <option value="earrings">Earrings</option>
+                      <option value="bracelet">Bracelet</option>
+                      <option value="pendant">Pendant</option>
+                    </CFormSelect>
+                  </CCol>
+                  <CCol md={4}>
+                    <CFormSelect
+                      name="stallId"
+                      value={product.stallId}
+                      onChange={handleChange}
+                      label="Stall">
+                      <option value="">Select Stall</option>
+                      {stallOptions.map(stall => (
+                        <option key={stall.id} value={stall.id}>
+                          {stall.name}
+                        </option>
+                      ))}
+                    </CFormSelect>
+                  </CCol>
 
-              </CRow>
-              <CButton
-                color="primary"
-                className="mt-4 custom-btn custom-btn-primary"
-                onClick={handleSubmit}
-              >
-                Submit Product
-              </CButton>
-            </div>
+                </CRow>
+                <CButton
+                  color="primary"
+                  className="mt-4 custom-btn custom-btn-primary"
+                  onClick={handleSubmit}
+                >
+                  Submit Product
+                </CButton>
+              </div>
             </CCardBody>
           </CCard>
         </CCol>
@@ -346,8 +357,8 @@ const AddProduct = () => {
               <div className='flex-grow-1' style={{ marginTop: '10px' }}>
                 <p><strong>Name:</strong> {addedProduct.name}</p>
                 <p><strong>Description:</strong> {addedProduct.description}</p>
-                <p><strong>Purchase Price:</strong> {addedProduct.purchasePrice}</p>
-                <p><strong>Sell Price:</strong> {addedProduct.sellPrice}</p>
+                <p><strong>Purchase Price:</strong> {addedProduct.purchasePrice}VND</p>
+                <p><strong>Sell Price:</strong> {addedProduct.sellPrice}VND</p>
                 <p><strong>Quantity:</strong> {addedProduct.quantity}</p>
                 <p><strong>Weight:</strong> {addedProduct.weight}</p>
                 <p><strong>Size:</strong> {addedProduct.size}</p>
