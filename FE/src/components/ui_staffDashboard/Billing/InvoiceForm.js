@@ -254,7 +254,7 @@ const InvoiceForm = () => {
           "address": address,
           "totalPrice": total,
           "tax": tax / 100,
-          "totalBonusPoint": `${(transactionType === 'SELL' && orderStatus === 'CONFIRMED') ? total / 100 : 0}`,
+          "totalBonusPoint": `${total / 100}`,
           "customerGiveMoney": customerGiveMoney,
           "refundMoney": `${customerGiveMoney >= total ? customerGiveMoney - total : 0}`,
           "sendMoneyMethod": sendMoneyMethod,
@@ -267,7 +267,7 @@ const InvoiceForm = () => {
             "address": address,
             "birthday": "2024-06-23T10:35:22.814Z",
             "status": true,
-            "bonusPoint": `${(transactionType === 'SELL' && orderStatus === 'CONFIRMED') ? total / 100 : 0}`
+            "bonusPoint": `${total / 100}`
           },
           "orderDetailRequestList": orderList
         };

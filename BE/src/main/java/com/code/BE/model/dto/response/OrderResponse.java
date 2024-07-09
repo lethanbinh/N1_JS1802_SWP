@@ -26,6 +26,7 @@ public class OrderResponse {
 
     private int promotionId;
     private int staffId;
+    private int customerId;
 
     private CustomerResponse customerResponse;
     private List<OrderDetailResponse> orderDetailResponses;
