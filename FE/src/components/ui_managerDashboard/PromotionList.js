@@ -103,7 +103,7 @@ const PromotionList = () => {
 
     let newData;
     if (isNew) {
-      const newId = data.length ? Math.max(...data.map(row => row.id)) + 1 : 1;
+      const newId = 0;
       const newRow = { ...formData, id: newId, status: true, discount: parseFloat(formData.discount) / 100 };
       newData = [...data, newRow];
     } else {
@@ -115,7 +115,7 @@ const PromotionList = () => {
       });
     }
 
-    const dataFromInput = newData.find(row => row.id === (isNew ? newData.length : editingRow));
+    const dataFromInput = newData.find(row => row.id === (isNew ? 0 : editingRow));
 
     const savedData = {
       discount: dataFromInput.discount,
@@ -127,6 +127,8 @@ const PromotionList = () => {
       maximumPrize: dataFromInput.maximumPrize,
       status: true
     };
+
+    console.log(savedData)
 
     const savePromise = isNew
       ? fetchData(`http://localhost:8080/api/v1/promotions`, 'POST', savedData, userInfo.accessToken)

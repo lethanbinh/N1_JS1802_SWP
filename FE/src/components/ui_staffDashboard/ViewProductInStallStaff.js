@@ -5,6 +5,7 @@ import {
   CCardHeader,
   CCol,
   CDropdownHeader,
+  CFormInput,
   CFormSelect,
   CHeader,
   CRow,
@@ -119,21 +120,7 @@ const StallProduct = () => {
           <CCardHeader>
             <CDropdownHeader>
               <strong>
-                <CHeader style={{fontSize: '20px'}}>{stallName}</CHeader>
-                <CFormSelect
-                  name="stallName"
-                  value={stallName}
-                  onChange={(event) =>
-                    setStallName(event.target.value)
-                  }
-                >
-                  <option value="">Select Stall</option>
-                  {stallOptions.map(stall => (
-                    <option key={stall.id} value={stall.name}>
-                      {stall.name}
-                    </option>
-                  ))}
-                </CFormSelect>
+                <CHeader style={{fontSize: '20px'}}>Stall: {stallName}</CHeader>
                 <CButton
                   style={{ marginRight: '10px', marginBottom: '10px', marginTop: '10px' }}
                   className='custom-btn custom-btn-info'

@@ -135,7 +135,7 @@ const AccountList = () => {
 
     let newData;
     if (isNew) {
-      const newId = data.length ? Math.max(...data.map(row => row.id)) + 1 : 1;
+      const newId = 0;
       const newRow = { ...formData, id: newId, status: true };
       newData = [...data, newRow];
     } else {
@@ -147,7 +147,7 @@ const AccountList = () => {
       })
     }
 
-    const dataFromInput = newData.find(row => row.id === (isNew ? newData.length : editingRow));
+    const dataFromInput = newData.find(row => row.id === (isNew ? 0 : editingRow));
 
     let roleId = 2;
     if (dataFromInput.roleName.toUpperCase() === 'ADMIN') {
@@ -189,6 +189,7 @@ const AccountList = () => {
           fetchData(`http://localhost:8080/api/v1/users/id/${editingRow}`, 'PUT', updatedData, userInfo.accessToken)
         } else {
           fetchData(`http://localhost:8080/api/v1/users`, 'POST', savedData, userInfo.accessToken)
+            .then(() => refreshData())
         }
       })
 
@@ -436,7 +437,7 @@ const AccountList = () => {
             className="mb-3"
           />
           {isNew ? <CFormInput
-            type="text"
+            type="password"
             name="password"
             label="Password"
             value={formData.password}
