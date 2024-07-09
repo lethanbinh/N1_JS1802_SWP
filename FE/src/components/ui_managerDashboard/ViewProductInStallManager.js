@@ -27,6 +27,7 @@ const StallProduct = () => {
   const [stallOptions, setStallOptions] = useState([])
   const [stallStatus, setStallStatus] = useState('')
   const [filterData, setFilterData] = useState([])
+  const [show, setShow] = useState(false)
 
 
   const loadData = async (stallName) => {
@@ -35,13 +36,16 @@ const StallProduct = () => {
       const productData = await fetchData(`http://localhost:8080/api/v1/products/stallName/${stallName}`, 'GET', null, userInfo.accessToken)
       if (productData && productData.payload) {
         setData(productData.payload)
+        setFilterData(productData.payload)
       } else {
         setData([])
+        setFilterData([])
       }
       setError(null)
     } catch (error) {
       setError(error.message)
       setData([]) // Ensure data is cleared on error
+      setFilterData([]) // Ensure filterData is cleared on error
     }
   }
 
@@ -72,10 +76,6 @@ const StallProduct = () => {
     setFilterData(filteredData)
   }
 
-  const searchAll = () => {
-    setFilterData(data)
-  }
-
   console.log(filterData)
 
   useEffect(() => {
@@ -86,20 +86,20 @@ const StallProduct = () => {
     loadData(stallName)
   }, [stallName])
 
-
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
             <CDropdownHeader>
-              <strong>
                 <CFormSelect
                   name="stallName"
                   value={stallName}
-                  onChange={(event) =>
+                  style={{fontWeight: 'bold', fontSize: '20px'}}
+                  onChange={(event) => {
                     setStallName(event.target.value)
-                  }
+                    setShow(true)
+                  }}
                 >
                   <option value="">Select Stall</option>
                   {stallOptions.map(stall => (
@@ -108,19 +108,6 @@ const StallProduct = () => {
                     </option>
                   ))}
                 </CFormSelect>
-                <CButton
-                  style={{ marginRight: '10px', marginBottom: '10px', marginTop: '10px' }}
-                  className='custom-btn custom-btn-info'
-                  color="warning"
-                  onClick={
-                    () => {
-                      setStallStatus('') 
-                      searchAll()
-                    }
-                  }
-                >
-                  All Product
-                </CButton>
                 <CButton
                   style={{ marginRight: '10px', marginBottom: '10px', marginTop: '10px' }}
                   className='custom-btn custom-btn-info'
@@ -147,11 +134,10 @@ const StallProduct = () => {
                 >
                   Purchase Product
                 </CButton>
-              </strong>
             </CDropdownHeader>
-
           </CCardHeader>
-          {
+
+          {show ?
             <CCardBody>
               <div style={{ height: '70vh', overflow: 'auto' }}>
                 <CTable>
@@ -174,6 +160,7 @@ const StallProduct = () => {
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
+                    {show === true}
                     {
                       filterData.map((row) => (
                         <CTableRow key={row.id}>
@@ -202,10 +189,10 @@ const StallProduct = () => {
                 </CTable>
               </div>
             </CCardBody>
-          }
+            : null}
         </CCard>
       </CCol>
-    </CRow>
+    </CRow >
   )
 }
 export default StallProduct
