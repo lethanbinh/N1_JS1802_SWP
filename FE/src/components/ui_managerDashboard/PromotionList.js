@@ -15,6 +15,10 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -30,6 +34,7 @@ import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import convertDateToJavaFormat from '../../util/DateConvert';
 import UserStorage from '../../util/UserStorage';
+import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 
 const PromotionList = () => {
   const [data, setData] = useState([]);
@@ -260,7 +265,8 @@ const PromotionList = () => {
                     <CTableHeaderCell scope="col">End Date</CTableHeaderCell>
                     <CTableHeaderCell scope="col" style={{ textAlign: 'right' }}>Minimum Price</CTableHeaderCell>
                     <CTableHeaderCell scope="col" style={{ textAlign: 'right' }}>Maximum Price</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Action</CTableHeaderCell>
+                    <CTableHeaderCell scope="col"></CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "200px" }} scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -274,14 +280,20 @@ const PromotionList = () => {
                       <CTableDataCell>{row.endDate}</CTableDataCell>
                       <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.minimumPrize)}</CTableDataCell>
                       <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.maximumPrize)}</CTableDataCell>
+                      <CTableDataCell></CTableDataCell>
                       <CTableDataCell>
-                        <CButton style={{ marginRight: "5px" }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
-                          Edit
-                        </CButton>
-                        <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => {
-                          setDeleteId(row.id);
-                          setVisible(true);
-                        }}>Delete</CButton>
+                        <CDropdown className="position-relative">
+                          <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
+                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-500" />
+                          </CDropdownToggle>
+                          <CDropdownMenu>
+                            <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
+                            <CDropdownItem onClick={() => {
+                              setDeleteId(row.id);
+                              setVisible(true);
+                            }}>Delete</CDropdownItem>
+                          </CDropdownMenu>
+                        </CDropdown>
                       </CTableDataCell>
                     </CTableRow>
                   ))}

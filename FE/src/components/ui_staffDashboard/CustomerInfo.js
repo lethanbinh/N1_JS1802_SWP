@@ -13,6 +13,10 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -25,6 +29,7 @@ import '../../customStyles.css';
 import fetchData from "../../util/ApiConnection";
 import convertDateToJavaFormat from '../../util/DateConvert';
 import UserStorage from "../../util/UserStorage";
+import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 
 const CustomerInfo = () => {
   const [data, setData] = useState([]);
@@ -236,7 +241,7 @@ const CustomerInfo = () => {
                     <CTableHeaderCell scope="col">Address</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Birthday</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Bonus Point</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Action</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "150px" }} scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -250,13 +255,18 @@ const CustomerInfo = () => {
                       <CTableDataCell>{row.birthday}</CTableDataCell>
                       <CTableDataCell>{row.bonusPoint}</CTableDataCell>
                       <CTableDataCell>
-                        <CButton style={{ marginRight: '10px' }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
-                          Edit
-                        </CButton>
-                        <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => {
-                          setDeleteId(row.id);
-                          setVisible(true);
-                        }}>Delete</CButton>
+                        <CDropdown className="position-relative">
+                          <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
+                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-500" />
+                          </CDropdownToggle>
+                          <CDropdownMenu>
+                            <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
+                            <CDropdownItem onClick={() => {
+                              setDeleteId(row.id);
+                              setVisible(true);
+                            }}>Delete</CDropdownItem>
+                          </CDropdownMenu>
+                        </CDropdown>
                       </CTableDataCell>
                     </CTableRow>
                   ))}

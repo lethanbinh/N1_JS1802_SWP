@@ -11,6 +11,10 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -24,6 +28,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
+import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 
 const PurchaseHistoryList = () => {
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
@@ -36,7 +41,11 @@ const PurchaseHistoryList = () => {
   const [editModalVisible, setEditModalVisible] = useState(false)
   const [currentStatus, setCurrentStatus] = useState('')
   const [orderId, setOrderId] = useState('')
-
+  const [selectedStaff, setSelectedStaff] = useState('');
+  const [staff, setStaff] = useState([]);
+  const [staffId, setStaffId] = useState(0);
+  const [staffName, setStaffName] = useState('')
+  const [purchaseHistory, setPurchaseHistory] = useState([]);
 
   const loadData = async () => {
     try {
@@ -110,20 +119,67 @@ const PurchaseHistoryList = () => {
     setFilteredData(filtered);
   };
 
+  useEffect(() => {
+    const fetchPurchaseHistory = async () => {
+      try {
+        if (staffName) {
+          const response = await fetchData(`http://localhost:8080/api/v1/orders/staffName/${staffName}`, 'GET', null, userInfo.accessToken);
+          if (response.status === 'SUCCESS') {
+            setPurchaseHistory(response.payload);
+          } else {
+            console.error('Error fetching purchase history:', response.error);
+          }
+        }
+      } catch (error) {
+        console.error('There was an error fetching the purchase history!', error);
+      }
+    };
+
+    fetchPurchaseHistory();
+  }, [staffName]);
+
+  const handleStaffChange = (event) => {
+    const selectedStaffId = event.target.value;
+    setStaffId(selectedStaffId);
+  };
+
+  const getStaffNameFromId = (staffId) => {
+    const selectedStaff = staff.find(user => user.id === staffId);
+    return selectedStaff ? selectedStaff.fullName : '';
+  };
+
   const formatPrice = (price) => {
     return `${price} VND`;
   };
 
   return (
     <CRow>
-      <div style={{ width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'right', paddingBottom: '10px' }}>
-        <label style={{ marginRight: '10px' }}>Create Date: </label>
-        <DatePicker
-          selected={createDateFilter}
-          onChange={handleCreateDateChange}
-          dateFormat="yyyy-MM-dd"
-          className="form-control"
-        />
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <strong style={{ marginRight: '10px', minWidth: "100px" }}>Staff Name: </strong>
+          <CFormSelect
+            name="staffName"
+            value={staffId}
+            style={{ minWidth: "500px" }}
+            onChange={handleStaffChange}
+          >
+            <option value="">Select Staff</option>
+            {staff.map(user => (
+              <option key={user.id} value={user.id}>
+                {user.fullName}
+              </option>
+            ))}
+          </CFormSelect>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <strong style={{ marginRight: '10px', minWidth: "100px" }}>Create Date: </strong>
+          <DatePicker
+            selected={createDateFilter}
+            onChange={handleCreateDateChange}
+            dateFormat="yyyy-MM-dd"
+            className="form-control"
+          />
+        </div>
       </div>
       <CCol xs={12}>
         <CCard className="mb-4">
@@ -147,7 +203,7 @@ const PurchaseHistoryList = () => {
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Payment methods</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Bonus Point</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Status</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "300px" }} scope="col">Action</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "200px" }} scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -165,16 +221,22 @@ const PurchaseHistoryList = () => {
                       <CTableDataCell>{row.sendMoneyMethod}</CTableDataCell>
                       <CTableDataCell>{row.totalBonusPoint}</CTableDataCell>
                       <CTableDataCell>{row.status}</CTableDataCell>
-                      <CTableDataCell className='mt-1'>
-                        <CButton style={{ marginRight: "10px" }} className='custom-btn custom-btn-info mr-1' onClick={() => loadDetails(row.id)} color="info">View Details</CButton>
-
-                        {row.status.toUpperCase() === 'CONFIRMED' ? "" : <CButton className='custom-btn custom-btn-info mr-1' color="warning" onClick={() => {
-                          setEditModalVisible(true)
-                          setCurrentStatus(row.status)
-                          setOrderId(row.id)
-                        }}>Edit Status</CButton>}
+                      <CTableDataCell>
+                        <CDropdown className="position-relative">
+                          <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
+                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-500" />
+                          </CDropdownToggle>
+                          <CDropdownMenu>
+                            <CDropdownItem onClick={() => loadDetails(row.id)}>View Details</CDropdownItem>
+                            {row.status.toUpperCase() === 'CONFIRMED' ? "" :
+                              <CDropdownItem onClick={() => {
+                                setEditModalVisible(true)
+                                setCurrentStatus(row.status)
+                                setOrderId(row.id)
+                              }}>Edit Status</CDropdownItem>}
+                          </CDropdownMenu>
+                        </CDropdown>
                       </CTableDataCell>
-
                     </CTableRow>
                   ))}
                 </CTableBody>
