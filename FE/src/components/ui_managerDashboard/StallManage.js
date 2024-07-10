@@ -29,6 +29,8 @@ import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
+import CIcon from '@coreui/icons-react';
+import { cilHamburgerMenu } from '@coreui/icons';
 
 const Stall = () => {
   const [data, setData] = useState([]);
@@ -164,8 +166,6 @@ const Stall = () => {
     setIsNew(true);
   };
 
-
-
   const refreshData = () => {
     fetchData('http://localhost:8080/api/v1/stalls', 'GET', null, userInfo.accessToken)
       .then(data => {
@@ -186,7 +186,7 @@ const Stall = () => {
             <strong>Stall List</strong>
           </CCardHeader>
           <CCardBody>
-          <CFormInput
+            <CFormInput
               type="text"
               placeholder="Search by full name"
               value={searchTerm}
@@ -216,7 +216,7 @@ const Stall = () => {
                       <CTableDataCell>
                         <CDropdown className="position-relative">
                           <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
-                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-500" />
+                            <CIcon icon={cilHamburgerMenu} size="xl" />
                           </CDropdownToggle>
                           <CDropdownMenu>
                             <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
@@ -306,8 +306,8 @@ const Stall = () => {
           </CButton>
         </CModalFooter>
       </CModal>
-{/* popup save success of create account and show info account created */}
-<CModal
+      {/* popup save success of create account and show info account created */}
+      <CModal
         visible={confirmationModalVisible}
         onClose={() => setConfirmationModalVisible(false)}
         aria-labelledby="ConfirmationModalLabel"

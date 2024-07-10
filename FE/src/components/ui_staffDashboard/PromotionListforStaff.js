@@ -201,7 +201,7 @@ const PromotionList = () => {
   }, []);
 
   const formatPrice = (price) => {
-    return `${price} VND`;
+    return `${price.toLocaleString('en-US')} VND`;
   };
 
   return (
@@ -242,8 +242,8 @@ const PromotionList = () => {
                     <CTableHeaderCell scope="col">Description</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Start Date</CTableHeaderCell>
                     <CTableHeaderCell scope="col">End Date</CTableHeaderCell>
-                    <CTableHeaderCell scope="col" style={{ textAlign: 'right' }}>Minimum Price</CTableHeaderCell>
-                    <CTableHeaderCell scope="col" style={{ textAlign: 'right' }}>Maximum Price</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Minimum Price</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Maximum Price</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -255,8 +255,8 @@ const PromotionList = () => {
                       <CTableDataCell>{row.description}</CTableDataCell>
                       <CTableDataCell>{row.startDate}</CTableDataCell>
                       <CTableDataCell>{row.endDate}</CTableDataCell>
-                      <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.minimumPrize)}</CTableDataCell>
-                      <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.maximumPrize)}</CTableDataCell>
+                      <CTableDataCell>{formatPrice(row.minimumPrize)}</CTableDataCell>
+                      <CTableDataCell>{formatPrice(row.maximumPrize)}</CTableDataCell>
                       <CTableDataCell>
                       </CTableDataCell>
                     </CTableRow>

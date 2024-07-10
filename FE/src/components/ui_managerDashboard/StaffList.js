@@ -25,6 +25,13 @@ import '../../customStyles.css'
 import fetchData from '../../util/ApiConnection'
 import convertDateToJavaFormat from '../../util/DateConvert'
 import UserStorage from '../../util/UserStorage'
+import React, { useEffect, useState } from 'react';
+import '../../customStyles.css';
+import fetchData from '../../util/ApiConnection';
+import convertDateToJavaFormat from '../../util/DateConvert';
+import UserStorage from '../../util/UserStorage';
+import { cilHamburgerMenu } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
 
 const StaffList = () => {
   const [data, setData] = useState([])
@@ -302,6 +309,61 @@ const StaffList = () => {
                       </CTableDataCell>
                     </CTableRow>
                   ))}
+                    <CTableHeaderCell style={{ minWidth: '60px' }} scope="col">
+                      Id
+                    </CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '120px' }} scope="col">
+                      Username
+                    </CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '140px' }} scope="col">
+                      Full Name
+                    </CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '140px' }} scope="col">
+                      Phone
+                    </CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">
+                      Email
+                    </CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">
+                      Address
+                    </CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">
+                      Birthday
+                    </CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '100px' }} scope="col">
+                      Actions
+                    </CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {filteredData
+                    .filter((row) => row.status && row.roleId === 2)
+                    .map((row) => (
+                      <CTableRow key={row.id}>
+                        <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
+                        <CTableDataCell>{row.username}</CTableDataCell>
+                        <CTableDataCell>{row.fullName}</CTableDataCell>
+                        <CTableDataCell>{row.phone}</CTableDataCell>
+                        <CTableDataCell>{row.email}</CTableDataCell>
+                        <CTableDataCell>{row.address}</CTableDataCell>
+                        <CTableDataCell>{row.birthday}</CTableDataCell>
+                        <CTableDataCell>
+                          <CDropdown className="position-relative">
+                            <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
+                              <CIcon icon={cilHamburgerMenu} size="xl" />
+                            </CDropdownToggle>
+                            <CDropdownMenu>
+                              <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
+                              <CDropdownItem onClick={() => {
+                                setDeleteId(row.id);
+                                setVisible(true);
+                                setDeletedUsername(row.username);
+                              }}>Delete</CDropdownItem>
+                            </CDropdownMenu>
+                          </CDropdown>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))}
                 </CTableBody>
               </CTable>
             </div>
