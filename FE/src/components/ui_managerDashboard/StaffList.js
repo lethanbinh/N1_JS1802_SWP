@@ -28,7 +28,8 @@ import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import convertDateToJavaFormat from '../../util/DateConvert';
 import UserStorage from '../../util/UserStorage';
-import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
+import { cilHamburgerMenu } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
 
 const StaffList = () => {
   const [data, setData] = useState([]);
@@ -262,16 +263,16 @@ const StaffList = () => {
               <CTable>
                 <CTableHead>
                   <CTableRow>
-                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">
+                    <CTableHeaderCell style={{ minWidth: '60px' }} scope="col">
                       Id
                     </CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">
+                    <CTableHeaderCell style={{ minWidth: '120px' }} scope="col">
                       Username
                     </CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">
+                    <CTableHeaderCell style={{ minWidth: '140px' }} scope="col">
                       Full Name
                     </CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">
+                    <CTableHeaderCell style={{ minWidth: '140px' }} scope="col">
                       Phone
                     </CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">
@@ -283,7 +284,7 @@ const StaffList = () => {
                     <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">
                       Birthday
                     </CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '200px' }} scope="col">
+                    <CTableHeaderCell style={{ minWidth: '100px' }} scope="col">
                       Actions
                     </CTableHeaderCell>
                   </CTableRow>
@@ -303,7 +304,7 @@ const StaffList = () => {
                         <CTableDataCell>
                           <CDropdown className="position-relative">
                             <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
-                              <EllipsisHorizontalIcon className="w-6 h-6 text-gray-500" />
+                              <CIcon icon={cilHamburgerMenu} size="xl" />
                             </CDropdownToggle>
                             <CDropdownMenu>
                               <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
