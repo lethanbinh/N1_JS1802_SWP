@@ -68,7 +68,7 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
             pdf.addImage(imgData, imageType, 0, 0, pdfWidth, pageHeight);
           }
 
-          pdf.save(`invoice}.pdf`);
+          pdf.save(`invoice.pdf`);
         };
       })
       .catch((error) => {
