@@ -468,3 +468,12 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2024-07-09 20:29:00
+INSERT INTO jewelry_management_at_the_store.policy (detail,name,`type`) VALUES
+	 ('Our policy lasts 30 days. If 30 days have gone by since your purchase, unfortunately we can’t offer you a refund or exchange.','Returns','EXCHANGE_AND_RETURN'),
+	 ('Once your return is received and inspected, we will send you an email to notify you that we have received your returned item. We will also notify you of the approval or rejection of your refund.','Refunds','EXCHANGE_AND_RETURN'),
+	 ('<p>If you haven’t received a refund yet, first check your bank account again. Then contact your credit card company, it may take some time before your refund is officially posted. Next contact your bank. There is often some processing time before a refund is posted. If you’ve done all of this and you still have not received your refund yet, please contact us at anltse173297@fpt.edu.vn</p>','Late or missing refunds
+','EXCHANGE_AND_RETURN'),
+	 ('<p>GoldenB Jewelry ("the Company") provides a Limited Warranty covering defects in materials and workmanship for jewelry items purchased directly from the Company.</p>','Warranty Coverage','WARRANTY'),
+	 ('Each jewelry item purchased from the Company is covered under warranty for a period of 30 days from the date of receipt goods.','Warranty Duration','WARRANTY'),
+	 ('<p>The Limited Warranty does not cover: </p><ol><li>Jewelry items purchased from unauthorized retailers or individuals. </li><li>Normal wear and tear, including scratches, dents, and faded colors.</li><li> Damage caused by misuse, neglect, accidents, or any external causes. </li><li>Damage caused by unauthorized modifications, repairs, or alterations. </li><li>Loss or theft.</li><li>Direct or consequential damages to persons or property.</li></ol>','Exclusions','WARRANTY'),
+	 ('<p>To make a warranty claim:</p><ol><li>Provide a valid proof of date of receipt of product within the warranty period.</li><li>Send a clear photograph of the defective item, along with a detailed description of the defect.</li><li>Send the aforementioned details via email to anltse173297@fpt.edu.vn.</li><li>Wait for confirmation and further instructions from our Customer Service department.</li><li>If replacement product is needed quickly, another order can be placed while the warranty claim is processed.</li></ol>','Warranty Claim Process','WARRANTY');

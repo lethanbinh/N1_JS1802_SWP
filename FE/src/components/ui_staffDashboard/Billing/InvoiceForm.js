@@ -3,30 +3,30 @@ import {
   CCard,
   CCardBody,
   CCol,
-  CInputGroupText,
-  CInputGroup,
   CFormInput,
+  CFormSelect,
+  CFormTextarea,
+  CInputGroup,
+  CInputGroupText,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
   CRow,
   CTable,
   CTableBody,
+  CTableDataCell,
   CTableHead,
   CTableHeaderCell,
-  CFormSelect,
   CTableRow,
-  CTableDataCell,
-  CModal,
-  CModalHeader,
-  CModalTitle,
-  CModalBody,
-  CModalFooter,
-  CFormTextarea,
 } from '@coreui/react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { uid } from 'uid';
-import InvoiceModal from './InvoiceModal';
 import fetchData from '../../../util/ApiConnection';
-import UserStorage from '../../../util/UserStorage';
 import { convertJavaDateToJSDate } from '../../../util/DateConvert';
+import UserStorage from '../../../util/UserStorage';
+import InvoiceModal from './InvoiceModal';
 
 const date = new Date();
 const today = date.toLocaleDateString('en-GB', {
@@ -72,8 +72,8 @@ const InvoiceForm = () => {
 
   const taxRate = transactionType === 'SELL' ? (tax * subtotal) / 100 : 0;
   const discountRate = transactionType === 'SELL' ? (promotionValue ? promotionValue * 100 * subtotal : 0) / 100 : 0;
-  const total = transactionType === 'SELL' ? subtotal - discountRate + taxRate - bonusPointExchange : subtotal
-
+  const total = transactionType === 'SELL' ? subtotal - discountRate + taxRate - bonusPointExchange : subtotal;
+  const ExchangeTotal = transactionType === 'EXCHANGE AND RETURN' ? subtotal : 0;
   const handleBarcodeChange = (event) => {
     setBarcode(event.target.value);
   };
@@ -144,7 +144,7 @@ const InvoiceForm = () => {
       return false;
     }
 
-    if (transactionType === 'SELL') {
+    if (transactionType === 'SELL' && transactionType === 'EXCHANGE AND RETURN') {
       if (customerGiveMoney < total) {
         setErrorMessage('Customer give money must be greater than total price');
         setErrorModalVisible(true);
@@ -196,12 +196,15 @@ const InvoiceForm = () => {
             setItems(newItems);
           } else {
             const id = uid(6);
+            const price = transactionType === 'SELL' ? data.payload.sellPrice : data.payload.purchasePrice;
+
             if (data.payload.quantity < 1 && transactionType === 'SELL') {
               setErrorMessage('Product quantity in stall is not enough');
               setErrorModalVisible(true);
               handleResetBarcode()
               return;
             }
+
             setItems((prevItems) => [
               ...prevItems,
               {
@@ -209,7 +212,7 @@ const InvoiceForm = () => {
                 id: id,
                 name: data.payload.name,
                 qty: 1,
-                price: data.payload.sellPrice,
+                price: price,
                 image: data.payload.image,
                 description: data.payload.description
               },
@@ -218,7 +221,7 @@ const InvoiceForm = () => {
 
           handleResetBarcode()
         } else {
-          setErrorMessage('Product is not exists');
+          setErrorMessage('Product does not exist');
           setErrorModalVisible(true);
           handleResetBarcode()
           return;
@@ -432,6 +435,7 @@ const InvoiceForm = () => {
               >
                 <option value="SELL">SELL</option>
                 <option value="PURCHASE">PURCHASE</option>
+                <option value="EXCHANGE_AND_RETURN">EXCHANGE_AND_RETURN</option>
               </CFormSelect>
             </CCol>
             <CCol>
@@ -447,7 +451,7 @@ const InvoiceForm = () => {
             </CCol>
           </CRow>
 
-          {transactionType === 'SELL' ? <CRow className='mb-4'>
+          {transactionType === 'SELL' ?  <CRow className='mb-4'>
             <CCol>
               <strong className="text-sm font-bold">Customer give money:</strong>
               <CInputGroup>
@@ -463,8 +467,8 @@ const InvoiceForm = () => {
               </CInputGroup>
             </CCol>
 
-            <CCol>
-              <strong className="text-sm font-bold">Tax Rate (%):</strong>
+            <CCol >
+              <strong className="text-sm font-bold">Tax Rate (%): </strong>
               <CFormInput
                 type="number"
                 min={0}
@@ -476,7 +480,6 @@ const InvoiceForm = () => {
               />
             </CCol>
           </CRow> : ""}
-
 
           <CRow className='mb-4'>
             <CCol>
@@ -634,7 +637,7 @@ const InvoiceForm = () => {
                 </CCol>
               </CRow>
 
-              {transactionType === 'SELL' ? <>
+              {transactionType === 'SELL'? <>
                 <CRow className="flex justify-end border-t">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Customer give money:</strong>
@@ -703,7 +706,6 @@ const InvoiceForm = () => {
                 >
                   <option value="PENDING">PENDING</option>
                   <option value="CONFIRMED">CONFIRMED</option>
-                  <option value="CANCELLED">CANCELLED</option>
                 </CFormSelect>
               </CRow>
             </div>
