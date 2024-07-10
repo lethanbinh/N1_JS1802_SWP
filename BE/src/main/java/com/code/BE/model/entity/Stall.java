@@ -1,11 +1,9 @@
 package com.code.BE.model.entity;
 
-import com.code.BE.constant.ErrorMessage;
 import com.code.BE.constant.Regex;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -46,5 +44,8 @@ public class Stall {
 
     @OneToMany(mappedBy = "stall")
     private List<Product> products;
+
+    @OneToMany(mappedBy = "stall")
+    private List<StaffDashboardDaily> staffDashboardDailies;
     // Getters and setters
 }

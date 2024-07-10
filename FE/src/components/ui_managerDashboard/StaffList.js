@@ -18,13 +18,12 @@ import {
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
-  CTableRow
-} from '@coreui/react'
-import React, { useEffect, useState } from 'react'
-import '../../customStyles.css'
-import fetchData from '../../util/ApiConnection'
-import convertDateToJavaFormat from '../../util/DateConvert'
-import UserStorage from '../../util/UserStorage'
+  CTableRow,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem
+} from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
@@ -34,47 +33,47 @@ import { cilHamburgerMenu } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 
 const StaffList = () => {
-  const [data, setData] = useState([])
-  const [filteredData, setFilteredData] = useState([])
-  const [editingRow, setEditingRow] = useState(null)
-  const [formData, setFormData] = useState({})
-  const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser())
-  const [visible, setVisible] = useState(false)
-  const [deleteId, setDeleteId] = useState(null)
-  const [deletedUsername, setDeletedUsername] = useState(null)
-  const [errorMessage, setErrorMessage] = useState("")
-  const [errorModalVisible, setErrorModalVisible] = useState(false)
-  const [editModalVisible, setEditModalVisible] = useState(false)
-  const [confirmationModalVisible, setConfirmationModalVisible] = useState(false)
-  const [confirmationInfo, setConfirmationInfo] = useState({ username: "", password: "" })
-  const [successModalVisible, setSuccessModalVisible] = useState(false)
-  const [deleteSuccessModalVisible, setDeleteSuccessModalVisible] = useState(false)
-  const [isNew, setIsNew] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [stalls, setStalls] = useState([])
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [editingRow, setEditingRow] = useState(null);
+  const [formData, setFormData] = useState({});
+  const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
+  const [visible, setVisible] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [deletedUsername, setDeletedUsername] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [confirmationModalVisible, setConfirmationModalVisible] = useState(false);
+  const [confirmationInfo, setConfirmationInfo] = useState({ username: "", password: "" });
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [deleteSuccessModalVisible, setDeleteSuccessModalVisible] = useState(false);
+  const [isNew, setIsNew] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [stalls, setStalls] = useState([]);
 
   const handleEdit = (id) => {
-    setEditingRow(id)
-    setFormData(data.find((row) => row.id === id))
-    setErrorMessage("")
-    setEditModalVisible(true)
-    setIsNew(false)
-  }
+    setEditingRow(id);
+    setFormData(data.find((row) => row.id === id));
+    setErrorMessage("");
+    setEditModalVisible(true);
+    setIsNew(false);
+  };
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target
-    setFormData({ ...formData, [name]: value === "null" ? null : value })
-  }
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value === "null" ? null : value });
+  };
 
   const handleSearchChange = (event) => {
-    const { value } = event.target
-    setSearchTerm(value)
+    const { value } = event.target;
+    setSearchTerm(value);
     if (value === "") {
-      setFilteredData(data)
+      setFilteredData(data);
     } else {
-      setFilteredData(data.filter(row => row.fullName.toLowerCase().includes(value.toLowerCase())))
+      setFilteredData(data.filter(row => row.fullName.toLowerCase().includes(value.toLowerCase())));
     }
-  }
+  };
 
   const handleAddNew = () => {
     setFormData({
@@ -88,11 +87,11 @@ const StaffList = () => {
       birthday: '',
       roleName: 'Staff',
       stallId: null,
-    })
-    setErrorMessage('')
-    setEditModalVisible(true)
-    setIsNew(true)
-  }
+    });
+    setErrorMessage('');
+    setEditModalVisible(true);
+    setIsNew(true);
+  };
 
   const handleSave = () => {
     const requiredFields = ['username', 'fullName', 'password', 'phone', 'email', 'address', 'birthday'];
@@ -115,8 +114,6 @@ const StaffList = () => {
     const duplicateUsername = data.some(row => row.username === formData.username && row.id !== editingRow);
     const duplicatePhone = data.some(row => row.phone === formData.phone && row.id !== editingRow);
     const duplicateEmail = data.some(row => row.email === formData.email && row.id !== editingRow);
-
-    // Check for duplicate Stall ID only if it has a valid value (not null)
     const duplicateStallId = formData.stallId !== null && data.some(row => row.stallId === formData.stallId && row.id !== editingRow);
 
     if (duplicateUsername) {
@@ -203,58 +200,58 @@ const StaffList = () => {
         setErrorMessage("Error saving data. Please try again.");
         setErrorModalVisible(true);
       });
-  }
+  };
 
   const handleDelete = (id) => {
-    setVisible(false)
+    setVisible(false);
     fetchData(`http://localhost:8080/api/v1/users/${deleteId}`, 'DELETE', null, userInfo.accessToken)
       .then(() => {
-        refreshData()
-        setDeleteId(null)
-        setDeleteSuccessModalVisible(true)
+        refreshData();
+        setDeleteId(null);
+        setDeleteSuccessModalVisible(true);
       })
       .catch((error) => {
-        console.error("Error deleting row:", error)
-      })
-  }
+        console.error("Error deleting row:", error);
+      });
+  };
 
   const handleCancelEdit = () => {
-    setEditModalVisible(false)
-    setFormData({})
-  }
+    setEditModalVisible(false);
+    setFormData({});
+  };
 
   const preprocessData = (data, stalls) => {
     return data.map(row => {
-      const stall = stalls.find(stall => stall.id === row.stallId)
-      return { ...row, stallName: stall ? stall.name : "N/A" }
-    })
-  }
+      const stall = stalls.find(stall => stall.id === row.stallId);
+      return { ...row, stallName: stall ? stall.name : "N/A" };
+    });
+  };
 
   const refreshData = () => {
     fetchData("http://localhost:8080/api/v1/users", 'GET', null, userInfo.accessToken)
       .then(data => {
         fetchStalls().then(stalls => {
-          const preprocessedData = preprocessData(data.payload, stalls)
-          setData(preprocessedData)
-          setFilteredData(preprocessedData)
-        })
-      })
-  }
+          const preprocessedData = preprocessData(data.payload, stalls);
+          setData(preprocessedData);
+          setFilteredData(preprocessedData);
+        });
+      });
+  };
 
   const fetchStalls = () => {
     return fetchData("http://localhost:8080/api/v1/stalls", 'GET', null, userInfo.accessToken)
       .then(data => {
-        setStalls(data.payload)
-        return data.payload
+        setStalls(data.payload);
+        return data.payload;
       })
       .catch(error => {
-        console.error("Error fetching stalls:", error)
-      })
-  }
+        console.error("Error fetching stalls:", error);
+      });
+  };
 
   useEffect(() => {
-    refreshData()
-  }, [])
+    refreshData();
+  }, []);
 
   return (
     <CRow>
@@ -275,15 +272,15 @@ const StaffList = () => {
               <CTable>
                 <CTableHead>
                   <CTableRow>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Id</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Username</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Full Name</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Phone</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Email</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Address</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Birthday</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Stall</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '200px' }} scope="col">Actions</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '60px' }} scope="col">Id</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Username</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Full Name</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Phone</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '180px' }} scope="col">Email</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '200px' }} scope="col">Address</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Birthday</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Stall</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '100px' }} scope="col">Actions</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -298,72 +295,22 @@ const StaffList = () => {
                       <CTableDataCell>{row.birthday}</CTableDataCell>
                       <CTableDataCell>{row.stallName}</CTableDataCell>
                       <CTableDataCell>
-                        <CButton style={{ marginRight: "5px" }} className='custom-btn custom-btn-info' color="info" onClick={() => handleEdit(row.id)}>
-                          Edit
-                        </CButton>
-                        <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => {
-                          setDeleteId(row.id)
-                          setVisible(true)
-                          setDeletedUsername(row.username)
-                        }}>Delete</CButton>
+                        <CDropdown className="position-relative">
+                          <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
+                            <CIcon icon={cilHamburgerMenu} size="xl" />
+                          </CDropdownToggle>
+                          <CDropdownMenu>
+                            <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
+                            <CDropdownItem onClick={() => {
+                              setDeleteId(row.id);
+                              setVisible(true);
+                              setDeletedUsername(row.username);
+                            }}>Delete</CDropdownItem>
+                          </CDropdownMenu>
+                        </CDropdown>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
-                    <CTableHeaderCell style={{ minWidth: '60px' }} scope="col">
-                      Id
-                    </CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '120px' }} scope="col">
-                      Username
-                    </CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '140px' }} scope="col">
-                      Full Name
-                    </CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '140px' }} scope="col">
-                      Phone
-                    </CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">
-                      Email
-                    </CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">
-                      Address
-                    </CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">
-                      Birthday
-                    </CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '100px' }} scope="col">
-                      Actions
-                    </CTableHeaderCell>
-                  </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                  {filteredData
-                    .filter((row) => row.status && row.roleId === 2)
-                    .map((row) => (
-                      <CTableRow key={row.id}>
-                        <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
-                        <CTableDataCell>{row.username}</CTableDataCell>
-                        <CTableDataCell>{row.fullName}</CTableDataCell>
-                        <CTableDataCell>{row.phone}</CTableDataCell>
-                        <CTableDataCell>{row.email}</CTableDataCell>
-                        <CTableDataCell>{row.address}</CTableDataCell>
-                        <CTableDataCell>{row.birthday}</CTableDataCell>
-                        <CTableDataCell>
-                          <CDropdown className="position-relative">
-                            <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
-                              <CIcon icon={cilHamburgerMenu} size="xl" />
-                            </CDropdownToggle>
-                            <CDropdownMenu>
-                              <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
-                              <CDropdownItem onClick={() => {
-                                setDeleteId(row.id);
-                                setVisible(true);
-                                setDeletedUsername(row.username);
-                              }}>Delete</CDropdownItem>
-                            </CDropdownMenu>
-                          </CDropdown>
-                        </CTableDataCell>
-                      </CTableRow>
-                    ))}
                 </CTableBody>
               </CTable>
             </div>
@@ -573,6 +520,7 @@ const StaffList = () => {
         </CModalFooter>
       </CModal>
     </CRow>
-  )
-}
-export default StaffList
+  );
+};
+
+export default StaffList;

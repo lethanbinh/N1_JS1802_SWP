@@ -30,6 +30,8 @@ import fetchData from "../../util/ApiConnection";
 import convertDateToJavaFormat from '../../util/DateConvert';
 import UserStorage from "../../util/UserStorage";
 import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
+import CIcon from '@coreui/icons-react';
+import { cilHamburgerMenu } from '@coreui/icons';
 
 const CustomerInfo = () => {
   const [data, setData] = useState([]);
@@ -241,7 +243,7 @@ const CustomerInfo = () => {
                     <CTableHeaderCell scope="col">Address</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Birthday</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Bonus Point</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "150px" }} scope="col">Action</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -257,7 +259,7 @@ const CustomerInfo = () => {
                       <CTableDataCell>
                         <CDropdown className="position-relative">
                           <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
-                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-500" />
+                            <CIcon icon={cilHamburgerMenu} size="xl" />
                           </CDropdownToggle>
                           <CDropdownMenu>
                             <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>

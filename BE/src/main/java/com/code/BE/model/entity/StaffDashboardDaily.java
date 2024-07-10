@@ -37,31 +37,31 @@ public class StaffDashboardDaily {
 
     @PositiveOrZero
     @Column(name = "total_customers_transacted")
-    private int totalCustomersTransacted;
+    private long totalCustomersTransacted;
 
     @PositiveOrZero
     @Column(name = "purchase_invoice_product_quantity")
-    private int purchaseInvoiceProductQuantity;
+    private long purchaseInvoiceProductQuantity;
 
     @PositiveOrZero
     @Column(name = "sales_invoice_product_quantity")
-    private int salesInvoiceProductQuantity;
+    private long salesInvoiceProductQuantity;
 
     @PositiveOrZero
     @Column(name = "return_invoice_product_quantity")
-    private int returnInvoiceProductQuantity;
+    private long returnInvoiceProductQuantity;
 
     @PositiveOrZero
     @Column(name = "total_invoices_created")
-    private int totalInvoicesCreated;
+    private long totalInvoicesCreated;
 
     @PositiveOrZero
     @Column(name = "total_invoices_completed")
-    private int totalInvoicesCompleted;
+    private long totalInvoicesCompleted;
 
     @PositiveOrZero
     @Column(name = "total_bonus_points_added")
-    private int totalBonusPointsAdded;
+    private double totalBonusPointsAdded;
 
     @PositiveOrZero
     @Column(name = "total_products_in_stock_start_of_day")
@@ -69,25 +69,25 @@ public class StaffDashboardDaily {
 
     @PositiveOrZero
     @Column(name = "total_products_in_stock_end_of_day")
-    private int totalProductsInStockEndOfDay;
+    private long totalProductsInStockEndOfDay;
 
     @PositiveOrZero
     @Column(name = "total_returned_products")
-    private int totalReturnedProducts;
+    private long totalReturnedProducts;
 
     @Column(name = "best_selling_product")
     private String bestSellingProduct;
 
     @PositiveOrZero
     @Column(name = "best_selling_product_quantity")
-    private int bestSellingProductQuantity;
+    private long bestSellingProductQuantity;
 
     @Column(name = "most_stocked_product")
     private String mostStockedProduct;
 
     @PositiveOrZero
     @Column(name = "most_stocked_product_quantity")
-    private int mostStockedProductQuantity;
+    private long mostStockedProductQuantity;
 
     @PositiveOrZero
     @Column(name = "total_discount_amount")
@@ -99,4 +99,8 @@ public class StaffDashboardDaily {
     @ManyToOne
     @JoinColumn(name = "staff_id")
     private User staff;
+
+    @ManyToOne
+    @JoinColumn(name = "stall_id")
+    private Stall stall;
 }
