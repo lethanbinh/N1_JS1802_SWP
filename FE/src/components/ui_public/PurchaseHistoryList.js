@@ -41,7 +41,11 @@ const PurchaseHistoryList = () => {
   const [editModalVisible, setEditModalVisible] = useState(false)
   const [currentStatus, setCurrentStatus] = useState('')
   const [orderId, setOrderId] = useState('')
-
+  const [selectedStaff, setSelectedStaff] = useState('');
+  const [staff, setStaff] = useState([]);
+  const [staffId, setStaffId] = useState(0);
+  const [staffName, setStaffName] = useState('')
+  const [purchaseHistory, setPurchaseHistory] = useState([]);
 
   const loadData = async () => {
     try {
@@ -115,20 +119,67 @@ const PurchaseHistoryList = () => {
     setFilteredData(filtered);
   };
 
+  useEffect(() => {
+    const fetchPurchaseHistory = async () => {
+      try {
+        if (staffName) {
+          const response = await fetchData(`http://localhost:8080/api/v1/orders/staffName/${staffName}`, 'GET', null, userInfo.accessToken);
+          if (response.status === 'SUCCESS') {
+            setPurchaseHistory(response.payload);
+          } else {
+            console.error('Error fetching purchase history:', response.error);
+          }
+        }
+      } catch (error) {
+        console.error('There was an error fetching the purchase history!', error);
+      }
+    };
+
+    fetchPurchaseHistory();
+  }, [staffName]);
+
+  const handleStaffChange = (event) => {
+    const selectedStaffId = event.target.value;
+    setStaffId(selectedStaffId);
+  };
+
+  const getStaffNameFromId = (staffId) => {
+    const selectedStaff = staff.find(user => user.id === staffId);
+    return selectedStaff ? selectedStaff.fullName : '';
+  };
+
   const formatPrice = (price) => {
     return `${price} VND`;
   };
 
   return (
     <CRow>
-      <div style={{ width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'right', paddingBottom: '10px' }}>
-        <label style={{ marginRight: '10px' }}>Create Date: </label>
-        <DatePicker
-          selected={createDateFilter}
-          onChange={handleCreateDateChange}
-          dateFormat="yyyy-MM-dd"
-          className="form-control"
-        />
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <strong style={{ marginRight: '10px', minWidth: "100px" }}>Staff Name: </strong>
+          <CFormSelect
+            name="staffName"
+            value={staffId}
+            style={{ minWidth: "500px" }}
+            onChange={handleStaffChange}
+          >
+            <option value="">Select Staff</option>
+            {staff.map(user => (
+              <option key={user.id} value={user.id}>
+                {user.fullName}
+              </option>
+            ))}
+          </CFormSelect>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <strong style={{ marginRight: '10px', minWidth: "100px" }}>Create Date: </strong>
+          <DatePicker
+            selected={createDateFilter}
+            onChange={handleCreateDateChange}
+            dateFormat="yyyy-MM-dd"
+            className="form-control"
+          />
+        </div>
       </div>
       <CCol xs={12}>
         <CCard className="mb-4">
@@ -177,12 +228,12 @@ const PurchaseHistoryList = () => {
                           </CDropdownToggle>
                           <CDropdownMenu>
                             <CDropdownItem onClick={() => loadDetails(row.id)}>View Details</CDropdownItem>
-                            {row.status.toUpperCase() === 'CONFIRMED' ? "" : 
-                            <CDropdownItem onClick={() => {
-                              setEditModalVisible(true)
-                              setCurrentStatus(row.status)
-                              setOrderId(row.id)
-                            }}>Edit Status</CDropdownItem>}
+                            {row.status.toUpperCase() === 'CONFIRMED' ? "" :
+                              <CDropdownItem onClick={() => {
+                                setEditModalVisible(true)
+                                setCurrentStatus(row.status)
+                                setOrderId(row.id)
+                              }}>Edit Status</CDropdownItem>}
                           </CDropdownMenu>
                         </CDropdown>
                       </CTableDataCell>
