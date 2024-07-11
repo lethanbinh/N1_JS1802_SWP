@@ -51,4 +51,17 @@ public class StaffDashboardController {
         }
         return false;
     }
+
+    @GetMapping("/staff-dashboard-checked")
+    public StaffDashboardDailyDTO getStaffDashboardDataAfterConfirm(@RequestParam int stallId, @RequestParam String date) {
+        if (!dashboardService.findByStallId(stallId).isEmpty()) {
+            for (StaffDashboardDailyDTO staffDashboardDailyDTO : dashboardService.findByStallId(stallId)) {
+                if (staffDashboardDailyDTO.getDate().getDay() == dateConvertService.convertToDate(date).getDay()) {
+                    return staffDashboardDailyDTO;
+                }
+            }
+            return null;
+        }
+        return null;
+    }
 }

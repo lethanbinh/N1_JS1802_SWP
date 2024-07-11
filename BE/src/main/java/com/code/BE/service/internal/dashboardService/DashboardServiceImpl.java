@@ -50,4 +50,9 @@ public class DashboardServiceImpl implements DashboardService {
     public List<StaffDashboardDailyDTO> findByStaffId(int id) {
         return staffDashboardMapper.toResponseList(staffDashboardDailyRepository.findByStaffId(id));
     }
+
+    @Override
+    public List<StaffDashboardDailyDTO> findByStallId(int id) {
+        return staffDashboardMapper.toResponseList(staffDashboardDailyRepository.findByStallId(id));
+    }
 }

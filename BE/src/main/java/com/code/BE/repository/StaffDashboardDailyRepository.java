@@ -12,6 +12,7 @@ import java.util.List;
 public interface StaffDashboardDailyRepository extends JpaRepository<StaffDashboardDaily, Integer> {
 
     List<StaffDashboardDaily> findByStaffId (int id);
+    List<StaffDashboardDaily> findByStallId (int id);
 
     @Query("SELECT new com.code.BE.model.dto.StaffDashboardDailyDTO(" +
             "DATE(:date), " +

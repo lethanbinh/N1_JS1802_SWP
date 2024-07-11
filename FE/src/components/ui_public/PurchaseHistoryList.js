@@ -86,21 +86,6 @@ const PurchaseHistoryList = () => {
         setEditModalVisible(false)
         loadData()
       })
-
-    fetchData(`http://localhost:8080/api/v1/orders/id/${orderId}`, 'GET', null, userInfo.accessToken)
-      .then(order => {
-        if (order.payload.status === 'CONFIRMED' && order.payload.type === 'SELL') {
-          // reduce product quantity and reduce bonus point if transaction type is sell and order status is confirmed
-          order.payload.orderDetailResponses.forEach(item => {
-            fetchData(`http://localhost:8080/api/v1/products/reduce-quantity/${item.id}/${item.productQuantity}`, 'PATCH', null, userInfo.accessToken)
-          })
-
-        } else if (order.payload.status === 'CONFIRMED' && order.payload.type === 'PURCHASE') {
-          order.payload.orderDetailResponses.forEach(item => {
-            fetchData(`http://localhost:8080/api/v1/products/add-quantity/${item.id}/${item.productQuantity}`, 'PATCH', null, userInfo.accessToken)
-          })
-        }
-      })
   }
 
   const loadDetails = (id) => {

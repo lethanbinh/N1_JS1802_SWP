@@ -28,7 +28,6 @@ import WarrantyCardModal from './WarrantyCardModal';
 import fetchData from '../../../util/ApiConnection';
 import { convertJavaDateToJSDate } from '../../../util/DateConvert';
 import UserStorage from '../../../util/UserStorage';
-import InvoiceModal from './InvoiceModal';
 
 const date = new Date();
 const today = date.toLocaleDateString('en-GB', {
@@ -287,14 +286,14 @@ const InvoiceForm = () => {
             }
           });
 
-        if (orderStatus === 'CONFIRMED' && transactionType === 'SELL') {
+        if (transactionType === 'SELL') {
           // reduce product quantity and reduce bonus point if transaction type is sell and order status is confirmed
           items.forEach(item => {
             fetchData(`http://localhost:8080/api/v1/products/reduce-quantity/${item.productId}/${item.qty}`, 'PATCH', null, userInfo.accessToken)
           })
 
           fetchData(`http://localhost:8080/api/v1/customers/bonus/${customerPhone}/${bonusPointExchange}`, 'PATCH', null, userInfo.accessToken)
-        } else if (orderStatus === 'CONFIRMED' && transactionType === 'PURCHASE') {
+        } else if (transactionType === 'PURCHASE' || transactionType === "EXCHANGE_AND_RETURN") {
           items.forEach(item => {
             fetchData(`http://localhost:8080/api/v1/products/add-quantity/${item.productId}/${item.qty}`, 'PATCH', null, userInfo.accessToken)
           })
@@ -454,7 +453,7 @@ const InvoiceForm = () => {
             </CCol>
           </CRow>
 
-          {transactionType === 'SELL' ?  <CRow className='mb-4'>
+          {transactionType === 'SELL' ? <CRow className='mb-4'>
             <CCol>
               <strong className="text-sm font-bold">Customer give money:</strong>
               <CInputGroup>
@@ -640,7 +639,7 @@ const InvoiceForm = () => {
                 </CCol>
               </CRow>
 
-              {transactionType === 'SELL'? <>
+              {transactionType === 'SELL' ? <>
                 <CRow className="flex justify-end border-t">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Customer give money:</strong>

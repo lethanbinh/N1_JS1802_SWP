@@ -10,4 +10,6 @@ public interface DashboardService {
     List<StaffDashboardDailyDTO> getManagerDashboard (int stallId, Date startDate, Date endDate);
     StaffDashboardDailyDTO save (StaffDashboardDailyDTO staffDashboardDailyDTO);
     List<StaffDashboardDailyDTO> findByStaffId (int id);
+
+    List<StaffDashboardDailyDTO> findByStallId(int id);
 }
