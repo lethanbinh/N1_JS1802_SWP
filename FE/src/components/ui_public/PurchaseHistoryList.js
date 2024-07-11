@@ -29,6 +29,8 @@ import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
+import CIcon from '@coreui/icons-react';
+import { cilHamburgerMenu } from '@coreui/icons';
 
 const PurchaseHistoryList = () => {
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
@@ -37,11 +39,9 @@ const PurchaseHistoryList = () => {
   const [error, setError] = useState(null);
   const [show, setShow] = useState(false);
   const [orderDetails, setOrderDetails] = useState([]);
-  const [createDateFilter, setCreateDateFilter] = useState(null);
   const [editModalVisible, setEditModalVisible] = useState(false)
   const [currentStatus, setCurrentStatus] = useState('')
   const [orderId, setOrderId] = useState('')
-  const [selectedStaff, setSelectedStaff] = useState('');
   const [staff, setStaff] = useState([]);
   const [staffId, setStaffId] = useState(0);
   const [staffName, setStaffName] = useState('')
@@ -51,27 +51,29 @@ const PurchaseHistoryList = () => {
     try {
       const result = await fetchData(`http://localhost:8080/api/v1/orders`, 'GET', null, userInfo.accessToken);
       const orders = result.payload;
-
-      const ordersWithStaffNames = await Promise.all(orders.map(async (order) => {
-        const user = await fetchData(`http://localhost:8080/api/v1/users/id/${order.staffId}`, 'GET', null, userInfo.accessToken);
-        return { ...order, staffName: user.payload.fullName };
-      }));
-
-      setData(ordersWithStaffNames);
-      setFilteredData(ordersWithStaffNames);
+      setData(orders);
+      setFilteredData(orders);
       setError(null);
     } catch (error) {
       setError(error.message);
     }
   };
 
+  const loadStaff = () => {
+    fetchData('http://localhost:8080/api/v1/users', 'GET', null, userInfo.accessToken)
+      .then(data => {
+        setStaff(data.payload.filter(item => item.roleName.toUpperCase() === 'STAFF'));
+      });
+  };
+
   useEffect(() => {
     loadData();
+    loadStaff();
   }, []);
 
   useEffect(() => {
     applyFilters();
-  }, [createDateFilter]);
+  }, [staffId]);
 
   const handleCancelEdit = () => {
     setEditModalVisible(false);
@@ -107,16 +109,17 @@ const PurchaseHistoryList = () => {
     setShow(true);
   };
 
-  const handleCreateDateChange = (date) => {
-    setCreateDateFilter(date);
-  };
-
   const applyFilters = () => {
+    console.log(staffId == 0)
     let filtered = data;
-    if (createDateFilter) {
-      filtered = filtered.filter(row => new Date(row.createDate) >= new Date(createDateFilter));
+    if (staffId == 0) {
+      setFilteredData(data);
+    } else {
+      filtered = filtered.filter(row => {
+        return row.staffId == staffId;
+      });
+      setFilteredData(filtered);
     }
-    setFilteredData(filtered);
   };
 
   useEffect(() => {
@@ -143,13 +146,8 @@ const PurchaseHistoryList = () => {
     setStaffId(selectedStaffId);
   };
 
-  const getStaffNameFromId = (staffId) => {
-    const selectedStaff = staff.find(user => user.id === staffId);
-    return selectedStaff ? selectedStaff.fullName : '';
-  };
-
   const formatPrice = (price) => {
-    return `${price} VND`;
+    return `${price.toLocaleString('en-US')} VND`;
   };
 
   return (
@@ -163,22 +161,13 @@ const PurchaseHistoryList = () => {
             style={{ minWidth: "500px" }}
             onChange={handleStaffChange}
           >
-            <option value="">Select Staff</option>
+            <option value="0">All Staff</option>
             {staff.map(user => (
               <option key={user.id} value={user.id}>
                 {user.fullName}
               </option>
             ))}
           </CFormSelect>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <strong style={{ marginRight: '10px', minWidth: "100px" }}>Create Date: </strong>
-          <DatePicker
-            selected={createDateFilter}
-            onChange={handleCreateDateChange}
-            dateFormat="yyyy-MM-dd"
-            className="form-control"
-          />
         </div>
       </div>
       <CCol xs={12}>
@@ -191,19 +180,18 @@ const PurchaseHistoryList = () => {
               <CTable>
                 <CTableHead>
                   <CTableRow>
-                    <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">ID</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "60px" }} scope="col">ID</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "190px" }} scope="col">Description</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Type</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Create Date</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Address</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "140px" }} scope="col">Staff Name</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "120px", textAlign: 'right' }} scope="col">Total Price</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "140px", textAlign: 'right' }} scope="col">Customer Give</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px", textAlign: 'right' }} scope="col">Refund Money</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Payment methods</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Price</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Customer Give</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Refund Money</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Payment Methods</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Total Bonus Point</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Status</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "200px" }} scope="col">Action</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -214,17 +202,16 @@ const PurchaseHistoryList = () => {
                       <CTableDataCell>{row.type}</CTableDataCell>
                       <CTableDataCell>{row.createDate}</CTableDataCell>
                       <CTableDataCell>{row.address}</CTableDataCell>
-                      <CTableDataCell>{row.staffName}</CTableDataCell>
-                      <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.totalPrice)}</CTableDataCell>
-                      <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.customerGiveMoney)}</CTableDataCell>
-                      <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.refundMoney)}</CTableDataCell>
+                      <CTableDataCell>{row.type.toUpperCase() === 'SELL' ? formatPrice(row.totalPrice) : "N/A"}</CTableDataCell>
+                      <CTableDataCell>{row.type.toUpperCase() === 'SELL' ? formatPrice(row.customerGiveMoney) : "N/A"}</CTableDataCell>
+                      <CTableDataCell>{row.type.toUpperCase() === 'SELL' ? formatPrice(row.refundMoney) : "N/A"}</CTableDataCell>
                       <CTableDataCell>{row.sendMoneyMethod}</CTableDataCell>
-                      <CTableDataCell>{row.totalBonusPoint}</CTableDataCell>
+                      <CTableDataCell>{row.totalBonusPoint.toLocaleString('en-US')}</CTableDataCell>
                       <CTableDataCell>{row.status}</CTableDataCell>
                       <CTableDataCell>
                         <CDropdown className="position-relative">
                           <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
-                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-500" />
+                            <CIcon icon={cilHamburgerMenu} size="xl" />
                           </CDropdownToggle>
                           <CDropdownMenu>
                             <CDropdownItem onClick={() => loadDetails(row.id)}>View Details</CDropdownItem>
@@ -264,8 +251,8 @@ const PurchaseHistoryList = () => {
                   <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Product ID</CTableHeaderCell>
                   <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Product Name</CTableHeaderCell>
                   <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Product Quantity</CTableHeaderCell>
-                  <CTableHeaderCell style={{ minWidth: "70px", textAlign: 'right' }} scope="col">Product Price</CTableHeaderCell>
-                  <CTableHeaderCell style={{ minWidth: "70px", textAlign: 'right' }} scope="col">Total Price</CTableHeaderCell>
+                  <CTableHeaderCell style={{ minWidth: "70px" }} scope="col">Product Price</CTableHeaderCell>
+                  <CTableHeaderCell style={{ minWidth: "70px" }} scope="col">Total Price</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -276,8 +263,8 @@ const PurchaseHistoryList = () => {
                     <CTableDataCell>{row.productId}</CTableDataCell>
                     <CTableDataCell>{row.productName}</CTableDataCell>
                     <CTableDataCell>{row.productQuantity}</CTableDataCell>
-                    <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.productPrice)}</CTableDataCell>
-                    <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.totalPrice)}</CTableDataCell>
+                    <CTableDataCell>{formatPrice(row.productPrice)}</CTableDataCell>
+                    <CTableDataCell>{formatPrice(row.totalPrice)}</CTableDataCell>
                   </CTableRow>
                 ))}
               </CTableBody>

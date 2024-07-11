@@ -111,7 +111,7 @@ const StallProduct = () => {
   console.log(stallInfo)
   console.log(data)
   const formatPrice = (price) => {
-    return `${price} VND`;
+    return `${price.toLocaleString('en-US')} VND`;
   };
   return (
     <CRow>
@@ -170,18 +170,18 @@ const StallProduct = () => {
                 <CTable>
                   <CTableHead>
                     <CTableRow>
-                      <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Id</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "200px" }} scope="col">Image</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Code</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Description</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "60px" }} scope="col">Id</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Image</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Code</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "200px" }} scope="col">Description</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Name</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Quantity</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "130px", textAlign: 'right' }} scope="col">Purchase Price</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "130px", textAlign: 'right' }} scope="col">Sell Price</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Quantity</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Purchase Price</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Sell Price</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Type</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Weight</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Size</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Status</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Weight (g)</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Size</CTableHeaderCell>
+                      <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Status</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Stall Location</CTableHeaderCell>
                       <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Bar Code</CTableHeaderCell>
                     </CTableRow>
@@ -192,21 +192,21 @@ const StallProduct = () => {
                         <CTableRow key={row.id}>
                           <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                           <CTableDataCell>
-                            <img src={row.image} style={{ width: 'auto', height: '200px' }} /> {/* Display image */}
+                            <img src={row.image} style={{ width: 'auto', height: '50px' }} /> {/* Display image */}
                           </CTableDataCell>
                           <CTableDataCell>{row.code}</CTableDataCell>
                           <CTableDataCell>{row.description}</CTableDataCell>
                           <CTableDataCell>{row.name}</CTableDataCell>
                           <CTableDataCell>{row.quantity}</CTableDataCell>
-                          <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.purchasePrice)}</CTableDataCell>
-                          <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.sellPrice)}</CTableDataCell>
+                          <CTableDataCell>{formatPrice(row.purchasePrice)}</CTableDataCell>
+                          <CTableDataCell>{formatPrice(row.sellPrice)}</CTableDataCell>
                           <CTableDataCell>{row.type}</CTableDataCell>
                           <CTableDataCell>{row.weight}</CTableDataCell>
                           <CTableDataCell>{row.size}</CTableDataCell>
                           <CTableDataCell>{row.status}</CTableDataCell>
                           <CTableDataCell>{row.stallLocation}</CTableDataCell>
                           <CTableDataCell>
-                            <img src={row.barCode} style={{ width: 'auto', height: '100px' }} />
+                            <img src={row.barCode} style={{ width: 'auto', height: '50px' }} />
                           </CTableDataCell>
                         </CTableRow>
                       ))

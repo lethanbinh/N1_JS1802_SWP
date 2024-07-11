@@ -1,13 +1,10 @@
-import React from 'react';
-import { toPng } from 'html-to-image';
-import { jsPDF } from 'jspdf';
 import {
+  CButton,
   CModal,
-  CModalHeader,
-  CModalTitle,
   CModalBody,
   CModalFooter,
-  CButton,
+  CModalHeader,
+  CModalTitle,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -15,6 +12,9 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from '@coreui/react';
+import { toPng } from 'html-to-image';
+import { jsPDF } from 'jspdf';
+import React from 'react';
 import '../../../customStyles.css';
 
 const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
@@ -150,7 +150,7 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
             <span style={{ display: "inline-block" }} className="font-bold">{invoiceInfo.total.toFixed(2)}VND</span>
           </div>
 
-          {invoiceInfo.transactionType === 'SELL' ? <>
+          {invoiceInfo.transactionType === 'SELL' || invoiceInfo.transactionType === 'EXCHANGE AND RETURN' ? <>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Customer Give Money:</span>
               <span style={{ display: "inline-block" }} className="font-bold">{invoiceInfo.customerGiveMoney}VND</span>

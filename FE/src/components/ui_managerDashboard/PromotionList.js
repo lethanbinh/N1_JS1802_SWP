@@ -35,6 +35,8 @@ import fetchData from '../../util/ApiConnection';
 import convertDateToJavaFormat from '../../util/DateConvert';
 import UserStorage from '../../util/UserStorage';
 import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
+import CIcon from '@coreui/icons-react';
+import { cilHamburgerMenu } from '@coreui/icons';
 
 const PromotionList = () => {
   const [data, setData] = useState([]);
@@ -222,7 +224,7 @@ const PromotionList = () => {
   }, []);
 
   const formatPrice = (price) => {
-    return `${price} VND`;
+    return `${price.toLocaleString('en-US')} VND`;
   };
 
   return (
@@ -257,16 +259,16 @@ const PromotionList = () => {
               <CTable>
                 <CTableHead>
                   <CTableRow>
-                    <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Discount (%)</CTableHeaderCell>
+                    <CTableHeaderCell scope="col" style={{ minWidth: "60px" }}>ID</CTableHeaderCell>
+                    <CTableHeaderCell scope="col" style={{ minWidth: "120px" }}>Discount (%)</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Name</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Start Date</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">End Date</CTableHeaderCell>
-                    <CTableHeaderCell scope="col" style={{ textAlign: 'right' }}>Minimum Price</CTableHeaderCell>
-                    <CTableHeaderCell scope="col" style={{ textAlign: 'right' }}>Maximum Price</CTableHeaderCell>
+                    <CTableHeaderCell scope="col" style={{ minWidth: "120px" }}>Start Date</CTableHeaderCell>
+                    <CTableHeaderCell scope="col" style={{ minWidth: "120px" }}>End Date</CTableHeaderCell>
+                    <CTableHeaderCell scope="col" style={{ minWidth: "160px" }}>Minimum Price</CTableHeaderCell>
+                    <CTableHeaderCell scope="col" style={{ minWidth: "160px" }}>Maximum Price</CTableHeaderCell>
                     <CTableHeaderCell scope="col"></CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "200px" }} scope="col">Action</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -278,13 +280,13 @@ const PromotionList = () => {
                       <CTableDataCell>{row.description}</CTableDataCell>
                       <CTableDataCell>{row.startDate}</CTableDataCell>
                       <CTableDataCell>{row.endDate}</CTableDataCell>
-                      <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.minimumPrize)}</CTableDataCell>
-                      <CTableDataCell style={{ textAlign: 'right' }}>{formatPrice(row.maximumPrize)}</CTableDataCell>
+                      <CTableDataCell>{formatPrice(row.minimumPrize)}</CTableDataCell>
+                      <CTableDataCell>{formatPrice(row.maximumPrize)}</CTableDataCell>
                       <CTableDataCell></CTableDataCell>
                       <CTableDataCell>
                         <CDropdown className="position-relative">
                           <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
-                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-500" />
+                            <CIcon icon={cilHamburgerMenu} size="xl" />
                           </CDropdownToggle>
                           <CDropdownMenu>
                             <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>

@@ -1,6 +1,5 @@
 package com.code.BE.model.dto.response;
 
-import com.code.BE.model.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

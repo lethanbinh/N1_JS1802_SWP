@@ -90,9 +90,9 @@ const CreateNewPassword = () => {
                     />
                   </CInputGroup>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <CButton style={{ display: "inline-block", flex: 1, marginRight: "15px" }} className='custom-btn custom-btn-success' color="success" type="submit">Submit</CButton>
+                    <CButton style={{ display: "inline-block", flex: 1, marginRight: "15px", color: "white" }} className='custom-btn custom-btn-success' color="success" type="submit">Submit</CButton>
                     <CButton className='custom-btn custom-btn-danger' color='danger' style={{ display: "inline-block", flex: 1 }}>
-                      <a className='custom-link'href='/'>Back to Login</a>
+                      <a style={{textDecoration: "none", color: "white"}} className='custom-link'href='/'>Back to Login</a>
                     </CButton>
                   </div>
                   <div style={{ color: "red" }}>{message}</div>

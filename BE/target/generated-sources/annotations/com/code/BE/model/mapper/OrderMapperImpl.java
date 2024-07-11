@@ -2,6 +2,7 @@ package com.code.BE.model.mapper;
 
 import com.code.BE.model.dto.request.OrderRequest;
 import com.code.BE.model.dto.response.OrderResponse;
+import com.code.BE.model.entity.Customer;
 import com.code.BE.model.entity.Order;
 import com.code.BE.model.entity.Promotion;
 import com.code.BE.model.entity.User;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-27T18:33:11+0700",
+    date = "2024-07-10T17:02:17+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
@@ -28,6 +29,7 @@ public class OrderMapperImpl implements OrderMapper {
 
         orderResponse.setPromotionId( orderPromotionId( order ) );
         orderResponse.setStaffId( orderStaffId( order ) );
+        orderResponse.setCustomerId( orderCustomerId( order ) );
         orderResponse.setId( order.getId() );
         orderResponse.setDescription( order.getDescription() );
         orderResponse.setStatus( order.getStatus() );
@@ -115,6 +117,18 @@ public class OrderMapperImpl implements OrderMapper {
             return 0;
         }
         int id = staff.getId();
+        return id;
+    }
+
+    private int orderCustomerId(Order order) {
+        if ( order == null ) {
+            return 0;
+        }
+        Customer customer = order.getCustomer();
+        if ( customer == null ) {
+            return 0;
+        }
+        int id = customer.getId();
         return id;
     }
 }
