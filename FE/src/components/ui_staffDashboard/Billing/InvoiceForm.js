@@ -23,6 +23,8 @@ import {
 } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { uid } from 'uid';
+import InvoiceModal from './InvoiceModal';
+import WarrantyCardModal from './WarrantyCardModal';
 import fetchData from '../../../util/ApiConnection';
 import { convertJavaDateToJSDate } from '../../../util/DateConvert';
 import UserStorage from '../../../util/UserStorage';
@@ -37,6 +39,7 @@ const today = date.toLocaleDateString('en-GB', {
 
 const InvoiceForm = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenWarranty, setIsOpenWarranty] = useState(false);
   const [tax, setTax] = useState(0);
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
   const [customerPhone, setCustomerPhone] = useState('');
@@ -727,12 +730,26 @@ const InvoiceForm = () => {
           </CButton>
 
           <CButton
+            style={{ marginRight: "10px" }}
+            color="primary"
+            className="rounded px-4 py-2 text-white shadow"
+            onClick={() => setIsOpenWarranty(true)}
+          >
+            Warranty Card
+          </CButton>
+
+          <CButton
             color="success"
             className="rounded px-4 py-2 text-white shadow"
             onClick={() => setconfirmModalVisible(true)}
           >
             Save Order
           </CButton>
+
+          <WarrantyCardModal
+            isOpenWarranty={isOpenWarranty}
+            setIsOpenWarranty={setIsOpenWarranty}
+          />
           <InvoiceModal
             isOpen={isOpen}
             setIsOpen={setIsOpen}
