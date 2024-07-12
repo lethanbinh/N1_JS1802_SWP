@@ -121,6 +121,7 @@ The software is designed to manage jewelry sales for a company operating a singl
 | Tran Nhat Quang    | UC-53    | Add customers              |
 | Nguyen Tran Khanh Ha    | UC-54    | Update customers           |
 | Le Xuan Phuong Nam    | UC-55    | Delete customers           |
+| Le Thanh Binh    | UC-48    | Staff Dashboard            |
 ### Table 5: Member Assignment for Sprint 4
 | Member Name | User Story ID | Description            |
 |-------------|---------------|------------------------|
@@ -128,6 +129,5 @@ The software is designed to manage jewelry sales for a company operating a singl
 | Nguyen Thanh Phong    | UC-42    | Add Product to Stall       |
 | Le Xuan Phuong Nam    | UC-44    | Edit Product               |
 | Le Xuan Phuong Nam    | UC-45    | View Products in Stall     |
-| Le Thanh Binh    | UC-48    | Staff Dashboard            |
 | Le Thanh Binh    | UC-49    | Manager Dashboard          |
 | Tran Nhat Quang    | UC-50    | Create Policies            |
