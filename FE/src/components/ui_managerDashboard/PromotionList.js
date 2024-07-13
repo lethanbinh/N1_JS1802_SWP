@@ -34,9 +34,8 @@ import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import convertDateToJavaFormat from '../../util/DateConvert';
 import UserStorage from '../../util/UserStorage';
-import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 import CIcon from '@coreui/icons-react';
-import { cilHamburgerMenu } from '@coreui/icons';
+import { cilPen, cilDelete } from '@coreui/icons';
 
 const PromotionList = () => {
   const [data, setData] = useState([]);
@@ -73,7 +72,7 @@ const PromotionList = () => {
     const today = new Date();
 
     if (new Date(formData.endDate) < today) {
-      setErrorMessage("Enddate must be greater than today. Please choose another date.");
+      setErrorMessage("End date must be greater than today. Please choose another date.");
       setErrorModalVisible(true);
       return;
     }
@@ -149,7 +148,6 @@ const PromotionList = () => {
       setSuccessModalVisible(true); // Show success modal
     });
   };
-
 
   const handleAddNew = () => {
     setFormData({
@@ -228,7 +226,7 @@ const PromotionList = () => {
   };
 
   return (
-    <CRow>
+    <CRow className="m-0">
       <div className="d-flex justify-content-between mb-4" style={{ alignItems: 'center' }}>
         <div style={{ width: "50%", display: 'flex', alignItems: 'center' }}>
           <label style={{ marginRight: '10px' }}>Start Date: </label>
@@ -250,14 +248,17 @@ const PromotionList = () => {
         </div>
       </div>
       <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
+        <CCard className="mb-4 border-0 shadow-sm">
+          <CCardHeader className="bg-light text-dark d-flex justify-content-between align-items-center">
             <strong>Promotion List</strong>
+            <CButton color="primary" onClick={handleAddNew}>
+              + Add Promotion
+            </CButton>
           </CCardHeader>
           <CCardBody>
-            <div style={{ height: '65vh', overflow: 'auto' }}>
-              <CTable>
-                <CTableHead>
+            <div style={{ height: '65vh', overflowY: 'auto' }}>
+              <CTable hover responsive bordered className="shadow-sm table-border-dark" style={{ border: '1px solid #adb5bd' }}>
+                <CTableHead className="bg-light text-dark">
                   <CTableRow>
                     <CTableHeaderCell scope="col" style={{ minWidth: "60px" }}>ID</CTableHeaderCell>
                     <CTableHeaderCell scope="col" style={{ minWidth: "120px" }}>Discount (%)</CTableHeaderCell>
@@ -283,29 +284,22 @@ const PromotionList = () => {
                       <CTableDataCell>{formatPrice(row.minimumPrize)}</CTableDataCell>
                       <CTableDataCell>{formatPrice(row.maximumPrize)}</CTableDataCell>
                       <CTableDataCell></CTableDataCell>
-                      <CTableDataCell>
-                        <CDropdown className="position-relative">
-                          <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
-                            <CIcon icon={cilHamburgerMenu} size="xl" />
-                          </CDropdownToggle>
-                          <CDropdownMenu>
-                            <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
-                            <CDropdownItem onClick={() => {
-                              setDeleteId(row.id);
-                              setVisible(true);
-                            }}>Delete</CDropdownItem>
-                          </CDropdownMenu>
-                        </CDropdown>
+                      <CTableDataCell className="d-flex justify-content-around">
+                        <CButton color="info" size="sm" onClick={() => handleEdit(row.id)}>
+                          <CIcon icon={cilPen} />
+                        </CButton>
+                        <CButton color="danger" size="sm" onClick={() => {
+                          setDeleteId(row.id);
+                          setVisible(true);
+                        }}>
+                          <CIcon icon={cilDelete} />
+                        </CButton>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
                 </CTableBody>
               </CTable>
-
             </div>
-            <CButton className='custom-btn custom-btn-success mt-2' color="success" onClick={handleAddNew}>
-              Add Promotion
-            </CButton>
           </CCardBody>
         </CCard>
       </CCol>
@@ -313,19 +307,20 @@ const PromotionList = () => {
       <CModal
         visible={visible}
         onClose={() => setVisible(false)}
+        backdrop={true}
         aria-labelledby="DeleteConfirmationModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-danger text-white">
           <CModalTitle id="DeleteConfirmationModalLabel">Confirm Deletion</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <p>Are you sure you want to delete this promotion?</p>
         </CModalBody>
         <CModalFooter>
-          <CButton style={{ marginRight: "5px" }} className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
+          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
             Cancel
           </CButton>
-          <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => handleDelete(deleteId)}>
+          <CButton className='custom-btn custom-btn-danger' color="danger" onClick={() => handleDelete(deleteId)} style={{ color: "white" }}>
             Delete
           </CButton>
         </CModalFooter>
@@ -334,10 +329,11 @@ const PromotionList = () => {
       <CModal
         visible={editModalVisible}
         onClose={handleCancelEdit}
+        backdrop={true}
         aria-labelledby="EditModalLabel"
         size="lg"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-primary text-white">
           <CModalTitle id="EditModalLabel">{isNew ? "Add Promotion" : "Edit Promotion"}</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -348,6 +344,7 @@ const PromotionList = () => {
             value={formData.discount}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
           <CFormInput
             type="text"
@@ -356,6 +353,7 @@ const PromotionList = () => {
             value={formData.name}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
           <CFormTextarea
             name="description"
@@ -363,6 +361,7 @@ const PromotionList = () => {
             value={formData.description}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
           <CFormInput
             type="date"
@@ -371,6 +370,7 @@ const PromotionList = () => {
             value={formData.startDate}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
           <CFormInput
             type="date"
@@ -379,6 +379,7 @@ const PromotionList = () => {
             value={formData.endDate}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
           <div className="mb-3">
             <CFormLabel htmlFor="minimumPrize">Minimum Price</CFormLabel>
@@ -389,6 +390,7 @@ const PromotionList = () => {
                 name="minimumPrize"
                 value={formData.minimumPrize}
                 onChange={handleInputChange}
+                style={{ border: '1px solid #adb5bd' }}
               />
               <CInputGroupText>VND</CInputGroupText>
             </CInputGroup>
@@ -402,6 +404,7 @@ const PromotionList = () => {
                 name="maximumPrize"
                 value={formData.maximumPrize}
                 onChange={handleInputChange}
+                style={{ border: '1px solid #adb5bd' }}
               />
               <CInputGroupText>VND</CInputGroupText>
             </CInputGroup>
@@ -411,7 +414,7 @@ const PromotionList = () => {
           <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCancelEdit}>
             Cancel
           </CButton>
-          <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
+          <CButton className='custom-btn custom-btn-success' color="primary" onClick={handleSave}>
             Save
           </CButton>
         </CModalFooter>
@@ -420,9 +423,10 @@ const PromotionList = () => {
       <CModal
         visible={errorModalVisible}
         onClose={handleCloseErrorModal}
+        backdrop={true}
         aria-labelledby="ErrorModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-warning text-white">
           <CModalTitle id="ErrorModalLabel">Error</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -438,9 +442,10 @@ const PromotionList = () => {
       <CModal
         visible={confirmationModalVisible}
         onClose={() => setConfirmationModalVisible(false)}
+        backdrop={true}
         aria-labelledby="ConfirmationModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-success text-white">
           <CModalTitle id="ConfirmationModalLabel">Account Information</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -453,13 +458,13 @@ const PromotionList = () => {
         </CModalFooter>
       </CModal>
 
-      {/* popup save success of edit */}
       <CModal
         visible={successModalVisible}
         onClose={() => setSuccessModalVisible(false)}
+        backdrop={true}
         aria-labelledby="SuccessModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-success text-white">
           <CModalTitle id="SuccessModalLabel">Success</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -472,13 +477,13 @@ const PromotionList = () => {
         </CModalFooter>
       </CModal>
 
-      {/* popup delete success */}
       <CModal
         visible={deleteSuccessModalVisible}
         onClose={() => setDeleteSuccessModalVisible(false)}
+        backdrop={true}
         aria-labelledby="DeleteSuccessModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-success text-white">
           <CModalTitle id="DeleteSuccessModalLabel">Delete Successful</CModalTitle>
         </CModalHeader>
         <CModalBody>

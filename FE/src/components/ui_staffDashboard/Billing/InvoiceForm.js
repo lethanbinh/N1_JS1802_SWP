@@ -351,7 +351,7 @@ const InvoiceForm = () => {
 
   return (
     <CRow className="relative flex flex-col px-2 md:flex-row" onSubmit={handleSubmit}>
-      <CCard className="my-6 flex-1 rounded-lg p-4 shadow-sm md:p-6">
+      <CCard className="my-6 flex-1 rounded-lg p-4 shadow-sm md:p-6 border-0">
         <CCardBody>
           <div className="text-center mb-4">
             <h1 className="text-xl font-bold">GoldenB Jewelry</h1>
@@ -376,6 +376,7 @@ const InvoiceForm = () => {
                   setStaffName(selectedOption.getAttribute("data-name"));
                   setStaffId(event.target.value);
                 }}
+                style={{ border: '1px solid #adb5bd' }}
               >
                 <option value="">Select Cashier</option>
                 {staff.map(user => (
@@ -397,6 +398,7 @@ const InvoiceForm = () => {
                 onChange={(event) => setCustomerPhone(event.target.value)}
                 pattern="[0-9]{10}"
                 title="Please enter a valid phone number (10 digits)"
+                style={{ border: '1px solid #adb5bd' }}
               />
             </CCol>
           </CRow>
@@ -411,6 +413,7 @@ const InvoiceForm = () => {
                 type="text"
                 value={address}
                 onChange={(event) => setAddress(event.target.value)}
+                style={{ border: '1px solid #adb5bd' }}
               />
             </CCol>
 
@@ -423,6 +426,7 @@ const InvoiceForm = () => {
                 type="text"
                 value={customerName}
                 onChange={(event) => setCustomerName(event.target.value)}
+                style={{ border: '1px solid #adb5bd' }}
               />
             </CCol>
           </CRow>
@@ -434,6 +438,7 @@ const InvoiceForm = () => {
                 required
                 value={transactionType}
                 onChange={(event) => setTransactionType(event.target.value)}
+                style={{ border: '1px solid #adb5bd' }}
               >
                 <option value="SELL">SELL</option>
                 <option value="PURCHASE">PURCHASE</option>
@@ -449,6 +454,7 @@ const InvoiceForm = () => {
                 type="text"
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
+                style={{ border: '1px solid #adb5bd' }}
               />
             </CCol>
           </CRow>
@@ -464,6 +470,7 @@ const InvoiceForm = () => {
                   type="text"
                   value={customerGiveMoney}
                   onChange={(event) => setCustomerGiveMoney(event.target.value)}
+                  style={{ border: '1px solid #adb5bd' }}
                 />
                 <CInputGroupText>VND</CInputGroupText>
               </CInputGroup>
@@ -479,6 +486,7 @@ const InvoiceForm = () => {
                 placeholder="0.0"
                 value={tax}
                 onChange={(event) => setTax(event.target.value)}
+                style={{ border: '1px solid #adb5bd' }}
               />
             </CCol>
           </CRow> : ""}
@@ -494,11 +502,12 @@ const InvoiceForm = () => {
                   type="text"
                   value={barcode}
                   onChange={handleBarcodeChange}
+                  style={{ border: '1px solid #adb5bd' }}
                 />
                 <CButton
                   type='submit'
                   color="primary"
-                  className="rounded px-4 py-2 text-white shadow mt-4"
+                  className="custom-btn custom-btn-primary rounded px-4 py-2 shadow mt-4"
                   onClick={e => addItemHandler(e)}
                 >
                   Add Item
@@ -515,30 +524,31 @@ const InvoiceForm = () => {
                 type="number"
                 value={bonusPointExchange}
                 onChange={(event) => setBonusPointExchange(event.target.value)}
+                style={{ border: '1px solid #adb5bd' }}
               />
             </CCol> : ""}
           </CRow>
         </CCardBody>
       </CCard>
 
-      <CCard className="my-6 flex-1 rounded-lg p-4 shadow-sm md:p-6">
+      <CCard className="my-6 flex-1 rounded-lg p-4 shadow-sm md:p-6 border-0">
         <CCardBody>
           {items.length > 0 && <CTable className="w-full text-left table-auto border " style={{ borderCollapse: "collapse" }}>
             <CTableHead>
               <CTableRow>
-                <CTableHeaderCell style={{ border: "1px solid #000" }}>ITEM</CTableHeaderCell>
-                <CTableHeaderCell style={{ border: "1px solid #000" }}>QTY</CTableHeaderCell>
-                <CTableHeaderCell style={{ border: "1px solid #000" }}>IMAGE</CTableHeaderCell>
-                <CTableHeaderCell style={{ border: "1px solid #000" }}>DESCRIPTION</CTableHeaderCell>
-                <CTableHeaderCell className="text-right" style={{ border: "1px solid #000" }}>UNIT PRICE</CTableHeaderCell>
-                <CTableHeaderCell className="text-right" style={{ border: "1px solid #000" }}>AMOUNT</CTableHeaderCell>
-                <CTableHeaderCell style={{ border: "1px solid #000" }}>ACTION</CTableHeaderCell>
+                <CTableHeaderCell style={{ border: "1px solid #adb5bd" }}>ITEM</CTableHeaderCell>
+                <CTableHeaderCell style={{ border: "1px solid #adb5bd" }}>QTY</CTableHeaderCell>
+                <CTableHeaderCell style={{ border: "1px solid #adb5bd" }}>IMAGE</CTableHeaderCell>
+                <CTableHeaderCell style={{ border: "1px solid #adb5bd" }}>DESCRIPTION</CTableHeaderCell>
+                <CTableHeaderCell className="text-right" style={{ border: "1px solid #adb5bd" }}>UNIT PRICE</CTableHeaderCell>
+                <CTableHeaderCell className="text-right" style={{ border: "1px solid #adb5bd" }}>AMOUNT</CTableHeaderCell>
+                <CTableHeaderCell style={{ border: "1px solid #adb5bd" }}>ACTION</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
               {items.map((item) => (
                 <CTableRow key={item.id}>
-                  <CTableDataCell style={{ border: "1px solid #000" }}>
+                  <CTableDataCell style={{ border: "1px solid #adb5bd" }}>
                     <CFormInput
                       readOnly
                       type="text"
@@ -546,21 +556,23 @@ const InvoiceForm = () => {
                       placeholder="Item name..."
                       value={item.name}
                       onChange={(event) => editItemHandler(event, item.productId)}
+                      style={{ border: '1px solid #adb5bd' }}
                     />
                   </CTableDataCell>
-                  <CTableDataCell style={{ border: "1px solid #000" }}>
+                  <CTableDataCell style={{ border: "1px solid #adb5bd" }}>
                     <CFormInput
                       type="number"
                       name="qty"
                       value={item.qty}
                       onChange={(event) => editItemHandler(event, item.productId)}
                       onBlur={() => handleBlur(item.productId)}
+                      style={{ border: '1px solid #adb5bd' }}
                     />
                   </CTableDataCell>
-                  <CTableDataCell style={{ border: "1px solid #000" }}>
+                  <CTableDataCell style={{ border: "1px solid #adb5bd" }}>
                     <img src={item.image} alt='jewelry' style={{ width: "100px", height: "100px" }} />
                   </CTableDataCell>
-                  <CTableDataCell style={{ border: "1px solid #000" }}>
+                  <CTableDataCell style={{ border: "1px solid #adb5bd" }}>
                     <CFormInput
                       readOnly
                       type="text"
@@ -568,9 +580,10 @@ const InvoiceForm = () => {
                       placeholder="Item description..."
                       value={item.description}
                       onChange={(event) => editItemHandler(event, item.productId)}
+                      style={{ border: '1px solid #adb5bd' }}
                     />
                   </CTableDataCell>
-                  <CTableDataCell className="text-right" style={{ border: "1px solid #000" }}>
+                  <CTableDataCell className="text-right" style={{ border: "1px solid #adb5bd" }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <CFormInput
                         readOnly
@@ -578,20 +591,21 @@ const InvoiceForm = () => {
                         name="price"
                         value={item.price}
                         onChange={(event) => editItemHandler(event, item.productId)}
-                        style={{ textAlign: 'left', border: '1px solid #D8D4D3', width: '100%' }}
+                        style={{ textAlign: 'left', border: '1px solid #adb5bd', width: '100%' }}
                       />
                       <span style={{ marginLeft: '5px' }}>VND</span>
                     </div>
                   </CTableDataCell>
-                  <CTableDataCell className="text-right" style={{ border: "1px solid #000", textAlign: 'right', padding: '13px 12px' }}>
+                  <CTableDataCell className="text-right" style={{ border: "1px solid #adb5bd", textAlign: 'right', padding: '13px 12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                       <span>{(Number(item.price) * item.qty).toFixed(2)}</span>
                       <span>VND</span>
                     </div>
                   </CTableDataCell>
-                  <CTableDataCell style={{ border: "1px solid #000" }}>
+                  <CTableDataCell style={{ border: "1px solid #adb5bd" }}>
                     <CButton
                       color="danger"
+                      className="custom-btn custom-btn-danger"
                       onClick={() => deleteItemHandler(item.id)}
                     >
                       Delete
@@ -667,6 +681,7 @@ const InvoiceForm = () => {
                         setPromotionId(event.target.selectedOptions[0].getAttribute('data-id'));
                         setPromotionValue(event.target.value);
                       }}
+                      style={{ border: '1px solid #adb5bd' }}
                     >
                       <option value="">None</option>
                       {promotion
@@ -692,6 +707,7 @@ const InvoiceForm = () => {
                   required
                   value={sendMoneyMethod}
                   onChange={(event) => setSendMoneyMethod(event.target.value)}
+                  style={{ border: '1px solid #adb5bd' }}
                 >
                   <option value="CASH">{transactionType === 'SELL' ? "Payment " : "Recieve "}by cash</option>
                   <option value="BANK_TRANSFER">{transactionType === 'SELL' ? "Payment " : "Recieve "}by bank transfer</option>
@@ -705,6 +721,7 @@ const InvoiceForm = () => {
                   required
                   value={orderStatus}
                   onChange={(event) => setOrderStatus(event.target.value)}
+                  style={{ border: '1px solid #adb5bd' }}
                 >
                   <option value="PENDING">PENDING</option>
                   <option value="CONFIRMED">CONFIRMED</option>
@@ -712,17 +729,15 @@ const InvoiceForm = () => {
               </CRow>
             </div>
           </div>
-
-
         </CCardBody>
       </CCard>
 
-      <CCard className="my-6 flex-1 rounded-lg p-4 shadow-sm md:p-6">
+      <CCard className="my-6 flex-1 rounded-lg p-4 shadow-sm md:p-6 border-0">
         <CCardBody className="space-y-4">
           <CButton
             style={{ marginRight: "10px" }}
             color="primary"
-            className="rounded px-4 py-2 text-white shadow"
+            className="custom-btn custom-btn-primary rounded px-4 py-2 shadow"
             onClick={handleReviewInvoice}
           >
             Review Invoice
@@ -731,7 +746,7 @@ const InvoiceForm = () => {
           <CButton
             style={{ marginRight: "10px" }}
             color="primary"
-            className="rounded px-4 py-2 text-white shadow"
+            className="custom-btn custom-btn-primary rounded px-4 py-2 shadow"
             onClick={() => setIsOpenWarranty(true)}
           >
             Warranty Card
@@ -739,7 +754,7 @@ const InvoiceForm = () => {
 
           <CButton
             color="success"
-            className="rounded px-4 py-2 text-white shadow"
+            className="custom-btn custom-btn-success rounded px-4 py-2 shadow"
             onClick={() => setconfirmModalVisible(true)}
           >
             Save Order

@@ -192,6 +192,7 @@ const AddProduct = () => {
                       label="Name"
                       value={product.name}
                       onChange={handleChange}
+                      style={{ border: '1px solid #adb5bd' }}
                     />
                   </CCol>
                   <CCol md={6}>
@@ -201,6 +202,7 @@ const AddProduct = () => {
                       label="Image"
                       accept="image/*"
                       onChange={handleImageChange}
+                      style={{ border: '1px solid #adb5bd' }}
                     />
                   </CCol>
                 </CRow>
@@ -222,6 +224,7 @@ const AddProduct = () => {
                       label="Description"
                       value={product.description}
                       onChange={handleChange}
+                      style={{ border: '1px solid #adb5bd' }}
                     />
                   </CCol>
                 </CRow>
@@ -235,6 +238,7 @@ const AddProduct = () => {
                         name="purchasePrice"
                         value={product.purchasePrice}
                         onChange={handleChange}
+                        style={{ border: '1px solid #adb5bd' }}
                       />
                       <CInputGroupText>VND</CInputGroupText>
                     </CInputGroup>
@@ -248,6 +252,7 @@ const AddProduct = () => {
                         name="sellPrice"
                         value={product.sellPrice}
                         onChange={handleChange}
+                        style={{ border: '1px solid #adb5bd' }}
                       />
                       <CInputGroupText>VND</CInputGroupText>
                     </CInputGroup>
@@ -259,6 +264,7 @@ const AddProduct = () => {
                       label="Quantity"
                       value={product.quantity}
                       onChange={handleChange}
+                      style={{ border: '1px solid #adb5bd' }}
                     />
                   </CCol>
                 </CRow>
@@ -270,6 +276,7 @@ const AddProduct = () => {
                       label="Weight"
                       value={product.weight}
                       onChange={handleChange}
+                      style={{ border: '1px solid #adb5bd' }}
                     />
                   </CCol>
                   <CCol md={4}>
@@ -277,7 +284,9 @@ const AddProduct = () => {
                       name="size"
                       value={product.size}
                       onChange={handleChange}
-                      label="Size">
+                      label="Size"
+                      style={{ border: '1px solid #adb5bd' }}
+                    >
                       <option value="">Select Size</option>
                       <option value="S">S</option>
                       <option value="M">M</option>
@@ -290,7 +299,9 @@ const AddProduct = () => {
                       name="stallLocation"
                       value={product.stallLocation}
                       onChange={handleChange}
-                      label="Stall Location">
+                      label="Stall Location"
+                      style={{ border: '1px solid #adb5bd' }}
+                    >
                       <option value="">Select location</option>
                       {stallOptions.map(stall => (
                         <option key={stall.id} value={stall.id}>
@@ -306,7 +317,9 @@ const AddProduct = () => {
                       name="type"
                       value={product.type}
                       onChange={handleChange}
-                      label="Type">
+                      label="Type"
+                      style={{ border: '1px solid #adb5bd' }}
+                    >
                       <option value="">Select Type</option>
                       <option value="necklace">Necklace</option>
                       <option value="ring">Ring</option>
@@ -320,7 +333,9 @@ const AddProduct = () => {
                       name="stallId"
                       value={product.stallId}
                       onChange={handleChange}
-                      label="Stall">
+                      label="Stall"
+                      style={{ border: '1px solid #adb5bd' }}
+                    >
                       <option value="">Select Stall</option>
                       {stallOptions.map(stall => (
                         <option key={stall.id} value={stall.id}>
@@ -376,7 +391,7 @@ const AddProduct = () => {
           )}
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={() => setSuccessModalVisible(false)}>
+          <CButton className="custom-btn custom-btn-secondary" color="secondary" onClick={() => setSuccessModalVisible(false)}>
             Close
           </CButton>
         </CModalFooter>
@@ -390,7 +405,7 @@ const AddProduct = () => {
           {error}
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={() => setErrorModalVisible(false)}>
+          <CButton className="custom-btn custom-btn-secondary" color="secondary" onClick={() => setErrorModalVisible(false)}>
             Close
           </CButton>
         </CModalFooter>

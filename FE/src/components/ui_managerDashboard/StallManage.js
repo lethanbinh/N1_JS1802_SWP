@@ -13,10 +13,6 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownItem,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -28,9 +24,8 @@ import React, { useEffect, useState } from 'react';
 import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
-import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 import CIcon from '@coreui/icons-react';
-import { cilHamburgerMenu } from '@coreui/icons';
+import { cilPen, cilTrash } from '@coreui/icons';
 
 const Stall = () => {
   const [data, setData] = useState([]);
@@ -41,11 +36,10 @@ const Stall = () => {
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [isNew, setIsNew] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("")
-  const [filteredData, setFilteredData] = useState([])
-  const [confirmationModalVisible, setConfirmationModalVisible] = useState(false)
-  const [successModalVisible, setSuccessModalVisible] = useState(false)
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+  const [confirmationModalVisible, setConfirmationModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
 
   const handleEdit = (id) => {
     setEditingRow(id);
@@ -61,14 +55,14 @@ const Stall = () => {
   };
 
   const handleSearchChange = (event) => {
-    const { value } = event.target
-    setSearchTerm(value)
+    const { value } = event.target;
+    setSearchTerm(value);
     if (value === "") {
-      setFilteredData(data)
+      setFilteredData(data);
     } else {
-      setFilteredData(data.filter(row => row.name.toLowerCase().includes(value.toLowerCase())))
+      setFilteredData(data.filter(row => row.name.toLowerCase().includes(value.toLowerCase())));
     }
-  }
+  };
 
   const handleSave = () => {
     const requiredFields = ['code', 'name', 'description', 'type'];
@@ -86,11 +80,11 @@ const Stall = () => {
       setErrorModalVisible(true);
       return;
     }
-    const duplicateCode = data.some(row => row.code === formData.code && row.id !== editingRow)
+    const duplicateCode = data.some(row => row.code === formData.code && row.id !== editingRow);
     if (duplicateCode) {
-      setErrorMessage("Code already exists. Please use a unique code.")
-      setErrorModalVisible(true)
-      return
+      setErrorMessage("Code already exists. Please use a unique code.");
+      setErrorModalVisible(true);
+      return;
     }
     let newData;
     if (isNew) {
@@ -138,14 +132,11 @@ const Stall = () => {
     setFilteredData(filtered);
 
     if (isNew) {
-      // Show success message for adding new user
       setConfirmationModalVisible(true);
     } else {
-      // Show success message for editing existing user
       setSuccessModalVisible(true);
     }
   };
-
 
   const handleCancelEdit = () => {
     setEditModalVisible(false);
@@ -170,7 +161,7 @@ const Stall = () => {
     fetchData('http://localhost:8080/api/v1/stalls', 'GET', null, userInfo.accessToken)
       .then(data => {
         setData(data.payload);
-        setFilteredData(data.payload)
+        setFilteredData(data.payload);
       });
   };
   useEffect(() => {
@@ -178,12 +169,14 @@ const Stall = () => {
   }, []);
 
   return (
-    <CRow>
+    <CRow className="m-0">
       <CCol xs={12}>
-        <CCard className="mb-4">
-
-          <CCardHeader>
+        <CCard className="mb-4 border-0 shadow-sm">
+          <CCardHeader className="bg-light text-dark d-flex justify-content-between align-items-center">
             <strong>Stall List</strong>
+            <CButton className='custom-btn custom-btn-primary' color="primary" onClick={handleAddNew}>
+              Add New Stall
+            </CButton>
           </CCardHeader>
           <CCardBody>
             <CFormInput
@@ -192,17 +185,18 @@ const Stall = () => {
               value={searchTerm}
               onChange={handleSearchChange}
               className="mb-3"
+              style={{ border: '1px solid #adb5bd' }}
             />
             <div style={{ height: '65vh', overflow: 'auto' }}>
-              <CTable>
-                <CTableHead>
+              <CTable hover responsive bordered className="shadow-sm table-border-dark" style={{ border: '1px solid #adb5bd' }}>
+                <CTableHead className="bg-light text-dark">
                   <CTableRow>
                     <CTableHeaderCell scope="col">Id</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Code</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Name</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Type</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Action</CTableHeaderCell>
+                    <CTableHeaderCell style={{ width: "60px" }} scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -213,24 +207,16 @@ const Stall = () => {
                       <CTableDataCell>{row.name}</CTableDataCell>
                       <CTableDataCell>{row.type}</CTableDataCell>
                       <CTableDataCell>{row.description}</CTableDataCell>
-                      <CTableDataCell>
-                        <CDropdown className="position-relative">
-                          <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
-                            <CIcon icon={cilHamburgerMenu} size="xl" />
-                          </CDropdownToggle>
-                          <CDropdownMenu>
-                            <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
-                          </CDropdownMenu>
-                        </CDropdown>
+                      <CTableDataCell className="d-flex justify-content-around">
+                        <CButton color="info" size="sm" onClick={() => handleEdit(row.id)}>
+                          <CIcon icon={cilPen} />
+                        </CButton>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
                 </CTableBody>
               </CTable>
             </div>
-            <CButton className='custom-btn custom-btn-success mt-2' color="success" onClick={handleAddNew}>
-              Add New Stall
-            </CButton>
           </CCardBody>
         </CCard>
       </CCol>
@@ -240,7 +226,7 @@ const Stall = () => {
         onClose={() => setErrorModalVisible(false)}
         aria-labelledby="ErrorModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-danger text-white">
           <CModalTitle id="ErrorModalLabel">Input Information Error</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -259,7 +245,7 @@ const Stall = () => {
         aria-labelledby="EditModalLabel"
         size="lg"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-primary text-white">
           <CModalTitle id="EditModalLabel">{isNew ? 'Add Stall' : 'Update Stall'}</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -270,6 +256,7 @@ const Stall = () => {
             value={formData.code}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
           <CFormInput
             type="text"
@@ -278,12 +265,14 @@ const Stall = () => {
             value={formData.name}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
           <CFormSelect
             name="type"
             value={formData.type}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
             label="Type">
             <option value="SELL">SELL</option>
             <option value="PURCHASE">PURCHASE</option>
@@ -295,24 +284,24 @@ const Stall = () => {
             value={formData.description}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
         </CModalBody>
         <CModalFooter>
           <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCancelEdit}>
             Cancel
           </CButton>
-          <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
+          <CButton className='custom-btn custom-btn-primary' color="primary" onClick={handleSave}>
             Save
           </CButton>
         </CModalFooter>
       </CModal>
-      {/* popup save success of create account and show info account created */}
       <CModal
         visible={confirmationModalVisible}
         onClose={() => setConfirmationModalVisible(false)}
         aria-labelledby="ConfirmationModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-success text-white">
           <CModalTitle id="ConfirmationModalLabel">Account Information</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -325,13 +314,12 @@ const Stall = () => {
         </CModalFooter>
       </CModal>
 
-      {/* popup save success of edit */}
       <CModal
         visible={successModalVisible}
         onClose={() => setSuccessModalVisible(false)}
         aria-labelledby="SuccessModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-success text-white">
           <CModalTitle id="SuccessModalLabel">Success</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -345,6 +333,7 @@ const Stall = () => {
       </CModal>
 
     </CRow>
-  )
-}
+  );
+};
+
 export default Stall;

@@ -5,18 +5,10 @@ import {
   CCardHeader,
   CCol,
   CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
   CButton
 } from '@coreui/react';
 
 const JewelryGoldPrices = () => {
-  const [data, setData] = useState([]);
-  const [updatedTime, setUpdatedTime] = useState('');
   const [isFullScreen, setIsFullScreen] = useState(false);
   const rowRef = useRef(null);
 
@@ -35,7 +27,6 @@ const JewelryGoldPrices = () => {
         if (result.success) {
           const goldPrice = result.price;
           const updatedTime = result.timestamp;
-          setData([{ type: 'Jewelry Gold', price: goldPrice }]);
           setUpdatedTime(new Date(updatedTime * 1000).toLocaleString());
         }
       } catch (error) {
@@ -87,16 +78,16 @@ const JewelryGoldPrices = () => {
       } : {}}
     >
       <CCol xs={12} style={{ flex: '1 1 auto', overflow: isFullScreen ? 'auto' : 'visible' }}>
-        <CCard className="mb-4" style={{ height: '100%' }}>
-          <CCardHeader>
+        <CCard className="mb-4 border-0 shadow-sm" style={{ height: '100%' }}>
+          <CCardHeader className="bg-light text-dark d-flex justify-content-between align-items-center">
             <strong>Jewelry Gold Prices</strong>
-            <CButton color="primary" style={{ float: 'right' }} onClick={toggleFullScreen}>
+            <CButton className="custom-btn custom-btn-primary" color="primary" onClick={toggleFullScreen}>
               {isFullScreen ? 'Exit Full Screen' : 'Full Screen'}
             </CButton>
           </CCardHeader>
-          <CCardBody style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
+          <CCardBody className="d-flex flex-column p-0">
             <div style={{ flex: '1 1 auto', overflow: 'auto' }}>
-              <iframe frameborder="0" width="100%" height="750px" src="https://webtygia.com/api/vang?bgheader=b53e3e&colorheader=ffffff&padding=7&fontsize=16&hienthi=&"></iframe>
+              <iframe frameBorder="0" width="100%" height="750px" src="https://webtygia.com/api/vang?bgheader=b53e3e&colorheader=ffffff&padding=7&fontsize=16&hienthi=&"></iframe>
             </div>
           </CCardBody>
         </CCard>

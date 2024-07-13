@@ -10,10 +10,9 @@ import {
     CCardHeader,
     CCol,
     CFormInput,
-    CFormSelect,
-    CRow,
     CInputGroup,
     CInputGroupText,
+    CRow,
 } from "@coreui/react";
 import UserStorage from "../../util/UserStorage";
 import convertDateToJavaFormat from "../../util/DateConvert";
@@ -35,12 +34,11 @@ const GeneralInfoForm = () => {
     useEffect(() => {
         fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "GET", null, userInfo.accessToken)
             .then((response) => {
-                console.log("Profile data fetched successfully:", response);
                 if (response.payload) {
                     const profileData = response.payload;
                     setData(profileData);
                     setFormData(profileData);
-                    setBirthday(profileData.birthday); // assuming birthday is part of profile data
+                    setBirthday(profileData.birthday);
                     setAvatar(profileData.avatar);
                 }
             })
@@ -80,29 +78,26 @@ const GeneralInfoForm = () => {
     const handleSave = (event) => {
         event.preventDefault();
 
-        // Prepare updated data from form state
         const updatedData = {
-            username: formData.username || "", // Ensure these fields are correctly mapped to your form state
+            username: formData.username || "",
             address: formData.address || "",
             fullName: formData.fullName || "",
             birthday: formData.birthday || "",
             email: formData.email || "",
             phone: formData.phone || "",
-            avatar: formData.avatar || null, // Handle avatar separately if updated
+            avatar: formData.avatar || null,
         };
 
-        // Assuming you have a function to convert the data to the correct format
         const savedData = {
             username: updatedData.username,
-            phone: updatedData.phone || "0374422448", // Using default phone if not provided
+            phone: updatedData.phone || "0374422448",
             email: updatedData.email || "string",
             address: updatedData.address || "string",
             avatar: updatedData.avatar || " ",
             fullName: updatedData.fullName,
-            birthday: convertDateToJavaFormat(updatedData.birthday) || "2024-06-16T08:48:44.695Z", // Default date
+            birthday: convertDateToJavaFormat(updatedData.birthday) || "2024-06-16T08:48:44.695Z",
         };
 
-        // Check for duplicate phone and email
         const duplicatePhone = listUser.some(row => row.phone === formData.phone && row.id !== data.id);
         const duplicateEmail = listUser.some(row => row.email === formData.email && row.id !== data.id);
 
@@ -114,13 +109,13 @@ const GeneralInfoForm = () => {
             return;
         } else if (duplicatePhone && !duplicateEmail) {
             setErrorPhone("Phone number already exists. Please use a unique phone number.");
-            setErrorEmail(""); // Clear email error if no email conflict
+            setErrorEmail("");
             setError("Update failed");
             setMessage("");
             return;
         } else if (duplicateEmail) {
             setErrorEmail("Email already exists. Please use a unique email.");
-            setErrorPhone(""); // Clear phone error if no phone conflict
+            setErrorPhone("");
             setError("Update failed");
             setMessage("");
             return;
@@ -130,15 +125,12 @@ const GeneralInfoForm = () => {
             setError("");
         }
 
-        // Assuming you have a function to upload the avatar file
         if (updatedData.avatar instanceof File) {
             const formDataToUpload = new FormData();
-            formDataToUpload.append("image", updatedData.avatar); // Ensure the field name matches the API requirement
-            console.log(formDataToUpload.get("image"));
+            formDataToUpload.append("image", updatedData.avatar);
             fetchData(`http://localhost:8080/api/v1/images`, "POST", formDataToUpload, null, "multipart/form-data")
                 .then((response) => {
-                    console.log(response);
-                    savedData.avatar = response.payload.name; // Update avatar field with the file name from the response
+                    savedData.avatar = response.payload.name;
                     return fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "PUT", savedData, userInfo.accessToken);
                 })
                 .then((data) => {
@@ -169,145 +161,155 @@ const GeneralInfoForm = () => {
     };
 
     return (
-        <CCard className="mb-4">
-            <CCardHeader>
-                <strong>Profile</strong>
-            </CCardHeader>
-            <CCardBody>
-                <form onSubmit={handleSave}>
-                    <CRow className="align-items-center">
-                        <CCol md={6} className="mb-3">
-                            <div className="form-group">
-                                {avatar && <img src={avatar} alt="Avatar" style={{ width: '100px', height: '100px' }} />}
-                                <CFormInput type="file" id="avatar" name="avatar" onChange={handleAvatarChange} />
-                            </div>
-                        </CCol>
-                    </CRow>
-                    <CRow>
-                        <CCol md={6} className="mb-3">
-                            <div className="form-group">
-                                <label htmlFor="username">
-                                    <strong>Username</strong>
-                                </label>
-                                <CFormInput
-                                    disabled
-                                    type="text"
-                                    id="username"
-                                    name="username"
-                                    placeholder="Enter your username"
-                                    value={formData.username || ""}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                        </CCol>
-                        <CCol md={6} className="mb-3">
-                            <div className="form-group">
-                                <label htmlFor="address">
-                                    <strong>Address</strong>
-                                </label>
-                                <CFormInput
-                                    required
-                                    type="text"
-                                    id="address"
-                                    name="address"
-                                    placeholder="Enter your address"
-                                    value={formData.address || ""}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                        </CCol>
-                    </CRow>
-                    <CRow>
-                        <CCol md={6} className="mb-3">
-                            <div className="form-group">
-                                <label htmlFor="firstName">
-                                    <strong>Full Name</strong>
-                                </label>
-                                <CFormInput
-                                    required
-                                    type="text"
-                                    id="fullName"
-                                    name="fullName"
-                                    placeholder="Enter your full name"
-                                    value={formData.fullName || ""}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                        </CCol>
-                        <CCol md={6} className="mb-3">
-                            <div className="form-group">
-                                <label htmlFor="birthday">
-                                    <strong>Birthday</strong>
-                                </label>
-                                <Datetime
-                                    timeFormat={false}
-                                    onChange={(date) => setBirthday(date)}
-                                    renderInput={(props, openCalendar) => (
-                                        <CInputGroup>
-                                            <CInputGroupText>
-                                                <FontAwesomeIcon icon={faCalendarAlt} />
-                                            </CInputGroupText>
-                                            <CFormInput
-                                                required
-                                                type="text"
-                                                value={birthday ? moment(birthday).format("MM/DD/YYYY") : ""}
-                                                placeholder="mm/dd/yyyy"
-                                                onFocus={openCalendar}
-                                                onChange={() => { }}
-                                            />
-                                        </CInputGroup>
-                                    )}
-                                />
-                            </div>
-                        </CCol>
-                    </CRow>
-                    <CRow>
-                        <CCol md={6} className="mb-3">
-                            <div className="form-group">
-                                <label htmlFor="email">
-                                    <strong>Email</strong>
-                                </label>
-                                <CFormInput
-                                    required
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    placeholder="name@company.com"
-                                    value={formData.email || ""}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div style={{ color: 'red' }} className='error-email'>{errorEmail}</div>
-                        </CCol>
-                        <CCol md={6} className="mb-3">
-                            <div className="form-group">
-                                <label htmlFor="phone">
-                                    <strong>Phone</strong>
-                                </label>
-                                <CFormInput
-                                    required
-                                    type="number"
-                                    id="phone"
-                                    name="phone"
-                                    placeholder="+12-345 678 910"
-                                    value={formData.phone || ""}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div style={{ color: 'red' }} className='error-phone'>{errorPhone}</div>
-                        </CCol>
-                    </CRow>
-                    <div className="mt-3">
-                        <CButton className=" custom-btn custom-btn-primary" color="primary" type="submit" >
-                            Save All
-                        </CButton>
+        <CRow className="m-0">
+            <CCol xs={12}>
+                <CCard className="mb-4 border-0 shadow-sm">
+                    <CCardHeader className="bg-light text-dark">
+                        <strong>Profile</strong>
+                    </CCardHeader>
+                    <CCardBody>
+                        <form onSubmit={handleSave}>
+                            <CRow className="align-items-center">
+                                <CCol md={6} className="mb-3">
+                                    <div className="form-group">
+                                        {avatar && <img src={avatar} alt="Avatar" style={{ width: '100px', height: '100px' }} />}
+                                        <CFormInput type="file" id="avatar" name="avatar" onChange={handleAvatarChange} style={{ border: '1px solid #adb5bd' }} />
+                                    </div>
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol md={6} className="mb-3">
+                                    <div className="form-group">
+                                        <label htmlFor="username">
+                                            <strong>Username</strong>
+                                        </label>
+                                        <CFormInput
+                                            disabled
+                                            type="text"
+                                            id="username"
+                                            name="username"
+                                            placeholder="Enter your username"
+                                            value={formData.username || ""}
+                                            onChange={handleInputChange}
+                                            style={{ border: '1px solid #adb5bd' }}
+                                        />
+                                    </div>
+                                </CCol>
+                                <CCol md={6} className="mb-3">
+                                    <div className="form-group">
+                                        <label htmlFor="address">
+                                            <strong>Address</strong>
+                                        </label>
+                                        <CFormInput
+                                            required
+                                            type="text"
+                                            id="address"
+                                            name="address"
+                                            placeholder="Enter your address"
+                                            value={formData.address || ""}
+                                            onChange={handleInputChange}
+                                            style={{ border: '1px solid #adb5bd' }}
+                                        />
+                                    </div>
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol md={6} className="mb-3">
+                                    <div className="form-group">
+                                        <label htmlFor="firstName">
+                                            <strong>Full Name</strong>
+                                        </label>
+                                        <CFormInput
+                                            required
+                                            type="text"
+                                            id="fullName"
+                                            name="fullName"
+                                            placeholder="Enter your full name"
+                                            value={formData.fullName || ""}
+                                            onChange={handleInputChange}
+                                            style={{ border: '1px solid #adb5bd' }}
+                                        />
+                                    </div>
+                                </CCol>
+                                <CCol md={6} className="mb-3">
+                                    <div className="form-group">
+                                        <label htmlFor="birthday">
+                                            <strong>Birthday</strong>
+                                        </label>
+                                        <Datetime
+                                            timeFormat={false}
+                                            onChange={(date) => setBirthday(date)}
+                                            renderInput={(props, openCalendar) => (
+                                                <CInputGroup>
+                                                    <CInputGroupText>
+                                                        <FontAwesomeIcon icon={faCalendarAlt} />
+                                                    </CInputGroupText>
+                                                    <CFormInput
+                                                        required
+                                                        type="text"
+                                                        value={birthday ? moment(birthday).format("MM/DD/YYYY") : ""}
+                                                        placeholder="mm/dd/yyyy"
+                                                        onFocus={openCalendar}
+                                                        onChange={() => { }}
+                                                        style={{ border: '1px solid #adb5bd' }}
+                                                    />
+                                                </CInputGroup>
+                                            )}
+                                        />
+                                    </div>
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol md={6} className="mb-3">
+                                    <div className="form-group">
+                                        <label htmlFor="email">
+                                            <strong>Email</strong>
+                                        </label>
+                                        <CFormInput
+                                            required
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            placeholder="name@company.com"
+                                            value={formData.email || ""}
+                                            onChange={handleInputChange}
+                                            style={{ border: '1px solid #adb5bd' }}
+                                        />
+                                    </div>
+                                    <div style={{ color: 'red' }} className='error-email'>{errorEmail}</div>
+                                </CCol>
+                                <CCol md={6} className="mb-3">
+                                    <div className="form-group">
+                                        <label htmlFor="phone">
+                                            <strong>Phone</strong>
+                                        </label>
+                                        <CFormInput
+                                            required
+                                            type="number"
+                                            id="phone"
+                                            name="phone"
+                                            placeholder="+12-345 678 910"
+                                            value={formData.phone || ""}
+                                            onChange={handleInputChange}
+                                            style={{ border: '1px solid #adb5bd' }}
+                                        />
+                                    </div>
+                                    <div style={{ color: 'red' }} className='error-phone'>{errorPhone}</div>
+                                </CCol>
+                            </CRow>
+                            <div className="mt-3">
+                                <CButton className=" custom-btn custom-btn-primary" color="primary" type="submit" >
+                                    Save All
+                                </CButton>
 
-                        <div style={{ color: 'green' }} className='message'>{message}</div>
-                        <div style={{ color: 'red' }} className='error'>{error}</div>
-                    </div>
-                </form>
-            </CCardBody>
-        </CCard>
+                                <div style={{ color: 'green' }} className='message'>{message}</div>
+                                <div style={{ color: 'red' }} className='error'>{error}</div>
+                            </div>
+                        </form>
+                    </CCardBody>
+                </CCard>
+            </CCol>
+        </CRow>
     );
 };
 

@@ -2,6 +2,7 @@ import {
   CButton,
   CCard,
   CCardBody,
+  CCardHeader,
   CCol,
   CRow
 } from '@coreui/react';
@@ -36,7 +37,6 @@ const Policy = () => {
   };
 
   const handleSave = async () => {
-
     console.log('Form Data on Save:', formData);
     const newData = data.map((row) => {
       if (row.id === editingRow && userInfo.roleName.toUpperCase() === 'MANAGER') {
@@ -93,11 +93,13 @@ const Policy = () => {
     refreshData();
   }, []);
 
-
   return (
-    <CRow>
+    <CRow className="m-0">
       <CCol xs={12}>
-        <CCard className="mb-4">
+        <CCard className="mb-4 border-0 shadow-sm">
+          <CCardHeader className="bg-light text-dark d-flex justify-content-between align-items-center">
+            <strong>Policy Management</strong>
+          </CCardHeader>
           <CCardBody>
             <div style={{ height: '80vh', overflow: 'auto' }}>
               {data.map((row, index) => (
@@ -106,24 +108,27 @@ const Policy = () => {
                   <div className="mb-3">
                     {editingRow === row.id ? (
                       <div>
-                        <CButton className='custom-btn custom-btn-primary mb-4' color="primary" onClick={handleSave}>Save</CButton>
+                        <CButton className='custom-btn mb-4' color="success" onClick={handleSave}>Save</CButton>
                         <input
                           type="text"
                           name="name"
                           value={formData.name}
                           className="form-control mb-2"
                           onChange={(e) => handleInputChange(e.target.value, 'name')}
+                          style={{ border: '1px solid #adb5bd' }}
                         />
                         <ReactQuill
                           value={formData.detail}
                           onChange={handleQuillChange}
                           className="mb-2"
+                          style={{ border: '1px solid #adb5bd' }}
                         />
                         <select
                           name="type"
                           value={formData.type}
                           className="form-control mb-2"
                           onChange={(e) => handleInputChange(e.target.value, 'type')}
+                          style={{ border: '1px solid #adb5bd' }}
                         >
                           <option value="EXCHANGE_AND_RETURN">EXCHANGE_AND_RETURN</option>
                           <option value="WARRANTY">WARRANTY</option>
@@ -132,7 +137,7 @@ const Policy = () => {
                     ) : (
                       <div>
                         {userInfo.roleName.toUpperCase() === 'MANAGER' &&
-                          <CButton color="secondary" className='custom-btn custom-btn-secondary mt-2  mb-4' onClick={() => handleEdit(row.id)}>Edit</CButton>
+                          <CButton color="primary" className='custom-btn mb-4' onClick={() => handleEdit(row.id)}>Edit</CButton>
                         }
                         <h5>{row.name}</h5>
                         <div dangerouslySetInnerHTML={{ __html: row.detail }} />

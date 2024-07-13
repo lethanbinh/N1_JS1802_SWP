@@ -1,20 +1,31 @@
 import {
+  CButton,
   CCard,
   CCardBody,
   CCardHeader,
   CCol,
+  CFormInput,
+  CFormLabel,
+  CInputGroup,
+  CInputGroupText,
+  CFormSelect,
+  CFormTextarea,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
   CRow,
   CTable,
   CTableBody,
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
-  CTableRow
+  CTableRow,
 } from '@coreui/react';
-
 import React, { useEffect, useState } from 'react';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import convertDateToJavaFormat from '../../util/DateConvert';
@@ -30,7 +41,7 @@ const PromotionList = () => {
   const [deleteId, setDeleteId] = useState(null);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [isNew, setIsNew] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [startDateFilter, setStartDateFilter] = useState(null);
   const [endDateFilter, setEndDateFilter] = useState(null);
@@ -51,11 +62,11 @@ const PromotionList = () => {
 
   const handleSave = () => {
     const requiredFields = ['discount', 'name', 'description', 'startDate', 'endDate', 'minimumPrize', 'maximumPrize'];
-    const emptyFields = requiredFields.filter(field => !formData[field]);
+    const emptyFields = requiredFields.filter((field) => !formData[field]);
     const today = new Date();
 
     if (new Date(formData.endDate) < today) {
-      setErrorMessage("Enddate must be greater than today. Please choose another date.");
+      setErrorMessage('End date must be greater than today. Please choose another date.');
       setErrorModalVisible(true);
       return;
     }
@@ -92,7 +103,7 @@ const PromotionList = () => {
 
     let newData;
     if (isNew) {
-      const newId = data.length ? Math.max(...data.map(row => row.id)) + 1 : 1;
+      const newId = data.length ? Math.max(...data.map((row) => row.id)) + 1 : 1;
       const newRow = { ...formData, id: newId, status: true, discount: parseFloat(formData.discount) / 100 };
       newData = [...data, newRow];
     } else {
@@ -104,7 +115,7 @@ const PromotionList = () => {
       });
     }
 
-    const dataFromInput = newData.find(row => row.id === (isNew ? newData.length : editingRow));
+    const dataFromInput = newData.find((row) => row.id === (isNew ? newData.length : editingRow));
 
     const savedData = {
       discount: dataFromInput.discount,
@@ -114,7 +125,7 @@ const PromotionList = () => {
       endDate: convertDateToJavaFormat(dataFromInput.endDate),
       minimumPrize: dataFromInput.minimumPrize,
       maximumPrize: dataFromInput.maximumPrize,
-      status: true
+      status: true,
     };
 
     const savePromise = isNew
@@ -129,7 +140,6 @@ const PromotionList = () => {
       setSuccessModalVisible(true); // Show success modal
     });
   };
-
 
   const handleAddNew = () => {
     setFormData({
@@ -149,25 +159,23 @@ const PromotionList = () => {
 
   const handleDelete = (id) => {
     setVisible(false);
-    fetchData(`http://localhost:8080/api/v1/promotions/${deleteId}`, 'DELETE', null, userInfo.accessToken)
-      .then(() => {
-        refreshData();
-        setDeleteSuccessModalVisible(true); // Show delete success modal
-      });
+    fetchData(`http://localhost:8080/api/v1/promotions/${deleteId}`, 'DELETE', null, userInfo.accessToken).then(() => {
+      refreshData();
+      setDeleteSuccessModalVisible(true); // Show delete success modal
+    });
     setDeleteId(null);
   };
 
   const handleCancelEdit = () => {
     setEditModalVisible(false);
     setFormData({});
-  }
+  };
 
   const refreshData = () => {
-    fetchData("http://localhost:8080/api/v1/promotions", 'GET', null, userInfo.accessToken)
-      .then(data => {
-        setData(data.payload);
-        applyFilters(data.payload);
-      });
+    fetchData('http://localhost:8080/api/v1/promotions', 'GET', null, userInfo.accessToken).then((data) => {
+      setData(data.payload);
+      applyFilters(data.payload);
+    });
   };
 
   const handleStartDateChange = (date) => {
@@ -183,18 +191,18 @@ const PromotionList = () => {
   const applyFilters = (data, startDate = startDateFilter, endDate = endDateFilter) => {
     let filtered = data;
     if (startDate) {
-      filtered = filtered.filter(row => new Date(row.startDate) >= new Date(startDate));
+      filtered = filtered.filter((row) => new Date(row.startDate) >= new Date(startDate));
     }
     if (endDate) {
-      filtered = filtered.filter(row => new Date(row.endDate) <= new Date(endDate));
+      filtered = filtered.filter((row) => new Date(row.endDate) <= new Date(endDate));
     }
     setFilteredData(filtered);
   };
 
   const handleCloseErrorModal = () => {
     setErrorModalVisible(false);
-    setErrorMessage("");
-  }
+    setErrorMessage('');
+  };
 
   useEffect(() => {
     refreshData();
@@ -207,7 +215,7 @@ const PromotionList = () => {
   return (
     <CRow>
       <div className="d-flex justify-content-between mb-4" style={{ alignItems: 'center' }}>
-        <div style={{ width: "50%", display: 'flex', alignItems: 'center' }}>
+        <div style={{ width: '50%', display: 'flex', alignItems: 'center' }}>
           <label style={{ marginRight: '10px' }}>Start Date: </label>
           <DatePicker
             selected={startDateFilter}
@@ -216,7 +224,7 @@ const PromotionList = () => {
             className="form-control"
           />
         </div>
-        <div style={{ width: "50%", display: 'flex', alignItems: 'center' }}>
+        <div style={{ width: '50%', display: 'flex', alignItems: 'center' }}>
           <label style={{ marginRight: '10px' }}>End Date: </label>
           <DatePicker
             selected={endDateFilter}
@@ -233,7 +241,7 @@ const PromotionList = () => {
           </CCardHeader>
           <CCardBody>
             <div style={{ height: '65vh', overflow: 'auto' }}>
-              <CTable>
+              <CTable hover responsive bordered className="shadow-sm table-border-dark" style={{ border: '1px solid #adb5bd' }}>
                 <CTableHead>
                   <CTableRow>
                     <CTableHeaderCell scope="col">ID</CTableHeaderCell>
@@ -247,20 +255,20 @@ const PromotionList = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {filteredData.filter(row => row.status).map((row) => (
-                    <CTableRow key={row.id}>
-                      <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
-                      <CTableDataCell>{row.discount * 100}</CTableDataCell>
-                      <CTableDataCell>{row.name}</CTableDataCell>
-                      <CTableDataCell>{row.description}</CTableDataCell>
-                      <CTableDataCell>{row.startDate}</CTableDataCell>
-                      <CTableDataCell>{row.endDate}</CTableDataCell>
-                      <CTableDataCell>{formatPrice(row.minimumPrize)}</CTableDataCell>
-                      <CTableDataCell>{formatPrice(row.maximumPrize)}</CTableDataCell>
-                      <CTableDataCell>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
+                  {filteredData
+                    .filter((row) => row.status)
+                    .map((row) => (
+                      <CTableRow key={row.id}>
+                        <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
+                        <CTableDataCell>{row.discount * 100}</CTableDataCell>
+                        <CTableDataCell>{row.name}</CTableDataCell>
+                        <CTableDataCell>{row.description}</CTableDataCell>
+                        <CTableDataCell>{row.startDate}</CTableDataCell>
+                        <CTableDataCell>{row.endDate}</CTableDataCell>
+                        <CTableDataCell>{formatPrice(row.minimumPrize)}</CTableDataCell>
+                        <CTableDataCell>{formatPrice(row.maximumPrize)}</CTableDataCell>
+                      </CTableRow>
+                    ))}
                 </CTableBody>
               </CTable>
             </div>

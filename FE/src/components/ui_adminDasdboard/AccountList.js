@@ -23,72 +23,74 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
-} from '@coreui/react'
-import React, { useEffect, useState } from 'react'
-import '../../customStyles.css'
-import fetchData from '../../util/ApiConnection'
-import convertDateToJavaFormat from '../../util/DateConvert'
-import UserStorage from '../../util/UserStorage'
+} from '@coreui/react';
+import React, { useEffect, useState } from 'react';
+import '../../customStyles.css';
+import fetchData from '../../util/ApiConnection';
+import convertDateToJavaFormat from '../../util/DateConvert';
+import UserStorage from '../../util/UserStorage';
 import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
+import CIcon from '@coreui/icons-react';
+import { cilPen, cilDelete } from '@coreui/icons';
 
 const AccountList = () => {
-  const [data, setData] = useState([])
-  const [filteredData, setFilteredData] = useState([])
-  const [editingRow, setEditingRow] = useState(null)
-  const [formData, setFormData] = useState({})
-  const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser())
-  const [visible, setVisible] = useState(false)
-  const [deleteId, setDeleteId] = useState(null)
-  const [deletedUsername, setDeletedUsername] = useState(null)
-  const [errorMessage, setErrorMessage] = useState("")
-  const [errorModalVisible, setErrorModalVisible] = useState(false)
-  const [editModalVisible, setEditModalVisible] = useState(false)
-  const [confirmationModalVisible, setConfirmationModalVisible] = useState(false)
-  const [confirmationInfo, setConfirmationInfo] = useState({ username: "", password: "" })
-  const [successModalVisible, setSuccessModalVisible] = useState(false)
-  const [deleteSuccessModalVisible, setDeleteSuccessModalVisible] = useState(false)
-  const [isNew, setIsNew] = useState(false)
-  const [selectedRole, setSelectedRole] = useState("")
-  const [searchTerm, setSearchTerm] = useState("")
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [editingRow, setEditingRow] = useState(null);
+  const [formData, setFormData] = useState({});
+  const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
+  const [visible, setVisible] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [deletedUsername, setDeletedUsername] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [confirmationModalVisible, setConfirmationModalVisible] = useState(false);
+  const [confirmationInfo, setConfirmationInfo] = useState({ username: "", password: "" });
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [deleteSuccessModalVisible, setDeleteSuccessModalVisible] = useState(false);
+  const [isNew, setIsNew] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleEdit = (id) => {
-    setEditingRow(id)
-    setFormData(data.find((row) => row.id === id))
-    setErrorMessage("")
-    setEditModalVisible(true)
-    setIsNew(false)
-  }
+    setEditingRow(id);
+    setFormData(data.find((row) => row.id === id));
+    setErrorMessage("");
+    setEditModalVisible(true);
+    setIsNew(false);
+  };
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target
-    setFormData({ ...formData, [name]: value })
-  }
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSearchChange = (event) => {
-    const { value } = event.target
-    setSearchTerm(value)
-    let filtered = data
+    const { value } = event.target;
+    setSearchTerm(value);
+    let filtered = data;
     if (selectedRole !== "") {
-      filtered = filtered.filter(row => row.roleName.toUpperCase() === selectedRole.toUpperCase())
+      filtered = filtered.filter(row => row.roleName.toUpperCase() === selectedRole.toUpperCase());
     }
     if (value !== "") {
-      filtered = filtered.filter(row => row.fullName.toLowerCase().includes(value.toLowerCase()))
+      filtered = filtered.filter(row => row.fullName.toLowerCase().includes(value.toLowerCase()));
     }
-    setFilteredData(filtered)
-  }
+    setFilteredData(filtered);
+  };
 
   const handleRoleChange = (event) => {
-    const selectedRole = event.target.value
-    setSelectedRole(selectedRole)
-    let filtered = data
+    const selectedRole = event.target.value;
+    setSelectedRole(selectedRole);
+    let filtered = data;
     if (selectedRole !== "") {
-      filtered = filtered.filter(row => row.roleName.toUpperCase() === selectedRole.toUpperCase())
+      filtered = filtered.filter(row => row.roleName.toUpperCase() === selectedRole.toUpperCase());
     }
     if (searchTerm !== "") {
-      filtered = filtered.filter(row => row.fullName.toLowerCase().includes(searchTerm.toLowerCase()))
+      filtered = filtered.filter(row => row.fullName.toLowerCase().includes(searchTerm.toLowerCase()));
     }
-    setFilteredData(filtered)
-  }
+    setFilteredData(filtered);
+  };
 
   const handleSave = () => {
     const requiredFields = ['username', 'fullName', 'password', 'phone', 'email', 'address', 'birthday', 'roleName'];
@@ -108,26 +110,26 @@ const AccountList = () => {
       return;
     }
 
-    const duplicateUsername = data.some(row => row.username === formData.username && row.id !== editingRow)
-    const duplicatePhone = data.some(row => row.phone === formData.phone && row.id !== editingRow)
-    const duplicateEmail = data.some(row => row.email === formData.email && row.id !== editingRow)
+    const duplicateUsername = data.some(row => row.username === formData.username && row.id !== editingRow);
+    const duplicatePhone = data.some(row => row.phone === formData.phone && row.id !== editingRow);
+    const duplicateEmail = data.some(row => row.email === formData.email && row.id !== editingRow);
 
     if (duplicateUsername) {
-      setErrorMessage("Username already exists. Please use a unique username.")
-      setErrorModalVisible(true)
-      return
+      setErrorMessage("Username already exists. Please use a unique username.");
+      setErrorModalVisible(true);
+      return;
     }
 
     if (duplicatePhone) {
-      setErrorMessage("Phone number already exists. Please use a unique phone number.")
-      setErrorModalVisible(true)
-      return
+      setErrorMessage("Phone number already exists. Please use a unique phone number.");
+      setErrorModalVisible(true);
+      return;
     }
 
     if (duplicateEmail) {
-      setErrorMessage("Email already exists. Please use a unique email.")
-      setErrorModalVisible(true)
-      return
+      setErrorMessage("Email already exists. Please use a unique email.");
+      setErrorModalVisible(true);
+      return;
     }
 
     // Check if there are already 2 Admin accounts
@@ -146,10 +148,10 @@ const AccountList = () => {
     } else {
       newData = data.map((row) => {
         if (row.id === editingRow) {
-          return { ...row, ...formData }
+          return { ...row, ...formData };
         }
-        return row
-      })
+        return row;
+      });
     }
 
     const dataFromInput = newData.find(row => row.id === (isNew ? 0 : editingRow));
@@ -176,49 +178,34 @@ const AccountList = () => {
       roleId
     };
 
-    const updatedData = {
-      username: dataFromInput.username || "string",
-      fullName: dataFromInput.fullName || "string",
-      phone: dataFromInput.phone || "0374422448", // Using default phone if not provided
-      email: dataFromInput.email || "string",
-      address: dataFromInput.address || "string",
-      avatar: "", // Default value
-      birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z", // Default date
-      status: dataFromInput.status ? true : false,
-      roleId
-    }
+    const apiCall = editingRow
+      ? fetchData(`http://localhost:8080/api/v1/users/id/${editingRow}`, 'PUT', savedData, userInfo.accessToken)
+      : fetchData(`http://localhost:8080/api/v1/users`, 'POST', savedData, userInfo.accessToken);
 
-    fetchData(`http://localhost:8080/api/v1/users/id/${editingRow}`, 'GET', null, userInfo.accessToken)
-      .then((data) => {
-        if (data.status === "SUCCESS") {
-          fetchData(`http://localhost:8080/api/v1/users/id/${editingRow}`, 'PUT', updatedData, userInfo.accessToken)
+    apiCall
+      .then(response => {
+        if (response.status === 'SUCCESS') {
+          refreshData();
+          setEditingRow(null);
+          setEditModalVisible(false);
+          setIsNew(false);
+
+          if (isNew) {
+            setConfirmationInfo({ username: formData.username, password: formData.password });
+            setConfirmationModalVisible(true);
+          } else {
+            setSuccessModalVisible(true);
+          }
         } else {
-          fetchData(`http://localhost:8080/api/v1/users`, 'POST', savedData, userInfo.accessToken)
-            .then(() => refreshData())
+          throw new Error('Failed to save data');
         }
       })
-
-    setData(newData)
-    setEditingRow(null)
-    setEditModalVisible(false)
-    setIsNew(false)
-
-    let filtered = newData;
-    if (selectedRole !== "") {
-      filtered = filtered.filter(row => row.roleName.toUpperCase() === selectedRole.toUpperCase());
-    }
-    if (searchTerm !== "") {
-      filtered = filtered.filter(row => row.fullName.toLowerCase().includes(searchTerm.toLowerCase()));
-    }
-    setFilteredData(filtered);
-
-    if (isNew) {
-      setConfirmationInfo({ username: formData.username, password: formData.password });
-      setConfirmationModalVisible(true);
-    } else {
-      setSuccessModalVisible(true);
-    }
-  }
+      .catch((error) => {
+        console.error("Error saving data:", error);
+        setErrorMessage("Error saving data. Please try again.");
+        setErrorModalVisible(true);
+      });
+  };
 
   const handleAddNew = () => {
     setFormData({
@@ -232,50 +219,41 @@ const AccountList = () => {
       birthday: '',
       roleName: '',
       status: true,
-    })
-    setErrorMessage("")
-    setEditModalVisible(true)
-    setIsNew(true)
-  }
+    });
+    setErrorMessage("");
+    setEditModalVisible(true);
+    setIsNew(true);
+  };
 
   const handleDelete = (id) => {
-    setVisible(false)
+    setVisible(false);
     fetchData(`http://localhost:8080/api/v1/users/${deleteId}`, 'DELETE', null, userInfo.accessToken)
       .then(() => {
-        const updatedData = data.filter((row) => row.id !== id);
-        setData(updatedData);
-        let filtered = updatedData;
-        if (selectedRole !== "") {
-          filtered = filtered.filter(row => row.roleName.toUpperCase() === selectedRole.toUpperCase());
-        }
-        if (searchTerm !== "") {
-          filtered = filtered.filter(row => row.fullName.toLowerCase().includes(searchTerm.toLowerCase()));
-        }
-        setFilteredData(filtered);
+        refreshData();
         setDeleteId(null);
         setDeleteSuccessModalVisible(true);
       })
       .catch((error) => {
         console.error("Error deleting row:", error);
       });
-  }
+  };
 
   const handleCancelEdit = () => {
     setEditModalVisible(false);
     setFormData({});
-  }
+  };
 
   const refreshData = () => {
     fetchData("http://localhost:8080/api/v1/users", 'GET', null, userInfo.accessToken)
       .then(data => {
-        setData(data.payload)
-        setFilteredData(data.payload)
-      })
-  }
+        setData(data.payload);
+        setFilteredData(data.payload);
+      });
+  };
 
   useEffect(() => {
-    refreshData()
-  }, [])
+    refreshData();
+  }, []);
 
   return (
     <CRow>
@@ -288,6 +266,7 @@ const AccountList = () => {
               value={selectedRole}
               onChange={handleRoleChange}
               className="mb-3"
+              style={{ border: '1px solid #adb5bd' }}
             >
               <option value="">All</option>
               <option value="ADMIN">ADMIN</option>
@@ -302,19 +281,22 @@ const AccountList = () => {
               value={searchTerm}
               onChange={handleSearchChange}
               className="mb-3"
+              style={{ border: '1px solid #adb5bd' }}
             />
           </div>
-
         </div>
 
-        <CCard className="mb-4">
-          <CCardHeader>
+        <CCard className="mb-4 border-0 shadow-sm">
+          <CCardHeader className="bg-light text-dark d-flex justify-content-between align-items-center">
             <strong>Account List</strong>
+            <CButton color="primary" onClick={handleAddNew}>
+              + Add Account
+            </CButton>
           </CCardHeader>
           <CCardBody>
-            <div style={{ height: '65vh', overflow: 'auto' }}>
-              <CTable>
-                <CTableHead>
+            <div style={{ height: '80vh', overflowY: 'auto' }}>
+              <CTable hover responsive bordered className="shadow-sm table-border-dark" style={{ border: '1px solid #adb5bd' }}>
+                <CTableHead className="bg-light text-dark">
                   <CTableRow>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Id</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Username</CTableHeaderCell>
@@ -325,7 +307,7 @@ const AccountList = () => {
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Address</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Birthday</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Role</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "200px" }} scope="col">Action</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -340,29 +322,23 @@ const AccountList = () => {
                       <CTableDataCell>{row.address}</CTableDataCell>
                       <CTableDataCell>{row.birthday}</CTableDataCell>
                       <CTableDataCell>{row.roleName}</CTableDataCell>
-                      <CTableDataCell>
-                        <CDropdown className="position-relative">
-                          <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
-                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-500" />
-                          </CDropdownToggle>
-                          <CDropdownMenu>
-                            <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
-                            <CDropdownItem onClick={() => {
-                              setDeleteId(row.id)
-                              setVisible(true)
-                              setDeletedUsername(row.username)
-                            }}>Delete</CDropdownItem>
-                          </CDropdownMenu>
-                        </CDropdown>
+                      <CTableDataCell className="d-flex justify-content-around">
+                        <CButton color="info" size="sm" onClick={() => handleEdit(row.id)}>
+                          <CIcon icon={cilPen} />
+                        </CButton>
+                        <CButton color="danger" size="sm" onClick={() => {
+                          setDeleteId(row.id);
+                          setVisible(true);
+                          setDeletedUsername(row.username);
+                        }}>
+                          <CIcon icon={cilDelete} />
+                        </CButton>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
                 </CTableBody>
               </CTable>
             </div>
-            <CButton className='custom-btn custom-btn-success mt-2' color="success" onClick={handleAddNew}>
-              Create New Account
-            </CButton>
           </CCardBody>
         </CCard>
       </CCol>
@@ -373,7 +349,7 @@ const AccountList = () => {
         aria-labelledby="DeleteConfirmationModalLabel"
       >
         {deletedUsername !== userInfo.username ? <>
-          <CModalHeader>
+          <CModalHeader className="bg-danger text-white">
             <CModalTitle id="DeleteConfirmationModalLabel">Confirm Deletion</CModalTitle>
           </CModalHeader>
           <CModalBody>
@@ -388,7 +364,7 @@ const AccountList = () => {
             </CButton>
           </CModalFooter>
         </> : <>
-          <CModalHeader>
+          <CModalHeader className="bg-warning text-white">
             <CModalTitle id="DeleteConfirmationModalLabel">Delete Error</CModalTitle>
           </CModalHeader>
           <CModalBody>
@@ -407,8 +383,8 @@ const AccountList = () => {
         onClose={() => setErrorModalVisible(false)}
         aria-labelledby="ErrorModalLabel"
       >
-        <CModalHeader>
-          <CModalTitle id="ErrorModalLabel">Input information error</CModalTitle>
+        <CModalHeader className="bg-warning text-white">
+          <CModalTitle id="ErrorModalLabel">Input Information Error</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <p>{errorMessage}</p>
@@ -426,7 +402,7 @@ const AccountList = () => {
         aria-labelledby="EditModalLabel"
         size="lg"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-primary text-white">
           <CModalTitle id="EditModalLabel">{isNew ? "Add Account" : "Edit Account"}</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -437,6 +413,7 @@ const AccountList = () => {
             value={formData.username}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
           <CFormInput
             type="text"
@@ -445,15 +422,19 @@ const AccountList = () => {
             value={formData.fullName}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
-          {isNew ? <CFormInput
-            type="password"
-            name="password"
-            label="Password"
-            value={formData.password}
-            onChange={handleInputChange}
-            className="mb-3"
-          /> : ""}
+          {isNew && (
+            <CFormInput
+              type="password"
+              name="password"
+              label="Password"
+              value={formData.password}
+              onChange={handleInputChange}
+              className="mb-3"
+              style={{ border: '1px solid #adb5bd' }}
+            />
+          )}
           <CFormInput
             type="text"
             name="phone"
@@ -461,6 +442,7 @@ const AccountList = () => {
             value={formData.phone}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
           <CFormTextarea
             name="email"
@@ -468,6 +450,7 @@ const AccountList = () => {
             value={formData.email}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
           <CFormTextarea
             name="address"
@@ -475,6 +458,7 @@ const AccountList = () => {
             value={formData.address}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
           <CFormInput
             type="date"
@@ -483,6 +467,7 @@ const AccountList = () => {
             value={formData.birthday}
             onChange={handleInputChange}
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           />
           <CFormSelect
             name="roleName"
@@ -491,6 +476,7 @@ const AccountList = () => {
             onChange={handleInputChange}
             aria-label="Default select example"
             className="mb-3"
+            style={{ border: '1px solid #adb5bd' }}
           >
             <option value="">Select role</option>
             <option value="ADMIN">ADMIN</option>
@@ -513,7 +499,7 @@ const AccountList = () => {
         onClose={() => setConfirmationModalVisible(false)}
         aria-labelledby="ConfirmationModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-success text-white">
           <CModalTitle id="ConfirmationModalLabel">Account Information</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -533,7 +519,7 @@ const AccountList = () => {
         onClose={() => setSuccessModalVisible(false)}
         aria-labelledby="SuccessModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-success text-white">
           <CModalTitle id="SuccessModalLabel">Success</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -551,7 +537,7 @@ const AccountList = () => {
         onClose={() => setDeleteSuccessModalVisible(false)}
         aria-labelledby="DeleteSuccessModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-success text-white">
           <CModalTitle id="DeleteSuccessModalLabel">Delete Successful</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -564,6 +550,7 @@ const AccountList = () => {
         </CModalFooter>
       </CModal>
     </CRow>
-  )
-}
-export default AccountList
+  );
+};
+
+export default AccountList;

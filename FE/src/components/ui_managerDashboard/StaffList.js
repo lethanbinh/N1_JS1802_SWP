@@ -19,17 +19,13 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownItem
 } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import convertDateToJavaFormat from '../../util/DateConvert';
 import UserStorage from '../../util/UserStorage';
-import { cilHamburgerMenu } from '@coreui/icons';
+import { cilPen, cilDelete } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 
 const StaffList = () => {
@@ -115,6 +111,13 @@ const StaffList = () => {
     const duplicatePhone = data.some(row => row.phone === formData.phone && row.id !== editingRow);
     const duplicateEmail = data.some(row => row.email === formData.email && row.id !== editingRow);
     const duplicateStallId = formData.stallId !== null && data.some(row => row.stallId === formData.stallId && row.id !== editingRow);
+
+    const regexPassword = /^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,}$/
+    if (!regexPassword.test(formData.password)) {
+      setErrorMessage("Password must be at least 6 characters, 1 uppercase letter, 1 number, 1 special character");
+      setErrorModalVisible(true);
+      return;
+    }
 
     if (duplicateUsername) {
       setErrorMessage("Username already exists. Please use a unique username.");
@@ -254,39 +257,43 @@ const StaffList = () => {
   }, []);
 
   return (
-    <CRow>
+    <CRow className="m-0">
       <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>Staff List</strong>
+        <CCard className="mb-4 border-0 shadow-sm">
+          <CCardHeader className="bg-light text-dark d-flex justify-content-between align-items-center">
+            <strong>Staff Management</strong>
+            <CButton color="primary" onClick={handleAddNew}>
+              + Add New Staff
+            </CButton>
           </CCardHeader>
           <CCardBody>
             <CFormInput
               type="text"
-              placeholder="Search by full name"
+              placeholder="Search by full name..."
               value={searchTerm}
               onChange={handleSearchChange}
-              className="mb-3"
+              className="mb-4 shadow-sm"
+              style={{ border: '1px solid #adb5bd' }}
             />
-            <div style={{ height: '65vh', overflow: 'auto' }}>
-              <CTable>
-                <CTableHead>
+            <div style={{ height: '65vh', overflowY: 'auto' }}>
+              <CTable hover responsive bordered className="shadow-sm table-border-dark" style={{ border: '1px solid #adb5bd' }}>
+                <CTableHead className="bg-light text-dark">
                   <CTableRow>
-                    <CTableHeaderCell style={{ minWidth: '60px' }} scope="col">Id</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Username</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Full Name</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Phone</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '180px' }} scope="col">Email</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '200px' }} scope="col">Address</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Birthday</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Stall</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: '100px' }} scope="col">Actions</CTableHeaderCell>
+                    <CTableHeaderCell>ID</CTableHeaderCell>
+                    <CTableHeaderCell>Username</CTableHeaderCell>
+                    <CTableHeaderCell>Full Name</CTableHeaderCell>
+                    <CTableHeaderCell>Phone</CTableHeaderCell>
+                    <CTableHeaderCell>Email</CTableHeaderCell>
+                    <CTableHeaderCell>Address</CTableHeaderCell>
+                    <CTableHeaderCell>Birthday</CTableHeaderCell>
+                    <CTableHeaderCell>Stall</CTableHeaderCell>
+                    <CTableHeaderCell>Actions</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
                   {filteredData.filter(row => row.status && row.roleId === 2).map((row) => (
                     <CTableRow key={row.id}>
-                      <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
+                      <CTableDataCell>{row.id}</CTableDataCell>
                       <CTableDataCell>{row.username}</CTableDataCell>
                       <CTableDataCell>{row.fullName}</CTableDataCell>
                       <CTableDataCell>{row.phone}</CTableDataCell>
@@ -294,29 +301,23 @@ const StaffList = () => {
                       <CTableDataCell>{row.address}</CTableDataCell>
                       <CTableDataCell>{row.birthday}</CTableDataCell>
                       <CTableDataCell>{row.stallName}</CTableDataCell>
-                      <CTableDataCell>
-                        <CDropdown className="position-relative">
-                          <CDropdownToggle color="light" className="border-0 bg-transparent p-0 custom-dropdown-toggle">
-                            <CIcon icon={cilHamburgerMenu} size="xl" />
-                          </CDropdownToggle>
-                          <CDropdownMenu>
-                            <CDropdownItem onClick={() => handleEdit(row.id)}>Update</CDropdownItem>
-                            <CDropdownItem onClick={() => {
-                              setDeleteId(row.id);
-                              setVisible(true);
-                              setDeletedUsername(row.username);
-                            }}>Delete</CDropdownItem>
-                          </CDropdownMenu>
-                        </CDropdown>
+                      <CTableDataCell className="d-flex justify-content-around">
+                        <CButton color="info" size="sm" onClick={() => handleEdit(row.id)}>
+                          <CIcon icon={cilPen} />
+                        </CButton>
+                        <CButton color="danger" size="sm" onClick={() => {
+                          setDeleteId(row.id);
+                          setVisible(true);
+                          setDeletedUsername(row.username);
+                        }}>
+                          <CIcon icon={cilDelete} />
+                        </CButton>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
                 </CTableBody>
               </CTable>
             </div>
-            <CButton className='custom-btn custom-btn-success mt-1' color="success" onClick={handleAddNew}>
-              Add New Staff
-            </CButton>
           </CCardBody>
         </CCard>
       </CCol>
@@ -324,51 +325,39 @@ const StaffList = () => {
       <CModal
         visible={visible}
         onClose={() => setVisible(false)}
+        backdrop={true}
         aria-labelledby="DeleteConfirmationModalLabel"
       >
-        {deletedUsername !== userInfo.username ? <>
-          <CModalHeader>
-            <CModalTitle id="DeleteConfirmationModalLabel">Confirm Deletion</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-            <p>Are you sure you want to delete this account?</p>
-          </CModalBody>
-          <CModalFooter>
-            <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
-              Cancel
-            </CButton>
-            <CButton className='custom-btn custom-btn-danger' color="danger" onClick={e => handleDelete(deleteId)}>
-              Delete
-            </CButton>
-          </CModalFooter>
-        </> : <>
-          <CModalHeader>
-            <CModalTitle id="DeleteConfirmationModalLabel">Delete Error</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-            <p>You are signed in. Cannot delete</p>
-          </CModalBody>
-          <CModalFooter>
-            <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setVisible(false)}>
-              Cancel
-            </CButton>
-          </CModalFooter>
-        </>}
+        <CModalHeader className="bg-danger text-white">
+          <CModalTitle id="DeleteConfirmationModalLabel">Confirm Deletion</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Are you sure you want to delete the account of <strong>{deletedUsername}</strong>?</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setVisible(false)}>
+            Cancel
+          </CButton>
+          <CButton color="danger" onClick={e => handleDelete(deleteId)} style={{ color: "white" }}>
+            Delete
+          </CButton>
+        </CModalFooter>
       </CModal>
 
       <CModal
         visible={errorModalVisible}
         onClose={() => setErrorModalVisible(false)}
+        backdrop={true}
         aria-labelledby="ErrorModalLabel"
       >
-        <CModalHeader>
-          <CModalTitle id="ErrorModalLabel">Input information error</CModalTitle>
+        <CModalHeader className="bg-warning text-white">
+          <CModalTitle id="ErrorModalLabel">Error</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <p>{errorMessage}</p>
         </CModalBody>
         <CModalFooter>
-          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setErrorModalVisible(false)}>
+          <CButton color="secondary" onClick={() => setErrorModalVisible(false)}>
             Close
           </CButton>
         </CModalFooter>
@@ -377,88 +366,122 @@ const StaffList = () => {
       <CModal
         visible={editModalVisible}
         onClose={handleCancelEdit}
+        backdrop={true}
         aria-labelledby="EditModalLabel"
         size="lg"
       >
-        <CModalHeader>
-          <CModalTitle id="EditModalLabel">{isNew ? "Add Staff" : "Edit Staff"}</CModalTitle>
+        <CModalHeader className="bg-primary text-white">
+          <CModalTitle id="EditModalLabel">{isNew ? "Add New Staff" : "Edit Staff"}</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CFormInput
-            type="text"
-            name="username"
-            label="Username"
-            value={formData.username}
-            onChange={handleInputChange}
-            className="mb-3"
-          />
-          <CFormInput
-            type="text"
-            name="fullName"
-            label="Full Name"
-            value={formData.fullName}
-            onChange={handleInputChange}
-            className="mb-3"
-          />
+          <CRow>
+            <CCol md={6}>
+              <CFormInput
+                type="text"
+                name="username"
+                label="Username"
+                value={formData.username}
+                onChange={handleInputChange}
+                className="mb-3"
+                style={{ border: '1px solid #adb5bd' }}
+              />
+            </CCol>
+            <CCol md={6}>
+              <CFormInput
+                type="text"
+                name="fullName"
+                label="Full Name"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                className="mb-3"
+                style={{ border: '1px solid #adb5bd' }}
+              />
+            </CCol>
+          </CRow>
           {isNew && (
-            <CFormInput
-              type="password"
-              name="password"
-              label="Password"
-              value={formData.password}
-              onChange={handleInputChange}
-              className="mb-3"
-            />
+            <CRow>
+              <CCol md={6}>
+                <CFormInput
+                  type="password"
+                  name="password"
+                  label="Password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  className="mb-3"
+                  style={{ border: '1px solid #adb5bd' }}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="phone"
+                  label="Phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  className="mb-3"
+                  style={{ border: '1px solid #adb5bd' }}
+                />
+              </CCol>
+            </CRow>
           )}
-          <CFormInput
-            type="text"
-            name="phone"
-            label="Phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            className="mb-3"
-          />
-          <CFormTextarea
-            name="email"
-            label="Email"
-            value={formData.email}
-            onChange={handleInputChange}
-            className="mb-3"
-          />
-          <CFormTextarea
-            name="address"
-            label="Address"
-            value={formData.address}
-            onChange={handleInputChange}
-            className="mb-3"
-          />
-          <CFormInput
-            type="date"
-            name="birthday"
-            label="Birthday"
-            value={formData.birthday}
-            onChange={handleInputChange}
-            className="mb-3"
-          />
-          <CFormSelect
-            name="stallId"
-            label="Stall"
-            value={formData.stallId !== null ? formData.stallId : "null"}
-            onChange={handleInputChange}
-            className="mb-3"
-          >
-            <option value="">Select Stall</option>
-            <option value="null">N/A</option>
-            {stalls.map(stall => (
-              <option key={stall.id} value={stall.id}>{stall.name}</option>
-            ))}
-          </CFormSelect>
+          <CRow>
+            <CCol md={6}>
+              <CFormInput
+                type="email"
+                name="email"
+                label="Email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="mb-3"
+                style={{ border: '1px solid #adb5bd' }}
+              />
+            </CCol>
+            <CCol md={6}>
+              <CFormInput
+                type="text"
+                name="address"
+                label="Address"
+                value={formData.address}
+                onChange={handleInputChange}
+                className="mb-3"
+                style={{ border: '1px solid #adb5bd' }}
+              />
+            </CCol>
+          </CRow>
+          <CRow>
+            <CCol md={6}>
+              <CFormInput
+                type="date"
+                name="birthday"
+                label="Birthday"
+                value={formData.birthday}
+                onChange={handleInputChange}
+                className="mb-3"
+                style={{ border: '1px solid #adb5bd' }}
+              />
+            </CCol>
+            <CCol md={6}>
+              <CFormSelect
+                name="stallId"
+                label="Stall"
+                value={formData.stallId !== null ? formData.stallId : "null"}
+                onChange={handleInputChange}
+                className="mb-3"
+                style={{ border: '1px solid #adb5bd' }}
+              >
+                <option value="">No Stall</option>
+                {stalls.map(stall => (
+                  <option key={stall.id} value={stall.id}>{stall.name}</option>
+                ))}
+              </CFormSelect>
+            </CCol>
+          </CRow>
         </CModalBody>
         <CModalFooter>
-          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCancelEdit}>
+          <CButton color="secondary" onClick={handleCancelEdit}>
             Cancel
           </CButton>
-          <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
+          <CButton color="primary" onClick={handleSave}>
             Save
           </CButton>
         </CModalFooter>
@@ -467,9 +490,10 @@ const StaffList = () => {
       <CModal
         visible={confirmationModalVisible}
         onClose={() => setConfirmationModalVisible(false)}
+        backdrop={true}
         aria-labelledby="ConfirmationModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-success text-white">
           <CModalTitle id="ConfirmationModalLabel">Account Information</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -478,7 +502,7 @@ const StaffList = () => {
           <p><strong>Password:</strong> {confirmationInfo.password}</p>
         </CModalBody>
         <CModalFooter>
-          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setConfirmationModalVisible(false)}>
+          <CButton color="secondary" onClick={() => setConfirmationModalVisible(false)}>
             Close
           </CButton>
         </CModalFooter>
@@ -487,16 +511,17 @@ const StaffList = () => {
       <CModal
         visible={successModalVisible}
         onClose={() => setSuccessModalVisible(false)}
+        backdrop={true}
         aria-labelledby="SuccessModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-success text-white">
           <CModalTitle id="SuccessModalLabel">Success</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <p>Your changes have been saved successfully!</p>
         </CModalBody>
         <CModalFooter>
-          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setSuccessModalVisible(false)}>
+          <CButton color="secondary" onClick={() => setSuccessModalVisible(false)}>
             Close
           </CButton>
         </CModalFooter>
@@ -505,16 +530,17 @@ const StaffList = () => {
       <CModal
         visible={deleteSuccessModalVisible}
         onClose={() => setDeleteSuccessModalVisible(false)}
+        backdrop={true}
         aria-labelledby="DeleteSuccessModalLabel"
       >
-        <CModalHeader>
+        <CModalHeader className="bg-success text-white">
           <CModalTitle id="DeleteSuccessModalLabel">Delete Successful</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <p>The account has been deleted successfully!</p>
         </CModalBody>
         <CModalFooter>
-          <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={() => setDeleteSuccessModalVisible(false)}>
+          <CButton color="secondary" onClick={() => setDeleteSuccessModalVisible(false)}>
             Close
           </CButton>
         </CModalFooter>
