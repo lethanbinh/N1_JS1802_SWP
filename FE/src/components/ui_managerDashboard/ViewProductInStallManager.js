@@ -4,6 +4,10 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
   CFormSelect,
   CRow,
   CTable,
@@ -16,6 +20,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
+import CIcon from '@coreui/icons-react';
+import { cilBasket, cilCart, cilList, cilMenu } from '@coreui/icons';
 
 const StallProduct = () => {
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
@@ -115,27 +121,41 @@ const StallProduct = () => {
                 </CFormSelect>
               </CCol>
               <CCol md={8} className="d-flex justify-content-end">
-                <CButton
-                  className='custom-btn custom-btn-info me-2'
-                  color="info"
-                  onClick={searchAll}
-                >
-                  All Product
-                </CButton>
-                <CButton
-                  className='custom-btn custom-btn-warning me-2'
-                  color="warning"
-                  onClick={searchSell}
-                >
-                  Sell Product
-                </CButton>
-                <CButton
-                  className='custom-btn custom-btn-success'
-                  color="success"
-                  onClick={searchPurchase}
-                >
-                  Purchase Product
-                </CButton>
+                <CDropdown>
+                  <CDropdownToggle color="primary">
+                    <CIcon icon={cilMenu} className="me-2" />
+                    Product Type
+                  </CDropdownToggle>
+                  <CDropdownMenu>
+                    <CDropdownItem
+                      onClick={searchAll}
+                      style={{ cursor: 'pointer' }}
+                      onMouseEnter={(e) => { e.target.style.backgroundColor = '#4b49b6', e.target.style.color = "white" }}
+                      onMouseLeave={(e) => { e.target.style.backgroundColor = '', e.target.style.color = "black" }}
+                    >
+                      <CIcon icon={cilList} className="me-2" />
+                      All Product
+                    </CDropdownItem>
+                    <CDropdownItem
+                      onClick={searchSell}
+                      style={{ cursor: 'pointer' }}
+                      onMouseEnter={(e) => { e.target.style.backgroundColor = '#4b49b6', e.target.style.color = "white" }}
+                      onMouseLeave={(e) => { e.target.style.backgroundColor = '', e.target.style.color = "black" }}
+                    >
+                      <CIcon icon={cilCart} className="me-2" />
+                      Sell Product
+                    </CDropdownItem>
+                    <CDropdownItem
+                      onClick={searchPurchase}
+                      style={{ cursor: 'pointer' }}
+                      onMouseEnter={(e) => { e.target.style.backgroundColor = '#4b49b6', e.target.style.color = "white" }}
+                      onMouseLeave={(e) => { e.target.style.backgroundColor = '', e.target.style.color = "black" }}
+                    >
+                      <CIcon icon={cilBasket} className="me-2" />
+                      Purchase Product
+                    </CDropdownItem>
+                  </CDropdownMenu>
+                </CDropdown>
               </CCol>
             </CRow>
             {show ?
