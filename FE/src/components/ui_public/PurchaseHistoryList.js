@@ -161,16 +161,16 @@ const PurchaseHistoryList = () => {
                       <CTableDataCell>{row.totalBonusPoint.toLocaleString('en-US')}</CTableDataCell>
                       <CTableDataCell>{row.status}</CTableDataCell>
                       <CTableDataCell className="d-flex justify-content-around">
-                        <CButton color="info" size="sm" onClick={() => loadDetails(row.id)}>
+                        <CButton color="warning" size="sm" onClick={() => loadDetails(row.id)}>
                           <CIcon icon={cilViewColumn} />
                         </CButton>
                         {row.status.toUpperCase() !== 'CONFIRMED' && (
-                          <CButton color="danger" size="sm" onClick={() => {
+                          <CButton color="info" size="sm" onClick={() => {
                             setEditModalVisible(true);
                             setCurrentStatus(row.status);
                             setOrderId(row.id);
                           }}>
-                            <CIcon icon={cilTrash} />
+                            <CIcon icon={cilPen} />
                           </CButton>
                         )}
                       </CTableDataCell>

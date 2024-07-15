@@ -11,23 +11,19 @@ import {
     CModalFooter,
     CModalHeader,
     CModalTitle,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow,
-    CProgress,
-    CWidgetStatsA
+    CWidgetStatsA,
+    CWidgetStatsB,
+    CWidgetStatsC,
+    CProgress
 } from "@coreui/react";
-import { CChartBar, CChartPie } from "@coreui/react-chartjs";
+import { CChartBar, CChartPie, CChartLine } from "@coreui/react-chartjs";
 import fetchData from "../../util/ApiConnection";
 import UserStorage from "../../util/UserStorage";
 import { getCurrentDateFormatted } from "../../util/DateConvert";
-import "../../customStyles.css";
 import CIcon from "@coreui/icons-react";
-import { cilWarning } from "@coreui/icons";
+import { cilWarning, cilPeople, cilCart } from "@coreui/icons";
 import { format } from 'date-fns';
+import "../../customStyles.css";
 
 const StaffDashboard = () => {
     const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
@@ -57,10 +53,8 @@ const StaffDashboard = () => {
                     .then(data => {
                         setConfirmed(data)
                         if (data) {
-                            console.log(data)
                             fetchData(`http://localhost:8080/api/v1/staff-dashboard/staff-dashboard-checked?stallId=${user.payload.stallId}&date=${getCurrentDateFormatted()}`, 'GET', null, userInfo.accessToken)
                                 .then(checkData => {
-                                    console.log(checkData)
                                     if (!isEmptyObject(checkData)) {
                                         setData(checkData)
                                     }
@@ -116,7 +110,39 @@ const StaffDashboard = () => {
                         <CCardHeader>Staff Dashboard - {format(data.date, 'dd-MM-yyyy')}</CCardHeader>
                         <CCardBody>
                             <CRow className="mb-4">
-                                <CCol sm="12" className="chart-container">
+                                <CCol sm="4">
+                                    <CWidgetStatsA
+                                        className="mb-4"
+                                        color="info"
+                                        value={data.totalCustomersTransacted}
+                                        title="Total Customers Transacted"
+                                        action={<CIcon icon={cilPeople} height={36} />}
+                                        style={{paddingBottom: "20px"}}
+                                    />
+                                </CCol>
+                                <CCol sm="4">
+                                    <CWidgetStatsA
+                                        className="mb-4"
+                                        color="success"
+                                        value={data.totalInvoicesCreated}
+                                        title="Total Invoices Created"
+                                        action={<CIcon icon={cilCart} height={36} />}
+                                        style={{paddingBottom: "20px"}}
+                                    />
+                                </CCol>
+                                <CCol sm="4">
+                                    <CWidgetStatsA
+                                        className="mb-4"
+                                        color="danger"
+                                        value={data.totalBonusPointsAdded}
+                                        title="Total Bonus Points Added"
+                                        action={<CIcon icon={cilWarning} height={36} />}
+                                        style={{paddingBottom: "20px"}}
+                                    />
+                                </CCol>
+                            </CRow>
+                            <CRow className="mb-4">
+                                <CCol sm="6">
                                     <CChartBar
                                         data={{
                                             labels: ["Purchase", "Sales", "Return"],
@@ -138,14 +164,10 @@ const StaffDashboard = () => {
                                         }}
                                     />
                                 </CCol>
-                                <CCol sm="12" className="chart-container">
+                                <CCol sm="6">
                                     <CChartPie
                                         data={{
-                                            labels: [
-                                                "Purchase Quantity",
-                                                "Sales Quantity",
-                                                "Return Quantity",
-                                            ],
+                                            labels: ["Purchase Quantity", "Sales Quantity", "Return Quantity"],
                                             datasets: [
                                                 {
                                                     data: [
@@ -161,24 +183,6 @@ const StaffDashboard = () => {
                                             responsive: true,
                                             maintainAspectRatio: false,
                                         }}
-                                    />
-                                </CCol>
-                            </CRow>
-                            <CRow className="mb-4">
-                                <CCol sm="6">
-                                    <CWidgetStatsA
-                                        className="mb-4"
-                                        color="info"
-                                        value={data.totalCustomersTransacted}
-                                        title="Total Customers Transacted"
-                                    />
-                                </CCol>
-                                <CCol sm="6">
-                                    <CWidgetStatsA
-                                        className="mb-4"
-                                        color="success"
-                                        value={data.totalInvoicesCreated}
-                                        title="Total Invoices Created"
                                     />
                                 </CCol>
                             </CRow>
@@ -222,44 +226,48 @@ const StaffDashboard = () => {
                                     </CCard>
                                 </CCol>
                             </CRow>
-                            <CTable hover>
-                                <CTableHead>
-                                    <CTableRow>
-                                        <CTableHeaderCell>Metric</CTableHeaderCell>
-                                        <CTableHeaderCell>Value</CTableHeaderCell>
-                                    </CTableRow>
-                                </CTableHead>
-                                <CTableBody>
-                                    <CTableRow>
-                                        <CTableDataCell>Total Products In Stock End of Day</CTableDataCell>
-                                        <CTableDataCell>{data.totalProductsInStockEndOfDay}</CTableDataCell>
-                                    </CTableRow>
-                                    <CTableRow>
-                                        <CTableDataCell>Total Returned Products</CTableDataCell>
-                                        <CTableDataCell>{data.totalReturnedProducts}</CTableDataCell>
-                                    </CTableRow>
-                                    <CTableRow>
-                                        <CTableDataCell>Best Selling Product</CTableDataCell>
-                                        <CTableDataCell>{data.bestSellingProduct}</CTableDataCell>
-                                    </CTableRow>
-                                    <CTableRow>
-                                        <CTableDataCell>Best Selling Product Quantity</CTableDataCell>
-                                        <CTableDataCell>{data.bestSellingProductQuantity}</CTableDataCell>
-                                    </CTableRow>
-                                    <CTableRow>
-                                        <CTableDataCell>Most Stocked Product</CTableDataCell>
-                                        <CTableDataCell>{data.mostStockedProduct}</CTableDataCell>
-                                    </CTableRow>
-                                    <CTableRow>
-                                        <CTableDataCell>Most Stocked Product Quantity</CTableDataCell>
-                                        <CTableDataCell>{data.mostStockedProductQuantity}</CTableDataCell>
-                                    </CTableRow>
-                                    <CTableRow>
-                                        <CTableDataCell>Total Discount Amount</CTableDataCell>
-                                        <CTableDataCell>{data.totalDiscountAmount}</CTableDataCell>
-                                    </CTableRow>
-                                </CTableBody>
-                            </CTable>
+                            <CRow className="mb-4">
+                                <CCol sm="12">
+                                    <CCard className="mb-4">
+                                        <CCardBody>
+                                            <CRow>
+                                                <CCol sm="4">
+                                                    <div>Total Products In Stock End of Day</div>
+                                                    <strong>{data.totalProductsInStockEndOfDay}</strong>
+                                                </CCol>
+                                                <CCol sm="4">
+                                                    <div>Total Returned Products</div>
+                                                    <strong>{data.totalReturnedProducts}</strong>
+                                                </CCol>
+                                                <CCol sm="4">
+                                                    <div>Best Selling Product</div>
+                                                    <strong>{data.bestSellingProduct}</strong>
+                                                </CCol>
+                                            </CRow>
+                                            <CRow className="mt-3">
+                                                <CCol sm="4">
+                                                    <div>Best Selling Product Quantity</div>
+                                                    <strong>{data.bestSellingProductQuantity}</strong>
+                                                </CCol>
+                                                <CCol sm="4">
+                                                    <div>Most Stocked Product</div>
+                                                    <strong>{data.mostStockedProduct}</strong>
+                                                </CCol>
+                                                <CCol sm="4">
+                                                    <div>Most Stocked Product Quantity</div>
+                                                    <strong>{data.mostStockedProductQuantity}</strong>
+                                                </CCol>
+                                            </CRow>
+                                            <CRow className="mt-3">
+                                                <CCol sm="4">
+                                                    <div>Total Discount Amount</div>
+                                                    <strong>{data.totalDiscountAmount}</strong>
+                                                </CCol>
+                                            </CRow>
+                                        </CCardBody>
+                                    </CCard>
+                                </CCol>
+                            </CRow>
                             {!confirmed && <CButton color="primary" onClick={handleOpen}>
                                 Confirm
                             </CButton>}
@@ -302,12 +310,12 @@ export default StaffDashboard;
 
 const styles = `
 .chart-container {
-  width: 50%;
+  width: 100%;
   height: 300px;
 }
 .chart-container canvas {
-  width: 50%;
-  height: 300px;
+  width: 100% !important;
+  height: 300px !important;
 }
 `;
 const styleSheet = document.createElement("style");

@@ -9,6 +9,8 @@ import {
     CInputGroup,
     CInputGroupText,
     CWidgetStatsA,
+    CWidgetStatsB,
+    CWidgetStatsC,
     CTable,
     CTableHead,
     CTableRow,
@@ -16,9 +18,12 @@ import {
     CTableBody,
     CTableDataCell,
     CProgress,
-    CWidgetStatsB
+    CBadge,
+    CWidgetStatsE,
+    CTooltip,
+    CCardGroup
 } from "@coreui/react";
-import { CChartBar, CChartPie, CChartLine, CChartDoughnut } from "@coreui/react-chartjs";
+import { CChartLine, CChartDoughnut, CChartBar, CChartRadar } from "@coreui/react-chartjs";
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 import '../../customStyles.css';
@@ -87,7 +92,7 @@ const ManagerDashboard = () => {
     const aggregatedStallData = aggregateData(dataStall);
 
     return (
-        <div>
+        <div className="dashboard-container">
             <CRow className="mb-4">
                 <CCol sm="6">
                     <CInputGroup>
@@ -114,33 +119,33 @@ const ManagerDashboard = () => {
             </CRow>
             <CRow>
                 <CCol sm="6">
-                    <CCard>
+                    <CCard className="modern-card">
                         <CCardHeader>
-                            Staff Dashboard
-                            <CFormSelect
-                                aria-label="Select Staff"
-                                onChange={(e) => setStaffId(e.target.value)}
-                            >
-                                {staff.map(s => (
-                                    <option key={s.id} value={s.id}>{s.fullName}</option>
-                                ))}
-                            </CFormSelect>
+                            <div className="card-header-content">
+                                <span>Staff Dashboard</span>
+                                <CFormSelect
+                                    aria-label="Select Staff"
+                                    onChange={(e) => setStaffId(e.target.value)}
+                                    className="select-input"
+                                >
+                                    {staff.map(s => (
+                                        <option key={s.id} value={s.id}>{s.fullName}</option>
+                                    ))}
+                                </CFormSelect>
+                            </div>
                         </CCardHeader>
                         <CCardBody>
                             {dataStaff.length > 0 ? (
                                 <div>
                                     <CRow className="mb-4">
                                         <CCol sm="12" className="chart-container">
-                                            <CChartLine
+                                            <CChartBar
                                                 data={{
                                                     labels: ["Purchase", "Sales", "Return"],
                                                     datasets: [
                                                         {
                                                             label: "Revenue",
-                                                            backgroundColor: "rgba(75,192,192,0.4)",
-                                                            borderColor: "rgba(75,192,192,1)",
-                                                            pointBackgroundColor: "rgba(75,192,192,1)",
-                                                            pointBorderColor: "#fff",
+                                                            backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
                                                             data: [
                                                                 aggregatedStaffData.purchaseInvoiceRevenue,
                                                                 aggregatedStaffData.salesInvoiceRevenue,
@@ -155,8 +160,10 @@ const ManagerDashboard = () => {
                                                 }}
                                             />
                                         </CCol>
+                                    </CRow>
+                                    <CRow className="mb-4">
                                         <CCol sm="12" className="chart-container">
-                                            <CChartDoughnut
+                                            <CChartRadar
                                                 data={{
                                                     labels: [
                                                         "Purchase Quantity",
@@ -165,12 +172,16 @@ const ManagerDashboard = () => {
                                                     ],
                                                     datasets: [
                                                         {
+                                                            label: "Product Quantities",
+                                                            backgroundColor: "rgba(75,192,192,0.2)",
+                                                            borderColor: "rgba(75,192,192,1)",
+                                                            pointBackgroundColor: "rgba(75,192,192,1)",
+                                                            pointBorderColor: "#fff",
                                                             data: [
                                                                 aggregatedStaffData.purchaseInvoiceProductQuantity,
                                                                 aggregatedStaffData.salesInvoiceProductQuantity,
                                                                 aggregatedStaffData.returnInvoiceProductQuantity,
                                                             ],
-                                                            backgroundColor: ["#ff6384", "#36a2eb", "#ffcd56"],
                                                         },
                                                     ],
                                                 }}
@@ -181,44 +192,52 @@ const ManagerDashboard = () => {
                                             />
                                         </CCol>
                                     </CRow>
-                                    <CRow className="mb-4">
-                                        <CCol sm="6">
-                                            <CWidgetStatsA
-                                                className="mb-4"
-                                                color="info"
-                                                value={aggregatedStaffData.totalCustomersTransacted?.toString() || '0'}
-                                                title="Total Customers Transacted"
-                                            />
-                                        </CCol>
-                                        <CCol sm="6">
-                                            <CWidgetStatsA
-                                                className="mb-4"
-                                                color="success"
-                                                value={aggregatedStaffData.totalInvoicesCreated?.toString() || '0'}
-                                                title="Total Invoices Created"
-                                            />
-                                        </CCol>
-                                    </CRow>
-                                    <CRow className="mb-4">
-                                        <CCol sm="6">
-                                            <CWidgetStatsB
-                                                className="mb-4"
-                                                color="gradient-info"
-                                                inverse
-                                                value={aggregatedStaffData.totalBonusPointsAdded?.toString() || '0'}
-                                                title="Total Bonus Points Added"
-                                            />
-                                        </CCol>
-                                        <CCol sm="6">
-                                            <CWidgetStatsB
-                                                className="mb-4"
-                                                color="gradient-warning"
-                                                inverse
-                                                value={aggregatedStaffData.totalProductsInStockEndOfDay?.toString() || '0'}
-                                                title="Products In Stock End of Day"
-                                            />
-                                        </CCol>
-                                    </CRow>
+                                    <CCardGroup className="mb-4">
+                                        <CWidgetStatsA
+                                            color="primary"
+                                            value={aggregatedStaffData.totalCustomersTransacted?.toString() || '0'}
+                                            title="Total Customers"
+                                            action={
+                                                <CTooltip content="Number of unique customers who made transactions">
+                                                    <CBadge color="info" shape="pill">Info</CBadge>
+                                                </CTooltip>
+                                            }
+                                        />
+                                        <CWidgetStatsA
+                                            color="success"
+                                            value={aggregatedStaffData.totalInvoicesCreated?.toString() || '0'}
+                                            title="Invoices Created"
+                                            action={
+                                                <CTooltip content="Total number of invoices created">
+                                                    <CBadge color="info" shape="pill">Info</CBadge>
+                                                </CTooltip>
+                                            }
+                                        />
+                                    </CCardGroup>
+                                    <CCardGroup className="mb-4">
+                                        <CWidgetStatsB
+                                            color="info"
+                                            inverse
+                                            value={aggregatedStaffData.totalBonusPointsAdded?.toString() || '0'}
+                                            title="Bonus Points"
+                                            action={
+                                                <CTooltip content="Total bonus points added">
+                                                    <CBadge color="info" shape="pill">Info</CBadge>
+                                                </CTooltip>
+                                            }
+                                        />
+                                        <CWidgetStatsB
+                                            color="warning"
+                                            inverse
+                                            value={aggregatedStaffData.totalProductsInStockEndOfDay?.toString() || '0'}
+                                            title="End of Day Stock"
+                                            action={
+                                                <CTooltip content="Total products in stock at the end of the day">
+                                                    <CBadge color="info" shape="pill">Info</CBadge>
+                                                </CTooltip>
+                                            }
+                                        />
+                                    </CCardGroup>
                                     <CRow className="mb-4">
                                         <CCol sm="12">
                                             <CProgress
@@ -274,33 +293,33 @@ const ManagerDashboard = () => {
                     </CCard>
                 </CCol>
                 <CCol sm="6">
-                    <CCard>
+                    <CCard className="modern-card">
                         <CCardHeader>
-                            Stall Dashboard
-                            <CFormSelect
-                                aria-label="Select Stall"
-                                onChange={(e) => setStallId(e.target.value)}
-                            >
-                                {stall.map(s => (
-                                    <option key={s.id} value={s.id}>{s.name}</option>
-                                ))}
-                            </CFormSelect>
+                            <div className="card-header-content">
+                                <span>Stall Dashboard</span>
+                                <CFormSelect
+                                    aria-label="Select Stall"
+                                    onChange={(e) => setStallId(e.target.value)}
+                                    className="select-input"
+                                >
+                                    {stall.map(s => (
+                                        <option key={s.id} value={s.id}>{s.name}</option>
+                                    ))}
+                                </CFormSelect>
+                            </div>
                         </CCardHeader>
                         <CCardBody>
                             {dataStall.length > 0 ? (
                                 <div>
                                     <CRow className="mb-4">
                                         <CCol sm="12" className="chart-container">
-                                            <CChartLine
+                                            <CChartBar
                                                 data={{
                                                     labels: ["Purchase", "Sales", "Return"],
                                                     datasets: [
                                                         {
                                                             label: "Revenue",
-                                                            backgroundColor: "rgba(75,192,192,0.4)",
-                                                            borderColor: "rgba(75,192,192,1)",
-                                                            pointBackgroundColor: "rgba(75,192,192,1)",
-                                                            pointBorderColor: "#fff",
+                                                            backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
                                                             data: [
                                                                 aggregatedStallData.purchaseInvoiceRevenue,
                                                                 aggregatedStallData.salesInvoiceRevenue,
@@ -315,8 +334,10 @@ const ManagerDashboard = () => {
                                                 }}
                                             />
                                         </CCol>
+                                    </CRow>
+                                    <CRow className="mb-4">
                                         <CCol sm="12" className="chart-container">
-                                            <CChartDoughnut
+                                            <CChartRadar
                                                 data={{
                                                     labels: [
                                                         "Purchase Quantity",
@@ -325,12 +346,16 @@ const ManagerDashboard = () => {
                                                     ],
                                                     datasets: [
                                                         {
+                                                            label: "Product Quantities",
+                                                            backgroundColor: "rgba(75,192,192,0.2)",
+                                                            borderColor: "rgba(75,192,192,1)",
+                                                            pointBackgroundColor: "rgba(75,192,192,1)",
+                                                            pointBorderColor: "#fff",
                                                             data: [
                                                                 aggregatedStallData.purchaseInvoiceProductQuantity,
                                                                 aggregatedStallData.salesInvoiceProductQuantity,
                                                                 aggregatedStallData.returnInvoiceProductQuantity,
                                                             ],
-                                                            backgroundColor: ["#ff6384", "#36a2eb", "#ffcd56"],
                                                         },
                                                     ],
                                                 }}
@@ -341,44 +366,52 @@ const ManagerDashboard = () => {
                                             />
                                         </CCol>
                                     </CRow>
-                                    <CRow className="mb-4">
-                                        <CCol sm="6">
-                                            <CWidgetStatsA
-                                                className="mb-4"
-                                                color="info"
-                                                value={aggregatedStallData.totalCustomersTransacted?.toString() || '0'}
-                                                title="Total Customers Transacted"
-                                            />
-                                        </CCol>
-                                        <CCol sm="6">
-                                            <CWidgetStatsA
-                                                className="mb-4"
-                                                color="success"
-                                                value={aggregatedStallData.totalInvoicesCreated?.toString() || '0'}
-                                                title="Total Invoices Created"
-                                            />
-                                        </CCol>
-                                    </CRow>
-                                    <CRow className="mb-4">
-                                        <CCol sm="6">
-                                            <CWidgetStatsB
-                                                className="mb-4"
-                                                color="gradient-info"
-                                                inverse
-                                                value={aggregatedStallData.totalBonusPointsAdded?.toString() || '0'}
-                                                title="Total Bonus Points Added"
-                                            />
-                                        </CCol>
-                                        <CCol sm="6">
-                                            <CWidgetStatsB
-                                                className="mb-4"
-                                                color="gradient-warning"
-                                                inverse
-                                                value={aggregatedStallData.totalProductsInStockEndOfDay?.toString() || '0'}
-                                                title="Products In Stock End of Day"
-                                            />
-                                        </CCol>
-                                    </CRow>
+                                    <CCardGroup className="mb-4">
+                                        <CWidgetStatsA
+                                            color="primary"
+                                            value={aggregatedStallData.totalCustomersTransacted?.toString() || '0'}
+                                            title="Total Customers"
+                                            action={
+                                                <CTooltip content="Number of unique customers who made transactions">
+                                                    <CBadge color="info" shape="pill">Info</CBadge>
+                                                </CTooltip>
+                                            }
+                                        />
+                                        <CWidgetStatsA
+                                            color="success"
+                                            value={aggregatedStallData.totalInvoicesCreated?.toString() || '0'}
+                                            title="Invoices Created"
+                                            action={
+                                                <CTooltip content="Total number of invoices created">
+                                                    <CBadge color="info" shape="pill">Info</CBadge>
+                                                </CTooltip>
+                                            }
+                                        />
+                                    </CCardGroup>
+                                    <CCardGroup className="mb-4">
+                                        <CWidgetStatsB
+                                            color="info"
+                                            inverse
+                                            value={aggregatedStallData.totalBonusPointsAdded?.toString() || '0'}
+                                            title="Bonus Points"
+                                            action={
+                                                <CTooltip content="Total bonus points added">
+                                                    <CBadge color="info" shape="pill">Info</CBadge>
+                                                </CTooltip>
+                                            }
+                                        />
+                                        <CWidgetStatsB
+                                            color="warning"
+                                            inverse
+                                            value={aggregatedStallData.totalProductsInStockEndOfDay?.toString() || '0'}
+                                            title="End of Day Stock"
+                                            action={
+                                                <CTooltip content="Total products in stock at the end of the day">
+                                                    <CBadge color="info" shape="pill">Info</CBadge>
+                                                </CTooltip>
+                                            }
+                                        />
+                                    </CCardGroup>
                                     <CRow className="mb-4">
                                         <CCol sm="12">
                                             <CProgress
@@ -441,6 +474,24 @@ const ManagerDashboard = () => {
 export default ManagerDashboard;
 
 const styles = `
+.dashboard-container {
+  background-color: #f0f2f5;
+  padding: 20px;
+}
+.modern-card {
+  border: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+.card-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.select-input {
+  margin-left: 10px;
+  width: 200px;
+}
 .chart-container {
   width: 100%;
   height: 300px;

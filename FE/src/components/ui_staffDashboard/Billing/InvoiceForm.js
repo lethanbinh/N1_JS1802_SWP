@@ -753,7 +753,7 @@ const InvoiceForm = () => {
           </CButton>
 
           <CButton
-            color="success"
+            color="primary"
             className="custom-btn custom-btn-success rounded px-4 py-2 shadow"
             onClick={() => setconfirmModalVisible(true)}
           >
@@ -821,7 +821,7 @@ const InvoiceForm = () => {
             Close
           </CButton>
           <CButton className='custom-btn custom-btn-success'
-            color="success" onClick={() => {
+            color="primary" onClick={() => {
               handleSaveOrder()
               setconfirmModalVisible(false)
             }}>
