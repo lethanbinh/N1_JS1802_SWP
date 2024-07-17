@@ -34,6 +34,11 @@ const JewelryGoldPrices = () => {
       }
     };
 
+    const script = document.createElement('script');
+    script.src = 'https://cls.giavangvietnam.com/js/widget.js?t=' + Date.now();
+    script.async = true;
+    document.body.appendChild(script);
+
     fetchData();
   }, []);
 
@@ -87,7 +92,7 @@ const JewelryGoldPrices = () => {
           </CCardHeader>
           <CCardBody className="d-flex flex-column p-0">
             <div style={{ flex: '1 1 auto', overflow: 'auto' }}>
-              <iframe frameBorder="0" width="100%" height="750px" src="https://webtygia.com/api/vang?bgheader=b53e3e&colorheader=ffffff&padding=7&fontsize=16&hienthi=&"></iframe>
+              <div id="gia-vang-viet-nam" show-chart="true" show-prices="sjc,pnj,doji,phuquy,btmc,mihong" show-xauusd="true" show-exchange="true"></div>
             </div>
           </CCardBody>
         </CCard>
