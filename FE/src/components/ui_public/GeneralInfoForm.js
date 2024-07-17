@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
-import moment from "moment-timezone";
 import "react-datepicker/dist/react-datepicker.css";
 import {
     CButton,
@@ -12,7 +10,7 @@ import {
     CRow,
 } from "@coreui/react";
 import UserStorage from "../../util/UserStorage";
-import convertDateToJavaFormat, { convertToJavaDateUtil } from "../../util/DateConvert";
+import convertDateToJavaFormat from "../../util/DateConvert";
 import fetchData from "../../util/ApiConnection";
 import '../../customStyles.css';
 
@@ -88,7 +86,7 @@ const GeneralInfoForm = () => {
             username: formData.username || "",
             address: formData.address || "",
             fullName: formData.fullName || "",
-            birthday: birthday || "",
+            birthday: convertDateToJavaFormat(formData.birthday) || "",
             email: formData.email || "",
             phone: formData.phone || "",
             avatar: formData.avatar || "",
@@ -100,8 +98,8 @@ const GeneralInfoForm = () => {
             email: updatedData.email || "string",
             address: updatedData.address || "string",
             avatar: updatedData.avatar || "",
-            fullName: updatedData.fullName,
-            birthday: convertToJavaDateUtil(updatedData.birthday) || "2024-06-16T08:48:44.695Z",
+            fullName: updatedData.fullName || "",
+            birthday: updatedData.birthday || "2024-06-16T08:48:44.695Z",
         };
 
         const today = new Date();
@@ -162,7 +160,7 @@ const GeneralInfoForm = () => {
                     savedData.avatar = getImageIdFromUrl(savedData.avatar)
                 }
             }
-            
+
             fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "PUT", savedData, userInfo.accessToken)
                 .then((data) => {
                     if (data.status === "SUCCESS") {
@@ -255,21 +253,13 @@ const GeneralInfoForm = () => {
                                         <label htmlFor="birthday" style={{ display: "block" }}>
                                             <strong>Birthday</strong>
                                         </label>
-                                        <DatePicker
-                                            selected={birthday}
-                                            onChange={date => {
-                                                setBirthday(date);
-                                                setFormData({ ...formData, birthday: date });
-                                            }}
-                                            dateFormat="dd-MM-yyyy"
-                                            className="form-control"
-                                            wrapperClassName="w-100"
-                                            style={{
-                                                width: '100%',
-                                                border: '1px solid #adb5bd',
-                                                padding: '0.375rem 0.75rem',
-                                                borderRadius: '0.25rem'
-                                            }}
+                                        <CFormInput
+                                            type="date"
+                                            name="birthday"
+                                            value={formData.birthday}
+                                            onChange={handleInputChange}
+                                            className="mb-3"
+                                            style={{ border: '1px solid #adb5bd' }}
                                         />
                                     </div>
                                 </CCol>

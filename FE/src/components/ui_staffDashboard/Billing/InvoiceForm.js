@@ -51,9 +51,7 @@ const InvoiceForm = () => {
   const [promotionValue, setPromotionValue] = useState('');
   const [promotionId, setPromotionId] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [staff, setStaff] = useState([]);
-  const [staffId, setStaffId] = useState(0);
-  const [staffName, setStaffName] = useState('')
+  const [staffName, setStaffName] = useState(userInfo.fullName)
   const [customerGiveMoney, setCustomerGiveMoney] = useState(0)
   const [description, setDescription] = useState('none')
   const [sendMoneyMethod, setSendMoneyMethod] = useState('CASH')
@@ -75,7 +73,6 @@ const InvoiceForm = () => {
   const taxRate = transactionType === 'SELL' ? (tax * subtotal) / 100 : 0;
   const discountRate = transactionType === 'SELL' ? (promotionValue ? promotionValue * 100 * subtotal : 0) / 100 : 0;
   const total = transactionType === 'SELL' ? subtotal - discountRate + taxRate - bonusPointExchange : subtotal;
-  const ExchangeTotal = transactionType === 'EXCHANGE AND RETURN' ? subtotal : 0;
   const handleBarcodeChange = (event) => {
     setBarcode(event.target.value);
   };
@@ -88,11 +85,11 @@ const InvoiceForm = () => {
   };
 
   const loadStaff = () => {
-    fetchData('http://localhost:8080/api/v1/users', 'GET', null, userInfo.accessToken)
+    fetchData(`http://localhost:8080/api/v1/users/id/${userInfo.id}`, 'GET', null, userInfo.accessToken)
       .then(data => {
-        setStaff(data.payload.filter(item => item.roleName.toUpperCase() === 'STAFF'));
+        setStaffName(data.payload.fullName);
       });
-  };
+  }
 
   const handleResetBarcode = () => {
     setBarcode('');
@@ -106,15 +103,10 @@ const InvoiceForm = () => {
 
   useEffect(() => {
     loadPromotion();
-    loadStaff();
+    loadStaff()
   }, []);
 
   const validate = () => {
-    if (staffId <= 0) {
-      setErrorMessage('Please choose cashier');
-      setErrorModalVisible(true);
-      return false;
-    }
 
     if (customerPhone.length < 1) {
       setErrorMessage('Please fill customer phone');
@@ -264,7 +256,7 @@ const InvoiceForm = () => {
           "refundMoney": `${customerGiveMoney >= total ? customerGiveMoney - total : 0}`,
           "sendMoneyMethod": sendMoneyMethod,
           "promotionId": promotionId,
-          "staffId": staffId,
+          "staffId": userInfo.id,
           "customerRequest": {
             "fullName": customerName,
             "phone": customerPhone,
@@ -368,23 +360,13 @@ const InvoiceForm = () => {
           <CRow className="mb-4">
             <CCol>
               <strong className="text-sm font-bold">Cashier:</strong>
-              <CFormSelect
+              <CFormInput
                 name="staff"
-                value={staffId}
-                onChange={(event) => {
-                  const selectedOption = event.target.options[event.target.selectedIndex];
-                  setStaffName(selectedOption.getAttribute("data-name"));
-                  setStaffId(event.target.value);
-                }}
+                value={staffName}
                 style={{ border: '1px solid #adb5bd' }}
+                disabled
               >
-                <option value="">Select Cashier</option>
-                {staff.map(user => (
-                  <option key={user.id} value={user.id} data-name={user.fullName}>
-                    {user.fullName}
-                  </option>
-                ))}
-              </CFormSelect>
+              </CFormInput>
             </CCol>
 
             <CCol>
@@ -494,7 +476,7 @@ const InvoiceForm = () => {
           <CRow className='mb-4'>
             <CCol>
               <form>
-                <strong className="text-sm font-bold">Barcode {transactionType === 'SELL' ? "" : ""}:</strong>
+                <strong className="text-sm font-bold">Barcode: </strong>
                 <CFormInput
                   id='barcode-input'
                   className="flex-1"

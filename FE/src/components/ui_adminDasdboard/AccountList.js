@@ -25,7 +25,6 @@ import '../../customStyles.css';
 import fetchData from '../../util/ApiConnection';
 import convertDateToJavaFormat from '../../util/DateConvert';
 import UserStorage from '../../util/UserStorage';
-import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 import CIcon from '@coreui/icons-react';
 import { cilPen, cilDelete } from '@coreui/icons';
 
@@ -49,7 +48,7 @@ const AccountList = () => {
   const [selectedRole, setSelectedRole] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
-  console.log(formData.roleName)
+  console.log(formData)
   const handleEdit = (id) => {
     setEditingRow(id);
     setFormData(data.find((row) => row.id === id));
@@ -143,14 +142,6 @@ const AccountList = () => {
       return;
     }
 
-    // Check if there are already 1 Admin accounts
-    const adminCount = data.filter(row => row.roleName.toUpperCase() === 'ADMIN').length;
-    if ((formData.roleName.toUpperCase() === 'ADMIN' && adminCount == 1) || (adminCount >= 2)) {
-      setErrorMessage("Only a maximum of 1 Admin accounts are allowed.");
-      setErrorModalVisible(true);
-      return;
-    }
-
     let newData;
     if (isNew) {
       const newId = 0;
@@ -176,17 +167,33 @@ const AccountList = () => {
       roleId = 3;
     }
 
+    function getImageIdFromUrl(url) {
+      const parts = url.split('/images/');
+      if (parts.length > 1) {
+        return parts[1];
+      } else {
+        return null;
+      }
+    }
+
+    let avatar = formData.avatar;
+    if (avatar) {
+      if (avatar.includes("http://localhost:8080/api/v1/images/")) {
+        avatar = getImageIdFromUrl(avatar)
+      }
+    }
     const savedData = {
       username: dataFromInput.username || "string",
       fullName: dataFromInput.fullName || "string",
       phone: dataFromInput.phone || "0374422448", // Using default phone if not provided
       email: dataFromInput.email || "string",
       address: dataFromInput.address || "string",
-      avatar: "", // Default value
+      avatar: avatar || "", // Default value
       password: dataFromInput.password,
       birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z", // Default date
       status: dataFromInput.status ? true : false,
-      roleId
+      roleId,
+      stallId: formData.stallId
     };
 
     const editData = {
@@ -196,9 +203,11 @@ const AccountList = () => {
       email: dataFromInput.email || "string",
       address: dataFromInput.address || "string",
       password: dataFromInput.password,
+      avatar: avatar || "",
       birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z", // Default date
       status: dataFromInput.status ? true : false,
-      roleId
+      roleId,
+      stallId: formData.stallId
     };
 
     const apiCall = editingRow
@@ -323,7 +332,6 @@ const AccountList = () => {
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Id</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Username</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Full Name</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Password</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Phone</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Email</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Address</CTableHeaderCell>
@@ -338,7 +346,6 @@ const AccountList = () => {
                       <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                       <CTableDataCell>{row.username}</CTableDataCell>
                       <CTableDataCell>{row.fullName}</CTableDataCell>
-                      <CTableDataCell>****</CTableDataCell>
                       <CTableDataCell>{row.phone}</CTableDataCell>
                       <CTableDataCell>{row.email}</CTableDataCell>
                       <CTableDataCell>{row.address}</CTableDataCell>
@@ -348,13 +355,13 @@ const AccountList = () => {
                         <CButton color="info" size="sm" onClick={() => handleEdit(row.id)}>
                           <CIcon icon={cilPen} />
                         </CButton>
-                        <CButton color="danger" size="sm" onClick={() => {
+                        {row.roleName.toUpperCase() !== "ADMIN" && <CButton color="danger" size="sm" onClick={() => {
                           setDeleteId(row.id);
                           setVisible(true);
                           setDeletedUsername(row.username);
                         }}>
                           <CIcon icon={cilDelete} />
-                        </CButton>
+                        </CButton>}
                       </CTableDataCell>
                     </CTableRow>
                   ))}
@@ -499,12 +506,19 @@ const AccountList = () => {
             aria-label="Default select example"
             className="mb-3"
             style={{ border: '1px solid #adb5bd' }}
+            disabled={formData.roleName && formData.roleName.toUpperCase() === "ADMIN"}
           >
             <option value="">Select role</option>
-            <option value="ADMIN">ADMIN</option>
+            <option
+              style={data.filter(row => row.roleName.toUpperCase() === 'ADMIN').length >= 1 ? { display: 'none' } : {}}
+              value="ADMIN"
+            >
+              ADMIN
+            </option>
             <option value="STAFF">STAFF</option>
             <option value="MANAGER">MANAGER</option>
           </CFormSelect>
+
         </CModalBody>
         <CModalFooter>
           <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCancelEdit}>

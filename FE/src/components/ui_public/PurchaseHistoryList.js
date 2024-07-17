@@ -242,7 +242,6 @@ const PurchaseHistoryList = () => {
           >
             <option value="PENDING">PENDING</option>
             <option value="CONFIRMED">CONFIRMED</option>
-            <option value="CANCELLED">CANCELLED</option>
           </CFormSelect>
         </CModalBody>
         <CModalFooter>

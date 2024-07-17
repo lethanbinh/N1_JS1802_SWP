@@ -110,7 +110,11 @@ const StaffList = () => {
     const duplicateUsername = data.some(row => row.username === formData.username && row.id !== editingRow);
     const duplicatePhone = data.some(row => row.phone === formData.phone && row.id !== editingRow);
     const duplicateEmail = data.some(row => row.email === formData.email && row.id !== editingRow);
-    const duplicateStallId = formData.stallId !== null && data.some(row => row.stallId === formData.stallId && row.id !== editingRow);
+    const duplicateStallId = formData.stallId !== 0 && formData.stallId !== "" && formData.stallId !== null 
+    && data.some(row => {
+      console.log(row.stallId, formData.stallId)
+      return row.stallId == formData.stallId && row.id !== editingRow;
+    });
 
     const regexPassword = /^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,}$/
     if (!regexPassword.test(formData.password)) {
@@ -167,13 +171,29 @@ const StaffList = () => {
 
     const dataFromInput = newData.find(row => row.id === (isNew ? newId : editingRow));
 
+    function getImageIdFromUrl(url) {
+      const parts = url.split('/images/');
+      if (parts.length > 1) {
+        return parts[1];
+      } else {
+        return null;
+      }
+    }
+
+    let avatar = formData.avatar;
+    if (avatar) {
+      if (avatar.includes("http://localhost:8080/api/v1/images/")) {
+        avatar = getImageIdFromUrl(avatar)
+      }
+    }
+
     const savedData = {
       username: dataFromInput.username || "string",
       fullName: dataFromInput.fullName || "string",
       phone: dataFromInput.phone || "0374422448",
       email: dataFromInput.email || "string",
       address: dataFromInput.address || "string",
-      avatar: "",
+      avatar: avatar || "",
       password: dataFromInput.password,
       birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z",
       status: dataFromInput.status ? true : false,

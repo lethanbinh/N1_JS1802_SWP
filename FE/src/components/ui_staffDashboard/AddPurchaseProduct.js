@@ -273,7 +273,7 @@ const AddProduct = () => {
                     <CFormInput
                       type="number"
                       name="weight"
-                      label="Weight"
+                      label="Weight (g)"
                       value={product.weight}
                       onChange={handleChange}
                       style={{ border: '1px solid #adb5bd' }}
@@ -375,7 +375,7 @@ const AddProduct = () => {
                 <p><strong>Purchase Price:</strong> {addedProduct.purchasePrice}VND</p>
                 <p><strong>Sell Price:</strong> {addedProduct.sellPrice}VND</p>
                 <p><strong>Quantity:</strong> {addedProduct.quantity}</p>
-                <p><strong>Weight:</strong> {addedProduct.weight}</p>
+                <p><strong>Weight (g):</strong> {addedProduct.weight}</p>
                 <p><strong>Size:</strong> {addedProduct.size}</p>
                 <p><strong>Stall Name:</strong> {addedProduct.stallName}</p>
                 <p><strong>Stall Location:</strong> {addedProduct.stallLocation}</p>
