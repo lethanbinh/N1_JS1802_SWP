@@ -12,8 +12,6 @@ import {
     CModalHeader,
     CModalTitle,
     CWidgetStatsA,
-    CWidgetStatsB,
-    CWidgetStatsC,
     CProgress
 } from "@coreui/react";
 import { CChartBar, CChartPie, CChartLine } from "@coreui/react-chartjs";

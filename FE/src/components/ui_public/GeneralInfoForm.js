@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
+import DatePicker from "react-datepicker";
 import moment from "moment-timezone";
-import Datetime from "react-datetime";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import "react-datepicker/dist/react-datepicker.css";
 import {
     CButton,
     CCard,
@@ -10,14 +9,12 @@ import {
     CCardHeader,
     CCol,
     CFormInput,
-    CInputGroup,
-    CInputGroupText,
     CRow,
 } from "@coreui/react";
 import UserStorage from "../../util/UserStorage";
-import convertDateToJavaFormat from "../../util/DateConvert";
+import convertDateToJavaFormat, { convertToJavaDateUtil } from "../../util/DateConvert";
 import fetchData from "../../util/ApiConnection";
-import '../../customStyles.css'
+import '../../customStyles.css';
 
 const GeneralInfoForm = () => {
     const [birthday, setBirthday] = useState("");
@@ -47,7 +44,16 @@ const GeneralInfoForm = () => {
             });
 
         loadListUser();
-    }, [userInfo]);
+    }, []);
+
+    function getImageIdFromUrl(url) {
+        const parts = url.split('/images/');
+        if (parts.length > 1) {
+            return parts[1];
+        } else {
+            return null;
+        }
+    }
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -82,10 +88,10 @@ const GeneralInfoForm = () => {
             username: formData.username || "",
             address: formData.address || "",
             fullName: formData.fullName || "",
-            birthday: formData.birthday || "",
+            birthday: birthday || "",
             email: formData.email || "",
             phone: formData.phone || "",
-            avatar: formData.avatar || null,
+            avatar: formData.avatar || "",
         };
 
         const savedData = {
@@ -93,10 +99,17 @@ const GeneralInfoForm = () => {
             phone: updatedData.phone || "0374422448",
             email: updatedData.email || "string",
             address: updatedData.address || "string",
-            avatar: updatedData.avatar || " ",
+            avatar: updatedData.avatar || "",
             fullName: updatedData.fullName,
-            birthday: convertDateToJavaFormat(updatedData.birthday) || "2024-06-16T08:48:44.695Z",
+            birthday: convertToJavaDateUtil(updatedData.birthday) || "2024-06-16T08:48:44.695Z",
         };
+
+        const today = new Date();
+        if (new Date(updatedData.birthday) > today) {
+            setError("Birthday cannot be in the future");
+            setMessage("");
+            return;
+        }
 
         const duplicatePhone = listUser.some(row => row.phone === formData.phone && row.id !== data.id);
         const duplicateEmail = listUser.some(row => row.email === formData.email && row.id !== data.id);
@@ -144,6 +157,12 @@ const GeneralInfoForm = () => {
                 })
                 .catch(error => console.log(error));
         } else {
+            if (savedData.avatar) {
+                if (savedData.avatar.includes("http://localhost:8080/api/v1/images/")) {
+                    savedData.avatar = getImageIdFromUrl(savedData.avatar)
+                }
+            }
+            
             fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "PUT", savedData, userInfo.accessToken)
                 .then((data) => {
                     if (data.status === "SUCCESS") {
@@ -216,7 +235,7 @@ const GeneralInfoForm = () => {
                             <CRow>
                                 <CCol md={6} className="mb-3">
                                     <div className="form-group">
-                                        <label htmlFor="firstName">
+                                        <label htmlFor="fullName">
                                             <strong>Full Name</strong>
                                         </label>
                                         <CFormInput
@@ -233,28 +252,24 @@ const GeneralInfoForm = () => {
                                 </CCol>
                                 <CCol md={6} className="mb-3">
                                     <div className="form-group">
-                                        <label htmlFor="birthday">
+                                        <label htmlFor="birthday" style={{ display: "block" }}>
                                             <strong>Birthday</strong>
                                         </label>
-                                        <Datetime
-                                            timeFormat={false}
-                                            onChange={(date) => setBirthday(date)}
-                                            renderInput={(props, openCalendar) => (
-                                                <CInputGroup>
-                                                    <CInputGroupText>
-                                                        <FontAwesomeIcon icon={faCalendarAlt} />
-                                                    </CInputGroupText>
-                                                    <CFormInput
-                                                        required
-                                                        type="text"
-                                                        value={birthday ? moment(birthday).format("MM/DD/YYYY") : ""}
-                                                        placeholder="mm/dd/yyyy"
-                                                        onFocus={openCalendar}
-                                                        onChange={() => { }}
-                                                        style={{ border: '1px solid #adb5bd' }}
-                                                    />
-                                                </CInputGroup>
-                                            )}
+                                        <DatePicker
+                                            selected={birthday}
+                                            onChange={date => {
+                                                setBirthday(date);
+                                                setFormData({ ...formData, birthday: date });
+                                            }}
+                                            dateFormat="dd-MM-yyyy"
+                                            className="form-control"
+                                            wrapperClassName="w-100"
+                                            style={{
+                                                width: '100%',
+                                                border: '1px solid #adb5bd',
+                                                padding: '0.375rem 0.75rem',
+                                                borderRadius: '0.25rem'
+                                            }}
                                         />
                                     </div>
                                 </CCol>
@@ -298,7 +313,7 @@ const GeneralInfoForm = () => {
                                 </CCol>
                             </CRow>
                             <div className="mt-3">
-                                <CButton className=" custom-btn custom-btn-primary" color="primary" type="submit" >
+                                <CButton className="custom-btn custom-btn-primary" color="primary" type="submit">
                                     Save All
                                 </CButton>
 

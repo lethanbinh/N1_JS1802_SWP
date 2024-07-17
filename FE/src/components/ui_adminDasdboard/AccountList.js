@@ -16,10 +16,6 @@ import {
   CTable,
   CTableBody,
   CTableDataCell,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownItem,
   CTableHead,
   CTableHeaderCell,
   CTableRow,
@@ -53,6 +49,7 @@ const AccountList = () => {
   const [selectedRole, setSelectedRole] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
+  console.log(formData.roleName)
   const handleEdit = (id) => {
     setEditingRow(id);
     setFormData(data.find((row) => row.id === id));
@@ -102,6 +99,20 @@ const AccountList = () => {
       return;
     }
 
+    const regexPassword = /^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,}$/
+    if (!regexPassword.test(formData.password)) {
+      setErrorMessage("Password must be at least 6 characters, 1 uppercase letter, 1 number, 1 special character");
+      setErrorModalVisible(true);
+      return;
+    }
+
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regexEmail.test(formData.email)) {
+      setErrorMessage("Please input a valid email");
+      setErrorModalVisible(true);
+      return;
+    }
+
     const birthdayDate = new Date(formData.birthday);
     const todayDate = new Date();
     if (birthdayDate > todayDate) {
@@ -132,10 +143,10 @@ const AccountList = () => {
       return;
     }
 
-    // Check if there are already 2 Admin accounts
+    // Check if there are already 1 Admin accounts
     const adminCount = data.filter(row => row.roleName.toUpperCase() === 'ADMIN').length;
-    if (formData.roleName.toUpperCase() === 'ADMIN' && adminCount >= 2 && !isNew) {
-      setErrorMessage("Only a maximum of 2 Admin accounts are allowed.");
+    if ((formData.roleName.toUpperCase() === 'ADMIN' && adminCount == 1) || (adminCount >= 2)) {
+      setErrorMessage("Only a maximum of 1 Admin accounts are allowed.");
       setErrorModalVisible(true);
       return;
     }
@@ -178,8 +189,20 @@ const AccountList = () => {
       roleId
     };
 
+    const editData = {
+      username: dataFromInput.username || "string",
+      fullName: dataFromInput.fullName || "string",
+      phone: dataFromInput.phone || "0374422448", // Using default phone if not provided
+      email: dataFromInput.email || "string",
+      address: dataFromInput.address || "string",
+      password: dataFromInput.password,
+      birthday: convertDateToJavaFormat(dataFromInput.birthday) || "2024-06-16T08:48:44.695Z", // Default date
+      status: dataFromInput.status ? true : false,
+      roleId
+    };
+
     const apiCall = editingRow
-      ? fetchData(`http://localhost:8080/api/v1/users/id/${editingRow}`, 'PUT', savedData, userInfo.accessToken)
+      ? fetchData(`http://localhost:8080/api/v1/users/id/${editingRow}`, 'PUT', editData, userInfo.accessToken)
       : fetchData(`http://localhost:8080/api/v1/users`, 'POST', savedData, userInfo.accessToken);
 
     apiCall
@@ -262,7 +285,6 @@ const AccountList = () => {
           <div style={{ width: "50%", display: 'flex', alignItems: 'center', justifyContent: 'right', paddingRight: '10px' }}>
             <CFormSelect
               name="roleFilter"
-              label="Filter by Role"
               value={selectedRole}
               onChange={handleRoleChange}
               className="mb-3"
@@ -321,7 +343,7 @@ const AccountList = () => {
                       <CTableDataCell>{row.email}</CTableDataCell>
                       <CTableDataCell>{row.address}</CTableDataCell>
                       <CTableDataCell>{row.birthday}</CTableDataCell>
-                      <CTableDataCell>{row.roleName}</CTableDataCell>
+                      <CTableDataCell>{row.roleName.toUpperCase()}</CTableDataCell>
                       <CTableDataCell className="d-flex justify-content-around">
                         <CButton color="info" size="sm" onClick={() => handleEdit(row.id)}>
                           <CIcon icon={cilPen} />
@@ -472,7 +494,7 @@ const AccountList = () => {
           <CFormSelect
             name="roleName"
             label="Role"
-            value={formData.roleName}
+            value={formData.roleName && formData.roleName.toUpperCase()}
             onChange={handleInputChange}
             aria-label="Default select example"
             className="mb-3"
@@ -488,7 +510,7 @@ const AccountList = () => {
           <CButton className='custom-btn custom-btn-secondary' color="secondary" onClick={handleCancelEdit}>
             Cancel
           </CButton>
-          <CButton className='custom-btn custom-btn-success' color="success" onClick={handleSave}>
+          <CButton className='custom-btn custom-btn-success' color="primary" onClick={handleSave}>
             Save
           </CButton>
         </CModalFooter>

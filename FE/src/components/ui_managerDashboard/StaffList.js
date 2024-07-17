@@ -119,6 +119,13 @@ const StaffList = () => {
       return;
     }
 
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regexEmail.test(formData.email)) {
+      setErrorMessage("Please input a valid email");
+      setErrorModalVisible(true);
+      return;
+    }
+
     if (duplicateUsername) {
       setErrorMessage("Username already exists. Please use a unique username.");
       setErrorModalVisible(true);
