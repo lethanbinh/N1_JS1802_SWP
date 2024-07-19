@@ -170,6 +170,10 @@ const AddProduct = () => {
     }
   }
 
+  const formatPrice = (price) => {
+    return `${price.toLocaleString('en-US')} VND`;
+  };
+
   useEffect(() => {
     loadStallData()
   }, [])
@@ -372,8 +376,8 @@ const AddProduct = () => {
               <div className='flex-grow-1' style={{ marginTop: '10px' }}>
                 <p><strong>Name:</strong> {addedProduct.name}</p>
                 <p><strong>Description:</strong> {addedProduct.description}</p>
-                <p><strong>Purchase Price:</strong> {addedProduct.purchasePrice}VND</p>
-                <p><strong>Sell Price:</strong> {addedProduct.sellPrice}VND</p>
+                <p><strong>Purchase Price:</strong> {formatPrice(addedProduct.purchasePrice)}VND</p>
+                <p><strong>Sell Price:</strong> {formatPrice(addedProduct.sellPrice)}VND</p>
                 <p><strong>Quantity:</strong> {addedProduct.quantity}</p>
                 <p><strong>Weight (g):</strong> {addedProduct.weight}</p>
                 <p><strong>Size:</strong> {addedProduct.size}</p>

@@ -76,6 +76,10 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
       });
   };
 
+  const formatPrice = (price) => {
+    return `${price.toLocaleString('en-US')} VND`;
+  };
+
   return (
     <CModal alignment="center" visible={isOpen} onClose={closeModal} size="lg">
       <CModalHeader>
@@ -120,8 +124,8 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
               <CTableRow key={item.id}>
                 <CTableDataCell style={{ border: "1px solid #000" }}>{item.name}</CTableDataCell>
                 <CTableDataCell style={{ border: "1px solid #000" }}>{item.qty}</CTableDataCell>
-                <CTableDataCell style={{ border: "1px solid #000", textAlign: 'right' }} className="text-right ">{Number(item.price).toFixed(2)}VND</CTableDataCell>
-                <CTableDataCell style={{ border: "1px solid #000", textAlign: 'right' }} className="text-right ">{(Number(item.price) * item.qty).toFixed(2)}VND</CTableDataCell>
+                <CTableDataCell style={{ border: "1px solid #000", textAlign: 'right' }} className="text-right ">{Number(item.price)}VND</CTableDataCell>
+                <CTableDataCell style={{ border: "1px solid #000", textAlign: 'right' }} className="text-right ">{(Number(item.price) * item.qty)}VND</CTableDataCell>
               </CTableRow>
             ))}
           </CTableBody>
@@ -130,7 +134,7 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
           {invoiceInfo.transactionType === 'SELL' ? <>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Subtotal:</span>
-              <span style={{ display: "inline-block" }}>{invoiceInfo.subtotal.toFixed(2)}VND</span>
+              <span style={{ display: "inline-block" }}>{formatPrice(invoiceInfo.subtotal)}VND</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Discount:</span>
@@ -142,25 +146,24 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Exchange bonus Point:</span>
-              <span style={{ display: "inline-block" }}>- {invoiceInfo.bonusPointExchange}VND</span>
+              <span style={{ display: "inline-block" }}>- {formatPrice(invoiceInfo.bonusPointExchange)}VND</span>
             </div>
           </> : ""}
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span style={{ display: "inline-block" }} className="font-bold">Total:</span>
-            <span style={{ display: "inline-block" }} className="font-bold">{invoiceInfo.total.toFixed(2)}VND</span>
+            <span style={{ display: "inline-block" }} className="font-bold">{formatPrice(invoiceInfo.total)}VND</span>
           </div>
 
           {invoiceInfo.transactionType === 'SELL' || invoiceInfo.transactionType === 'EXCHANGE AND RETURN' ? <>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Customer Give Money:</span>
-              <span style={{ display: "inline-block" }} className="font-bold">{invoiceInfo.customerGiveMoney}VND</span>
+              <span style={{ display: "inline-block" }} className="font-bold">{formatPrice(invoiceInfo.customerGiveMoney)}VND</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Refund Money:</span>
-              <span style={{ display: "inline-block" }} className="font-bold">{invoiceInfo.refundMoney}VND</span>
+              <span style={{ display: "inline-block" }} className="font-bold">{formatPrice(invoiceInfo.refundMoney)}VND</span>
             </div>
           </> : ""}
-
         </div>
         <div className="text-center mt-4">
           <p className="text-sm">Thank you!</p>

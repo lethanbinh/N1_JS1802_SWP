@@ -107,9 +107,14 @@ const InvoiceForm = () => {
   }, []);
 
   const validate = () => {
-
     if (customerPhone.length < 1) {
       setErrorMessage('Please fill customer phone');
+      setErrorModalVisible(true);
+      return false;
+    }
+
+    if (address.length < 1) {
+      setErrorMessage('Please fill address');
       setErrorModalVisible(true);
       return false;
     }
@@ -245,7 +250,7 @@ const InvoiceForm = () => {
         items.map(item => orderList.push({ productQuantity: item.qty, productId: item.productId }));
 
         let saveData = {
-          "description": description,
+          "description": description || "",
           "status": orderStatus,
           "type": transactionType,
           "address": address,
@@ -338,7 +343,7 @@ const InvoiceForm = () => {
   };
 
   const formatPrice = (price) => {
-    return `${price} VND`;
+    return `${price.toLocaleString('en-US')} VND`;
   };
 
   return (
@@ -429,7 +434,7 @@ const InvoiceForm = () => {
             </CCol>
             <CCol>
               <strong className="text-sm font-bold">Order Description:</strong>
-              <CFormTextarea
+              {transactionType.toUpperCase() !== "EXCHANGE_AND_RETURN" ? <CFormTextarea
                 required
                 className="flex-1"
                 placeholder="Description for order"
@@ -437,7 +442,20 @@ const InvoiceForm = () => {
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
                 style={{ border: '1px solid #adb5bd' }}
-              />
+              /> : <CFormSelect
+                required
+                className="flex-1"
+                placeholder="Description for order"
+                type="text"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                style={{ border: '1px solid #adb5bd' }}
+              >
+                <option value="">Choose Reasons return</option>
+                <option value="Defective Item: The jewelry received is damaged or has manufacturing defects.">Defective Item: The jewelry received is damaged or has manufacturing defects.</option>
+                <option value="Wrong Size: The ring, bracelet, or necklace does not fit as expected.">Wrong Size: The ring, bracelet, or necklace does not fit as expected.</option>
+                <option value="Incorrect Item: The wrong product was shipped or received.">Incorrect Item: The wrong product was shipped or received.</option>
+              </CFormSelect>}
             </CCol>
           </CRow>
 
@@ -580,7 +598,7 @@ const InvoiceForm = () => {
                   </CTableDataCell>
                   <CTableDataCell className="text-right" style={{ border: "1px solid #adb5bd", textAlign: 'right', padding: '13px 12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                      <span>{(Number(item.price) * item.qty).toFixed(2)}</span>
+                      <span>{(Number(item.price) * item.qty)}</span>
                       <span>VND</span>
                     </div>
                   </CTableDataCell>
@@ -605,25 +623,25 @@ const InvoiceForm = () => {
                 <CRow className="flex justify-end pt-6">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Subtotal:</strong>
-                    <span style={{ display: "inline-block" }}>{subtotal.toFixed(2)}VND</span>
+                    <span style={{ display: "inline-block" }}>{formatPrice(subtotal)}VND</span>
                   </CCol>
                 </CRow>
                 <CRow className="flex justify-end">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Discount:</strong>
-                    <span style={{ display: "inline-block" }}>({promotionValue ? promotionValue * 100 : '0'}%) - {discountRate.toFixed(2)}VND</span>
+                    <span style={{ display: "inline-block" }}>({promotionValue ? formatPrice(promotionValue * 100) : '0'}%) - {discountRate}VND</span>
                   </CCol>
                 </CRow>
                 <CRow className="flex justify-end">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Tax:</strong>
-                    <span style={{ display: "inline-block" }}>({tax || '0'}%) + {taxRate.toFixed(2)}VND</span>
+                    <span style={{ display: "inline-block" }}>({tax || '0'}%) + {formatPrice(taxRate)}VND</span>
                   </CCol>
                 </CRow>
                 <CRow className="flex justify-end">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Exchange bonus Point:</strong>
-                    <span style={{ display: "inline-block" }}>- {bonusPointExchange}VND</span>
+                    <span style={{ display: "inline-block" }}>- {formatPrice(bonusPointExchange)}VND</span>
                   </CCol>
                 </CRow>
               </> : ""}
@@ -631,7 +649,7 @@ const InvoiceForm = () => {
               <CRow className="flex justify-end border-t mt-2">
                 <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                   <strong style={{ display: "inline-block" }} className="font-bold">Total:</strong>
-                  <span style={{ display: "inline-block" }} className="font-bold">{total % 1 === 0 ? total : total.toFixed(2)}VND</span>
+                  <span style={{ display: "inline-block" }} className="font-bold">{formatPrice(total)}VND</span>
                 </CCol>
               </CRow>
 
@@ -639,14 +657,14 @@ const InvoiceForm = () => {
                 <CRow className="flex justify-end border-t">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Customer give money:</strong>
-                    <span style={{ display: "inline-block" }} className="font-bold">{customerGiveMoney}VND</span>
+                    <span style={{ display: "inline-block" }} className="font-bold">{formatPrice(customerGiveMoney)}VND</span>
                   </CCol>
                 </CRow>
 
                 <CRow className="flex justify-end border-t">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Refund money:</strong>
-                    <span style={{ display: "inline-block" }} className="font-bold">{customerGiveMoney >= total ? customerGiveMoney - total : 0}VND</span>
+                    <span style={{ display: "inline-block" }} className="font-bold">{customerGiveMoney >= total ? formatPrice(customerGiveMoney - total) : 0}VND</span>
                   </CCol>
                 </CRow>
               </> : ""}
