@@ -117,6 +117,21 @@ const CustomerInfo = () => {
       return;
     }
 
+    const phoneRegex = /^(\+84|0)(3[2-9]|5[6|8|9]|7[0|6|7|8|9]|8[1-5]|9[0-4|6-9])[0-9]{7}$/
+    const regexEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+    if (!phoneRegex.test(formData.phone)) {
+      setErrorMessage("Invalid Vietnam Phone number");
+      setErrorModalVisible(true);
+      return;
+    }
+
+    if (!regexEmail.test(formData.email)) {
+      setErrorMessage("Invalid Email");
+      setErrorModalVisible(true);
+      return;
+    }
+
     let newData;
     if (isNew) {
       const newId = 0;
@@ -361,6 +376,7 @@ const CustomerInfo = () => {
                 type="number"
                 name="bonusPoint"
                 label="Bonus Point"
+                disabled
                 value={formData.bonusPoint || 0}
                 onChange={handleInputChange}
                 className="mb-3"

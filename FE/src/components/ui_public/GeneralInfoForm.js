@@ -82,6 +82,48 @@ const GeneralInfoForm = () => {
     const handleSave = (event) => {
         event.preventDefault();
 
+        const duplicatePhone = listUser.some(row => row.phone === formData.phone && row.id !== data.id);
+        const duplicateEmail = listUser.some(row => row.email === formData.email && row.id !== data.id);
+
+        const phoneRegex = /^(\+84|0)(3[2-9]|5[6|8|9]|7[0|6|7|8|9]|8[1-5]|9[0-4|6-9])[0-9]{7}$/
+        const regexEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+        if (!phoneRegex.test(formData.phone)) {
+            setError("Invalid Vietnam Phone number");
+            setMessage("");
+            return;
+        }
+
+        if (!regexEmail.test(formData.email)) {
+            setError("Invalid Email");
+            setMessage("");
+            return;
+        }
+
+        if (duplicatePhone && duplicateEmail) {
+            setErrorPhone("Phone number already exists. Please use a unique phone number.");
+            setErrorEmail("Email already exists. Please use a unique email.");
+            setError("Update failed");
+            setMessage("");
+            return;
+        } else if (duplicatePhone && !duplicateEmail) {
+            setErrorPhone("Phone number already exists. Please use a unique phone number.");
+            setErrorEmail("");
+            setError("Update failed");
+            setMessage("");
+            return;
+        } else if (duplicateEmail) {
+            setErrorEmail("Email already exists. Please use a unique email.");
+            setErrorPhone("");
+            setError("Update failed");
+            setMessage("");
+            return;
+        } else {
+            setErrorPhone("");
+            setErrorEmail("");
+            setError("");
+        }
+
         const updatedData = {
             username: formData.username || "",
             address: formData.address || "",
@@ -107,33 +149,6 @@ const GeneralInfoForm = () => {
             setError("Birthday cannot be in the future");
             setMessage("");
             return;
-        }
-
-        const duplicatePhone = listUser.some(row => row.phone === formData.phone && row.id !== data.id);
-        const duplicateEmail = listUser.some(row => row.email === formData.email && row.id !== data.id);
-
-        if (duplicatePhone && duplicateEmail) {
-            setErrorPhone("Phone number already exists. Please use a unique phone number.");
-            setErrorEmail("Email already exists. Please use a unique email.");
-            setError("Update failed");
-            setMessage("");
-            return;
-        } else if (duplicatePhone && !duplicateEmail) {
-            setErrorPhone("Phone number already exists. Please use a unique phone number.");
-            setErrorEmail("");
-            setError("Update failed");
-            setMessage("");
-            return;
-        } else if (duplicateEmail) {
-            setErrorEmail("Email already exists. Please use a unique email.");
-            setErrorPhone("");
-            setError("Update failed");
-            setMessage("");
-            return;
-        } else {
-            setErrorPhone("");
-            setErrorEmail("");
-            setError("");
         }
 
         if (updatedData.avatar instanceof File) {

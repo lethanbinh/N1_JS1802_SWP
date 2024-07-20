@@ -122,10 +122,15 @@ const StaffList = () => {
       setErrorModalVisible(true);
       return;
     }
-
-    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const regexEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     if (!regexEmail.test(formData.email)) {
       setErrorMessage("Please input a valid email");
+      setErrorModalVisible(true);
+      return;
+    }
+    const phoneRegex = /^(\+84|0)(3[2-9]|5[6|8|9]|7[0|6|7|8|9]|8[1-5]|9[0-4|6-9])[0-9]{7}$/
+    if (!phoneRegex.test(formData.phone)) {
+      setErrorMessage("Invalid Vietnam Phone number");
       setErrorModalVisible(true);
       return;
     }
