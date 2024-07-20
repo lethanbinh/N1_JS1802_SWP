@@ -157,11 +157,11 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
           {invoiceInfo.transactionType === 'SELL' || invoiceInfo.transactionType === 'EXCHANGE AND RETURN' ? <>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Customer Give Money:</span>
-              <span style={{ display: "inline-block" }} className="font-bold">{formatPrice(invoiceInfo.customerGiveMoney)}VND</span>
+              <span style={{ display: "inline-block" }} className="font-bold">{formatPrice(parseInt(invoiceInfo.customerGiveMoney))}VND</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Refund Money:</span>
-              <span style={{ display: "inline-block" }} className="font-bold">{formatPrice(invoiceInfo.refundMoney)}VND</span>
+              <span style={{ display: "inline-block" }} className="font-bold">{formatPrice(parseInt(invoiceInfo.refundMoney))}VND</span>
             </div>
           </> : ""}
         </div>

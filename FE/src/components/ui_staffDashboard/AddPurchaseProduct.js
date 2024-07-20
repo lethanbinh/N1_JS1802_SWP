@@ -365,31 +365,55 @@ const AddProduct = () => {
 
       <CModal visible={successModalVisible} onClose={() => setSuccessModalVisible(false)} size='lg'>
         <CModalHeader onClose={() => setSuccessModalVisible(false)}>
-          <CModalTitle>Success</CModalTitle>
+          <CModalTitle style={{textAlign: "center"}}>Success</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <div color='success' style={{ textAlign: 'center' }}>
-            <p>Product added successfully!</p>
-          </div>
           {addedProduct && (
-            <div className='d-flex'>
-              <div className='flex-grow-1' style={{ marginTop: '10px' }}>
-                <p><strong>Name:</strong> {addedProduct.name}</p>
-                <p><strong>Description:</strong> {addedProduct.description}</p>
-                <p><strong>Purchase Price:</strong> {formatPrice(addedProduct.purchasePrice)}VND</p>
-                <p><strong>Sell Price:</strong> {formatPrice(addedProduct.sellPrice)}VND</p>
-                <p><strong>Quantity:</strong> {addedProduct.quantity}</p>
-                <p><strong>Weight (g):</strong> {addedProduct.weight}</p>
-                <p><strong>Size:</strong> {addedProduct.size}</p>
-                <p><strong>Stall Name:</strong> {addedProduct.stallName}</p>
-                <p><strong>Stall Location:</strong> {addedProduct.stallLocation}</p>
-                <p><strong>Type:</strong> {addedProduct.type}</p>
-              </div>
-              <div className='flex-shrink-1'>
-                <p><strong>Image:</strong></p>
-                <img src={addedProduct.image} alt={addedProduct.name} style={{ width: '300px', height: 'fit-content', marginTop: '10px' }} />
-                <p><strong>Barcode:</strong></p>
-                <img src={addedProduct.barCode} alt="Barcode" style={{ width: '300px', height: '100px', marginTop: '10px' }} />
+            <div className="container py-5">
+              <div className="row gx-5">
+                <aside className="col-lg-6">
+                  <div className="border rounded-4 mb-3 d-flex justify-content-center">
+                    <a data-fslightbox="mygalley" className="rounded-4" target="_blank" data-type="image" href={`${addedProduct.image}`}>
+                      <img style={{ maxWidth: '100%', maxHeight: '100vh', margin: 'auto' }} className="rounded-4 fit" src={`${addedProduct.image}`} alt={addedProduct.name} />
+                    </a>
+                  </div>
+                </aside>
+                <main className="col-lg-6">
+                  <div className="ps-lg-3">
+                    <h4 className="title text-dark">
+                      {addedProduct.name}
+                    </h4>
+                    <div className="d-flex flex-row mb-3">
+                        <div className="text-warning mb-1 me-2">
+                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
+                          <i className="fas fa-star-half-alt"></i>
+                          <span className="ms-1">4.5</span>
+                        </div>
+                        <span className="text-success ms-2">In stock: </span>
+                        <span className="text-muted"><i className="fas fa-shopping-basket fa-sm mx-1"></i>{addedProduct.quantity}</span>
+                      </div>
+                    <div className="mb-3">
+                      <span className="h5">{formatPrice(addedProduct.sellPrice)}</span>
+                      <span className="text-muted"> / per box</span>
+                    </div>
+                    <p>{addedProduct.description}</p>
+                    <div className="row mb-4">
+                      <dt className="col-3">Type:</dt>
+                      <dd className="col-9">{addedProduct.type}</dd>
+                      <dt className="col-3">Size</dt>
+                      <dd className="col-9">{addedProduct.size}</dd>
+                      <dt className="col-3">Weight</dt>
+                      <dd className="col-9">{addedProduct.weight} g</dd>
+                      <dt className="col-3">Stall</dt>
+                      <dd className="col-9">{addedProduct.stallName}</dd>
+                      <dt className="col-3">Location</dt>
+                      <dd className="col-9">{addedProduct.stallLocation}</dd>
+                    </div>
+                  </div>
+                </main>
               </div>
             </div>
           )}

@@ -24,7 +24,7 @@ import UserStorage from '../../util/UserStorage';
 import CIcon from '@coreui/icons-react';
 import { cilDescription, cilEyedropper, cilPen, cilTrash, cilViewColumn, cilViewStream } from '@coreui/icons';
 
-const PurchaseHistoryList = () => {
+const ProductPurchaseHistory = () => {
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -40,7 +40,7 @@ const PurchaseHistoryList = () => {
   const loadData = async () => {
     try {
       const result = await fetchData(`http://localhost:8080/api/v1/orders`, 'GET', null, userInfo.accessToken);
-      const orders = result.payload.filter(data => data.type === 'SELL');
+      const orders = result.payload.filter(data => data.type === 'PURCHASE');
       setData(orders);
       setFilteredData(orders);
       setError(null);
@@ -147,7 +147,7 @@ const PurchaseHistoryList = () => {
                     <CTableRow key={row.id}>
                       <CTableDataCell>{row.id}</CTableDataCell>
                       <CTableDataCell>{row.createDate}</CTableDataCell>
-                      <CTableDataCell>{row.type.toUpperCase() === 'SELL' ? formatPrice(row.totalPrice) : "N/A"}</CTableDataCell>
+                      <CTableDataCell>{formatPrice(row.totalPrice)}</CTableDataCell>
                       <CTableDataCell>{row.type.toUpperCase() === 'SELL' ? formatPrice(row.customerGiveMoney) : "N/A"}</CTableDataCell>
                       <CTableDataCell>{row.type.toUpperCase() === 'SELL' ? formatPrice(row.refundMoney) : "N/A"}</CTableDataCell>
                       <CTableDataCell>{row.sendMoneyMethod}</CTableDataCell>
@@ -245,4 +245,4 @@ const PurchaseHistoryList = () => {
   );
 };
 
-export default PurchaseHistoryList;
+export default ProductPurchaseHistory;

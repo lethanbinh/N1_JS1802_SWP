@@ -1,4 +1,4 @@
-import { cilMoney, cilPeople } from '@coreui/icons'
+import { cilMoney, cilPeople, cilList, cilArrowCircleLeft, cilCart } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import React from 'react'
@@ -16,9 +16,22 @@ const _nav_staff = [
     items: [
       {
         component: CNavItem,
-        name: 'Billing',
-        to: '/staff-dashboard/invoice',
+        name: 'Main Dashboard',
+        to: '/staff-dashboard/dashboard',
       },
+      {
+        component: CNavItem,
+        name: 'Customer Information',
+        to: '/staff-dashboard/customer-info',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Product Management',
+    to: '/product-management',
+    icon: <CIcon icon={cilCart} customClassName="nav-icon" />,
+    items: [
       {
         component: CNavItem,
         name: 'Add Sell Product',
@@ -31,20 +44,40 @@ const _nav_staff = [
       },
       {
         component: CNavItem,
-        name: 'Promotion List',
-        to: '/staff-dashboard/promotion',
-        //button view, update, delete - phía dưới cùng tạo button create new promotion link to page create
-      },
-      {
-        component: CNavItem,
-        name: 'Product in Stall',
+        name: 'Product List',
         to: '/staff-dashboard/view-edit-product',
       },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Transaction History',
+    to: '/transaction-history',
+    icon: <CIcon icon={cilList} customClassName="nav-icon" />,
+    items: [
       {
         component: CNavItem,
-        name: 'Customer Purchase History',
+        name: 'Billing',
+        to: '/staff-dashboard/invoice',
+      },
+      {
+        component: CNavItem,
+        name: 'Sell History',
         to: '/staff-dashboard/view-CPH',
       },
+      {
+        component: CNavItem,
+        name: 'Purchase History',
+        to: '/staff-dashboard/view-PCPH',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Policies',
+    to: '/policies',
+    icon: <CIcon icon={cilArrowCircleLeft} customClassName="nav-icon" />,
+    items: [
       {
         component: CNavItem,
         name: 'Return & Exchange Policy',
@@ -52,23 +85,16 @@ const _nav_staff = [
       },
       {
         component: CNavItem,
-        name: 'Customer Information',
-        to: '/staff-dashboard/customer-info',
-      },
-      {
-        component: CNavItem,
-        name: 'Staff dashboard',
-        to: '/staff-dashboard/dashboard',
+        name: 'Promotion List',
+        to: '/staff-dashboard/promotion',
       },
     ],
   },
   {
-
     component: CNavItem,
     name: 'Gold Price Table',
     to: '/settings/gold-price',
     icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
-
   },
 ]
 

@@ -51,14 +51,24 @@ const InvoiceForm = () => {
   const [promotionValue, setPromotionValue] = useState('');
   const [promotionId, setPromotionId] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [staffName, setStaffName] = useState(userInfo.fullName)
-  const [customerGiveMoney, setCustomerGiveMoney] = useState(0)
-  const [description, setDescription] = useState('none')
-  const [sendMoneyMethod, setSendMoneyMethod] = useState('CASH')
-  const [bonusPointExchange, setBonusPointExchange] = useState(0)
+  const [staffName, setStaffName] = useState(userInfo.fullName);
+  const [customerGiveMoney, setCustomerGiveMoney] = useState(0);
+  const [description, setDescription] = useState('none');
+  const [sendMoneyMethod, setSendMoneyMethod] = useState('CASH');
+  const [bonusPointExchange, setBonusPointExchange] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [confirmModalVisible, setconfirmModalVisible] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [authenticationDetails, setAuthenticationDetails] = useState({
+    jewelryType: '',
+    authenticityCertificate: '',
+    dateOfCertification: '',
+    certifyingAuthority: '',
+    authenticityGrade: '',
+    gemWeight: '',
+    metalPurity: '',
+  });
 
   const [items, setItems] = useState([]);
 
@@ -89,12 +99,12 @@ const InvoiceForm = () => {
       .then(data => {
         setStaffName(data.payload.fullName);
       });
-  }
+  };
 
   const handleResetBarcode = () => {
     setBarcode('');
     document.getElementById('barcode-input').focus();
-  }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -103,7 +113,7 @@ const InvoiceForm = () => {
 
   useEffect(() => {
     loadPromotion();
-    loadStaff()
+    loadStaff();
   }, []);
 
   const validate = () => {
@@ -150,6 +160,23 @@ const InvoiceForm = () => {
         return false;
       }
     }
+
+    if (transactionType === 'PURCHASE') {
+      if (
+        !authenticationDetails.jewelryType ||
+        !authenticationDetails.authenticityCertificate ||
+        !authenticationDetails.dateOfCertification ||
+        !authenticationDetails.certifyingAuthority ||
+        !authenticationDetails.authenticityGrade ||
+        !authenticationDetails.gemWeight ||
+        !authenticationDetails.metalPurity
+      ) {
+        setErrorMessage('Please fill all authentication details');
+        setErrorModalVisible(true);
+        return false;
+      }
+    }
+
     return true;
   };
 
@@ -160,7 +187,7 @@ const InvoiceForm = () => {
 
     fetchData(`http://localhost:8080/api/v1/customers/check-point/${customerPhone}/${bonusPointExchange}`, 'GET', null, userInfo.accessToken)
       .then(data => {
-        console.log(data, bonusPointExchange)
+        console.log(data, bonusPointExchange);
         if (data.status === 'ERROR' && bonusPointExchange > 0 && transactionType === 'SELL') {
           setErrorMessage('Customer does not have enough point');
           setErrorModalVisible(true);
@@ -168,8 +195,7 @@ const InvoiceForm = () => {
         }
 
         setIsOpen(true);
-      })
-
+      });
   };
 
   const addItemHandler = (e) => {
@@ -183,7 +209,7 @@ const InvoiceForm = () => {
                 if (data.payload.quantity < item.qty + 1 && transactionType === 'SELL') {
                   setErrorMessage('Product quantity in stall is not enough');
                   setErrorModalVisible(true);
-                  handleResetBarcode()
+                  handleResetBarcode();
                   return item;
                 }
 
@@ -200,7 +226,7 @@ const InvoiceForm = () => {
             if (data.payload.quantity < 1 && transactionType === 'SELL') {
               setErrorMessage('Product quantity in stall is not enough');
               setErrorModalVisible(true);
-              handleResetBarcode()
+              handleResetBarcode();
               return;
             }
 
@@ -213,16 +239,16 @@ const InvoiceForm = () => {
                 qty: 1,
                 price: price,
                 image: data.payload.image,
-                description: data.payload.description
+                description: data.payload.description,
               },
             ]);
           }
 
-          handleResetBarcode()
+          handleResetBarcode();
         } else {
           setErrorMessage('Product does not exist');
           setErrorModalVisible(true);
-          handleResetBarcode()
+          handleResetBarcode();
           return;
         }
       });
@@ -239,7 +265,7 @@ const InvoiceForm = () => {
 
     fetchData(`http://localhost:8080/api/v1/customers/check-point/${customerPhone}/${bonusPointExchange}`, 'GET', null, userInfo.accessToken)
       .then(data => {
-        console.log(data, bonusPointExchange)
+        console.log(data, bonusPointExchange);
         if (data.status === 'ERROR' && bonusPointExchange > 0 && transactionType === 'SELL') {
           setErrorMessage('Customer does not have enough point');
           setErrorModalVisible(true);
@@ -271,7 +297,8 @@ const InvoiceForm = () => {
             "status": true,
             "bonusPoint": `${total / 100}`
           },
-          "orderDetailRequestList": orderList
+          "orderDetailRequestList": orderList,
+          "authenticationDetails": authenticationDetails // Adding authentication details
         };
         console.log(saveData);
 
@@ -286,16 +313,16 @@ const InvoiceForm = () => {
         if (transactionType === 'SELL') {
           // reduce product quantity and reduce bonus point if transaction type is sell and order status is confirmed
           items.forEach(item => {
-            fetchData(`http://localhost:8080/api/v1/products/reduce-quantity/${item.productId}/${item.qty}`, 'PATCH', null, userInfo.accessToken)
-          })
+            fetchData(`http://localhost:8080/api/v1/products/reduce-quantity/${item.productId}/${item.qty}`, 'PATCH', null, userInfo.accessToken);
+          });
 
-          fetchData(`http://localhost:8080/api/v1/customers/bonus/${customerPhone}/${bonusPointExchange}`, 'PATCH', null, userInfo.accessToken)
+          fetchData(`http://localhost:8080/api/v1/customers/bonus/${customerPhone}/${bonusPointExchange}`, 'PATCH', null, userInfo.accessToken);
         } else if (transactionType === 'PURCHASE' || transactionType === "EXCHANGE_AND_RETURN") {
           items.forEach(item => {
-            fetchData(`http://localhost:8080/api/v1/products/add-quantity/${item.productId}/${item.qty}`, 'PATCH', null, userInfo.accessToken)
-          })
+            fetchData(`http://localhost:8080/api/v1/products/add-quantity/${item.productId}/${item.qty}`, 'PATCH', null, userInfo.accessToken);
+          });
         }
-      })
+      });
   };
 
   const editItemHandler = (event, productId) => {
@@ -345,6 +372,141 @@ const InvoiceForm = () => {
   const formatPrice = (price) => {
     return `${price.toLocaleString('en-US')} VND`;
   };
+
+  const handleAuthenticationChange = (e) => {
+    const { name, value } = e.target;
+    setAuthenticationDetails({
+      ...authenticationDetails,
+      [name]: value,
+    });
+  };
+
+
+  const handleSaveAuthentication = () => {
+    if (
+      !authenticationDetails.jewelryType ||
+      !authenticationDetails.authenticityCertificate ||
+      !authenticationDetails.dateOfCertification ||
+      !authenticationDetails.certifyingAuthority ||
+      !authenticationDetails.authenticityGrade ||
+      !authenticationDetails.gemWeight ||
+      !authenticationDetails.metalPurity
+    ) {
+      setErrorMessage('Please fill all authentication details');
+      setErrorModalVisible(true);
+      return;
+    }
+    // Logic to save authentication details
+    setIsAuthenticating(false);
+  };
+
+  const renderAuthenticationForm = () => (
+    <CModal
+      visible={isAuthenticating}
+      onClose={() => setIsAuthenticating(false)}
+      aria-labelledby="AuthenticationModalLabel"
+    >
+      <CModalHeader>
+        <CModalTitle id="AuthenticationModalLabel">Jewelry Authentication</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <CRow className="mb-4">
+          <CCol>
+            <strong className="text-sm font-bold">Jewelry Type:</strong>
+            <CFormInput
+              name="jewelryType"
+              value={authenticationDetails.jewelryType}
+              onChange={handleAuthenticationChange}
+              style={{ border: '1px solid #adb5bd' }}
+            />
+          </CCol>
+        </CRow>
+        <CRow className="mb-4">
+          <CCol>
+            <strong className="text-sm font-bold">Authenticity Certificate:</strong>
+            <CFormInput
+              name="authenticityCertificate"
+              value={authenticationDetails.authenticityCertificate}
+              onChange={handleAuthenticationChange}
+              style={{ border: '1px solid #adb5bd' }}
+            />
+          </CCol>
+        </CRow>
+        <CRow className="mb-4">
+          <CCol>
+            <strong className="text-sm font-bold">Date of Certification:</strong>
+            <CFormInput
+              type="date"
+              name="dateOfCertification"
+              value={authenticationDetails.dateOfCertification}
+              onChange={handleAuthenticationChange}
+              style={{ border: '1px solid #adb5bd' }}
+            />
+          </CCol>
+        </CRow>
+        <CRow className="mb-4">
+          <CCol>
+            <strong className="text-sm font-bold">Certifying Authority:</strong>
+            <CFormInput
+              name="certifyingAuthority"
+              value={authenticationDetails.certifyingAuthority}
+              onChange={handleAuthenticationChange}
+              style={{ border: '1px solid #adb5bd' }}
+            />
+          </CCol>
+        </CRow>
+        <CRow className="mb-4">
+          <CCol>
+            <strong className="text-sm font-bold">Authenticity Grade:</strong>
+            <CFormInput
+              name="authenticityGrade"
+              value={authenticationDetails.authenticityGrade}
+              onChange={handleAuthenticationChange}
+              style={{ border: '1px solid #adb5bd' }}
+            />
+          </CCol>
+        </CRow>
+        <CRow className="mb-4">
+          <CCol>
+            <strong className="text-sm font-bold">Gem Weight (carats):</strong>
+            <CFormInput
+              name="gemWeight"
+              value={authenticationDetails.gemWeight}
+              onChange={handleAuthenticationChange}
+              style={{ border: '1px solid #adb5bd' }}
+            />
+          </CCol>
+        </CRow>
+        <CRow className="mb-4">
+          <CCol>
+            <strong className="text-sm font-bold">Metal Purity (%):</strong>
+            <CFormInput
+              name="metalPurity"
+              value={authenticationDetails.metalPurity}
+              onChange={handleAuthenticationChange}
+              style={{ border: '1px solid #adb5bd' }}
+            />
+          </CCol>
+        </CRow>
+      </CModalBody>
+      <CModalFooter>
+        <CButton
+          className='custom-btn custom-btn-secondary'
+          color="secondary"
+          onClick={() => setIsAuthenticating(false)}
+        >
+          Close
+        </CButton>
+        <CButton
+          className='custom-btn custom-btn-success'
+          color="primary"
+          onClick={handleSaveAuthentication}
+        >
+          Save Authentication
+        </CButton>
+      </CModalFooter>
+    </CModal>
+  );  
 
   return (
     <CRow className="relative flex flex-col px-2 md:flex-row" onSubmit={handleSubmit}>
@@ -453,7 +615,7 @@ const InvoiceForm = () => {
               >
                 <option value="">Choose Reasons return</option>
                 <option value="Defective Item: The jewelry received is damaged or has manufacturing defects.">Defective Item: The jewelry received is damaged or has manufacturing defects.</option>
-                <option value="Wrong Size: The ring, bracelet, or necklace does not fit as expected.">Wrong Size: The ring, bracelet, or necklace does not fit as expected.</option>
+                <option value="Wrong Size: The ring, bracelet, or necklace does not fit as expected.">Wrong Size: The ring, bracelet, hoặc necklace does not fit as expected.</option>
                 <option value="Incorrect Item: The wrong product was shipped or received.">Incorrect Item: The wrong product was shipped or received.</option>
               </CFormSelect>}
             </CCol>
@@ -657,7 +819,7 @@ const InvoiceForm = () => {
                 <CRow className="flex justify-end border-t">
                   <CCol style={{ display: "flex", justifyContent: "space-between" }}>
                     <strong style={{ display: "inline-block" }} className="font-bold">Customer give money:</strong>
-                    <span style={{ display: "inline-block" }} className="font-bold">{formatPrice(customerGiveMoney)}VND</span>
+                    <span style={{ display: "inline-block" }} className="font-bold">{formatPrice(parseInt(customerGiveMoney))}VND</span>
                   </CCol>
                 </CRow>
 
@@ -743,15 +905,25 @@ const InvoiceForm = () => {
             Review Invoice
           </CButton>
 
-          <CButton
+          {transactionType.toUpperCase() === "SELL" && <CButton
             style={{ marginRight: "10px" }}
             color="primary"
             className="custom-btn custom-btn-primary rounded px-4 py-2 shadow"
             onClick={() => setIsOpenWarranty(true)}
           >
             Warranty Card
-          </CButton>
-
+          </CButton>}
+          {transactionType === 'PURCHASE' && (
+            <CButton
+              style={{ marginRight: "10px" }}
+              color="primary"
+              className="custom-btn custom-btn-primary rounded px-4 py-2 shadow"
+              onClick={() => setIsAuthenticating(true)}
+            >
+              Authenticate Jewelry
+            </CButton>
+          )}
+          {renderAuthenticationForm()}
           <CButton
             color="primary"
             className="custom-btn custom-btn-success rounded px-4 py-2 shadow"
@@ -822,8 +994,8 @@ const InvoiceForm = () => {
           </CButton>
           <CButton className='custom-btn custom-btn-success'
             color="primary" onClick={() => {
-              handleSaveOrder()
-              setconfirmModalVisible(false)
+              handleSaveOrder();
+              setconfirmModalVisible(false);
             }}>
             Save
           </CButton>

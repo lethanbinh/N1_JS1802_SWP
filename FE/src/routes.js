@@ -7,6 +7,7 @@ const ForgotPassword = React.lazy(() => import('./views/resetPassword/ForgotPass
 const CreateNewPassword = React.lazy(() => import('./views/resetPassword/CreateNewPassword'))
 const GeneralInfoForm = React.lazy(() => import('./components/ui_public/GeneralInfoForm'))
 const GoldPrice = React.lazy(() => import('./components/ui_public/GoldPrice'))
+const ProductCustomerHistoryPurchase = React.lazy(() => import('./components/ui_public/ProductPurchaseHistory'))
 
 //adminDashboard
 const AccountList = React.lazy(() => import('./components/ui_adminDasdboard/AccountList'))
@@ -50,6 +51,9 @@ const routes = [
   { path: '/manager-dashboard/promotion', name: 'Promotion List', element: PromotionList },
   { path: '/manager-dashboard/promotion', name: 'Promotion List', element: PromotionList },
   { path: '/manager-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListManagerDashboard },
+  { path: '/manager-dashboard/view-PCPH', name: 'Customer Purchase History', element: ProductCustomerHistoryPurchase },
+  { path: '/manager-dashboard/add-sell-product', name: 'Add Sell Product', element: AddSellProduct },
+  { path: '/manager-dashboard/add-purchase-product', name: 'Add Purchase Product', element: AddPurchaseProduct },
   { path: '/manager-dashboard/view-product-in-stall', name: 'Product in Stall', element: ViewProductInStallManager },
   { path: '/manager-dashboard/stall', name: 'Stall', element: Stall },
   { path: '/manager-dashboard/dashboard', name: 'Manager Dashboard', element: ManagerDashboard },
@@ -60,6 +64,7 @@ const routes = [
   { path: '/staff-dashboard/view-edit-RAEP', name: 'Return & Exchange Policy', element: PolicyForStaff, },
   { path: '/staff-dashboard/promotion', name: 'Promotion List', element: PromotionListForStaff, },
   { path: '/staff-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListStaffDashboard, },
+  { path: '/staff-dashboard/view-PCPH', name: 'Customer Purchase History', element: ProductCustomerHistoryPurchase, },
   { path: '/staff-dashboard/view-edit-product', name: 'Product in Stall', element: ViewProductInStallStaff },
   { path: '/staff-dashboard/customer-info', name: 'Customer Information', element: CustomerInfo },
   { path: '/staff-dashboard/invoice', name: 'Invoice', element: InvoiceForm },

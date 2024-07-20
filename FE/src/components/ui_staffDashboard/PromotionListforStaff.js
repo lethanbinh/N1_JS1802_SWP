@@ -199,11 +199,6 @@ const PromotionList = () => {
     setFilteredData(filtered);
   };
 
-  const handleCloseErrorModal = () => {
-    setErrorModalVisible(false);
-    setErrorMessage('');
-  };
-
   useEffect(() => {
     refreshData();
   }, []);
@@ -245,9 +240,8 @@ const PromotionList = () => {
                 <CTableHead>
                   <CTableRow>
                     <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Discount (%)</CTableHeaderCell>
+                    <CTableHeaderCell scope="col" style={{ width: "120px" }}>Discount (%)</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Name</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Description</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Start Date</CTableHeaderCell>
                     <CTableHeaderCell scope="col">End Date</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Minimum Price</CTableHeaderCell>
@@ -262,7 +256,6 @@ const PromotionList = () => {
                         <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
                         <CTableDataCell>{row.discount * 100}</CTableDataCell>
                         <CTableDataCell>{row.name}</CTableDataCell>
-                        <CTableDataCell>{row.description}</CTableDataCell>
                         <CTableDataCell>{row.startDate}</CTableDataCell>
                         <CTableDataCell>{row.endDate}</CTableDataCell>
                         <CTableDataCell>{formatPrice(row.minimumPrize)}</CTableDataCell>

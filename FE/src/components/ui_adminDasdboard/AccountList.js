@@ -329,13 +329,12 @@ const AccountList = () => {
               <CTable hover responsive bordered className="shadow-sm table-border-dark" style={{ border: '1px solid #adb5bd' }}>
                 <CTableHead className="bg-light text-dark">
                   <CTableRow>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Id</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Username</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "60px" }} scope="col">Id</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Username</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Full Name</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Phone</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Email</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Phone</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Address</CTableHeaderCell>
-                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Birthday</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Email</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Role</CTableHeaderCell>
                     <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Action</CTableHeaderCell>
                   </CTableRow>
@@ -349,7 +348,6 @@ const AccountList = () => {
                       <CTableDataCell>{row.phone}</CTableDataCell>
                       <CTableDataCell>{row.email}</CTableDataCell>
                       <CTableDataCell>{row.address}</CTableDataCell>
-                      <CTableDataCell>{row.birthday}</CTableDataCell>
                       <CTableDataCell>{row.roleName.toUpperCase()}</CTableDataCell>
                       <CTableDataCell className="d-flex justify-content-around">
                         <CButton color="info" size="sm" onClick={() => handleEdit(row.id)}>

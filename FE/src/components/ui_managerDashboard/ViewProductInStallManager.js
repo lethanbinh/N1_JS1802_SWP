@@ -1,37 +1,62 @@
 import {
-  CButton,
   CCard,
   CCardBody,
-  CCardHeader,
   CCol,
   CDropdown,
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
-  CFormSelect,
+  CHeader,
   CRow,
   CTable,
   CTableBody,
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
-  CTableRow
+  CTableRow,
+  CButton,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CFormSelect,
 } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 import CIcon from '@coreui/icons-react';
-import { cilBasket, cilCart, cilList, cilMenu } from '@coreui/icons';
+import { cilBasket, cilCart, cilDescription, cilList, cilMenu, cilSearch } from '@coreui/icons';
 
 const StallProduct = () => {
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
   const [stallName, setStallName] = useState('');
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-  const [stallOptions, setStallOptions] = useState([]);
-  const [stallStatus, setStallStatus] = useState('');
+  const [stallInfo, setStallInfo] = useState([]);
   const [filterData, setFilterData] = useState([]);
-  const [show, setShow] = useState(false);
+  const [user, setUser] = useState({});
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [visible, setVisible] = useState(false);
+
+  const loadUser = async () => {
+    try {
+      const userData = await fetchData(`http://localhost:8080/api/v1/users/id/${userInfo.id}`, 'GET', null, userInfo.accessToken);
+      if (userData && userData.payload) {
+        setUser(userData.payload);
+      } else {
+        setUser({});
+      }
+      setError(null);
+    } catch (error) {
+      setError(error.message);
+      setUser({});
+    }
+  };
+
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   const loadData = async (stallName) => {
     if (!stallName) return;
@@ -56,19 +81,15 @@ const StallProduct = () => {
     try {
       const stallData = await fetchData(`http://localhost:8080/api/v1/stalls`, 'GET', null, userInfo.accessToken);
       if (stallData && stallData.payload) {
-        setStallOptions(stallData.payload);
+        setStallInfo(stallData.payload);
       } else {
-        setStallOptions([]);
+        setStallInfo([]);
       }
       setError(null);
     } catch (error) {
       setError(error.message);
-      setStallOptions([]);
+      setStallInfo([]);
     }
-  };
-
-  const searchAll = () => {
-    setFilterData(data);
   };
 
   const searchSell = () => {
@@ -81,9 +102,13 @@ const StallProduct = () => {
     setFilterData(filteredData);
   };
 
+  const searchAll = () => {
+    setFilterData(data);
+  };
+
   useEffect(() => {
-    loadStallData();
-  }, []);
+    loadStallData(user.stallId);
+  }, [user.stallId]);
 
   useEffect(() => {
     loadData(stallName);
@@ -93,122 +118,155 @@ const StallProduct = () => {
     return `${price.toLocaleString('en-US')} VND`;
   };
 
+  const getTotalStock = () => {
+    let total = 0;
+    filterData.map(item => total += item.quantity)
+    return total
+  }
+
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+    setVisible(true);
+  };
+
   return (
     <CRow className="m-0">
       <CCol xs={12}>
         <CCard className="mb-4 border-0 shadow-sm">
-          <CCardHeader className="bg-light text-dark d-flex justify-content-between align-items-center">
-            <strong>Stall Products</strong>
-          </CCardHeader>
           <CCardBody>
             <CRow className="mb-3">
-              <CCol md={4}>
+              <CCol xs={12} className="d-flex align-items-center">
                 <CFormSelect
                   name="stallName"
                   value={stallName}
-                  style={{ fontWeight: 'bold', fontSize: '20px' }}
+                  style={{ fontWeight: 'bold', fontSize: '20px', maxWidth: "400px" }}
                   onChange={(event) => {
                     setStallName(event.target.value);
                     setShow(true);
                   }}
                 >
                   <option value="">Select Stall</option>
-                  {stallOptions.map(stall => (
+                  {stallInfo.map(stall => (
                     <option key={stall.id} value={stall.name}>
-                      {stall.name}
+                      {stall.name} - {stall.type}
                     </option>
                   ))}
                 </CFormSelect>
-              </CCol>
-              <CCol md={8} className="d-flex justify-content-end">
-                <CDropdown>
-                  <CDropdownToggle color="primary">
-                    <CIcon icon={cilMenu} className="me-2" />
-                    Product Type
-                  </CDropdownToggle>
-                  <CDropdownMenu>
-                    <CDropdownItem
-                      onClick={searchAll}
-                      style={{ cursor: 'pointer' }}
-                      onMouseEnter={(e) => { e.target.style.backgroundColor = '#4b49b6', e.target.style.color = "white" }}
-                      onMouseLeave={(e) => { e.target.style.backgroundColor = '', e.target.style.color = "black" }}
-                    >
-                      <CIcon icon={cilList} className="me-2" />
-                      All Product
-                    </CDropdownItem>
-                    <CDropdownItem
-                      onClick={searchSell}
-                      style={{ cursor: 'pointer' }}
-                      onMouseEnter={(e) => { e.target.style.backgroundColor = '#4b49b6', e.target.style.color = "white" }}
-                      onMouseLeave={(e) => { e.target.style.backgroundColor = '', e.target.style.color = "black" }}
-                    >
-                      <CIcon icon={cilCart} className="me-2" />
-                      Sell Product
-                    </CDropdownItem>
-                    <CDropdownItem
-                      onClick={searchPurchase}
-                      style={{ cursor: 'pointer' }}
-                      onMouseEnter={(e) => { e.target.style.backgroundColor = '#4b49b6', e.target.style.color = "white" }}
-                      onMouseLeave={(e) => { e.target.style.backgroundColor = '', e.target.style.color = "black" }}
-                    >
-                      <CIcon icon={cilBasket} className="me-2" />
-                      Purchase Product
-                    </CDropdownItem>
-                  </CDropdownMenu>
-                </CDropdown>
+                <CHeader style={{ fontSize: '20px', justifyContent: "center" }}>Stock: {getTotalStock()}</CHeader>
               </CCol>
             </CRow>
-            {show ?
-              <div style={{ height: '70vh', overflow: 'auto' }}>
-                <CTable hover responsive bordered className="shadow-sm table-border-dark" style={{ border: '1px solid #adb5bd' }}>
-                  <CTableHead className="bg-light text-dark">
-                    <CTableRow>
-                      <CTableHeaderCell style={{ minWidth: "60px" }} scope="col">Id</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Image</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "100px" }} scope="col">Code</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "200px" }} scope="col">Description</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Name</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Quantity</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Purchase Price</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Sell Price</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Type</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Weight (g)</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Size</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "120px" }} scope="col">Status</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Stall Location</CTableHeaderCell>
-                      <CTableHeaderCell style={{ minWidth: "160px" }} scope="col">Bar Code</CTableHeaderCell>
+            <div style={{ height: '70vh', overflow: 'auto' }}>
+              <CTable hover responsive bordered className="shadow-sm table-border-dark" style={{ border: '1px solid #adb5bd' }}>
+                <CTableHead className="bg-light text-dark">
+                  <CTableRow>
+                    <CTableHeaderCell style={{ minWidth: '60px' }} scope="col">Id</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '100px' }} scope="col">Image</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Name</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '80px' }} scope="col">Quantity</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Purchase Price</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '160px' }} scope="col">Sell Price</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '100px' }} scope="col">Type</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '140px' }} scope="col">Bar Code</CTableHeaderCell>
+                    <CTableHeaderCell style={{ minWidth: '60px' }} scope="col">Action</CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {filterData.map((row) => (
+                    <CTableRow key={row.id}>
+                      <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
+                      <CTableDataCell>
+                        <img src={row.image} style={{ width: 'auto', height: '50px' }} alt="Product" /> {/* Display image */}
+                      </CTableDataCell>
+                      <CTableDataCell>{row.name}</CTableDataCell>
+                      <CTableDataCell>{row.quantity}</CTableDataCell>
+                      <CTableDataCell>{formatPrice(row.purchasePrice)}</CTableDataCell>
+                      <CTableDataCell>{formatPrice(row.sellPrice)}</CTableDataCell>
+                      <CTableDataCell>{row.type}</CTableDataCell>
+                      <CTableDataCell>
+                        <img src={row.barCode} style={{ width: 'auto', height: '50px' }} alt="Bar Code" />
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <CButton color="warning" onClick={() => handleProductClick(row)}>
+                          <CIcon icon={cilDescription} />
+                        </CButton>
+                      </CTableDataCell>
                     </CTableRow>
-                  </CTableHead>
-                  <CTableBody>
-                    {filterData.map((row) => (
-                      <CTableRow key={row.id}>
-                        <CTableHeaderCell scope="row">{row.id}</CTableHeaderCell>
-                        <CTableDataCell>
-                          <img src={row.image} style={{ width: 'auto', height: '50px' }} alt="Product" /> {/* Display image */}
-                        </CTableDataCell>
-                        <CTableDataCell>{row.code}</CTableDataCell>
-                        <CTableDataCell>{row.description}</CTableDataCell>
-                        <CTableDataCell>{row.name}</CTableDataCell>
-                        <CTableDataCell>{row.quantity}</CTableDataCell>
-                        <CTableDataCell>{formatPrice(row.purchasePrice)}</CTableDataCell>
-                        <CTableDataCell>{formatPrice(row.sellPrice)}</CTableDataCell>
-                        <CTableDataCell>{row.type}</CTableDataCell>
-                        <CTableDataCell>{row.weight}</CTableDataCell>
-                        <CTableDataCell>{row.size}</CTableDataCell>
-                        <CTableDataCell>{row.status}</CTableDataCell>
-                        <CTableDataCell>{row.stallLocation}</CTableDataCell>
-                        <CTableDataCell>
-                          <img src={row.barCode} style={{ width: 'auto', height: '50px' }} alt="Bar Code" />
-                        </CTableDataCell>
-                      </CTableRow>
-                    ))}
-                  </CTableBody>
-                </CTable>
-              </div>
-              : null}
+                  ))}
+                </CTableBody>
+              </CTable>
+            </div>
           </CCardBody>
         </CCard>
       </CCol>
+
+      {selectedProduct && (
+        <CModal visible={visible} onClose={() => setVisible(false)} size="xl">
+          <CModalHeader>
+            <CModalTitle>{selectedProduct.name}</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <section className="py-5">
+              <div className="container">
+                <div className="row gx-5">
+                  <aside className="col-lg-5">
+                    <div className="border rounded-4 mb-3 d-flex justify-content-center">
+                      <a className="rounded-4" target="_blank" href={selectedProduct.image}>
+                        <img
+                          style={{ maxWidth: '100%', maxHeight: '100vh', margin: 'auto' }}
+                          className="rounded-4 fit"
+                          src={selectedProduct.image}
+                          alt={selectedProduct.name}
+                        />
+                      </a>
+                    </div>
+                  </aside>
+                  <main className="col-lg-7">
+                    <div className="ps-lg-3">
+                      <h4 className="title text-dark mb-4">{selectedProduct.name}</h4>
+                      <div className="d-flex flex-row mb-3">
+                        <div className="text-warning mb-1 me-2">
+                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
+                          <i className="fas fa-star-half-alt"></i>
+                          <span className="ms-1">4.5</span>
+                        </div>
+                        <span className="text-success ms-2">In stock: </span>
+                        <span className="text-muted"><i className="fas fa-shopping-basket fa-sm mx-1"></i>{selectedProduct.quantity}</span>
+                      </div>
+
+                      <div className="mb-4">
+                        <span className="h5">{formatPrice(selectedProduct.sellPrice)}</span>
+                        <span className="text-muted"> / per item</span>
+                      </div>
+                      <p className="mb-4">{selectedProduct.description}</p>
+                      <div className="row mb-4">
+                        <dt className="col-3">Type:</dt>
+                        <dd className="col-9">{selectedProduct.type}</dd>
+
+                        <dt className="col-3">Weight:</dt>
+                        <dd className="col-9">{selectedProduct.weight}g</dd>
+
+                        <dt className="col-3">Size:</dt>
+                        <dd className="col-9">{selectedProduct.size}</dd>
+
+                        <dt className="col-3">Bar Code:</dt>
+                        <dd className="col-9">
+                          <img src={selectedProduct.barCode} alt="Bar Code" style={{ height: '50px', width: 'auto' }} />
+                        </dd>
+                      </div>
+                    </div>
+                  </main>
+                </div>
+              </div>
+            </section>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="secondary" onClick={() => setVisible(false)}>Close</CButton>
+          </CModalFooter>
+        </CModal>
+      )}
     </CRow>
   );
 }

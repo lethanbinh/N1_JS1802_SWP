@@ -261,7 +261,7 @@ const PromotionList = () => {
                 <CTableHead className="bg-light text-dark">
                   <CTableRow>
                     <CTableHeaderCell scope="col" style={{ minWidth: "60px" }}>ID</CTableHeaderCell>
-                    <CTableHeaderCell scope="col" style={{ minWidth: "120px" }}>Discount (%)</CTableHeaderCell>
+                    <CTableHeaderCell scope="col" style={{ minWidth: "100px" }}>Discount (%)</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Name</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Description</CTableHeaderCell>
                     <CTableHeaderCell scope="col" style={{ minWidth: "120px" }}>Start Date</CTableHeaderCell>

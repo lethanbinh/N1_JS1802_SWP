@@ -32,11 +32,6 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public List<StaffDashboardDailyDTO> getManagerDashboard(int stallId, Date startDate, Date endDate) {
-        return staffDashboardDailyRepository.getManagerDashboard(stallId, startDate, endDate);
-    }
-
-    @Override
     public StaffDashboardDailyDTO save(StaffDashboardDailyDTO staffDashboardDailyDTO) {
         StaffDashboardDaily staffDashboardDaily = staffDashboardMapper.toEntity(staffDashboardDailyDTO);
         staffDashboardDaily.setStaff(userRepository.findById(staffDashboardDailyDTO.getStaffId()));
