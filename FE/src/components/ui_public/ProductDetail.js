@@ -85,9 +85,7 @@ const ProductDetailModal = ({ visible, setVisible, selectedProduct, setSelectedP
 
         setSelectedProduct(editedProduct);
         setIsEditing(false);
-        let savedData = { ...editedProduct };
-        savedData.image = getImageIdFromUrl(editedProduct.image);
-        fetchData(`http://localhost:8080/api/v1/products/id/${savedData.id}`, 'PUT', savedData, user.accessToken)
+        fetchData(`http://localhost:8080/api/v1/products/id/${editedProduct.id}`, 'PUT', editedProduct, user.accessToken)
             .then(() => {
                 loadData(stallName);
                 setSuccessMessage('Product saved successfully!');

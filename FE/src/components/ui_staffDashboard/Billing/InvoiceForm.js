@@ -153,7 +153,7 @@ const InvoiceForm = () => {
       return false;
     }
 
-    if (transactionType === 'SELL' && transactionType === 'EXCHANGE AND RETURN') {
+    if (transactionType === 'SELL') {
       if (customerGiveMoney < total) {
         setErrorMessage('Customer give money must be greater than total price');
         setErrorModalVisible(true);
@@ -203,6 +203,19 @@ const InvoiceForm = () => {
     fetchData(`http://localhost:8080/api/v1/products/barcode/${barcode}`, 'GET', null, userInfo.accessToken)
       .then(data => {
         if (data.status === 'SUCCESS') {
+          console.log(data.payload.type, transactionType)
+          if (data.payload.status !== "PURCHASE" && transactionType === "PURCHASE") {
+            setErrorMessage('This product is not purchase product');
+            setErrorModalVisible(true);
+            return;
+          }
+
+          if (data.payload.status !== "SELL" && transactionType === "SELL") {
+            setErrorMessage('This product is not sell product');
+            setErrorModalVisible(true);
+            return;
+          }
+
           if (items.find(item => item.name === data.payload.name)) {
             const newItems = items.map((item) => {
               if (item.name === data.payload.name) {
@@ -210,6 +223,7 @@ const InvoiceForm = () => {
                   setErrorMessage('Product quantity in stall is not enough');
                   setErrorModalVisible(true);
                   handleResetBarcode();
+                  item.quantity = 1
                   return item;
                 }
 
@@ -355,7 +369,7 @@ const InvoiceForm = () => {
             // Reset to available quantity immediately
             const updatedItems = items.map((item) => {
               if (item.productId === productId) {
-                return { ...item, qty: product.payload.quantity }; // Reset to available quantity
+                return { ...item, qty: 1 }; // Reset to available quantity
               }
               return item;
             });
@@ -506,7 +520,7 @@ const InvoiceForm = () => {
         </CButton>
       </CModalFooter>
     </CModal>
-  );  
+  );
 
   return (
     <CRow className="relative flex flex-col px-2 md:flex-row" onSubmit={handleSubmit}>
@@ -586,7 +600,10 @@ const InvoiceForm = () => {
               <CFormSelect
                 required
                 value={transactionType}
-                onChange={(event) => setTransactionType(event.target.value)}
+                onChange={(event) => {
+                  setTransactionType(event.target.value)
+                  setItems([])
+                }}
                 style={{ border: '1px solid #adb5bd' }}
               >
                 <option value="SELL">SELL</option>
@@ -699,7 +716,7 @@ const InvoiceForm = () => {
             <CTableHead>
               <CTableRow>
                 <CTableHeaderCell style={{ border: "1px solid #adb5bd" }}>ITEM</CTableHeaderCell>
-                <CTableHeaderCell style={{ border: "1px solid #adb5bd" }}>QTY</CTableHeaderCell>
+                <CTableHeaderCell style={{ border: "1px solid #adb5bd", width: "100px" }}>QTY</CTableHeaderCell>
                 <CTableHeaderCell style={{ border: "1px solid #adb5bd" }}>IMAGE</CTableHeaderCell>
                 <CTableHeaderCell style={{ border: "1px solid #adb5bd" }}>DESCRIPTION</CTableHeaderCell>
                 <CTableHeaderCell className="text-right" style={{ border: "1px solid #adb5bd" }}>UNIT PRICE</CTableHeaderCell>
@@ -749,9 +766,9 @@ const InvoiceForm = () => {
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <CFormInput
                         readOnly
-                        type="number"
+                        type="text"
                         name="price"
-                        value={item.price}
+                        value={formatPrice(item.price)}
                         onChange={(event) => editItemHandler(event, item.productId)}
                         style={{ textAlign: 'left', border: '1px solid #adb5bd', width: '100%' }}
                       />
@@ -760,7 +777,7 @@ const InvoiceForm = () => {
                   </CTableDataCell>
                   <CTableDataCell className="text-right" style={{ border: "1px solid #adb5bd", textAlign: 'right', padding: '13px 12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                      <span>{(Number(item.price) * item.qty)}</span>
+                      <span>{(formatPrice(Number(item.price) * item.qty))}</span>
                       <span>VND</span>
                     </div>
                   </CTableDataCell>

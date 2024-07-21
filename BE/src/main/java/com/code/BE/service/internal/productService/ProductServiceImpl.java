@@ -73,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(id);
         if (product != null) {
             product.setName(productRequest.getName());
-            product.setImage(IMAGE_API + productRequest.getImage());
+            product.setImage(productRequest.getImage());
             product.setDescription(productRequest.getName());
             product.setPurchasePrice(productRequest.getPurchasePrice());
             product.setSellPrice(productRequest.getSellPrice());

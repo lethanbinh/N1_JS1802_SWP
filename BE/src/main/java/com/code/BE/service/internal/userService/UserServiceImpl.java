@@ -96,7 +96,11 @@ public class UserServiceImpl implements UserService {
             user.setPhone(phoneNumberUtil.normalizePhoneNumber(profileUpdateRoleUser.getPhone()));
             user.setEmail(profileUpdateRoleUser.getEmail());
             user.setAddress(profileUpdateRoleUser.getAddress());
-            user.setAvatar(IMAGE_API + profileUpdateRoleUser.getAvatar());
+            if (user.getAvatar().contains("http") || user.getAvatar().contains("https")) {
+                user.setAvatar(profileUpdateRoleUser.getAvatar());
+            } else {
+                user.setAvatar(IMAGE_API + profileUpdateRoleUser.getAvatar());
+            }
             user.setBirthday(profileUpdateRoleUser.getBirthday());
             return userMapper.toResponse(userRepository.saveAndFlush(user));
         }

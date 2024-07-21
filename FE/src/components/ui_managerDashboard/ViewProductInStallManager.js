@@ -2,11 +2,6 @@ import {
   CCard,
   CCardBody,
   CCol,
-  CDropdown,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
-  CHeader,
   CRow,
   CTable,
   CTableBody,
@@ -15,19 +10,16 @@ import {
   CTableHeaderCell,
   CTableRow,
   CButton,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
   CFormSelect,
+  CHeader,
 } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 import CIcon from '@coreui/icons-react';
-import { cilBasket, cilCart, cilDescription, cilList, cilMenu, cilPen, cilSearch } from '@coreui/icons';
+import { cilPen } from '@coreui/icons';
 import ProductDetailModal from '../ui_public/ProductDetail';
+import * as XLSX from 'xlsx'; // Import xlsx
 
 const StallProduct = () => {
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
@@ -128,6 +120,13 @@ const StallProduct = () => {
     setVisible(true);
   };
 
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filterData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Products");
+    XLSX.writeFile(workbook, "products.xlsx");
+  };
+
   return (
     <CRow className="m-0">
       <CCol xs={12}>
@@ -151,6 +150,7 @@ const StallProduct = () => {
                   ))}
                 </CFormSelect>
                 <CHeader style={{ fontSize: '20px', justifyContent: "center" }}>Stock: {getTotalStock()}</CHeader>
+                <CButton color="primary" className="ms-auto" onClick={exportToExcel}>Export to Excel</CButton>
               </CCol>
             </CRow>
             <div style={{ height: '70vh', overflow: 'auto' }}>

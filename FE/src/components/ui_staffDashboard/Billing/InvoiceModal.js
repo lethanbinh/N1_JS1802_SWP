@@ -124,8 +124,8 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
               <CTableRow key={item.id}>
                 <CTableDataCell style={{ border: "1px solid #000" }}>{item.name}</CTableDataCell>
                 <CTableDataCell style={{ border: "1px solid #000" }}>{item.qty}</CTableDataCell>
-                <CTableDataCell style={{ border: "1px solid #000", textAlign: 'right' }} className="text-right ">{Number(item.price)}VND</CTableDataCell>
-                <CTableDataCell style={{ border: "1px solid #000", textAlign: 'right' }} className="text-right ">{(Number(item.price) * item.qty)}VND</CTableDataCell>
+                <CTableDataCell style={{ border: "1px solid #000", textAlign: 'right' }} className="text-right ">{formatPrice(Number(item.price))}VND</CTableDataCell>
+                <CTableDataCell style={{ border: "1px solid #000", textAlign: 'right' }} className="text-right ">{(formatPrice(Number(item.price) * item.qty))}VND</CTableDataCell>
               </CTableRow>
             ))}
           </CTableBody>
@@ -138,11 +138,11 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Discount:</span>
-              <span style={{ display: "inline-block" }}>- {invoiceInfo.discountRate}VND</span>
+              <span style={{ display: "inline-block" }}>- {formatPrice(invoiceInfo.discountRate)}VND</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Tax:</span>
-              <span style={{ display: "inline-block" }}>+ {invoiceInfo.taxRate}VND</span>
+              <span style={{ display: "inline-block" }}>+ {formatPrice(invoiceInfo.taxRate)}VND</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ display: "inline-block" }} className="font-bold">Exchange bonus Point:</span>

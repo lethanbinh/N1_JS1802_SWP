@@ -170,12 +170,6 @@ const GeneralInfoForm = () => {
                 })
                 .catch(error => console.log(error));
         } else {
-            if (savedData.avatar) {
-                if (savedData.avatar.includes("http://localhost:8080/api/v1/images/")) {
-                    savedData.avatar = getImageIdFromUrl(savedData.avatar)
-                }
-            }
-
             fetchData(`http://localhost:8080/api/v1/profile/id/${userInfo.id}`, "PUT", savedData, userInfo.accessToken)
                 .then((data) => {
                     if (data.status === "SUCCESS") {

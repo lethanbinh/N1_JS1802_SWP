@@ -11,18 +11,14 @@ import {
   CTableHeaderCell,
   CTableRow,
   CButton,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
 } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 import CIcon from '@coreui/icons-react';
-import { cilBasket, cilCart, cilDescription, cilList, cilMenu, cilPen, cilSearch } from '@coreui/icons';
+import { cilPen } from '@coreui/icons';
 import ProductDetailModal from '../ui_public/ProductDetail';
+import * as XLSX from 'xlsx'; // Import xlsx
 
 const StallProduct = () => {
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
@@ -116,6 +112,13 @@ const StallProduct = () => {
     setVisible(true);
   };
 
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filterData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Products");
+    XLSX.writeFile(workbook, "products.xlsx");
+  };
+
   return (
     <CRow className="m-0">
       <CCol xs={12}>
@@ -124,6 +127,7 @@ const StallProduct = () => {
             <CRow className="mb-3">
               <CCol xs={12} className="d-flex justify-content-between align-items-center">
                 <CHeader style={{ fontSize: '20px', display: 'inline-block' }}>Stall: {stallName}  |  Stock: {getTotalStock()}  |  Stall's Type: {stallType}</CHeader>
+                <CButton color="primary" className="ms-auto" onClick={exportToExcel}>Export to Excel</CButton>
               </CCol>
             </CRow>
             <div style={{ height: '70vh', overflow: 'auto' }}>
