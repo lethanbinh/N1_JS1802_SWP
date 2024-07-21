@@ -3,9 +3,7 @@
 -- Host: localhost    Database: jewelry_management_at_the_store
 -- ------------------------------------------------------
 -- Server version	8.4.0
-drop database jewelry_management_at_the_store;
-Create database jewelry_management_at_the_store;
-use jewelry_management_at_the_store;
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
