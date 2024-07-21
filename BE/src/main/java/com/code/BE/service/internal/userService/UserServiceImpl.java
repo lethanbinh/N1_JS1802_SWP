@@ -129,6 +129,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id);
         if (user != null) {
             user.setStatus(false);
+            user.setStall(null);
             userRepository.saveAndFlush(user);
             return true;
         }

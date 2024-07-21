@@ -26,7 +26,7 @@ import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 import CIcon from '@coreui/icons-react';
-import { cilBasket, cilCart, cilDescription, cilList, cilMenu, cilSearch } from '@coreui/icons';
+import { cilBasket, cilCart, cilDescription, cilList, cilMenu, cilPen, cilSearch } from '@coreui/icons';
 import ProductDetailModal from '../ui_public/ProductDetail';
 
 const StallProduct = () => {
@@ -60,17 +60,29 @@ const StallProduct = () => {
   }, []);
 
   const loadData = async (stallName) => {
-    if (!stallName) return;
     try {
-      const productData = await fetchData(`http://localhost:8080/api/v1/products/stallName/${stallName}`, 'GET', null, userInfo.accessToken);
-      if (productData && productData.payload) {
-        setData(productData.payload);
-        setFilterData(productData.payload);
+      if (stallName !== "") {
+        const productData = await fetchData(`http://localhost:8080/api/v1/products/stallName/${stallName}`, 'GET', null, userInfo.accessToken);
+        if (productData && productData.payload) {
+          setData(productData.payload);
+          setFilterData(productData.payload);
+        } else {
+          setData([]);
+          setFilterData([]);
+        }
+        setError(null);
       } else {
-        setData([]);
-        setFilterData([]);
+        const productData = await fetchData(`http://localhost:8080/api/v1/products`, 'GET', null, userInfo.accessToken);
+        if (productData && productData.payload) {
+          setData(productData.payload);
+          setFilterData(productData.payload);
+        } else {
+          setData([]);
+          setFilterData([]);
+        }
+        setError(null);
       }
-      setError(null);
+
     } catch (error) {
       setError(error.message);
       setData([]);
@@ -91,20 +103,6 @@ const StallProduct = () => {
       setError(error.message);
       setStallInfo([]);
     }
-  };
-
-  const searchSell = () => {
-    const filteredData = data.filter((item) => item.status === 'SELL');
-    setFilterData(filteredData);
-  };
-
-  const searchPurchase = () => {
-    const filteredData = data.filter((item) => item.status === 'PURCHASE');
-    setFilterData(filteredData);
-  };
-
-  const searchAll = () => {
-    setFilterData(data);
   };
 
   useEffect(() => {
@@ -143,13 +141,12 @@ const StallProduct = () => {
                   style={{ fontWeight: 'bold', fontSize: '20px', maxWidth: "400px" }}
                   onChange={(event) => {
                     setStallName(event.target.value);
-                    setShow(true);
                   }}
                 >
-                  <option value="">Select Stall</option>
+                  <option value="">All Products</option>
                   {stallInfo.map(stall => (
                     <option key={stall.id} value={stall.name}>
-                      {stall.name} - {stall.type}
+                      Stall: {stall.name} - {stall.type}
                     </option>
                   ))}
                 </CFormSelect>
@@ -187,8 +184,8 @@ const StallProduct = () => {
                         <img src={row.barCode} style={{ width: 'auto', height: '50px' }} alt="Bar Code" />
                       </CTableDataCell>
                       <CTableDataCell>
-                        <CButton color="warning" onClick={() => handleProductClick(row)}>
-                          <CIcon icon={cilDescription} />
+                        <CButton color="info" onClick={() => handleProductClick(row)}>
+                          <CIcon icon={cilPen} />
                         </CButton>
                       </CTableDataCell>
                     </CTableRow>

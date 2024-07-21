@@ -439,6 +439,7 @@ const AccountList = () => {
             label="Username"
             value={formData.username}
             onChange={handleInputChange}
+            disabled={userInfo.username === formData.username && !isNew}
             className="mb-3"
             style={{ border: '1px solid #adb5bd' }}
           />
