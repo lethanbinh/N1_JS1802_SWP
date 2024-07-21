@@ -27,6 +27,7 @@ import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 import CIcon from '@coreui/icons-react';
 import { cilBasket, cilCart, cilDescription, cilList, cilMenu, cilSearch } from '@coreui/icons';
+import ProductDetailModal from '../ui_public/ProductDetail';
 
 const StallProduct = () => {
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
@@ -112,7 +113,7 @@ const StallProduct = () => {
 
   useEffect(() => {
     loadData(stallName);
-  }, [stallName]);
+  }, [stallName, visible]);
 
   const formatPrice = (price) => {
     return `${price.toLocaleString('en-US')} VND`;
@@ -199,74 +200,7 @@ const StallProduct = () => {
         </CCard>
       </CCol>
 
-      {selectedProduct && (
-        <CModal visible={visible} onClose={() => setVisible(false)} size="xl">
-          <CModalHeader>
-            <CModalTitle>{selectedProduct.name}</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-            <section className="py-5">
-              <div className="container">
-                <div className="row gx-5">
-                  <aside className="col-lg-5">
-                    <div className="border rounded-4 mb-3 d-flex justify-content-center">
-                      <a className="rounded-4" target="_blank" href={selectedProduct.image}>
-                        <img
-                          style={{ maxWidth: '100%', maxHeight: '100vh', margin: 'auto' }}
-                          className="rounded-4 fit"
-                          src={selectedProduct.image}
-                          alt={selectedProduct.name}
-                        />
-                      </a>
-                    </div>
-                  </aside>
-                  <main className="col-lg-7">
-                    <div className="ps-lg-3">
-                      <h4 className="title text-dark mb-4">{selectedProduct.name}</h4>
-                      <div className="d-flex flex-row mb-3">
-                        <div className="text-warning mb-1 me-2">
-                          <i className="fa fa-star"></i>
-                          <i className="fa fa-star"></i>
-                          <i className="fa fa-star"></i>
-                          <i className="fa fa-star"></i>
-                          <i className="fas fa-star-half-alt"></i>
-                          <span className="ms-1">4.5</span>
-                        </div>
-                        <span className="text-success ms-2">In stock: </span>
-                        <span className="text-muted"><i className="fas fa-shopping-basket fa-sm mx-1"></i>{selectedProduct.quantity}</span>
-                      </div>
-
-                      <div className="mb-4">
-                        <span className="h5">{formatPrice(selectedProduct.sellPrice)}</span>
-                        <span className="text-muted"> / per item</span>
-                      </div>
-                      <p className="mb-4">{selectedProduct.description}</p>
-                      <div className="row mb-4">
-                        <dt className="col-3">Type:</dt>
-                        <dd className="col-9">{selectedProduct.type}</dd>
-
-                        <dt className="col-3">Weight:</dt>
-                        <dd className="col-9">{selectedProduct.weight}g</dd>
-
-                        <dt className="col-3">Size:</dt>
-                        <dd className="col-9">{selectedProduct.size}</dd>
-
-                        <dt className="col-3">Bar Code:</dt>
-                        <dd className="col-9">
-                          <img src={selectedProduct.barCode} alt="Bar Code" style={{ height: '50px', width: 'auto' }} />
-                        </dd>
-                      </div>
-                    </div>
-                  </main>
-                </div>
-              </div>
-            </section>
-          </CModalBody>
-          <CModalFooter>
-            <CButton color="secondary" onClick={() => setVisible(false)}>Close</CButton>
-          </CModalFooter>
-        </CModal>
-      )}
+      <ProductDetailModal visible={visible} product={data} setProduct={setData} setVisible={setVisible} selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} stallName={stallName} />
     </CRow>
   );
 }

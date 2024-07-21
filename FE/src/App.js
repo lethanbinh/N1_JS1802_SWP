@@ -2,6 +2,8 @@ import { CSpinner } from '@coreui/react'
 import React, { Suspense } from 'react'
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
