@@ -77,7 +77,7 @@ const InvoiceModal = ({ isOpen, setIsOpen, invoiceInfo, items }) => {
   };
 
   const formatPrice = (price) => {
-    return `${price.toLocaleString('en-US')} VND`;
+    return `${price.toLocaleString('en-US')}`;
   };
 
   return (
