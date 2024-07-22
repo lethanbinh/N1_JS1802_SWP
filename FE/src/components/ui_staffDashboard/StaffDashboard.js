@@ -256,12 +256,6 @@ const StaffDashboard = () => {
                                                     <strong>{data.mostStockedProductQuantity}</strong>
                                                 </CCol>
                                             </CRow>
-                                            <CRow className="mt-3">
-                                                <CCol sm="4">
-                                                    <div>Total Discount Amount</div>
-                                                    <strong>{data.totalDiscountAmount}</strong>
-                                                </CCol>
-                                            </CRow>
                                         </CCardBody>
                                     </CCard>
                                 </CCol>
