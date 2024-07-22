@@ -921,15 +921,14 @@ const InvoiceForm = () => {
 
       <CCard className="my-6 flex-1 rounded-lg p-4 shadow-sm md:p-6 border-0">
         <CCardBody className="space-y-4">
-          <CButton
+          {orderStatus.toUpperCase() === "CONFIRMED" && <CButton
             style={{ marginRight: "10px" }}
             color="primary"
             className="custom-btn custom-btn-primary rounded px-4 py-2 shadow"
             onClick={handleReviewInvoice}
           >
             Review Invoice
-          </CButton>
-
+          </CButton>}
           {transactionType.toUpperCase() === "SELL" && <CButton
             style={{ marginRight: "10px" }}
             color="primary"
