@@ -18,6 +18,7 @@ import {
 } from '@coreui/react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import html2canvas from 'html2canvas';
 import './ProductDetailModal.css'; // Tạo file CSS riêng để tùy chỉnh giao diện
 import UserStorage from '../../util/UserStorage';
 import fetchData from '../../util/ApiConnection';
@@ -28,6 +29,7 @@ const ProductDetailModal = ({ visible, setVisible, selectedProduct, setSelectedP
     const [user, setUser] = useState(UserStorage.getAuthenticatedUser());
     const [errors, setErrors] = useState([]);
     const [successMessage, setSuccessMessage] = useState('');
+    const [barcodeVisible, setBarcodeVisible] = useState(false);
 
     const loadData = async (stallName) => {
         if (!stallName) return;
@@ -46,15 +48,6 @@ const ProductDetailModal = ({ visible, setVisible, selectedProduct, setSelectedP
     useEffect(() => {
         setEditedProduct({ ...selectedProduct });
     }, [selectedProduct]);
-
-    const getImageIdFromUrl = (url) => {
-        const parts = url.split('/images/');
-        if (parts.length > 1) {
-            return parts[1];
-        } else {
-            return null;
-        }
-    };
 
     const formatPrice = (price) => {
         return `${price.toLocaleString('en-US')} VND`;
@@ -91,6 +84,22 @@ const ProductDetailModal = ({ visible, setVisible, selectedProduct, setSelectedP
                 setSuccessMessage('Product saved successfully!');
                 setTimeout(() => setSuccessMessage(''), 3000);
             });
+    };
+
+    const handleDownloadBarcode = async () => {
+        const element = document.getElementById('barcode-preview');
+        if (element) {
+            try {
+                const canvas = await html2canvas(element, { useCORS: true, backgroundColor: '#fff' });
+                const imgData = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = imgData;
+                link.download = `${selectedProduct.name}_barcode.png`;
+                link.click();
+            } catch (error) {
+                console.error('Error capturing barcode image:', error);
+            }
+        }
     };
 
     return (
@@ -287,6 +296,7 @@ const ProductDetailModal = ({ visible, setVisible, selectedProduct, setSelectedP
                                                         setVisible(false);
                                                         setIsEditing(false);
                                                     }}>Close</CButton>
+                                                    <CButton color="info" onClick={() => setBarcodeVisible(true)}>Print Barcode</CButton>
                                                 </>
                                             )}
                                         </div>
@@ -296,6 +306,28 @@ const ProductDetailModal = ({ visible, setVisible, selectedProduct, setSelectedP
                         </CContainer>
                     </section>
                 </CModalBody>
+                {/* Barcode Preview Modal */}
+                <CModal visible={barcodeVisible} onClose={() => setBarcodeVisible(false)} size="sm">
+                    <CModalHeader onClose={() => setBarcodeVisible(false)}>
+                        <CModalTitle>Barcode Preview</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                        <div id="barcode-preview" className="barcode-label" style={{ textAlign: 'center', padding: '10px', border: '1px solid #000', borderRadius: '10px' }}>
+                            <div style={{ marginBottom: '10px', fontSize: '18px', fontWeight: 'bold' }}>
+                                {selectedProduct.name}
+                            </div>
+                            <div style={{ marginBottom: '10px' }}>
+                                <CImage src={selectedProduct.barCode} alt="Bar Code" style={{ width: '100%', height: 'auto' }} />
+                            </div>
+                            <div style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                                {`Giá: ${formatPrice(parseInt(selectedProduct.sellPrice))}`}
+                            </div>
+                        </div>
+                    </CModalBody>
+                    <CModalFooter>
+                        <CButton color="primary" onClick={handleDownloadBarcode}>Download</CButton>
+                    </CModalFooter>
+                </CModal>
             </CModal>
         )
     );

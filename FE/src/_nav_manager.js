@@ -85,6 +85,11 @@ const _nav_manager = [
         name: 'Purchase History',
         to: '/manager-dashboard/view-PCPH',
       },
+      {
+        component: CNavItem,
+        name: 'Exchange and Return History',
+        to: '/manager-dashboard/view-EAR-product',
+      },
     ],
   },
   {

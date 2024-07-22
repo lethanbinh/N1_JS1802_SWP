@@ -126,7 +126,7 @@ const StallProduct = () => {
           <CCardBody>
             <CRow className="mb-3">
               <CCol xs={12} className="d-flex justify-content-between align-items-center">
-                <CHeader style={{ fontSize: '20px', display: 'inline-block' }}>Stall: {stallName}  |  Stock: {getTotalStock()}  |  Stall's Type: {stallType}</CHeader>
+                <CHeader style={{ fontSize: '20px', display: 'inline-block' }}>Stall: {stallName}  |  Stock: {getTotalStock()}  |  Stall's Type: {stallType} | Product quantity: {filterData.length}</CHeader>
                 <CButton color="primary" className="ms-auto" onClick={exportToExcel}>Export to Excel</CButton>
               </CCol>
             </CRow>

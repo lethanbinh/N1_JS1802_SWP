@@ -70,6 +70,11 @@ const _nav_staff = [
         name: 'Purchase History',
         to: '/staff-dashboard/view-PCPH',
       },
+      {
+        component: CNavItem,
+        name: 'Exchange and Return History',
+        to: '/staff-dashboard/view-EAR-product',
+      },
     ],
   },
   {

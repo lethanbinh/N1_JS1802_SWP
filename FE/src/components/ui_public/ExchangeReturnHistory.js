@@ -22,9 +22,9 @@ import React, { useEffect, useState } from 'react';
 import fetchData from '../../util/ApiConnection';
 import UserStorage from '../../util/UserStorage';
 import CIcon from '@coreui/icons-react';
-import { cilDescription, cilEyedropper, cilPen, cilTrash, cilViewColumn, cilViewStream } from '@coreui/icons';
+import { cilDescription, cilPen } from '@coreui/icons';
 
-const ProductPurchaseHistory = () => {
+const ExchangeReturnHistory = () => {
   const [userInfo, setUserInfo] = useState(UserStorage.getAuthenticatedUser());
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -40,7 +40,7 @@ const ProductPurchaseHistory = () => {
   const loadData = async () => {
     try {
       const result = await fetchData(`http://localhost:8080/api/v1/orders`, 'GET', null, userInfo.accessToken);
-      const orders = result.payload.filter(data => data.type === 'PURCHASE');
+      const orders = result.payload.filter(data => data.type === 'EXCHANGE_AND_RETURN');
       setData(orders);
       setFilteredData(orders);
       setError(null);
@@ -71,7 +71,7 @@ const ProductPurchaseHistory = () => {
 
   const handleSave = () => {
     fetchData(`http://localhost:8080/api/v1/orders/edit-status/${orderId}/${currentStatus}`, 'PUT', null, userInfo.accessToken)
-      .then(data => {
+      .then(() => {
         setEditModalVisible(false);
         loadData();
       });
@@ -107,7 +107,7 @@ const ProductPurchaseHistory = () => {
       <CCol xs={12}>
         <CCard className="mb-4 border-0 shadow-sm">
           <CCardHeader className="bg-light text-dark d-flex justify-content-between align-items-center">
-            <strong>Purchase History</strong>
+            <strong>Exchange and Return History</strong>
           </CCardHeader>
           <CCardBody>
             <CRow className="mb-4">
@@ -241,4 +241,4 @@ const ProductPurchaseHistory = () => {
   );
 };
 
-export default ProductPurchaseHistory;
+export default ExchangeReturnHistory;

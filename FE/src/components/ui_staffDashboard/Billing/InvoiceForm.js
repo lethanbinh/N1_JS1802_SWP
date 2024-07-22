@@ -71,6 +71,7 @@ const InvoiceForm = () => {
   });
 
   const [items, setItems] = useState([]);
+  const [stallId, setStallId] = useState(0)
 
   const subtotal = items.reduce((prev, curr) => {
     if (curr.name.trim().length > 0) {
@@ -98,6 +99,7 @@ const InvoiceForm = () => {
     fetchData(`http://localhost:8080/api/v1/users/id/${userInfo.id}`, 'GET', null, userInfo.accessToken)
       .then(data => {
         setStaffName(data.payload.fullName);
+        setStallId(data.payload.stallId)
       });
   };
 
@@ -204,6 +206,12 @@ const InvoiceForm = () => {
       .then(data => {
         if (data.status === 'SUCCESS') {
           console.log(data.payload.type, transactionType)
+          if (data.payload.stallId !== stallId) {
+            setErrorMessage('Your stall does not contain this product');
+            setErrorModalVisible(true);
+            return;
+          }
+
           if (data.payload.status !== "PURCHASE" && transactionType === "PURCHASE") {
             setErrorMessage('This product is not purchase product');
             setErrorModalVisible(true);
