@@ -250,7 +250,7 @@ const ProductDetailModal = ({ visible, setVisible, selectedProduct, setSelectedP
                                                     </span>
                                                 </div>
                                                 <div className="price mb-4">
-                                                    <span className="h4">${formatPrice(parseInt(selectedProduct.sellPrice))}</span>
+                                                    <span className="h4">{formatPrice(parseInt(selectedProduct.sellPrice))}</span>
                                                     <span className="text-muted ms-2">/ per item</span>
                                                 </div>
                                                 <p className="product-description mb-4">{selectedProduct.description}</p>
