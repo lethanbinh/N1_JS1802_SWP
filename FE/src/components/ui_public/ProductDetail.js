@@ -296,7 +296,7 @@ const ProductDetailModal = ({ visible, setVisible, selectedProduct, setSelectedP
                                                         setVisible(false);
                                                         setIsEditing(false);
                                                     }}>Close</CButton>
-                                                    <CButton color="info" onClick={() => setBarcodeVisible(true)}>Print Barcode</CButton>
+                                                    <CButton color="info" onClick={() => setBarcodeVisible(true)}>View Barcode</CButton>
                                                 </>
                                             )}
                                         </div>
@@ -324,9 +324,6 @@ const ProductDetailModal = ({ visible, setVisible, selectedProduct, setSelectedP
                             </div>
                         </div>
                     </CModalBody>
-                    <CModalFooter>
-                        <CButton color="primary" onClick={handleDownloadBarcode}>Download</CButton>
-                    </CModalFooter>
                 </CModal>
             </CModal>
         )
