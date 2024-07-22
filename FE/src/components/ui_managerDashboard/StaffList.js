@@ -301,7 +301,7 @@ const StaffList = () => {
           <CCardBody>
             <CFormInput
               type="text"
-              placeholder="Search by name..."
+              placeholder="Search by full name..."
               value={searchTerm}
               onChange={handleSearchChange}
               className="mb-4 shadow-sm"
