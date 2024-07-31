@@ -14,8 +14,8 @@ import {
   CHeader,
 } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
-import fetchData from '../../util/ApiConnection';
-import UserStorage from '../../util/UserStorage';
+import fetchData from '../../services/ApiConnection';
+import UserStorage from '../../services/UserStorage';
 import CIcon from '@coreui/icons-react';
 import { cilPen } from '@coreui/icons';
 import ProductDetailModal from '../ui_public/ProductDetail';

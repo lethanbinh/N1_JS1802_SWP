@@ -27,9 +27,9 @@ import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../customStyles.css';
-import fetchData from '../../util/ApiConnection';
-import convertDateToJavaFormat from '../../util/DateConvert';
-import UserStorage from '../../util/UserStorage';
+import fetchData from '../../services/ApiConnection';
+import convertDateToJavaFormat from '../../services/DateConvert';
+import UserStorage from '../../services/UserStorage';
 
 const PromotionList = () => {
   const [data, setData] = useState([]);

@@ -22,11 +22,11 @@ import {
 } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import '../../customStyles.css';
-import fetchData from '../../util/ApiConnection';
-import convertDateToJavaFormat from '../../util/DateConvert';
-import UserStorage from '../../util/UserStorage';
+import convertDateToJavaFormat from '../../services/DateConvert';
 import CIcon from '@coreui/icons-react';
 import { cilPen, cilDelete } from '@coreui/icons';
+import UserStorage from '../../services/UserStorage';
+import fetchData from '../../services/ApiConnection';
 
 const AccountList = () => {
   const [data, setData] = useState([]);

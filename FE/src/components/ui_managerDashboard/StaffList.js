@@ -22,9 +22,9 @@ import {
 } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import '../../customStyles.css';
-import fetchData from '../../util/ApiConnection';
-import convertDateToJavaFormat from '../../util/DateConvert';
-import UserStorage from '../../util/UserStorage';
+import fetchData from '../../services/ApiConnection';
+import convertDateToJavaFormat from '../../services/DateConvert';
+import UserStorage from '../../services/UserStorage';
 import { cilPen, cilDelete } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 

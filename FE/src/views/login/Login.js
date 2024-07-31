@@ -15,8 +15,8 @@ import {
 } from '@coreui/react';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import fetchData from '../../util/ApiConnection';
-import UserStorage from '../../util/UserStorage';
+import fetchData from '../../services/ApiConnection';
+import UserStorage from '../../services/UserStorage';
 import loginImage from '../../views/login/1232.png'; // Update with the correct path to your image
 import './Login.css';
 

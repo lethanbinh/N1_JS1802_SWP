@@ -9,6 +9,7 @@ const GeneralInfoForm = React.lazy(() => import('./components/ui_public/GeneralI
 const GoldPrice = React.lazy(() => import('./components/ui_public/GoldPrice'))
 const ProductCustomerHistoryPurchase = React.lazy(() => import('./components/ui_public/ProductPurchaseHistory'))
 const ExchangeAndReturnHistory = React.lazy(() => import('./components/ui_public/ExchangeReturnHistory'))
+const Chat = React.lazy(() => import('./components/ui_public/Chat'))
 
 //adminDashboard
 const AccountList = React.lazy(() => import('./components/ui_adminDasdboard/AccountList'))
@@ -44,6 +45,8 @@ const routes = [
 
   //adminDashboard
   { path: '/admin-dashboard/account-list', name: 'Account List', element: AccountList },
+  { path: '/admin-dashboard/chat', name: 'Chat', element: Chat },
+
   //managerDashboard
   { path: '/manager-dashboard/staff-list', name: 'Staff List', element: StaffList },
   { path: '/manager-dashboard/view-edit-RAEP', name: 'Return & Exchange Policy', element: Policy },
@@ -59,6 +62,7 @@ const routes = [
   { path: '/manager-dashboard/view-product-in-stall', name: 'Product in Stall', element: ViewProductInStallManager },
   { path: '/manager-dashboard/stall', name: 'Stall', element: Stall },
   { path: '/manager-dashboard/dashboard', name: 'Manager Dashboard', element: ManagerDashboard },
+  { path: '/manager-dashboard/chat', name: 'Chat', element: Chat },
 
   //staffDashboard
   { path: '/staff-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListStaffDashboard },
@@ -73,7 +77,8 @@ const routes = [
   { path: '/staff-dashboard/invoice', name: 'Invoice', element: InvoiceForm },
   { path: '/staff-dashboard/add-sell-product', name: 'Add Sell Product', element: AddSellProduct },
   { path: '/staff-dashboard/add-purchase-product', name: 'Add Purchase Product', element: AddPurchaseProduct },
-  { path: '/staff-dashboard/dashboard', name: 'Staff Dashboard', element: StaffDashboard }
+  { path: '/staff-dashboard/dashboard', name: 'Staff Dashboard', element: StaffDashboard },
+  { path: '/staff-dashboard/chat', name: 'Chat', element: Chat },
 ]
 
 export default routes

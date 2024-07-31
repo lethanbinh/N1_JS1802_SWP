@@ -14,7 +14,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked } from '@coreui/icons'
 import { useNavigate } from 'react-router-dom';
-import fetchData from '../../util/ApiConnection';
+import fetchData from '../../services/ApiConnection';
 import '../../customStyles.css'
 
 const CreateNewPassword = () => {

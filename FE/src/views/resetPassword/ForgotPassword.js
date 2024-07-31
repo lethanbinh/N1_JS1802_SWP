@@ -12,7 +12,7 @@ import {
   CRow,
 } from '@coreui/react'
 import { useNavigate } from 'react-router-dom';
-import fetchData from '../../util/ApiConnection';
+import fetchData from '../../services/ApiConnection';
 import '../../customStyles.css'
 
 const ForgotPassword = () => {

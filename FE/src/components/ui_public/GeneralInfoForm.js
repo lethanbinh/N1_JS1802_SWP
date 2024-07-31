@@ -9,9 +9,9 @@ import {
     CFormInput,
     CRow,
 } from "@coreui/react";
-import UserStorage from "../../util/UserStorage";
-import convertDateToJavaFormat from "../../util/DateConvert";
-import fetchData from "../../util/ApiConnection";
+import UserStorage from "../../services/UserStorage";
+import convertDateToJavaFormat from "../../services/DateConvert";
+import fetchData from "../../services/ApiConnection";
 import '../../customStyles.css';
 
 const GeneralInfoForm = () => {

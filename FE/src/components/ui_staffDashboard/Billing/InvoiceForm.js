@@ -25,9 +25,9 @@ import React, { useEffect, useState } from 'react';
 import { uid } from 'uid';
 import InvoiceModal from './InvoiceModal';
 import WarrantyCardModal from './WarrantyCardModal';
-import fetchData from '../../../util/ApiConnection';
-import { convertJavaDateToJSDate } from '../../../util/DateConvert';
-import UserStorage from '../../../util/UserStorage';
+import fetchData from '../../../services/ApiConnection';
+import { convertJavaDateToJSDate } from '../../../services/DateConvert';
+import UserStorage from '../../../services/UserStorage';
 
 const date = new Date();
 const today = date.toLocaleDateString('en-GB', {
@@ -937,17 +937,6 @@ const InvoiceForm = () => {
           >
             Warranty Card
           </CButton>}
-          {transactionType === 'PURCHASE' && (
-            <CButton
-              style={{ marginRight: "10px" }}
-              color="primary"
-              className="custom-btn custom-btn-primary rounded px-4 py-2 shadow"
-              onClick={() => setIsAuthenticating(true)}
-            >
-              Authenticate Jewelry
-            </CButton>
-          )}
-          {renderAuthenticationForm()}
           <CButton
             color="primary"
             className="custom-btn custom-btn-success rounded px-4 py-2 shadow"

@@ -1,4 +1,4 @@
-import { cilMoney, cilPeople, cilList, cilArrowCircleLeft, cilCart } from '@coreui/icons'
+import { cilMoney, cilPeople, cilList, cilArrowCircleLeft, cilCart, cilChatBubble } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import React from 'react'
@@ -92,6 +92,19 @@ const _nav_staff = [
         component: CNavItem,
         name: 'Promotion List',
         to: '/staff-dashboard/promotion',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Message',
+    to: '/message',
+    icon: <CIcon icon={cilChatBubble} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Chat',
+        to: '/staff-dashboard/chat',
       },
     ],
   },

@@ -10,8 +10,8 @@ import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../../customStyles.css';
-import fetchData from '../../util/ApiConnection';
-import UserStorage from '../../util/UserStorage';
+import fetchData from '../../services/ApiConnection';
+import UserStorage from '../../services/UserStorage';
 
 const Policy = () => {
   const [data, setData] = useState([]);

@@ -19,8 +19,7 @@ import { logo } from 'src/assets/brand/logo'
 import navigation from '../_nav'
 import navigationManager from '../_nav_manager'
 import navigationStaff from '../_nav_staff'
-
-import UserStorage from '../util/UserStorage'
+import UserStorage from '../services/UserStorage'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()

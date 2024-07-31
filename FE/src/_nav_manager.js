@@ -1,4 +1,4 @@
-import { cilMoney, cilPeople, cilList, cilArrowCircleLeft, cilHome } from '@coreui/icons'
+import { cilMoney, cilPeople, cilList, cilArrowCircleLeft, cilHome, cibSnapchat, cilChatBubble } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import React from 'react'
@@ -102,6 +102,19 @@ const _nav_manager = [
         component: CNavItem,
         name: 'Return & Exchange Policy',
         to: '/manager-dashboard/view-edit-RAEP',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Message',
+    to: '/message',
+    icon: <CIcon icon={cilChatBubble} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Chat',
+        to: '/manager-dashboard/chat',
       },
     ],
   },

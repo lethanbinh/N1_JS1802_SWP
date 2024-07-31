@@ -15,9 +15,9 @@ import {
     CProgress
 } from "@coreui/react";
 import { CChartBar, CChartPie, CChartLine } from "@coreui/react-chartjs";
-import fetchData from "../../util/ApiConnection";
-import UserStorage from "../../util/UserStorage";
-import { getCurrentDateFormatted } from "../../util/DateConvert";
+import fetchData from "../../services/ApiConnection";
+import UserStorage from "../../services/UserStorage";
+import { getCurrentDateFormatted } from "../../services/DateConvert";
 import CIcon from "@coreui/icons-react";
 import { cilWarning, cilPeople, cilCart } from "@coreui/icons";
 import { format } from 'date-fns';

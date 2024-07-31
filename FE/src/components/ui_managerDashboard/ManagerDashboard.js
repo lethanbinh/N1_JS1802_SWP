@@ -23,9 +23,9 @@ import {
     CTooltip,
     CCardGroup
 } from "@coreui/react";
-import { CChartLine, CChartDoughnut, CChartBar, CChartRadar } from "@coreui/react-chartjs";
-import fetchData from '../../util/ApiConnection';
-import UserStorage from '../../util/UserStorage';
+import { CChartBar, CChartRadar } from "@coreui/react-chartjs";
+import fetchData from '../../services/ApiConnection';
+import UserStorage from '../../services/UserStorage';
 import '../../customStyles.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';

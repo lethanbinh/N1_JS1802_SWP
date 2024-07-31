@@ -20,8 +20,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import html2canvas from 'html2canvas';
 import './ProductDetailModal.css'; // Tạo file CSS riêng để tùy chỉnh giao diện
-import UserStorage from '../../util/UserStorage';
-import fetchData from '../../util/ApiConnection';
+import UserStorage from '../../services/UserStorage';
+import fetchData from '../../services/ApiConnection';
 
 const ProductDetailModal = ({ visible, setVisible, selectedProduct, setSelectedProduct, product, setProduct, stallName }) => {
     const [isEditing, setIsEditing] = useState(false);

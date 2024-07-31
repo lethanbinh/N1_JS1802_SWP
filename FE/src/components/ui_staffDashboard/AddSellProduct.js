@@ -21,8 +21,8 @@ import {
 } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import '../../customStyles.css';
-import fetchData from '../../util/ApiConnection';
-import UserStorage from '../../util/UserStorage';
+import fetchData from '../../services/ApiConnection';
+import UserStorage from '../../services/UserStorage';
 
 const AddProduct = () => {
   const [product, setProduct] = useState({
