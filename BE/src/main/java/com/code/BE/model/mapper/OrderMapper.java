@@ -14,7 +14,7 @@ public interface OrderMapper {
     @Mapping(source = "order.staff.id", target = "staffId")
     @Mapping(source = "order.customer.id", target = "customerId")
 
-        // Map Entity to Response
+    // Map Entity to Response
     OrderResponse toResponse(Order order);
     List<OrderResponse> toResponseList(List<Order> orderList);
     // Map Request to Entity

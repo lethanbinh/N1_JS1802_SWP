@@ -80,5 +80,10 @@ public class User {
     @OneToMany(mappedBy = "staff")
     private List<StaffDashboardDaily> staffDashboardDailies;
 
+    @OneToMany(mappedBy = "sender")
+    private List<Message> sendMessages;
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Message> receiveMessages;
     // Getters and setters
 }
