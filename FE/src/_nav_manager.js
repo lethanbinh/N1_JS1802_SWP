@@ -1,4 +1,4 @@
-import { cilMoney, cilPeople, cilList, cilArrowCircleLeft, cilHome, cibSnapchat, cilChatBubble } from '@coreui/icons'
+import { cilMoney, cilPeople, cilList, cilArrowCircleLeft, cilHome, cibSnapchat, cilChatBubble, cilCalendar } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import React from 'react'
@@ -18,6 +18,11 @@ const _nav_manager = [
         component: CNavItem,
         name: 'Main Dashboard',
         to: '/manager-dashboard/dashboard',
+      },
+      {
+        component: CNavItem,
+        name: 'Schedule',
+        to: '/manager-dashboard/schedule',
       },
     ],
   },

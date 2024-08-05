@@ -1,4 +1,4 @@
-import { cilMoney, cilPeople, cilList, cilArrowCircleLeft, cilCart, cilChatBubble } from '@coreui/icons'
+import { cilMoney, cilPeople, cilList, cilArrowCircleLeft, cilCart, cilChatBubble, cilCalendar } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import React from 'react'
@@ -23,6 +23,11 @@ const _nav_staff = [
         component: CNavItem,
         name: 'Customer Information',
         to: '/staff-dashboard/customer-info',
+      },
+      {
+        component: CNavItem,
+        name: 'Schedule',
+        to: '/staff-dashboard/schedule',
       },
     ],
   },

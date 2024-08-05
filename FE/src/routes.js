@@ -10,6 +10,7 @@ const GoldPrice = React.lazy(() => import('./components/ui_public/GoldPrice'))
 const ProductCustomerHistoryPurchase = React.lazy(() => import('./components/ui_public/ProductPurchaseHistory'))
 const ExchangeAndReturnHistory = React.lazy(() => import('./components/ui_public/ExchangeReturnHistory'))
 const Chat = React.lazy(() => import('./components/ui_public/Chat'))
+const Schedule = React.lazy(() => import('./components/ui_public/Schedule'))
 
 //adminDashboard
 const AccountList = React.lazy(() => import('./components/ui_adminDasdboard/AccountList'))
@@ -63,6 +64,7 @@ const routes = [
   { path: '/manager-dashboard/stall', name: 'Stall', element: Stall },
   { path: '/manager-dashboard/dashboard', name: 'Manager Dashboard', element: ManagerDashboard },
   { path: '/manager-dashboard/chat', name: 'Chat', element: Chat },
+  { path: '/manager-dashboard/schedule', name: 'Schedule', element: Schedule },
 
   //staffDashboard
   { path: '/staff-dashboard/view-CPH', name: 'Customer Purchase History', element: PurchaseHistoryListStaffDashboard },
@@ -79,6 +81,7 @@ const routes = [
   { path: '/staff-dashboard/add-purchase-product', name: 'Add Purchase Product', element: AddPurchaseProduct },
   { path: '/staff-dashboard/dashboard', name: 'Staff Dashboard', element: StaffDashboard },
   { path: '/staff-dashboard/chat', name: 'Chat', element: Chat },
+  { path: '/staff-dashboard/schedule', name: 'Schedule', element: Schedule },
 ]
 
 export default routes

@@ -1,0 +1,20 @@
+.container a {
+    color: black !important;
+    text-decoration: none !important;
+}
+
+.fc-scrollgrid-section .fc-scrollgrid-section-body {
+    display: none !important;
+}
+
+.fc .fc-timegrid .fc-timegrid-slot-lane {
+    height: 21vh;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+    border: 1px solid #ccc !important;
+}
+
+.fc .fc-timegrid-divider {
+    padding: 0!important;
+}

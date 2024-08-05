@@ -60,16 +60,6 @@ const InvoiceForm = () => {
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [confirmModalVisible, setconfirmModalVisible] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
-  const [authenticationDetails, setAuthenticationDetails] = useState({
-    jewelryType: '',
-    authenticityCertificate: '',
-    dateOfCertification: '',
-    certifyingAuthority: '',
-    authenticityGrade: '',
-    gemWeight: '',
-    metalPurity: '',
-  });
-
   const [items, setItems] = useState([]);
   const [stallId, setStallId] = useState(0)
 
@@ -158,22 +148,6 @@ const InvoiceForm = () => {
     if (transactionType === 'SELL') {
       if (customerGiveMoney < total) {
         setErrorMessage('Customer give money must be greater than total price');
-        setErrorModalVisible(true);
-        return false;
-      }
-    }
-
-    if (transactionType === 'PURCHASE') {
-      if (
-        !authenticationDetails.jewelryType ||
-        !authenticationDetails.authenticityCertificate ||
-        !authenticationDetails.dateOfCertification ||
-        !authenticationDetails.certifyingAuthority ||
-        !authenticationDetails.authenticityGrade ||
-        !authenticationDetails.gemWeight ||
-        !authenticationDetails.metalPurity
-      ) {
-        setErrorMessage('Please fill all authentication details');
         setErrorModalVisible(true);
         return false;
       }
@@ -304,23 +278,23 @@ const InvoiceForm = () => {
           "address": address,
           "totalPrice": total,
           "tax": tax / 100,
-          "totalBonusPoint": `${total / 100}`,
+          "totalBonusPoint": `${transactionType === "SELL" ? total / 100 : 0}`,
           "customerGiveMoney": customerGiveMoney,
-          "refundMoney": `${customerGiveMoney >= total ? customerGiveMoney - total : 0}`,
+          "refundMoney": `${transactionType === "SELL" ? (customerGiveMoney >= total ? customerGiveMoney - total : 0) : 0}`,
           "sendMoneyMethod": sendMoneyMethod,
           "promotionId": promotionId,
           "staffId": userInfo.id,
           "customerRequest": {
             "fullName": customerName,
             "phone": customerPhone,
-            "email": `string${customerPhone}@gmail.com`,
+            "email": `Demo${customerPhone}@gmail.com`,
             "address": address,
             "birthday": "2024-06-23T10:35:22.814Z",
             "status": true,
-            "bonusPoint": `${total / 100}`
+            "bonusPoint": `${transactionType === "SELL" ? total / 100 : 0}`
           },
           "orderDetailRequestList": orderList,
-          "authenticationDetails": authenticationDetails // Adding authentication details
+          "authenticationDetails": "."
         };
         console.log(saveData);
 
@@ -394,141 +368,6 @@ const InvoiceForm = () => {
   const formatPrice = (price) => {
     return `${price.toLocaleString('en-US')}`;
   };
-
-  const handleAuthenticationChange = (e) => {
-    const { name, value } = e.target;
-    setAuthenticationDetails({
-      ...authenticationDetails,
-      [name]: value,
-    });
-  };
-
-
-  const handleSaveAuthentication = () => {
-    if (
-      !authenticationDetails.jewelryType ||
-      !authenticationDetails.authenticityCertificate ||
-      !authenticationDetails.dateOfCertification ||
-      !authenticationDetails.certifyingAuthority ||
-      !authenticationDetails.authenticityGrade ||
-      !authenticationDetails.gemWeight ||
-      !authenticationDetails.metalPurity
-    ) {
-      setErrorMessage('Please fill all authentication details');
-      setErrorModalVisible(true);
-      return;
-    }
-    // Logic to save authentication details
-    setIsAuthenticating(false);
-  };
-
-  const renderAuthenticationForm = () => (
-    <CModal
-      visible={isAuthenticating}
-      onClose={() => setIsAuthenticating(false)}
-      aria-labelledby="AuthenticationModalLabel"
-    >
-      <CModalHeader>
-        <CModalTitle id="AuthenticationModalLabel">Jewelry Authentication</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CRow className="mb-4">
-          <CCol>
-            <strong className="text-sm font-bold">Jewelry Type:</strong>
-            <CFormInput
-              name="jewelryType"
-              value={authenticationDetails.jewelryType}
-              onChange={handleAuthenticationChange}
-              style={{ border: '1px solid #adb5bd' }}
-            />
-          </CCol>
-        </CRow>
-        <CRow className="mb-4">
-          <CCol>
-            <strong className="text-sm font-bold">Authenticity Certificate:</strong>
-            <CFormInput
-              name="authenticityCertificate"
-              value={authenticationDetails.authenticityCertificate}
-              onChange={handleAuthenticationChange}
-              style={{ border: '1px solid #adb5bd' }}
-            />
-          </CCol>
-        </CRow>
-        <CRow className="mb-4">
-          <CCol>
-            <strong className="text-sm font-bold">Date of Certification:</strong>
-            <CFormInput
-              type="date"
-              name="dateOfCertification"
-              value={authenticationDetails.dateOfCertification}
-              onChange={handleAuthenticationChange}
-              style={{ border: '1px solid #adb5bd' }}
-            />
-          </CCol>
-        </CRow>
-        <CRow className="mb-4">
-          <CCol>
-            <strong className="text-sm font-bold">Certifying Authority:</strong>
-            <CFormInput
-              name="certifyingAuthority"
-              value={authenticationDetails.certifyingAuthority}
-              onChange={handleAuthenticationChange}
-              style={{ border: '1px solid #adb5bd' }}
-            />
-          </CCol>
-        </CRow>
-        <CRow className="mb-4">
-          <CCol>
-            <strong className="text-sm font-bold">Authenticity Grade:</strong>
-            <CFormInput
-              name="authenticityGrade"
-              value={authenticationDetails.authenticityGrade}
-              onChange={handleAuthenticationChange}
-              style={{ border: '1px solid #adb5bd' }}
-            />
-          </CCol>
-        </CRow>
-        <CRow className="mb-4">
-          <CCol>
-            <strong className="text-sm font-bold">Gem Weight (carats):</strong>
-            <CFormInput
-              name="gemWeight"
-              value={authenticationDetails.gemWeight}
-              onChange={handleAuthenticationChange}
-              style={{ border: '1px solid #adb5bd' }}
-            />
-          </CCol>
-        </CRow>
-        <CRow className="mb-4">
-          <CCol>
-            <strong className="text-sm font-bold">Metal Purity (%):</strong>
-            <CFormInput
-              name="metalPurity"
-              value={authenticationDetails.metalPurity}
-              onChange={handleAuthenticationChange}
-              style={{ border: '1px solid #adb5bd' }}
-            />
-          </CCol>
-        </CRow>
-      </CModalBody>
-      <CModalFooter>
-        <CButton
-          className='custom-btn custom-btn-secondary'
-          color="secondary"
-          onClick={() => setIsAuthenticating(false)}
-        >
-          Close
-        </CButton>
-        <CButton
-          className='custom-btn custom-btn-success'
-          color="primary"
-          onClick={handleSaveAuthentication}
-        >
-          Save Authentication
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
 
   return (
     <CRow className="relative flex flex-col px-2 md:flex-row" onSubmit={handleSubmit}>
