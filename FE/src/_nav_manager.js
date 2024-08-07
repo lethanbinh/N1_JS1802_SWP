@@ -19,11 +19,6 @@ const _nav_manager = [
         name: 'Main Dashboard',
         to: '/manager-dashboard/dashboard',
       },
-      {
-        component: CNavItem,
-        name: 'Schedule',
-        to: '/manager-dashboard/schedule',
-      },
     ],
   },
   {

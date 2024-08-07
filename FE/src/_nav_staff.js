@@ -24,11 +24,6 @@ const _nav_staff = [
         name: 'Customer Information',
         to: '/staff-dashboard/customer-info',
       },
-      {
-        component: CNavItem,
-        name: 'Schedule',
-        to: '/staff-dashboard/schedule',
-      },
     ],
   },
   {
