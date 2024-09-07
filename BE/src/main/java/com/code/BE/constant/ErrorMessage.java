@@ -39,7 +39,6 @@ public class ErrorMessage {
     public static final String PHONE_VALIDATION_FAILED = "Incorrect Vietnam Phone";
 
     public static final String DATE_VALIDATION_FAILED = "Date is not correct format";
-    public static final String DATE_INCORRECT = "Start date cannot after end date";
     public static final String BIRTHDAY_VALIDATION_FAILED = "Birthday cannot be a day in future";
 
     public static final String PROMOTION_EXPIRED = "Promotion expired";

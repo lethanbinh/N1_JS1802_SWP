@@ -270,6 +270,8 @@ const Chat = () => {
                                                                         alt="avatar"
                                                                         className="d-flex align-self-center me-3"
                                                                         width="60"
+                                                                        height="60"
+                                                                        style={{ borderRadius: '999px', objectFit: 'cover' }}
                                                                     />
                                                                     <span className="badge bg-success badge-dot"></span>
                                                                 </div>
@@ -277,8 +279,10 @@ const Chat = () => {
                                                                     <p className="fw-bold mb-0" style={{ textAlign: "left" }}>General</p>
                                                                     {latestMessages.PUBLIC_CHAT ?
                                                                         (latestMessages.PUBLIC_CHAT.message.length > 15 ?
-                                                                            latestMessages.PUBLIC_CHAT.message.substring(0, 15) + '...' :
-                                                                            latestMessages.PUBLIC_CHAT.message) :
+                                                                            <p style={{ textAlign: "left" }}>{latestMessages.PUBLIC_CHAT.message.substring(0, 15) + '...'}</p>
+                                                                            :
+                                                                            <p style={{ textAlign: "left" }}v>{latestMessages.PUBLIC_CHAT.message}</p>
+                                                                        ) :
                                                                         ""}
                                                                 </div>
                                                             </div>
@@ -299,6 +303,8 @@ const Chat = () => {
                                                                         alt="avatar"
                                                                         className="d-flex align-self-center me-3"
                                                                         width="60"
+                                                                        height="60"
+                                                                        style={{ borderRadius: '999px', objectFit: 'cover' }}
                                                                     />
                                                                     <span className="badge bg-success badge-dot"></span>
                                                                 </div>
@@ -338,7 +344,9 @@ const Chat = () => {
                                                                         && listUsers.find(item => item.id === chat.senderId).avatar}
                                                                     alt="avatar"
                                                                     className="rounded-circle d-flex align-self-start shadow-1-strong"
-                                                                    width="45"
+                                                                    width="45px"
+                                                                    height="45px"
+                                                                    style={{objectFit: "cover"}}
                                                                 />
                                                                 {listUsers.find(item => item.id === chat.senderId)
                                                                     && listUsers.find(item => item.id === chat.senderId).fullName}
@@ -358,7 +366,9 @@ const Chat = () => {
                                                                     src={currentUser && currentUser.avatar}
                                                                     alt="avatar"
                                                                     className="rounded-circle d-flex align-self-start shadow-1-strong"
-                                                                    width="45"
+                                                                    width="45px"
+                                                                    height="45px"
+                                                                    style={{objectFit: "cover"}}
                                                                 />
                                                                 {chat.senderId === user.id &&
                                                                     <p>{currentUser && currentUser.fullName}</p>
@@ -376,7 +386,9 @@ const Chat = () => {
                                                                 src={partnerUser && partnerUser.avatar}
                                                                 alt="avatar"
                                                                 className="rounded-circle d-flex align-self-start shadow-1-strong"
-                                                                width="45"
+                                                                width="45px"
+                                                                height="45px"
+                                                                style={{objectFit: "cover"}}
                                                             />
                                                             {chat.senderId !== user.id &&
                                                                 <p>{partnerUser && partnerUser.fullName}</p>
@@ -398,7 +410,9 @@ const Chat = () => {
                                                                 src={currentUser && currentUser.avatar}
                                                                 alt="avatar"
                                                                 className="rounded-circle d-flex align-self-start shadow-1-strong"
-                                                                width="45"
+                                                                width="45px"
+                                                                height="45px"
+                                                                style={{objectFit: "cover"}}
                                                             />
                                                             {chat.senderId === user.id &&
                                                                 <p>{currentUser && currentUser.fullName}</p>
